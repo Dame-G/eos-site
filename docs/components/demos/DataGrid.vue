@@ -12,14 +12,15 @@ const rows = [
 ];
 
 const columns = [
-  { key: "date", label: "Date", sortable: true, value: (r: (typeof rows)[number]) => new Date(r.date) },
+  { key: "date", label: "Date", width: 150, sortable: true, value: (r: (typeof rows)[number]) => new Date(r.date) },
   { key: "service", label: "Service", sortable: true, filter: { type: "text" } as const },
   {
     key: "status",
     label: "Status",
+    width: 130,
     filter: { type: "select", options: ["Due", "Paid"] } as const,
   },
-  { key: "amount", label: "Amount", numeric: true, sortable: true, filter: { type: "number" } as const },
+  { key: "amount", label: "Amount", width: 200, numeric: true, sortable: true, filter: { type: "number" } as const },
 ];
 
 const selected = ref<string[]>([]);

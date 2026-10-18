@@ -9,6 +9,5 @@ const image = ref("");
   <EStack>
     <ESignaturePad v-model="image" :height="180" />
     <p>{{ image ? "Signature drawn" : "Nothing drawn yet" }}</p>
-    <ESignaturePad :height="100" disabled />
   </EStack>
 </template>

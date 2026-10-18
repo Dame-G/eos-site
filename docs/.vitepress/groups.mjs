@@ -16,7 +16,7 @@ export const GROUP_OF = {
   Segmented: "controls", Select: "controls", SlotPicker: "controls", Switch: "controls", TextField: "controls",
   Textarea: "controls", Upload: "controls",
   // Composite controls: controls built from controls
-  ButtonGroup: "composites", Calendar: "composites", CardField: "composites", CurrencyField: "composites",
+  ButtonGroup: "composites", Calendar: "composites", CardField: "composites", ColorField: "composites", CurrencyField: "composites",
   DatePicker: "composites", FormSection: "composites", Pagination: "composites", PasswordField: "composites",
   PhoneField: "composites", RangePicker: "composites", SignatureField: "composites", SignaturePad: "composites",
   Toggle: "composites", AddressField: "composites",

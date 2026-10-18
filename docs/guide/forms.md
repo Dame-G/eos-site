@@ -7,7 +7,7 @@ description: "v-model, labels, hints and errors, wiring your own control with EF
 
 ## v-model
 
-The main value of every control is `v-model`. Two values use named models (`v-model:start` and `v-model:end` on a range picker). Leave `v-model` off and the control keeps its own state, so there is no `defaultValue` prop.
+The main value of every control is `v-model`. A range picker has two (`v-model:start`, `v-model:end`). Leave `v-model` off and the control keeps its own state, so there is no `defaultValue` prop.
 
 ```vue
 <script setup lang="ts">
@@ -22,20 +22,20 @@ const day = ref<Date | null>(null);
 </template>
 ```
 
-Other signals are events, with the value first: `@change`, `@clear`.
+Other signals are events with the value first: `@change`, `@clear`.
 
 ## Labels, hints and errors
 
-Every field takes the same four props:
+Every field takes the same props:
 
-- `label`: required, always visible unless `hideLabel`. The placeholder is only an example.
+- `label`: required, always visible unless `hideLabel`. A placeholder is only an example.
 - `hint`: help under the control.
 - `error`: replaces the hint, turns the edge red, adds an alert glyph, sets `aria-invalid` and is announced. Colour is never the only signal.
-- `required` or `optional`: shows the word "Required" or "Optional". Flag whichever is rarer. Eos does not use asterisks.
+- `required` or `optional`: shows the word "Required" or "Optional". Flag whichever is rarer. There are no asterisks.
 
-Write errors that say what is wrong and how to fix it: "Enter a mobile number with 10 digits".
+Say what is wrong and how to fix it: "Enter a mobile number with 10 digits".
 
-## Wiring your own control
+## Your own control
 
 For a control Eos does not wrap, `EField` gives you the label, hint and error, and hands you the ids:
 
@@ -45,11 +45,11 @@ For a control Eos does not wrap, `EField` gives you the label, hint and error, a
 </EField>
 ```
 
-If you build a text-like control of your own, use `useFieldAttrs()` with `inheritAttrs: false`: `class` and `style` stay on the wrapper, and everything else (name, autocomplete, aria attributes, listeners) goes to the input.
+For a text-like control of your own, use `useFieldAttrs()` with `inheritAttrs: false`: `class` and `style` stay on the wrapper, and the rest (name, autocomplete, aria attributes, listeners) goes to the input.
 
 ## ErrorSummary
 
-After a failed submit, show the list of what went wrong at the top of the form. It takes focus when errors appear, and each field still shows its own error.
+After a failed submit, list what went wrong at the top of the form. It takes focus when errors appear, and each field still shows its own error.
 
 ```vue
 <script setup lang="ts">
@@ -80,10 +80,8 @@ const errors = computed(() => {
 
 Use `novalidate` so your messages, not the browser's, are shown. The [Register](/patterns/register) and [Sign in](/patterns/sign-in) patterns do this end to end.
 
-## Autofill
+## Autofill and submitting
 
-Give inputs an `autocomplete` token (`given-name`, `email`, `one-time-code`). Browsers can then fill personal details, which WCAG 1.3.5 asks for.
+Give inputs an `autocomplete` token (`given-name`, `email`, `one-time-code`) so browsers can fill them, as WCAG 1.3.5 asks.
 
-## Submitting
-
-Controls with a `name` submit with the form. Select and others carry their value in a hidden input, so a plain `<form method="post">` works too.
+Controls with a `name` submit with the form. Select and others carry their value in a hidden input, so a plain `<form method="post">` works.

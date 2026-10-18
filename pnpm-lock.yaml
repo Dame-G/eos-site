@@ -185,6 +185,9 @@ importers:
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
+      minisearch:
+        specifier: ^7.2.0
+        version: 7.2.0
       playwright:
         specifier: ^1.64.1
         version: 1.64.1

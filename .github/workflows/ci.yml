@@ -44,3 +44,12 @@ jobs:
         run: pnpm test
         env:
           CI: "true"
+
+      - name: Check the layout at phone and desktop widths
+        working-directory: eos-site
+        run: |
+          pnpm exec vitepress preview docs --port 4173 &
+          for i in $(seq 1 30); do curl -sf http://localhost:4173 > /dev/null && break; sleep 1; done
+          pnpm layout:check
+        env:
+          CI: "true"

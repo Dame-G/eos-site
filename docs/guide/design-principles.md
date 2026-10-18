@@ -5,17 +5,17 @@ description: "Spacing rhythm, where depth is allowed, one control height, and wh
 
 # Design principles
 
-These rules are not options. They are what makes every theme feel like the same system, so a rebrand changes colours, corners and fonts but not how a page is laid out.
+These rules are not options. They keep every theme feeling like the same system: a rebrand changes colours, corners and fonts, not how a page is laid out.
 
 ## Compose, do not copy
 
-A card is a `ESurface`. A group of buttons is `EActions`. A list of label and text rows is an `EDescriptionList`. A row of icon and text is an `EMetaList`. If two components need the same box, it moves into a building block. If a page needs a custom box or a hand-written flex row, a building block is missing, and that is worth reporting.
+A card is an `ESurface`. A group of buttons is `EActions`. Rows of label and text are an `EDescriptionList`. A row of icon and text is an `EMetaList`. If a page needs a custom box or a hand-written flex row, a building block is missing: report it.
 
-The [patterns](/patterns/) are built only from library components for this reason. They double as the integration test of the whole system.
+The [patterns](/patterns/) use only library components for this reason. They are the integration test of the whole system.
 
 ## Space belongs to the parent
 
-Children never set their own outer margin. `EStack`, `EInline`, `EGrid` and `EActions` space them. That is what lets a component move from a page into a drawer with no edits.
+Children never set their own outer margin. `EStack`, `EInline`, `EGrid` and `EActions` space them, so a component moves from a page into a drawer with no edits.
 
 ## Spacing rhythm
 
@@ -30,17 +30,17 @@ Related things sit close, groups sit apart.
 | 24px (`--e-space-6`) | Between groups and sections of a page |
 | 32px (`--e-space-8`) | Between page regions |
 
-A control that depends on a choice follows it directly. The amount field that appears under "Another amount" is the example: the choice already has padding, so no extra gap is added. See it in [Pay a bill](/patterns/pay-a-bill).
+A control that depends on a choice follows it directly, as the amount field under "Another amount" does in [Pay a bill](/patterns/pay-a-bill).
 
 ## Where depth is allowed
 
-**Depth means "you can click this" or "this floats".** Buttons and statement rows carry a 2px bottom edge and darken on hover. Inputs are wells, pressed into the page. Popovers, menus and toasts are the only things that float, and they use the one `--e-float` shadow. Everything else is flat and outlined with `--e-edge`.
+**Depth means "you can click this" or "this floats".** Buttons and statement rows carry a 2px bottom edge and darken on hover. Inputs are wells, pressed into the page. Popovers, menus and toasts float, with the one `--e-float` shadow. Everything else is flat and outlined with `--e-edge`.
 
-Edges are visible on white: cards and rows use `border` (3:1 or more), controls use `border-strong`. A pale tint never marks a boundary alone.
+Edges show on white: cards and rows use `border` (3:1 or more), controls use `border-strong`. A pale tint never marks a boundary alone.
 
 ## One control height
 
-Every control that can be tapped is 48px tall: buttons, inputs, selects, date fields, time slots. A button beside an input lines up, and a field never shifts when it changes type. Inputs stay at 16px text or more so phones do not zoom in on focus.
+Every tappable control is 48px tall: buttons, inputs, selects, date fields, time slots. A button beside an input lines up, and a field never shifts when it changes type. Inputs use 16px text or more so phones do not zoom on focus.
 
 ## Actions
 
@@ -60,7 +60,7 @@ Two families. The sans for reading, the mono for kickers, chips, stamps and ever
 
 ## Voice
 
-Write in sentence case, lead with the status, then the reason, then the next step: "Your balance is due November 1. Pay now to avoid a late fee." Say who did something and when. Address the person as you, and the practice as we. Use the words people use: Statement, Balance, Payment, Receipt, Appointment, Form.
+Use sentence case. Lead with the status, then the reason, then the next step: "Your balance is due November 1. Pay now to avoid a late fee." Say who did something and when. Address the person as you and the practice as we. Use the words people use: Statement, Balance, Payment, Receipt, Appointment, Form.
 
 ## Logical properties
 

@@ -5,7 +5,7 @@ description: "Install Eos, add the plugin, draw your first component and set up 
 
 # Getting started
 
-Eos is a set of Vue 3 components and a theme system. You need Vue 3.5 or newer and a bundler that handles CSS imports, such as Vite.
+Eos needs Vue 3.5 or newer and a bundler that handles CSS imports, such as Vite.
 
 ## Install
 
@@ -13,11 +13,11 @@ Eos is a set of Vue 3 components and a theme system. You need Vue 3.5 or newer a
 npm install @eos-ui/vue
 ```
 
-`@eos-ui/tokens` (the design tokens and `defineTheme()`) comes with it. Install it yourself only if you want the tokens without the components.
+`@eos-ui/tokens` comes with it. Install it alone only if you want the tokens without the components.
 
 ## Add the plugin
 
-The plugin holds your language, currency, words and icons, and applies your theme. Every component also works without it, using English and US dollars, so you can add it later.
+The plugin holds your language, currency, words and icons, and applies your theme. Components also work without it, in English and US dollars.
 
 ```ts
 // main.ts
@@ -38,15 +38,15 @@ createApp(App)
   .mount("#app");
 ```
 
-`fonts.css` is optional. It loads Jost and Spline Sans Mono from Google Fonts. To self-host, install `@fontsource/jost` and `@fontsource/spline-sans-mono` instead, or set other families in your [theme](/guide/theming).
+`fonts.css` is optional. It loads Jost and Spline Sans Mono from Google Fonts. To self-host, install `@fontsource/jost` and `@fontsource/spline-sans-mono`, or set other families in your [theme](/guide/theming).
 
-::: tip The app owns `lang`
-Eos does not set the `lang` attribute on your page. Set `<html lang="en-CA">` yourself, next to the `locale` you give the plugin.
+::: tip Set `lang` yourself
+Eos does not touch the page's `lang`. Set `<html lang="en-CA">` to match `locale`.
 :::
 
 ## Your first component
 
-The one stylesheet you imported in `main.ts` (about 17 kB gzipped) styles every component.
+The one stylesheet styles every component (about 18 kB gzipped).
 
 ```vue
 <script setup lang="ts">
@@ -62,20 +62,16 @@ const email = ref("");
 </template>
 ```
 
-Try the same thing here:
-
-<HomeDemo />
-
-A few habits you will see everywhere:
+Habits you will see everywhere:
 
 - The main value is `v-model`. Leave it off and the component keeps its own state.
-- A label is always required. It is a real label, never only a placeholder.
-- A field takes `hint` and `error` as props. An error replaces the hint and is announced.
+- A label is always required, and it is a real label.
+- Fields take `hint` and `error`. An error replaces the hint and is announced.
 - Native attributes (`name`, `autocomplete`, `aria-*`) land on the real `<input>`. `class` and `style` land on the wrapper.
 
-## Auto-import in Vite
+## Auto-import
 
-With [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components), `<EButton>` in a template can import itself:
+With [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components), `<EButton>` imports itself:
 
 ```ts
 // vite.config.ts
@@ -89,16 +85,12 @@ export default {
 
 Pass `EosResolver({ from: "your-wrapper" })` to import from a package of your own that re-exports Eos.
 
-::: warning Check the resolver version you have
-The resolver in the library checkout this site was built against matches names that start with `Op`, not `E`. If `<EButton>` is not found, import the component by name as shown above until that is fixed.
-:::
+## Layers
 
-## Styles and layers
+Everything sits in the cascade layers `e.reset, e.tokens, e.base, e.primitives, e.blocks, e.controls, e.composites, e.containers, e.account, e.page`. Unlayered CSS beats layered CSS, so your rules win without extra specificity. See [Theming](/guide/theming#cascade-layers).
 
-Everything sits in the cascade layers `e.reset, e.tokens, e.base, e.primitives, e.blocks, e.controls, e.composites, e.containers, e.account, e.page`. Unlayered CSS always beats layered CSS, so your own rules win without raising specificity. See [Theming](/guide/theming#cascade-layers).
+## Next
 
-## Where to go next
-
-- [Theming](/guide/theming): make it yours.
-- [Components](/components/): every component with a live demo.
-- [Patterns](/patterns/): six whole pages built only from Eos components.
+- [Theming](/guide/theming)
+- [Components](/components/)
+- [Patterns](/patterns/)

@@ -6,19 +6,31 @@ import {
   ECalendar,
   ECheckbox,
   EChip,
+  EColorField,
+  EDisclosure,
+  EGrid,
+  EHeading,
+  EInline,
+  EKicker,
   ENotice,
   ERadioGroup,
   ESegmented,
   ESelect,
+  EStack,
   EStamp,
+  ESurface,
   ESwitch,
+  EText,
   ETextField,
   defineTheme,
   type EosConfig,
 } from "@eos-ui/vue";
+import CodeBlock from "./CodeBlock.vue";
 
 const DEFAULT_BRAND = "#2c95b4";
 const DEFAULT_ACCENT = "#72c451";
+const DEFAULT_MUTED = "#515151";
+const DEFAULT_BORDER = "#7f8f96";
 const FONTS: Record<string, string> = {
   jost: '"Jost", Futura, "Century Gothic", "Avenir Next", system-ui, sans-serif',
   system: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
@@ -118,38 +130,26 @@ const cssBlock = computed(() => {
   if (!changed.length) return ":root {\n  /* No changes: these are the defaults. */\n}";
   return `:root {\n${changed.map(([k, v]) => `  --e-${k}: ${v};`).join("\n")}\n}`;
 });
-
-const copied = ref("");
-async function copy(text: string, what: string) {
-  try {
-    await navigator.clipboard.writeText(text);
-    copied.value = `${what} copied`;
-  } catch {
-    copied.value = `Select the ${what} and copy it`;
-  }
-  setTimeout(() => (copied.value = ""), 2500);
-}
 </script>
 
 <template>
-  <div class="playground">
-    <section class="controls" aria-labelledby="pg-controls">
-      <h2 id="pg-controls">Theme</h2>
-
-      <div class="pair">
-        <label class="color">
-          <span class="e-kicker">Brand colour</span>
-          <span class="row"><input v-model="brand" type="color" /><code>{{ brand }}</code></span>
-        </label>
-        <label class="color">
-          <span class="e-kicker">Accent colour</span>
-          <span class="row"><input v-model="accent" type="color" /><code>{{ accent }}</code></span>
-        </label>
-      </div>
-      <p class="note">The deep action colours are derived from these so white text on them keeps at least 7:1.</p>
-
-      <ESegmented v-model="radius" label="Corners" :options="[{ value: 'sharp', label: 'Sharp' }, { value: 'default', label: 'Default' }, { value: 'round', label: 'Round' }]" />
-
+  <div class="playground eos-live">
+    <EStack as="section" aria-labelledby="pg-controls" class="controls">
+      <EHeading id="pg-controls">Theme</EHeading>
+      <EGrid min="9rem" :gap="3">
+        <EColorField v-model="brand" label="Brand colour" />
+        <EColorField v-model="accent" label="Accent colour" />
+      </EGrid>
+      <EText variant="small" muted>The deep action colours are derived from these so white text on them keeps at least 7:1.</EText>
+      <ESegmented
+        v-model="radius"
+        label="Corners"
+        :options="[
+          { value: 'sharp', label: 'Sharp' },
+          { value: 'default', label: 'Default' },
+          { value: 'round', label: 'Round' },
+        ]"
+      />
       <ESelect
         v-model="font"
         label="Font"
@@ -162,27 +162,21 @@ async function copy(text: string, what: string) {
       />
       <ESelect v-model="locale" label="Language and region" :options="LOCALES" />
       <ESelect v-model="currency" label="Currency" :options="CURRENCIES" />
+      <EDisclosure title="Try a failing colour">
+        <EStack :gap="3">
+          <EText variant="small" muted>Plain token overrides are not corrected. Pick a pale grey to see the contrast check catch it.</EText>
+          <EGrid min="9rem" :gap="3">
+            <EColorField label="Secondary text" :model-value="muted || DEFAULT_MUTED" @update:model-value="muted = $event" />
+            <EColorField label="Card edge" :model-value="border || DEFAULT_BORDER" @update:model-value="border = $event" />
+          </EGrid>
+          <div><EButton variant="quiet" @click="((muted = ''), (border = ''))">Reset both</EButton></div>
+        </EStack>
+      </EDisclosure>
+    </EStack>
 
-      <details class="advanced">
-        <summary>Try a failing colour</summary>
-        <p class="note">Plain token overrides are not corrected. Pick a pale grey to see the contrast check catch it.</p>
-        <div class="pair">
-          <label class="color">
-            <span class="e-kicker">Secondary text</span>
-            <span class="row"><input type="color" :value="muted || '#515151'" @input="muted = ($event.target as HTMLInputElement).value" /><code>{{ muted || "default" }}</code></span>
-          </label>
-          <label class="color">
-            <span class="e-kicker">Card edge</span>
-            <span class="row"><input type="color" :value="border || '#7f8f96'" @input="border = ($event.target as HTMLInputElement).value" /><code>{{ border || "default" }}</code></span>
-          </label>
-        </div>
-        <EButton variant="quiet" @click="((muted = ''), (border = ''))">Reset both</EButton>
-      </details>
-    </section>
-
-    <div class="stage">
-      <section aria-labelledby="pg-issues">
-        <h2 id="pg-issues">Contrast check</h2>
+    <EStack :gap="8" class="stage">
+      <EStack as="section" :gap="3" aria-labelledby="pg-issues">
+        <EHeading id="pg-issues">Contrast check</EHeading>
         <ENotice v-if="theme.issues.length" tone="danger" :title="`${theme.issues.length} contrast ${theme.issues.length === 1 ? 'pair fails' : 'pairs fail'}`">
           <ul class="issues">
             <li v-for="i in theme.issues" :key="i.pair.join()">
@@ -194,79 +188,90 @@ async function copy(text: string, what: string) {
         <ENotice v-else tone="success" title="Every promised pair holds">
           <code>defineTheme().issues</code> is empty for this theme.
         </ENotice>
-      </section>
+      </EStack>
 
-      <section aria-labelledby="pg-preview">
-        <h2 id="pg-preview">Preview</h2>
+      <EStack as="section" :gap="3" aria-labelledby="pg-preview">
+        <EHeading id="pg-preview">Preview</EHeading>
         <div ref="scope" class="preview e-root" data-e-theme="preview" :style="style" :dir="dir">
-          <div class="grid">
-            <div class="card">
-              <p class="e-kicker">Buttons</p>
-              <div class="wrap">
-                <EButton icon="lock">Pay {{ money }}</EButton>
-                <EButton variant="secondary">Confirm</EButton>
-                <EButton variant="outline">Cancel</EButton>
-                <EButton variant="danger">Remove</EButton>
-                <EButton variant="quiet">Skip</EButton>
-                <EButton disabled>Disabled</EButton>
-              </div>
-            </div>
-            <div class="card">
-              <p class="e-kicker">Stamps and chips</p>
-              <div class="wrap">
-                <EStamp status="paid" />
-                <EStamp status="due" detail="Nov 1" />
-                <EStamp status="action" />
-                <EStamp status="overdue" />
-                <EChip>Draft</EChip>
-                <EChip tone="success">Paid</EChip>
-                <EChip tone="info">Scheduled</EChip>
-                <EChip tone="warning">Review</EChip>
-                <EChip tone="danger">Failed</EChip>
-              </div>
-            </div>
-            <div class="card">
-              <p class="e-kicker">Fields</p>
-              <ETextField v-model="email" label="Email" type="email" error="Enter an email address like name@example.com" />
-              <ESelect v-model="plan" label="Pay with" :options="planOptions" />
-              <ECheckbox v-model="agree" label="Keep me signed in" description="On this device only." />
-              <ESwitch v-model="reminders" label="Text reminders" />
-              <ERadioGroup
-                v-model="method"
-                label="How much would you like to pay?"
-                :options="[
-                  { value: 'full', label: 'The full balance', description: money },
-                  { value: 'part', label: 'Another amount' },
-                ]"
-              />
-            </div>
-            <div class="card">
-              <p class="e-kicker">Notices</p>
-              <ENotice tone="info" title="Your visit is Thursday">Main office, 9:30 am.</ENotice>
-              <ENotice tone="success" title="Payment received">We emailed your receipt.</ENotice>
-              <ENotice tone="warning" title="Form due">Please sign before Oct 22.</ENotice>
-              <ENotice tone="danger" title="Card declined">Try another card.</ENotice>
-            </div>
-            <div class="card">
-              <p class="e-kicker">Calendar</p>
-              <ECalendar v-model="day" :month="day" :footer="false" />
-            </div>
-          </div>
+          <EGrid min="19rem" :gap="4">
+            <ESurface pad="md">
+              <EStack>
+                <EKicker>Buttons</EKicker>
+                <EInline>
+                  <EButton icon="lock">Pay {{ money }}</EButton>
+                  <EButton variant="secondary">Confirm</EButton>
+                  <EButton variant="outline">Cancel</EButton>
+                  <EButton variant="danger">Remove</EButton>
+                  <EButton variant="quiet">Skip</EButton>
+                  <EButton disabled>Disabled</EButton>
+                </EInline>
+              </EStack>
+            </ESurface>
+            <ESurface pad="md">
+              <EStack>
+                <EKicker>Stamps and chips</EKicker>
+                <EInline>
+                  <EStamp status="paid" />
+                  <EStamp status="due" detail="Nov 1" />
+                  <EStamp status="action" />
+                  <EStamp status="overdue" />
+                  <EChip>Draft</EChip>
+                  <EChip tone="success">Paid</EChip>
+                  <EChip tone="info">Scheduled</EChip>
+                  <EChip tone="warning">Review</EChip>
+                  <EChip tone="danger">Failed</EChip>
+                </EInline>
+              </EStack>
+            </ESurface>
+            <ESurface pad="md">
+              <EStack>
+                <EKicker>Fields</EKicker>
+                <ETextField v-model="email" label="Email" type="email" error="Enter an email address like name@example.com" />
+                <ESelect v-model="plan" label="Pay with" :options="planOptions" />
+                <ECheckbox v-model="agree" label="Keep me signed in" description="On this device only." />
+                <ESwitch v-model="reminders" label="Text reminders" />
+                <ERadioGroup
+                  v-model="method"
+                  label="How much would you like to pay?"
+                  :options="[
+                    { value: 'full', label: 'The full balance', description: money },
+                    { value: 'part', label: 'Another amount' },
+                  ]"
+                />
+              </EStack>
+            </ESurface>
+            <ESurface pad="md">
+              <EStack>
+                <EKicker>Notices</EKicker>
+                <ENotice tone="info" title="Your visit is Thursday">Main office, 9:30 am.</ENotice>
+                <ENotice tone="success" title="Payment received">We emailed your receipt.</ENotice>
+                <ENotice tone="warning" title="Form due">Please sign before Oct 22.</ENotice>
+                <ENotice tone="danger" title="Card declined">Try another card.</ENotice>
+              </EStack>
+            </ESurface>
+            <ESurface pad="md">
+              <EStack>
+                <EKicker>Calendar</EKicker>
+                <ECalendar v-model="day" :month="day" :footer="false" />
+              </EStack>
+            </ESurface>
+          </EGrid>
         </div>
-      </section>
+      </EStack>
 
-      <section aria-labelledby="pg-code">
-        <h2 id="pg-code">Use this theme</h2>
-        <h3>In your app</h3>
-        <pre class="code" tabindex="0"><code>{{ snippet }}</code></pre>
-        <EButton variant="outline" @click="copy(snippet, 'Code')">Copy code</EButton>
-        <h3>Or as plain CSS</h3>
-        <p class="note">Only the values that differ from the defaults. It wins because the library is layered.</p>
-        <pre class="code" tabindex="0"><code>{{ cssBlock }}</code></pre>
-        <EButton variant="outline" @click="copy(cssBlock, 'CSS')">Copy CSS</EButton>
-        <p class="status" role="status">{{ copied }}</p>
-      </section>
-    </div>
+      <EStack as="section" :gap="4" aria-labelledby="pg-code">
+        <EHeading id="pg-code">Use this theme</EHeading>
+        <EStack :gap="3">
+          <EHeading :level="3">In your app</EHeading>
+          <CodeBlock :code="snippet" what="code" />
+        </EStack>
+        <EStack :gap="3">
+          <EHeading :level="3">Or as plain CSS</EHeading>
+          <EText variant="small" muted>Only the values that differ from the defaults. It wins because the library is layered.</EText>
+          <CodeBlock :code="cssBlock" what="CSS" />
+        </EStack>
+      </EStack>
+    </EStack>
   </div>
 </template>
 
@@ -276,74 +281,24 @@ async function copy(text: string, what: string) {
   grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr);
   gap: var(--e-space-8);
   align-items: start;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: var(--e-space-8) var(--e-space-4);
+  padding-block: var(--e-space-6);
 }
-@media (max-width: 860px) {
+@media (max-width: 64rem) {
   .playground {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 .controls {
-  display: grid;
-  gap: var(--e-space-4);
   position: sticky;
-  top: calc(var(--vp-nav-height) + var(--e-space-4));
+  top: calc(var(--site-header) + var(--e-space-4));
 }
-@media (max-width: 860px) {
+@media (max-width: 64rem) {
   .controls {
     position: static;
   }
 }
-h2 {
-  margin: 0 0 var(--e-space-3);
-  font-size: var(--e-text-2xl);
-  font-weight: 500;
-}
-h3 {
-  margin: var(--e-space-4) 0 var(--e-space-2);
-  font-size: var(--e-text-xl);
-  font-weight: 500;
-}
 .stage {
-  display: grid;
-  gap: var(--e-space-8);
   min-width: 0;
-}
-.pair {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--e-space-3);
-}
-.color {
-  display: grid;
-  gap: var(--e-space-2);
-}
-.row {
-  display: flex;
-  gap: var(--e-space-2);
-  align-items: center;
-}
-.row input[type="color"] {
-  width: 48px;
-  height: var(--e-control-height);
-  padding: 2px;
-  border: var(--e-stroke-edge) solid var(--e-border-strong);
-  border-radius: var(--e-radius-md);
-  background: var(--e-surface);
-}
-.note {
-  margin: 0;
-  font-size: var(--e-text-sm);
-  color: var(--e-muted);
-}
-.advanced summary {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-weight: 500;
 }
 .issues {
   margin: var(--e-space-2) 0 0;
@@ -356,44 +311,5 @@ h3 {
   background: var(--e-surface-tint);
   color: var(--e-ink);
   font-family: var(--e-font-sans);
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-  gap: var(--e-space-4);
-}
-.card {
-  display: grid;
-  gap: var(--e-space-4);
-  align-content: start;
-  min-width: 0;
-  padding: var(--e-space-4);
-  border: var(--e-stroke-hair) solid var(--e-border);
-  border-radius: var(--e-radius-md);
-  background: var(--e-surface);
-}
-.card p {
-  margin: 0;
-}
-.wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-space-2);
-  align-items: center;
-}
-.code {
-  margin: 0 0 var(--e-space-3);
-  padding: var(--e-space-4);
-  overflow-x: auto;
-  border-radius: var(--e-radius-md);
-  background: var(--e-surface-tint);
-  font: 400 var(--e-text-sm) / 1.6 var(--e-font-mono);
-  white-space: pre;
-}
-.status {
-  min-height: 1.5em;
-  margin: var(--e-space-2) 0 0;
-  font-size: var(--e-text-sm);
-  color: var(--e-muted);
 }
 </style>

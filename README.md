@@ -2,7 +2,7 @@
 
 Private source of https://eos.dame.gg: the documentation and live-preview site for the public [Eos](https://github.com/Dame-G/eos) library.
 
-It is a [VitePress](https://vitepress.dev) site that uses the library it documents: the Eos plugin is installed in the theme, the VitePress chrome is themed with the library's tokens, and every demo is made of Eos components.
+It is a [VitePress](https://vitepress.dev) site that uses the library it documents. The page frame (header, navigation, search, footer), the home page, the tokens and the playground are built from Eos components; only the markdown prose and code blocks use VitePress styles, and those read the library's tokens.
 
 - `docs/`: the site. Guide pages, the tokens page, the theme playground, patterns, and one generated page per component.
 - `reference/react/`: the original React design system the library was ported from (spec, tests, CSS). Development aid only.
@@ -24,6 +24,7 @@ corepack pnpm docs:build      # static site in docs/.vitepress/dist
 corepack pnpm docs:preview    # serve the build
 corepack pnpm test            # Vitest browser mode + Playwright (Edge locally, Chromium when CI is set)
 corepack pnpm ssr:check       # renders components with renderToString and reports what it finds
+corepack pnpm layout:check    # with the preview running: every page at 375 and 1280px, reporting overflow and console errors
 ```
 
 After the library changes (a new component, a changed prop), rebuild it in `../eos`. The site imports the built `dist`, so a component that exists in `src` but not in `dist` fails its demo test.
