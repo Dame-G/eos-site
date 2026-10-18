@@ -1,0 +1,9 @@
+node_modules
+docs/.vitepress/cache
+docs/.vitepress/dist
+docs/public/llms.txt
+test-results
+.wrangler
+.env
+*.local
+.vitest

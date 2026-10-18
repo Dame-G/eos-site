@@ -1,0 +1,38 @@
+{
+  "name": "eos-site",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Documentation and live previews for the Eos component library, published at https://eos.dame.gg.",
+  "type": "module",
+  "packageManager": "pnpm@12.14.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "llms": "node scripts/gen-llms.mjs",
+    "docs:dev": "node scripts/gen-llms.mjs && vitepress dev docs",
+    "docs:build": "node scripts/gen-llms.mjs && vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "ssr:check": "node scripts/ssr-check.mjs",
+    "pages:check": "node scripts/check-pages.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@eos-ui/tokens": "link:../eos/packages/tokens",
+    "@eos-ui/vue": "link:../eos/packages/vue",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vitest/browser-playwright": "^5.0.5",
+    "axe-core": "^4.14.0",
+    "playwright": "^1.64.1",
+    "vite": "^8.3.4",
+    "vitepress": "^1.6.4",
+    "vitest": "^5.0.5",
+    "vitest-browser-vue": "^3.1.0",
+    "wrangler": "^4.151.1"
+  }
+}
