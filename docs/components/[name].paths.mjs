@@ -12,8 +12,16 @@ export default {
   paths() {
     const names = listComponents();
     const known = new Set(names);
+    // Relative links in a README point at files in the library repo. On the site the icons guide is a page; any other
+    // relative link goes to the file on GitHub, so nothing on the page is a dead link.
+    const fixRelative = (md, self) =>
+      md.replace(/\]\((\.{1,2}\/[^)\s]*)\)/g, (m, target) => {
+        if (/icons\/README/.test(target)) return "](/guide/icons)";
+        const path = new URL(target, `https://x/packages/vue/src/components/${self}/`).pathname.slice(1);
+        return `](https://github.com/Dame-G/eos/blob/main/${path})`;
+      });
     const link = (md, self) =>
-      md.replace(/(^|[^`\[])`(E[A-Z][A-Za-z]+)`/g, (m, pre, tag) => {
+      fixRelative(md, self).replace(/(^|[^`\[])`(E[A-Z][A-Za-z]+)`/g, (m, pre, tag) => {
         const folder = tag.slice(1);
         return known.has(folder) && folder !== self ? `${pre}[\`${tag}\`](/components/${folder})` : m;
       });
