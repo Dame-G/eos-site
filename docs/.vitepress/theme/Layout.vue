@@ -129,10 +129,10 @@ watch(
           </nav>
         </template>
       </main>
-      <div v-if="showOutline" class="site-outline">
+      <aside v-if="showOutline" class="site-outline" aria-label="Page outline">
         <p class="site-outline-title">On this page</p>
         <ENavList dense label="On this page" :items="outline" />
-      </div>
+      </aside>
     </div>
 
     <EAppFooter class="site-footer">

@@ -41,7 +41,7 @@ const features = [
     <EGrid min="17rem" :gap="4" class="home-features">
       <ESurface v-for="f in features" :key="f.title" as="section" pad="md">
         <EStack :gap="3">
-          <EHeading :level="3">{{ f.title }}</EHeading>
+          <EHeading :level="2">{{ f.title }}</EHeading>
           <EText>{{ f.text }}</EText>
           <ELink :href="f.link">{{ f.linkText }}</ELink>
         </EStack>
