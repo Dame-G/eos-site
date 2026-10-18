@@ -1,0 +1,224 @@
+/*
+  The VitePress chrome speaks the same tokens as the components, so the site reads as one system.
+  VitePress variables point at Eos variables; change the Eos theme and the chrome follows.
+  This file is unlayered on purpose: it wins over the VitePress layer (`vp`) and sits above the Eos layers.
+*/
+:root {
+  --vp-font-family-base: var(--e-font-sans);
+  --vp-font-family-mono: var(--e-font-mono);
+
+  --vp-c-white: var(--e-surface);
+  --vp-c-black: var(--e-ink);
+  --vp-c-bg: var(--e-surface);
+  --vp-c-bg-alt: var(--e-surface-tint);
+  --vp-c-bg-elv: var(--e-surface);
+  --vp-c-bg-soft: var(--e-surface-tint);
+
+  --vp-c-text-1: var(--e-ink);
+  --vp-c-text-2: var(--e-muted);
+  --vp-c-text-3: var(--e-muted);
+
+  --vp-c-divider: var(--e-border);
+  --vp-c-border: var(--e-border);
+  --vp-c-gutter: var(--e-border);
+
+  --vp-c-brand-1: var(--e-primary);
+  --vp-c-brand-2: color-mix(in srgb, var(--e-primary) 88%, #000);
+  --vp-c-brand-3: var(--e-primary);
+  --vp-c-brand-soft: color-mix(in srgb, var(--e-primary) 10%, transparent);
+
+  --vp-c-default-1: var(--e-border);
+  --vp-c-default-2: var(--e-surface-tint);
+  --vp-c-default-3: var(--e-surface-tint);
+  --vp-c-default-soft: var(--e-surface-tint);
+
+  --vp-c-tip-1: var(--e-primary);
+  --vp-c-tip-soft: var(--e-surface-tint);
+  --vp-c-warning-1: var(--e-warning-strong);
+  --vp-c-warning-soft: var(--e-warning-soft);
+  --vp-c-danger-1: var(--e-danger);
+  --vp-c-danger-soft: var(--e-danger-soft);
+
+  --vp-button-brand-bg: var(--e-primary);
+  --vp-button-brand-text: var(--e-on-primary);
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-hover-bg: color-mix(in srgb, var(--e-primary) 88%, #000);
+  --vp-button-brand-hover-text: var(--e-on-primary);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-active-bg: color-mix(in srgb, var(--e-primary) 78%, #000);
+  --vp-button-brand-active-text: var(--e-on-primary);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-alt-bg: var(--e-surface);
+  --vp-button-alt-border: var(--e-border-strong);
+  --vp-button-alt-hover-bg: var(--e-surface-tint);
+  --vp-button-alt-hover-border: var(--e-border-strong);
+
+  --vp-code-block-bg: var(--e-surface);
+  --vp-code-line-highlight-color: var(--e-surface-tint);
+  --vp-code-color: var(--e-primary);
+  --vp-code-font-size: var(--e-text-sm);
+
+  --vp-nav-height: 64px;
+  --vp-layout-max-width: 1440px;
+  --vp-home-hero-name-color: var(--e-primary);
+  --vp-home-hero-name-background: none;
+  --vp-home-hero-image-background-image: none;
+  --vp-home-hero-image-filter: none;
+}
+
+body {
+  font-family: var(--e-font-sans);
+  color: var(--e-ink);
+}
+
+/* Same focus ring as the components: solid, 2px, offset 2px, black. Text inputs use the teal field colour. */
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: var(--e-stroke-focus) solid var(--e-focus-ring);
+  outline-offset: var(--e-focus-gap);
+}
+
+:where(input, textarea, select):focus-visible {
+  outline: var(--e-stroke-focus) solid var(--e-focus-field);
+  outline-offset: var(--e-focus-gap-field);
+}
+
+/* Type: Jost for reading at weight 500 for headings, Spline Sans Mono for labels. */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4,
+.VPHero .name,
+.VPHero .text {
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.vp-doc h1 {
+  font-size: var(--e-text-4xl);
+  line-height: 1.15;
+}
+
+.vp-doc h2 {
+  font-size: var(--e-text-2xl);
+}
+
+.vp-doc th {
+  font: 600 var(--e-text-xs) / 1.2 var(--e-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--e-muted);
+}
+
+.vp-doc table {
+  display: table;
+  width: 100%;
+  font-size: var(--e-text-sm);
+}
+
+.vp-doc a {
+  text-underline-offset: 3px;
+}
+
+.vp-doc :not(pre) > code {
+  font-size: 0.9em;
+}
+
+.VPSidebarItem .text,
+.VPNavBarMenuLink,
+.VPSidebarItem.level-0 > .item .text {
+  font-size: var(--e-text-sm);
+}
+
+.VPSidebarItem.level-0 > .item .text {
+  font: 600 var(--e-text-xs) / 1.2 var(--e-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.VPFeature {
+  border-radius: var(--e-radius-md);
+  border: var(--e-stroke-hair) solid var(--e-border);
+  background: var(--e-surface);
+}
+
+.VPFeature .title {
+  font-weight: 500;
+}
+
+/* Demo stage: where a live component sits inside a page. */
+.demo {
+  margin-block: var(--e-space-4);
+  border: var(--e-stroke-hair) solid var(--e-border);
+  border-radius: var(--e-radius-md);
+  background: var(--e-surface);
+}
+
+.demo-stage {
+  padding: var(--e-space-6);
+  font-family: var(--e-font-sans);
+  font-size: var(--e-text-md);
+  line-height: 1.5;
+  color: var(--e-ink);
+}
+
+.demo-missing {
+  padding: var(--e-space-4);
+  color: var(--e-muted);
+  font-size: var(--e-text-sm);
+}
+
+.pattern-stage {
+  margin-block: var(--e-space-6);
+  padding-block: var(--e-space-2);
+}
+
+
+/* Code blocks sit on white with an edge, so the syntax colours keep their contrast. */
+.vp-doc div[class*="language-"] {
+  border: var(--e-stroke-hair) solid var(--e-border);
+  border-radius: var(--e-radius-md);
+}
+
+/* The search button shows "Search" and a shortcut hint; the hint made the visible text differ from the accessible name. */
+.DocSearch-Button-Keys {
+  display: none;
+}
+
+/* Home page body */
+.home-body {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.home-body h2 {
+  margin: 40px 0 16px;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+/* Playground intro */
+.playground-intro {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 16px 0;
+}
+
+.playground-intro h1 {
+  margin: 0 0 8px;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.playground-intro p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--e-muted);
+}
+
+/* Headings inside a live demo are the library's, not the page's: no rule above them. */
+.vp-doc :is(.demo, .pattern-stage) :is(h1, h2, h3, h4, h5, h6) {
+  padding-top: 0;
+  border-top: 0;
+}

@@ -1,0 +1,13 @@
+{
+  // The site is a Worker with static assets only: no script, VitePress writes the files.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "eos-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./docs/.vitepress/dist",
+    // No single-page-app fallback. A missing path gets VitePress's own 404.html, with a 404 status.
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "eos.dame.gg/*", "zone_name": "dame.gg" }],
+  "observability": { "enabled": true }
+}
