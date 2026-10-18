@@ -1,0 +1,11 @@
+<!-- @dsCard group="Feedback" height=560 subtitle="Message with actions and dismiss" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"grid",gap:12,maxWidth:720}},
+    h(P.Notice,{title:"Your October statement is ready"},"You owe $162.40, due November 1."),
+    h(P.Notice,{tone:"success",title:"Payment received",onDismiss:function(){}},"We received $162.40 on Oct 14. A receipt was sent to your email."),
+    h(P.Notice,{tone:"warning",title:"A form needs your signature",actions:[h(P.Button,{key:"a",variant:"outline"},"Sign form"),h(P.Button,{key:"b",variant:"quiet"},"Remind me later")]},"Please sign the new client form before your visit on Oct 22."),
+    h("div",{style:{maxWidth:340}},h(P.Notice,{tone:"danger",title:"We couldn't process your payment",onDismiss:function(){},actions:h(P.Button,{variant:"outline"},"Try another card")},"Your bank declined the charge. You were not charged."))));
+</script>

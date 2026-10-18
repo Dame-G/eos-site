@@ -1,0 +1,1 @@
+The small uppercase mono label above a value or a section, in the muted colour. Props: the text as children, and `as` if it should not be a paragraph. It is a label, not a heading: use Heading for the title that follows.

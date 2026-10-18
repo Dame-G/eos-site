@@ -1,0 +1,1 @@
+Buttons that belong together, side by side, announced as one labelled group. Props: `label` (what the group is for) and the Buttons as children. For a choice of one from several, use SegmentedControl; for independent on-off options, use ToggleButtons in a group.

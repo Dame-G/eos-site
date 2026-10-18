@@ -1,0 +1,3 @@
+A term that opens a floating panel (the native popover, so Escape and an outside click close it). The panel is built from a header, body and footer like Dialog, with an IconButton to close it.
+
+Props: `trigger` (the visible text, shown with a dotted underline and an info glyph), `label` (for screen readers), optional `title` (adds the header and Close button), children for the body, and optional `actions` (Buttons in a tinted footer, left-aligned, main action first; they stack full-width on a phone). Use it for a definition or a short explanation; use a Dialog when the reader must decide something, and a Menu for a list of actions.

@@ -1,0 +1,1 @@
+The label, hint and error that every field has, for a control the system does not wrap itself. Props: `label`, `hint`, `error`, `required` or `optional`, and either a control as children or a function that receives `{ id, aria-invalid, aria-describedby }` to put on it. In Vue this is a component with a scoped slot.

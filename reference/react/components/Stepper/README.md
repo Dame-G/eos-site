@@ -1,0 +1,1 @@
+Where you are in a multi-step flow such as registration. Props: `steps` (`{label, state}` with state `done`, `current` or `todo`). Done steps are filled with a check, the current step is outlined in black and bold, upcoming steps are dashed. Stacks vertically on a phone, with connector lines.

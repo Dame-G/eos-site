@@ -1,0 +1,25 @@
+<!-- @dsCard group="Patterns" height=940 subtitle="A list of forms and signing one" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+
+  function Demo() {
+    var s = React.useState("none"), method = s[0], setMethod = s[1];
+    return h(P.Grid,{min:"22rem",gap:6,style:{maxWidth:900}},
+      h(P.Stack,{gap:3},
+        h(P.Heading,{level:2,kicker:"Forms"},"To do before your visit"),
+        h(P.Notice,{tone:"warning",title:"2 forms need your signature"},"Please finish them before Oct 22."),
+        h(P.ItemList,null,
+          h(P.ItemRow,{icon:"form",title:"New client form",subtitle:"Due before your visit on Oct 22",status:"action",action:h(P.Button,{variant:"outline"},"Review and sign")}),
+          h(P.ItemRow,{icon:"shield",title:"Privacy notice",subtitle:"Due before your visit on Oct 22",status:"action",action:h(P.Button,{variant:"outline"},"Review and sign")}),
+          h(P.ItemRow,{icon:"form",title:"Payment plan agreement",subtitle:"Signed Oct 3",status:"signed",action:h(P.IconButton,{icon:"download",label:"Download payment plan agreement"})}))),
+      h(P.Surface,{pad:"lg",actions:[h(P.Button,{key:"s"},"Submit signed form"),h(P.Button,{key:"l",variant:"outline"},"Save for later")]},h(P.Stack,{gap:4},
+        h(P.BackLink,{href:"#"},"Back to forms"),
+        h(P.Heading,{level:2},"New client form"),
+        h(P.Text,{muted:true},"By signing, you confirm the details you gave us are correct and you agree to our payment policy."),
+        h(P.SignatureField,{mode:"both"}),
+        h(P.FileUpload,{label:"Photo ID",optional:true,accept:".jpg,.png,.pdf",hint:"A photo of your driver licence or passport."}))));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
+</script>

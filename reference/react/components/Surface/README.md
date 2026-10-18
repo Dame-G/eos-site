@@ -1,0 +1,3 @@
+The flat, outlined card that every content block is made of: StatementCard, AppointmentCard, Panel, the totals box and Toast all render a Surface. Props: `as` (the element, default div), `pad` (`sm`, `md` or `lg`; omit for none), `clip` (hides what overflows the rounded corners), `actions` (Buttons for a bar at the foot of the card; see Actions), `tone` (`default`, `tint` or `float`), and `className`, `id`, `role` and `aria-*`.
+
+A Surface never lifts or highlights on hover: depth means "you can click this". If the whole card is clickable, build it from a link or a button inside, not by adding hover to the Surface. Put a heading in every Surface that stands alone, so screen reader users can jump to it.

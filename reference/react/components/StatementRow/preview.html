@@ -1,0 +1,11 @@
+<!-- @dsCard group="Account" height=640 subtitle="Compact statement, opens to the breakdown" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"grid",gap:8,maxWidth:720}},
+    h(P.StatementRow,{title:"Visit on Oct 2",subtitle:"Statement 4471 · Main office",status:"due",amountLabel:"You owe",amount:162.4,details:[{label:"Charges",value:210},{label:"Payments and credits",value:"\u2212$47.60"}],reason:"Your balance is due by November 1. Pay now to avoid a late fee.",parts:[{label:"What it covers",text:"Follow-up visit with Amara Singh on Oct 2."},{label:"How to pay",text:"Pay by card or bank transfer, or set up a payment plan."},{label:"Due date",text:"November 1, in 14 days."}],activity:[{kind:"practice",note:"Statement sent by email.",source:"Oct 14, 9:02 am"},{kind:"you",note:"You viewed this statement.",source:"Oct 15, 7:41 pm"},{kind:"system",note:"Payment applied.",source:"Oct 12"}],actions:[h(P.Button,{key:"p",icon:"card"},"Pay $162.40"),h(P.Button,{key:"d",variant:"outline",icon:"download"},"Download")]}),
+    h(P.StatementRow,{title:"Follow-up visit",subtitle:"Statement 4402 · Main office",status:"paid",amount:84,reason:"Paid Sep 18"}),
+    h(P.StatementRow,{title:"Consultation",subtitle:"Statement 4290 · Downtown location",status:"overdue",amount:310,reason:"Past due"}),
+    h(P.StatementRow,{title:"Package of 4 sessions",subtitle:"Statement 4188 · Online",tone:"info",label:"Processing",amount:480,reason:"Payment in progress"})));
+</script>

@@ -1,0 +1,1 @@
+Paging through a long list. Props: `page`, `pageCount` and `onChange(page)`. Shows the first, last and neighbouring pages with ellipses; Previous and Next are outline Buttons. On a phone only Previous and Next remain.

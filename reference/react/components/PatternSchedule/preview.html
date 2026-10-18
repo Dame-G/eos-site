@@ -1,0 +1,22 @@
+<!-- @dsCard group="Patterns" height=860 subtitle="Choose a day and a time" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+
+  var TIMES = { 0:[], 1:["9:00 am","9:30 am","10:30 am","1:00 pm"], 2:["8:30 am","11:00 am","2:00 pm","3:30 pm"], 3:[], 4:["9:30 am","10:00 am","4:00 pm"], 5:["9:00 am","1:30 pm"], 6:[] };
+  function Demo() {
+    var s1 = React.useState(new Date(2026,9,22)), day = s1[0], setDay = s1[1];
+    var s2 = React.useState("9:30 am"), time = s2[0], setTime = s2[1];
+    var open = function(d){ return d.getDay()>0 && d.getDay()<6 && d.getDay()!==3; };
+    return h("div",{style:{maxWidth:760}},h(P.Stack,{gap:6},
+      h(P.PageHeader,{headingLevel:2,title:"Book a visit",description:"Follow-up visit with Amara Singh \u00b7 Main office"}),
+      h(P.Inline,{align:"start",gap:6},
+        h(P.Surface,{pad:"md"},h(P.Calendar,{value:day,month:day,onChange:function(d){setDay(d);setTime(null);},min:new Date(2026,9,18),marked:open,disabledDate:function(d){return !open(d);},footer:false})),
+        h(P.Stack,{gap:4,style:{flex:"1 1 16rem"}},
+          h(P.TimeSlots,{label:"Times on "+new Intl.DateTimeFormat("en-US",{weekday:"long",month:"long",day:"numeric"}).format(day),slots:TIMES[day.getDay()],value:time,onChange:setTime,emptyText:"No times are open on this day."}),
+          time ? h(P.Notice,{title:new Intl.DateTimeFormat("en-US",{weekday:"long",month:"long",day:"numeric"}).format(day)+" at "+time,tone:"info"},"Main office, 120 Park Street. You can reschedule up to 24 hours before.") : null,
+          h(P.Actions,null,h(P.Button,{disabled:!time},"Confirm appointment"),h(P.Button,{variant:"outline"},"Cancel"))))));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
+</script>

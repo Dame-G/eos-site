@@ -1,0 +1,1 @@
+Children in a column with an even gap. Props: `gap` (a space token number from the scale: 1, 2, 3, 4, 6, 8; default 3), `align` (`center` or `end` to align children across the column), `as` and `className`. Use it instead of margins: space belongs to the parent, so a child never needs to know what is beside it.

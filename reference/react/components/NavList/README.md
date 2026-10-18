@@ -1,0 +1,1 @@
+The sidebar list for an app. Props: `items` (`{label, href, icon, count, current}`) and `label` for the landmark. The current page is tinted, outlined and bold, so it is not shown by colour alone. 48px rows; counts are pills (for things waiting on the person: bills to pay, forms to sign).

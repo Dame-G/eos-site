@@ -1,0 +1,1 @@
+Short facts, one per line, each with an icon: when, where, who to call. Props: `items` (`[{ icon, text }]`; null items are skipped). The icon is decoration, so every item must say its meaning in words. AppointmentCard is built on it.

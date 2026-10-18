@@ -1,0 +1,7 @@
+<!-- @dsCard group="Actions" height=220 subtitle="One height, same as an input" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",null,h("div",{className:"row"},h(P.Button,{icon:"card"},"Pay now"),h(P.Button,{variant:"secondary",icon:"check"},"Confirm"),h(P.Button,{variant:"outline"},"Reschedule"),h(P.Button,{variant:"danger"},"Cancel visit"),h(P.Button,{variant:"quiet"},"View receipt"),h(P.Button,{disabled:true},"Pay now")),h("div",{style:{maxWidth:360}},h(P.Button,{block:true},"Continue"))));
+</script>

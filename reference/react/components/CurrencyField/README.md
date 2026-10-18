@@ -1,0 +1,1 @@
+An amount of money: a NumberField with the currency symbol in front, two decimal places and no negatives. Props: everything NumberField takes (`min`, `max`, `value`, `onChange(number)`) plus `currency` and `locale` (default: the configured ones). The symbol is decoration; the label must say what the amount is for. Round to the cent in code, not in the display.

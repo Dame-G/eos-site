@@ -1,0 +1,8 @@
+<!-- @dsCard group="Navigation" height=270 subtitle="The title of a page" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",null,h(P.PageHeader,{breadcrumb:h(P.Breadcrumb,{items:[{label:"Home",href:"#"},{label:"Statements",href:"#"},{label:"Visit on Oct 2"}]}),title:"Visit on Oct 2",description:"Statement 4471 \u00b7 Main office",status:h(P.StatusStamp,{status:"due",detail:"Nov 1"}),actions:[h(P.Button,{key:"p",icon:"card"},"Pay $162.40"),h(P.Button,{key:"d",variant:"outline",icon:"download"},"Download")]})));
+</script>

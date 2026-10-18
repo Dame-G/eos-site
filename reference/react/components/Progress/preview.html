@@ -1,0 +1,7 @@
+<!-- @dsCard group="Display" height=150 subtitle="Bar with label and value" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"grid",gap:20,maxWidth:420}},h(P.Progress,{label:"Payment plan",value:400,max:1200,valueText:"$400 of $1,200"}),h(P.Progress,{label:"Registration",value:3,max:5,valueText:"Step 3 of 5"})));
+</script>

@@ -1,0 +1,7 @@
+<!-- @dsCard group="Typography" height=240 subtitle="Body, deck and small copy" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"grid",gap:12,maxWidth:560}},h(P.Text,{variant:"deck"},"Your balance is due November 1."),h(P.Text,{},"Pay online in about a minute. You will get a receipt by email as soon as it goes through."),h(P.Text,{variant:"small",muted:true},"Statement 4471, sent Oct 14")));
+</script>

@@ -1,0 +1,1 @@
+A postal address as one bordered group: the legend (default "Address") is the title and the fields drop the repeated word (Street, Apartment, suite or unit, City, State, ZIP code), each with the right autocomplete token (`address-line1`, `address-line2`, `address-level2`, `postal-code`) so a browser fills the lot in one go.

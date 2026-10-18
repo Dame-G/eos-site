@@ -1,0 +1,8 @@
+<!-- @dsCard group="Forms" height=620 subtitle="Type or draw, with the date" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:480,display:"grid",gap:32}},
+    h(P.SignatureField,{label:"Sign the privacy notice",mode:"both",defaultName:"Maria Okafor",agreement:"I have read the privacy notice and I agree to it.",date:new Date(2026,9,18)})));
+</script>

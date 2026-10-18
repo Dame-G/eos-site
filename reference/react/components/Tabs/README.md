@@ -1,0 +1,1 @@
+Tabs for switching between views of the same record or list. Props: `items` (`{id, label, count, content}`) and optionally `value`, `defaultValue`, `onChange`. Arrow keys, Home and End move between tabs. The selected tab has a `primary` underline and heavier text. Two to five tabs; the strip scrolls sideways on a phone.

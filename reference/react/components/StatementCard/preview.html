@@ -1,0 +1,7 @@
+<!-- @dsCard group="Account" height=550 subtitle="One statement, with what to do next" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:640}},h(P.StatementCard,{title:"Visit on Oct 2",subtitle:"Statement 4471 · Main office",status:"due",detail:"Nov 1",amountLabel:"You owe",amount:162.4,details:[{label:"Charges",value:210},{label:"Insurance paid",value:47.6}],reason:"Your balance is due by November 1. Pay now to avoid a late fee.",parts:[{label:"What it covers",text:"Follow-up visit with Amara Singh on Oct 2."},{label:"How to pay",text:"Pay by card or bank transfer, or set up a payment plan."},{label:"Due date",text:"November 1, in 14 days."}],activity:[{kind:"practice",note:"Statement sent by email.",source:"Oct 14, 9:02 am"},{kind:"you",note:"You viewed this statement.",source:"Oct 15, 7:41 pm"},{kind:"system",note:"Insurance payment applied.",source:"Oct 12"}],actions:[h(P.Button,{key:"p",icon:"card"},"Pay $162.40"),h(P.Button,{key:"d",variant:"outline",icon:"download"},"Download")]})));
+</script>

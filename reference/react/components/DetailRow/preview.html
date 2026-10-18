@@ -1,0 +1,7 @@
+<!-- @dsCard group="Account" height=330 subtitle="One detail you can change" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:520}},h(P.DetailRow,{label:"Name",onEdit:function(){}},"Maria Okafor"),h(P.DetailRow,{label:"Email",status:"Verified",tone:"success",onEdit:function(){}},"maria@example.com"),h(P.DetailRow,{label:"Phone",status:"Needs update",tone:"warning",onEdit:function(){}},"(555) 010-4471"),h(P.DetailRow,{label:"Address",onEdit:function(){}},"120 Park Street, Springfield, IL 62701")));
+</script>

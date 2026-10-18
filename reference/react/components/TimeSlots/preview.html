@@ -1,0 +1,7 @@
+<!-- @dsCard group="Forms" height=330 subtitle="Choose a time for a visit" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:480,display:"grid",gap:24}},h(P.TimeSlots,{label:"Choose a time on Thursday, Oct 22",defaultValue:"9:30 am",slots:["9:00 am",{value:"9:30 am",label:"9:30 am"},{value:"10:00 am",label:"10:00 am",disabled:true},"10:30 am","11:00 am",{value:"1:00 pm",label:"1:00 pm",disabled:true},"1:30 pm","2:00 pm","3:30 pm"]}),h(P.TimeSlots,{label:"Friday, Oct 23",slots:[]})));
+</script>

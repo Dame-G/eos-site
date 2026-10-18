@@ -1,0 +1,1 @@
+A titled section of a longer form, with a short description. Props: `title`, `description`, `headingLevel` (default 2) and the fields as children (spaced evenly). Sections after the first are ruled apart. A form of more than about six fields should be sections, each answering one question ("Your details", "How you will pay"), or steps of a Stepper.

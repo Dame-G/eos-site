@@ -1,0 +1,1 @@
+The three heading styles (36, 24 and 20px, weight 500) with an optional mono `kicker` above. Props: `level` (1 to 3, which sets both the element and the size) and children. One level 1 per page; do not skip levels.

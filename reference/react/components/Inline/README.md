@@ -1,0 +1,1 @@
+Children in a row that wraps when it runs out of room. Props: `gap` (a space token number, default 2), `justify` (`between` or `end`; start by default), `align` (`start`, `baseline`; centred by default), `nowrap` and `as`. Use it for a title with a status, a list of chips, a row of fields. For a group of Buttons use Actions, which also lines them up the same way everywhere.

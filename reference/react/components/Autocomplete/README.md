@@ -1,0 +1,1 @@
+A text input that offers suggestions but accepts anything typed. Props: the same props as Combobox; `onChange` receives the text. There is no toggle button: suggestions appear as the person types. Use it for addresses and names that may not be in your list; use Combobox when only listed values are valid.

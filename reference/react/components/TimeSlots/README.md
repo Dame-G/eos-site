@@ -1,0 +1,3 @@
+The times a person can choose for a visit, shown as a grid of 48px options. Props: `label` (usually the day), `slots` (strings or `{value, label, disabled}`), `value` or `defaultValue`, `onChange(value)` and `emptyText` (shown when the day has no times). It is a radio group underneath, so arrow keys work; the chosen time is filled with `primary` and bold, and a taken time is dashed and struck through, so neither relies on colour. Put it under a Calendar or beside it; the grid adds columns as space allows.
+
+Also takes `hint`, `error`, `required` and `disabled`; it is a Fieldset, so they are announced with the group.

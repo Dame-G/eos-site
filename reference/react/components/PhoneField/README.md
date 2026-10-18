@@ -1,0 +1,1 @@
+A phone number. With the default `format="us"` it groups the digits as you type, (555) 123-4567; with `format="none"` it leaves them alone. It sets `type=tel`, `inputMode=tel` and `autocomplete=tel`, so a phone shows the number pad and a browser can fill it. Takes every Field prop; onChange receives the formatted value first.

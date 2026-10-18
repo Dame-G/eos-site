@@ -1,0 +1,8 @@
+<!-- @dsCard group="Forms" height=500 subtitle="A titled group of fields on a form" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:480}},h(P.FormSection,{title:"Your details",description:"We use these to find your account and send reminders."},h(P.Field,{label:"First name",required:true,autoComplete:"given-name"}),h(P.Field,{label:"Last name",required:true,autoComplete:"family-name"}),h(P.PhoneField,{label:"Mobile phone"}))));
+</script>

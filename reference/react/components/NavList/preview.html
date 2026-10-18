@@ -1,0 +1,7 @@
+<!-- @dsCard group="Navigation" height=360 subtitle="Vertical navigation" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:280}},h(P.NavList,{items:[{label:"Home",icon:"home"},{label:"Pay a bill",icon:"card",count:2,current:true},{label:"Statements and receipts",icon:"receipt"},{label:"Appointments",icon:"calendar"},{label:"Forms",icon:"form",count:1},{label:"Your profile",icon:"user"}]})));
+</script>

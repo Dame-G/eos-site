@@ -1,0 +1,8 @@
+<!-- @dsCard group="Layout" height=330 subtitle="The flat card everything sits on" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+
+  ReactDOM.createRoot(document.getElementById("root")).render(h(P.Stack,{gap:4,style:{maxWidth:420}},h(P.Surface,{pad:"md"},h(P.Text,{variant:"small"},"Default: white, outlined, flat. For anything you cannot click.")),h(P.Surface,{pad:"md",tone:"tint"},h(P.Text,{variant:"small"},"Tint: a quieter card on a white page.")),h(P.Surface,{pad:"md",tone:"float"},h(P.Text,{variant:"small"},"Float: lifted, for the one thing that sits over the page."))));
+</script>

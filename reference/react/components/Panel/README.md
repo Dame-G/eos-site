@@ -1,0 +1,1 @@
+The generic flat container. Props: optional `kicker`, `title` and `action` (a node, usually a Button) for the header, and children for the body. Outlined, never shadowed, because a Panel is not clickable. Put statements, DetailRows and forms inside it.

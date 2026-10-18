@@ -1,0 +1,1 @@
+A link back to the previous page: an arrow, then words that name the destination ("Back to statements", not "Back"). Props: `href`, the text as children (default "Back") and `onClick`. It sits above the page title. The arrow mirrors in right-to-left text.

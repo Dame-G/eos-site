@@ -1,0 +1,7 @@
+<!-- @dsCard group="Forms" height=250 subtitle="One of a few options" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:420}},h(P.RadioGroup,{label:"How would you like to pay?",defaultValue:"card",options:[{value:"card",label:"Credit or debit card"},{value:"bank",label:"Bank transfer",description:"Takes 1 to 3 business days."},{value:"office",label:"Pay at the office"}]})));
+</script>

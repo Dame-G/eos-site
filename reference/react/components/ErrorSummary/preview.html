@@ -1,0 +1,8 @@
+<!-- @dsCard group="Forms" height=260 subtitle="What went wrong, at the top of a form" -->
+<style>body{margin:0;padding:16px;background:var(--surface)}</style>
+<div id="root" class="op-root"></div>
+<script>
+  var P = window.OpenPractice, h = React.createElement;
+
+  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:520}},h(P.ErrorSummary,{autoFocus:false,errors:[{field:"Email",message:"Enter an address like name@example.com"},{field:"Date of birth",message:"Choose a date in the past"}]})));
+</script>

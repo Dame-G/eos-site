@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenPractice UI tests</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../components/bundle.css">
+<style>
+  body { margin: 0; padding: 16px; font: 14px/1.5 system-ui, sans-serif; background: #fff; color: #000; }
+  #summary { font-weight: 600; margin-bottom: 8px; }
+  #results { list-style: none; margin: 0; padding: 0; font-family: ui-monospace, monospace; font-size: 12px; }
+  #results li { padding: 2px 0; }
+  .ok::before { content: "PASS  "; color: #1f4713; }
+  .fail::before { content: "FAIL  "; color: #962019; font-weight: 700; }
+  #stage { position: absolute; left: -9999px; top: 0; width: 900px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="../components/bundle.js"></script>
+<script src="suite.js"></script>
+</head>
+<body>
+<div id="summary">Running…</div>
+<ul id="results"></ul>
+<div id="stage"></div>
+<script>
+  var list = document.getElementById("results"), pass = 0, fail = 0;
+  OpenPracticeTests.run(function (r) {
+    var li = document.createElement("li"); li.className = r.ok ? "ok" : "fail"; li.textContent = r.name + (r.ok ? "" : ": " + r.error); list.appendChild(li);
+    if (r.ok) pass++; else fail++;
+    document.getElementById("summary").textContent = pass + " passed, " + fail + " failed of " + OpenPracticeTests.count();
+  }).then(function () { document.title = fail ? "tests failed" : "tests passed"; window.__done = true; });
+</script>
+</body>
+</html>

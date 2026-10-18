@@ -1,0 +1,1 @@
+Label and text rows, ruled apart: what a statement covers, how to pay, when it is due. Props: `items` (`[{ label, text }]`). It renders a real description list (dl, dt, dd), so screen readers announce each pair. The label sits beside the text and stacks above it below 26rem.

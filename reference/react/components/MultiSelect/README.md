@@ -1,0 +1,1 @@
+A Combobox that keeps several choices, shown as removable tags in the field. Props: the Combobox props, with `value` and `defaultValue` as arrays of option values and `onChange(values)`. The list stays open while choosing; chosen options show a check; Backspace in an empty field removes the last tag; each tag has its own labelled Remove button.
