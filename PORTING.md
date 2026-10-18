@@ -3,8 +3,8 @@
 Working notes for porting the original React design system into the public Eos library (in C:/dev/aegis, with this repo checked out beside it as ../eos-site). The visual and behavioural spec is the React design system in `../eos-site/reference/react/` (its READMEs, `src/*.js`, `bundle.css`, `index.d.ts` and `tests/suite.js`). The Vue components reproduce it with the same class names and the same CSS, written the way Vue and modern CSS want.
 
 ```
-packages/tokens   @eos/tokens   tokens.json -> CSS variables, defineTheme(), contrast checks
-packages/vue      @eos/vue      the components, plugin, composables
+packages/tokens   @eos-ui/tokens   tokens.json -> CSS variables, defineTheme(), contrast checks
+packages/vue      @eos-ui/vue      the components, plugin, composables
 reference/react   the spec being ported (read only)
 ```
 
@@ -18,7 +18,7 @@ reference/react   the spec being ported (read only)
 | `node scripts/css-parity.mjs --grep e-chip`            | compares your CSS with the reference `bundle.css`, rule by rule                                         |
 | `npx vue-tsc --noEmit -p tsconfig.json`                 | types, including `.vue` files                                                                           |
 | `node scripts/gen-index.mjs`                            | rewrites `src/index.ts` from what is on disk (never edit `src/index.ts`)                                |
-| `corepack pnpm --filter @eos/vue build` | the library build (needs `node ../tokens/scripts/build.mjs` once, which `build` and `test` already run) |
+| `corepack pnpm --filter @eos-ui/vue build` | the library build (needs `node ../tokens/scripts/build.mjs` once, which `build` and `test` already run) |
 
 `pnpm` is only available as `corepack pnpm`. Do not run the full `build` or `test` scripts while others are working; run the single-component commands above.
 
