@@ -15,6 +15,7 @@
     "docs:preview": "vitepress preview docs",
     "ssr:check": "node scripts/ssr-check.mjs",
     "pages:check": "node scripts/check-pages.mjs",
+    "layout:check": "node scripts/layout-check.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy": "wrangler deploy"
@@ -28,6 +29,7 @@
     "@vitejs/plugin-vue": "^6.0.10",
     "@vitest/browser-playwright": "^5.0.5",
     "axe-core": "^4.14.0",
+    "minisearch": "^7.2.0",
     "playwright": "^1.64.1",
     "vite": "^8.3.4",
     "vitepress": "^1.6.4",

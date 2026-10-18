@@ -5,13 +5,13 @@ description: "Every Eos design token with its usage note and contrast, generated
 
 # Tokens
 
-Every value below is read from `@eos-ui/tokens` when the site is built, so this page is always the same as the code. Each token is a CSS custom property named `--e-<name>`. Components never write a raw colour, size or duration; they read these.
+Every value is read from `@eos-ui/tokens` at build time, so this page matches the code. Each token is a CSS custom property named `--e-<name>`. Components read tokens and never write a raw colour, size or duration.
 
 To change them, see [Theming](/guide/theming).
 
 ## Colour
 
-Each colour shows the ratio against its partner, the colour it is used with. Text needs 4.5:1 (AA), and the system aims for 7:1 (AAA) wherever the brand allows it. Edges and focus outlines need 3:1.
+Each colour shows its ratio against its partner, the colour it is used with. Text needs 4.5:1 (AA) and the system aims for 7:1 (AAA). Edges and focus outlines need 3:1.
 
 <TokenTables section="colour" />
 

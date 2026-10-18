@@ -6,8 +6,11 @@ const names = ["card", "receipt", "calendar", "download", "lock", "mail", "phone
 <template>
   <EStack>
     <!-- Icons are decorative: say the meaning in words beside them -->
-    <EInline>
-      <EText v-for="n in names" :key="n" as="span" muted><EIcon :name="n" /> {{ n }}</EText>
+    <EInline :gap="6">
+      <EInline v-for="n in names" :key="n" :gap="2">
+        <EIcon :name="n" />
+        <EText as="span" muted>{{ n }}</EText>
+      </EInline>
     </EInline>
     <EInline>
       <EIcon name="wallet" small />

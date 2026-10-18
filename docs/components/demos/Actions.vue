@@ -10,15 +10,13 @@ import { EActions, EButton, EStack, ESurface, EText } from "@eos-ui/vue";
       <EButton variant="outline">View details</EButton>
       <EButton variant="quiet">Skip</EButton>
     </EActions>
-    <!-- Bar: ends a card, edge to edge -->
-    <ESurface as="article" clip aria-label="October statement">
-      <ESurface pad="md">
-        <EText>October statement, due Oct 31, 2026.</EText>
-      </ESurface>
-      <EActions bar as="footer">
+    <!-- Bar: ends a card, edge to edge. The card's actions slot makes the bar. -->
+    <ESurface as="article" pad="md" aria-label="October statement">
+      <EText>October statement, due Oct 31, 2026.</EText>
+      <template #actions>
         <EButton>Pay</EButton>
         <EButton variant="outline">Download</EButton>
-      </EActions>
+      </template>
     </ESurface>
   </EStack>
 </template>

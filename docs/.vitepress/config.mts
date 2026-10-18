@@ -78,7 +78,11 @@ function vitepressInLayer() {
         imports.push(`@import ${spec.trim()} layer(e.reset);`);
         return "";
       });
-      return { code: `${imports.join("\n")}\n@layer e.reset {\n${body}\n}\n`, map: null };
+      // The prose styles (".vp-doc li", ".vp-doc summary", ...) are for the page text. A donut scope keeps them out of
+      // the live demos and patterns, so a component looks the same there as it does anywhere else.
+      const scoped = id.split(sep).join("/").includes("styles/components/vp-doc.css");
+      const css = scoped ? `@scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live) {\n${body.replace(/\.vp-doc\b/g, ":scope")}\n}` : body;
+      return { code: `${imports.join("\n")}\n@layer e.reset {\n${css}\n}\n`, map: null };
     },
   };
 }
@@ -95,7 +99,14 @@ export default defineConfig({
     ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     ["meta", { name: "theme-color", content: "#17586d" }],
   ],
-  markdown: { theme: "github-light-high-contrast" },
+  markdown: {
+    theme: "github-light-high-contrast",
+    config(md) {
+      // A table scrolls sideways inside its own box on a narrow screen instead of stretching the page.
+      md.renderer.rules.table_open = () => '<div class="table-wrap"><table>';
+      md.renderer.rules.table_close = () => "</table></div>";
+    },
+  },
   themeConfig: {
     logo: { src: "/favicon.svg", alt: "" },
     siteTitle: "Eos",

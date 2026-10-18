@@ -58,61 +58,240 @@
   --vp-code-color: var(--e-primary);
   --vp-code-font-size: var(--e-text-sm);
 
-  --vp-nav-height: 64px;
-  --vp-layout-max-width: 1440px;
-  --vp-home-hero-name-color: var(--e-primary);
-  --vp-home-hero-name-background: none;
-  --vp-home-hero-image-background-image: none;
-  --vp-home-hero-image-filter: none;
+}
+
+:root {
+  --site-header: 64px;
+  --site-wide: 90rem;
+}
+
+html {
+  scroll-padding-top: calc(var(--site-header) + var(--e-space-4));
 }
 
 body {
-  font-family: var(--e-font-sans);
+  margin: 0;
+  background: var(--e-surface);
   color: var(--e-ink);
+  font-family: var(--e-font-sans);
 }
 
-/* Same focus ring as the components: solid, 2px, offset 2px, black. Text inputs use the teal field colour. */
-:where(a, button, summary, [tabindex]):focus-visible {
-  outline: var(--e-stroke-focus) solid var(--e-focus-ring);
-  outline-offset: var(--e-focus-gap);
+/* ---- Page frame ---- */
+.site {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-:where(input, textarea, select):focus-visible {
-  outline: var(--e-stroke-focus) solid var(--e-focus-field);
-  outline-offset: var(--e-focus-gap-field);
+.site .e-shell-inner {
+  max-width: var(--site-wide);
 }
 
-/* Type: Jost for reading at weight 500 for headings, Spline Sans Mono for labels. */
-.vp-doc h1,
-.vp-doc h2,
-.vp-doc h3,
-.vp-doc h4,
-.VPHero .name,
-.VPHero .text {
-  font-weight: 500;
-  letter-spacing: 0;
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-space-3);
+  color: var(--e-ink);
+  font: 600 var(--e-text-2xl) / 1 var(--e-font-sans);
+  text-decoration: none;
 }
 
-.vp-doc h1 {
-  font-size: var(--e-text-4xl);
-  line-height: 1.15;
+.site-brand img {
+  display: block;
+  width: 36px;
+  height: 36px;
 }
 
-.vp-doc h2 {
-  font-size: var(--e-text-2xl);
+.site-topnav {
+  display: none;
 }
 
-.vp-doc th {
+.site-topnav ul {
+  display: flex;
+  gap: 2px;
+}
+
+.site-menu-button {
+  display: inline-flex;
+}
+
+@media (min-width: 52rem) {
+  .site-topnav {
+    display: block;
+  }
+}
+
+@media (min-width: 64rem) {
+  .site-menu-button {
+    display: none;
+  }
+}
+
+@media (max-width: 30rem) {
+  .site-search-button {
+    padding-inline: var(--e-space-3);
+  }
+}
+
+.site-body {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--e-space-8);
+  width: 100%;
+  max-width: var(--site-wide);
+  margin-inline: auto;
+  padding: var(--e-space-6) var(--e-space-4) var(--e-space-8);
+}
+
+.site-side,
+.site-outline {
+  display: none;
+  position: sticky;
+  top: calc(var(--site-header) + var(--e-space-6));
+  align-self: start;
+  max-height: calc(100vh - var(--site-header) - var(--e-space-8));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (min-width: 64rem) {
+  .site-body--side {
+    grid-template-columns: 15rem minmax(0, 1fr);
+  }
+
+  .site-side {
+    display: block;
+  }
+}
+
+@media (min-width: 80rem) {
+  .site-body--side.site-body--outline {
+    grid-template-columns: 15rem minmax(0, 1fr) 13rem;
+  }
+
+  .site-outline {
+    display: block;
+  }
+}
+
+.site-main {
+  min-width: 0;
+  max-width: 60rem;
+}
+
+.site-main:focus {
+  outline: none;
+}
+
+.site-body--wide .site-main {
+  max-width: none;
+}
+
+.site-outline-title {
+  margin: 0 0 var(--e-space-2);
+  padding-inline: var(--e-space-3);
   font: 600 var(--e-text-xs) / 1.2 var(--e-font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--e-muted);
 }
 
-.vp-doc table {
-  display: table;
+.site-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-space-3);
+  margin-top: var(--e-space-8);
+  padding-top: var(--e-space-6);
+  border-top: var(--e-stroke-hair) solid var(--e-border);
+}
+
+.site-pager-next {
+  margin-inline-start: auto;
+}
+
+.site-drawer-pages {
+  margin-top: var(--e-space-6);
+  padding-top: var(--e-space-4);
+  border-top: var(--e-stroke-hair) solid var(--e-border);
+}
+
+.site-search {
+  width: min(40rem, calc(100vw - 32px));
+}
+
+.site-search-body {
+  display: grid;
+  gap: var(--e-space-3);
+}
+
+.site-search-results {
+  max-height: min(24rem, 50vh);
+  min-height: 3rem;
+  overflow-y: auto;
+}
+
+/* ---- Home ---- */
+.home {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: var(--e-space-8);
   width: 100%;
-  font-size: var(--e-text-sm);
+  max-width: var(--site-wide);
+  margin-inline: auto;
+  padding: var(--e-space-8) var(--e-space-4);
+}
+
+.home-title {
+  margin: 0;
+  color: var(--e-primary);
+  font: 500 clamp(3.5rem, 10vw, 6rem) / 1 var(--e-font-sans);
+}
+
+.home-lead {
+  max-width: 36rem;
+}
+
+.home-features {
+  max-width: 60rem;
+}
+
+.home-doc {
+  max-width: 44rem;
+}
+
+.home-doc > :first-child {
+  margin-top: 0;
+}
+
+/* ---- Page text ---- */
+.vp-doc {
+  font-family: var(--e-font-sans);
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4 {
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.vp-doc h1 {
+  margin: 0 0 var(--e-space-4);
+  font-size: var(--e-text-4xl);
+  line-height: 1.15;
+}
+
+.vp-doc h2 {
+  font-size: var(--e-text-2xl);
+  scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
+}
+
+.vp-doc h3 {
+  scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
 }
 
 .vp-doc a {
@@ -123,29 +302,56 @@ body {
   font-size: 0.9em;
 }
 
-.VPSidebarItem .text,
-.VPNavBarMenuLink,
-.VPSidebarItem.level-0 > .item .text {
+.vp-doc a:focus-visible,
+.vp-doc summary:focus-visible {
+  outline: var(--e-stroke-focus) solid var(--e-focus-ring);
+  outline-offset: var(--e-focus-gap);
+}
+
+/* Tables scroll sideways inside their own box on a narrow screen, and the first column keeps its words on one line. */
+.table-wrap {
+  margin: var(--e-space-4) 0;
+  overflow-x: auto;
+  border: var(--e-stroke-hair) solid var(--e-border);
+  border-radius: var(--e-radius-md);
+}
+
+.vp-doc .table-wrap table {
+  display: table;
+  width: 100%;
+  min-width: 34rem;
+  margin: 0;
   font-size: var(--e-text-sm);
 }
 
-.VPSidebarItem.level-0 > .item .text {
+.vp-doc .table-wrap :is(th, td) {
+  vertical-align: top;
+}
+
+.vp-doc .table-wrap :is(th, td):first-child {
+  white-space: nowrap;
+}
+
+.vp-doc th {
   font: 600 var(--e-text-xs) / 1.2 var(--e-font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: var(--e-muted);
 }
 
-.VPFeature {
-  border-radius: var(--e-radius-md);
+/* Code blocks sit on white with an edge, so the syntax colours keep their contrast. */
+.vp-doc div[class*="language-"] {
   border: var(--e-stroke-hair) solid var(--e-border);
-  background: var(--e-surface);
+  border-radius: var(--e-radius-md);
 }
 
-.VPFeature .title {
-  font-weight: 500;
+/* Headings inside a live demo are the library's, not the page's: no rule above them. */
+.vp-doc :is(.demo, .pattern-stage) :is(h1, h2, h3, h4, h5, h6) {
+  padding-top: 0;
+  border-top: 0;
 }
 
-/* Demo stage: where a live component sits inside a page. */
+/* ---- Live demos ---- */
 .demo {
   margin-block: var(--e-space-4);
   border: var(--e-stroke-hair) solid var(--e-border);
@@ -161,6 +367,12 @@ body {
   color: var(--e-ink);
 }
 
+@media (max-width: 40rem) {
+  .demo-stage {
+    padding: var(--e-space-4);
+  }
+}
+
 .demo-missing {
   padding: var(--e-space-4);
   color: var(--e-muted);
@@ -172,43 +384,15 @@ body {
   padding-block: var(--e-space-2);
 }
 
-
-/* Code blocks sit on white with an edge, so the syntax colours keep their contrast. */
-.vp-doc div[class*="language-"] {
-  border: var(--e-stroke-hair) solid var(--e-border);
-  border-radius: var(--e-radius-md);
-}
-
-/* The search button shows "Search" and a shortcut hint; the hint made the visible text differ from the accessible name. */
-.DocSearch-Button-Keys {
-  display: none;
-}
-
-/* Home page body */
-.home-body {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 32px 24px 64px;
-}
-
-.home-body h2 {
-  margin: 40px 0 16px;
-  font-size: 24px;
-  font-weight: 500;
-}
-
-/* Playground intro */
+/* ---- Playground ---- */
 .playground-intro {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 32px 16px 0;
+  max-width: 80rem;
+  margin: 0;
 }
 
 .playground-intro h1 {
-  margin: 0 0 8px;
-  font-size: 36px;
-  font-weight: 500;
-  line-height: 1.15;
+  margin: 0 0 var(--e-space-2);
+  font: 500 var(--e-text-4xl) / 1.15 var(--e-font-sans);
 }
 
 .playground-intro p {
@@ -217,8 +401,30 @@ body {
   color: var(--e-muted);
 }
 
-/* Headings inside a live demo are the library's, not the page's: no rule above them. */
-.vp-doc :is(.demo, .pattern-stage) :is(h1, h2, h3, h4, h5, h6) {
+.home-doc > h2:first-child {
+  margin-top: 0;
   padding-top: 0;
   border-top: 0;
+}
+
+.component-list {
+  margin: var(--e-space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.component-list > li {
+  display: grid;
+  gap: var(--e-space-1);
+  align-content: start;
+}
+
+/* VitePress lets code blocks bleed past the gutter on a phone; this page's gutter is narrower, so keep them inside. */
+@media (max-width: 639px) {
+  .vp-doc div[class*="language-"],
+  .vp-doc .vp-code-group .tabs,
+  .vp-doc .custom-block {
+    margin-inline: 0;
+    border-radius: var(--e-radius-md);
+  }
 }

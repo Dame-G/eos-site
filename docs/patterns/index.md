@@ -5,7 +5,7 @@ description: "Six whole pages built only from Eos components: pay a bill, sign i
 
 # Patterns
 
-Whole tasks, built only from Eos components. Each one is a live page you can use, with its source below. If a pattern needs a custom box or a hand-written flex row, a building block is missing from the library, so these double as integration tests. Every pattern is tested for rendering, behaviour and accessibility on each change.
+Whole tasks built only from Eos components. Each is a live page with its source below, tested for rendering, behaviour and accessibility on every change. If a pattern needs a custom box, a building block is missing from the library.
 
 - [Pay a bill](/patterns/pay-a-bill): amount choice, saved card, hosted card frame, pay button.
 - [Sign in](/patterns/sign-in): password, code and password rules.
