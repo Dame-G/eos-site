@@ -24,7 +24,6 @@ corepack pnpm docs:build      # static site in docs/.vitepress/dist
 corepack pnpm docs:preview    # serve the build
 corepack pnpm test            # Vitest browser mode + Playwright (Edge locally, Chromium when CI is set)
 corepack pnpm ssr:check       # renders components with renderToString and reports what it finds
-corepack pnpm layout:check    # with the preview running: every page at 375 and 1280px, reporting overflow and console errors
 ```
 
 After the library changes (a new component, a changed prop), rebuild it in `../eos`. The site imports the built `dist`, so a component that exists in `src` but not in `dist` fails its demo test.
