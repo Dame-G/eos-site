@@ -1,10 +1,10 @@
 # Porting from the React reference
 
-Working notes for porting the original React design system into the public Aegis library (in C:/dev/aegis, with this repo checked out beside it as ../aegis-site). The visual and behavioural spec is the React design system in `../aegis-site/reference/react/` (its READMEs, `src/*.js`, `bundle.css`, `index.d.ts` and `tests/suite.js`). The Vue components reproduce it with the same class names and the same CSS, written the way Vue and modern CSS want.
+Working notes for porting the original React design system into the public Eos library (in C:/dev/aegis, with this repo checked out beside it as ../eos-site). The visual and behavioural spec is the React design system in `../eos-site/reference/react/` (its READMEs, `src/*.js`, `bundle.css`, `index.d.ts` and `tests/suite.js`). The Vue components reproduce it with the same class names and the same CSS, written the way Vue and modern CSS want.
 
 ```
-packages/tokens   @aegis/tokens   tokens.json -> CSS variables, defineTheme(), contrast checks
-packages/vue      @aegis/vue      the components, plugin, composables
+packages/tokens   @eos/tokens   tokens.json -> CSS variables, defineTheme(), contrast checks
+packages/vue      @eos/vue      the components, plugin, composables
 reference/react   the spec being ported (read only)
 ```
 
@@ -13,12 +13,12 @@ reference/react   the spec being ported (read only)
 | Command                                                 | Use                                                                                                     |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `npx vitest run src/components/Chip`                    | tests for one component, in a real browser (Edge locally, Chromium in CI)                               |
-| `node scripts/check-css.mjs`                            | every rule is inside `@layer ae.*`, no `!important`, no raw z-index                                     |
+| `node scripts/check-css.mjs`                            | every rule is inside `@layer e.*`, no `!important`, no raw z-index                                     |
 | `node scripts/check-layers.mjs`                         | a component only uses components of its own layer or an earlier one                                     |
-| `node scripts/css-parity.mjs --grep ae-chip`            | compares your CSS with the reference `bundle.css`, rule by rule                                         |
+| `node scripts/css-parity.mjs --grep e-chip`            | compares your CSS with the reference `bundle.css`, rule by rule                                         |
 | `npx vue-tsc --noEmit -p tsconfig.json`                 | types, including `.vue` files                                                                           |
 | `node scripts/gen-index.mjs`                            | rewrites `src/index.ts` from what is on disk (never edit `src/index.ts`)                                |
-| `corepack pnpm --filter @aegis/vue build` | the library build (needs `node ../tokens/scripts/build.mjs` once, which `build` and `test` already run) |
+| `corepack pnpm --filter @eos/vue build` | the library build (needs `node ../tokens/scripts/build.mjs` once, which `build` and `test` already run) |
 
 `pnpm` is only available as `corepack pnpm`. Do not run the full `build` or `test` scripts while others are working; run the single-component commands above.
 
@@ -27,19 +27,19 @@ reference/react   the spec being ported (read only)
 `src/components/<Name>/` holds:
 
 ```
-AeChip.vue        script setup + template + <style> (the component's own CSS)
-AeChip.test.ts    Vitest browser tests (see Button for the shape)
+EChip.vue        script setup + template + <style> (the component's own CSS)
+EChip.test.ts    Vitest browser tests (see Button for the shape)
 README.md         what the consumer provides, what it does, the rules (adapt the reference README for Vue)
-index.ts          export { default as AeChip } from "./AeChip.vue";   (plus exported types)
+index.ts          export { default as EChip } from "./EChip.vue";   (plus exported types)
 ```
 
-`AeButton` is the model. Read `src/components/Button/` before writing anything.
+`EButton` is the model. Read `src/components/Button/` before writing anything.
 
 ### Naming and files
 
-The reference (React, `Op*` components, `op-*` classes) has been renamed in Aegis. **Use the new names everywhere**; the reference name is only for finding the source.
+The reference (React, `Op*` components, `op-*` classes) has been renamed in Eos. **Use the new names everywhere**; the reference name is only for finding the source.
 
-| Reference name | Aegis name |
+| Reference name | Eos name |
 | --- | --- |
 | FormField | Field (the label, hint and error shell) |
 | Field | TextField |
@@ -56,8 +56,8 @@ The reference (React, `Op*` components, `op-*` classes) has been renamed in Aegi
 | TimeSlots | SlotPicker |
 | Pattern* (PatternPayBill ...) | not library components: they become example pages in the site and integration tests (see 'Patterns') |
 
-Every other component keeps its name. The prefix is `Ae` (`AeButton`), classes are `ae-*`, custom properties are `--ae-*` (`var(--ae-space-4)`), cascade layers are `ae.*`. Naming rules for new names: one word where it reads well; `*Field` is a labelled input built on `AeField`; `*Picker` chooses from a popup; `*Group` is a fieldset of choices; `*Row` is a compact line; `*Card` is a bordered summary; `*List` repeats items. Practice-specific words stay out of names and docs: the library is general. Components are `Ae` + the name above: `AeChip`, `AeStatementCard`. The folder is the name without the prefix (`Chip`). A component with sub-parts keeps them in its folder (`AeTabs.vue`, `AeTab.vue`).
-- Keep the reference's class stems and swap the prefix: `.op-chip` becomes `.ae-chip`. Consumers theme through tokens, not class renames.
+Every other component keeps its name. The prefix is `Ae` (`EButton`), classes are `ae-*`, custom properties are `--e-*` (`var(--e-space-4)`), cascade layers are `e.*`. Naming rules for new names: one word where it reads well; `*Field` is a labelled input built on `EField`; `*Picker` chooses from a popup; `*Group` is a fieldset of choices; `*Row` is a compact line; `*Card` is a bordered summary; `*List` repeats items. Practice-specific words stay out of names and docs: the library is general. Components are `Ae` + the name above: `EChip`, `EStatementCard`. The folder is the name without the prefix (`Chip`). A component with sub-parts keeps them in its folder (`ETabs.vue`, `ETab.vue`).
+- Keep the reference's class stems and swap the prefix: `.op-chip` becomes `.e-chip`. Consumers theme through tokens, not class renames.
 - Composables are `src/composables/useThing.ts`, one per file, one named export per file (`gen-index` exports them).
 
 ### Props, events, slots
@@ -82,38 +82,38 @@ Every other component keeps its name. The prefix is `Ae` (`AeButton`), classes a
 
 - Every string a component writes is `const t = useMessages(); t("key")`. Keys already exist in `src/messages.ts`; add a key there only when the reference component has one that is missing. A local variable named `t` that is not that function is a bug.
 - Money, dates and numbers use the configured `locale` and `currency` from `useConfig()` (`Intl`), never hard-coded.
-- Icons are `<AeIcon name="..." />`. Never inline SVG paths.
+- Icons are `<EIcon name="..." />`. Never inline SVG paths.
 
 ### CSS
 
-- Write the component's CSS in its own `<style>` block (not scoped; the `op-*` classes are the contract) inside one `@layer ae.<layer> { ... }`:
+- Write the component's CSS in its own `<style>` block (not scoped; the `op-*` classes are the contract) inside one `@layer e.<layer> { ... }`:
 
   | Layer           | Reference layer           |
   | --------------- | ------------------------- |
-  | `ae.primitives` | 1 Primitives              |
-  | `ae.blocks`     | 2 Building blocks         |
-  | `ae.controls`   | 3 Form controls           |
-  | `ae.composites` | 4 Composite controls      |
-  | `ae.containers` | 5 Containers and feedback |
-  | `ae.account`    | 6 The account             |
-  | `ae.page`       | 7 The page                |
-  | `ae.patterns`   | 8 Patterns                |
+  | `e.primitives` | 1 Primitives              |
+  | `e.blocks`     | 2 Building blocks         |
+  | `e.controls`   | 3 Form controls           |
+  | `e.composites` | 4 Composite controls      |
+  | `e.containers` | 5 Containers and feedback |
+  | `e.account`    | 6 The account             |
+  | `e.page`       | 7 The page                |
+  | `e.patterns`   | 8 Patterns                |
 
   A component uses only components of its own layer or an earlier one (`check-layers`).
 
-- `import "../../styles/base.css";` at the top of the script so the tokens, the focus ring, `.ae-kicker` and `.ae-sr` are present wherever the component is used.
-- Take every rule for your classes from the reference `bundle.css`, including the ones in cross-cutting sections: `@media print`, `forced-colors`, `:dir(rtl)`, container queries, the "polish" sections, and rules where your class appears inside another selector. `css-parity --grep ae-yourclass` must report no missing rules and no changed values, except what you record in `packages/vue/parity-allow.json` with a reason. A rule that styles a child component's class (`.ae-actions--bar > .ae-btn`) lives with the parent that sets the context.
-- Format as expanded, one declaration per line, lowercase `currentcolor`. Values come from tokens (`var(--ae-space-4)`); a raw colour, size or duration is a missing token. Logical properties only (`margin-inline-start`, `inset-inline-end`).
+- `import "../../styles/base.css";` at the top of the script so the tokens, the focus ring, `.e-kicker` and `.e-sr` are present wherever the component is used.
+- Take every rule for your classes from the reference `bundle.css`, including the ones in cross-cutting sections: `@media print`, `forced-colors`, `:dir(rtl)`, container queries, the "polish" sections, and rules where your class appears inside another selector. `css-parity --grep e-yourclass` must report no missing rules and no changed values, except what you record in `packages/vue/parity-allow.json` with a reason. A rule that styles a child component's class (`.e-actions--bar > .e-btn`) lives with the parent that sets the context.
+- Format as expanded, one declaration per line, lowercase `currentcolor`. Values come from tokens (`var(--e-space-4)`); a raw colour, size or duration is a missing token. Logical properties only (`margin-inline-start`, `inset-inline-end`).
 - Dark mode and other themes work by changing token values; never hard-code a colour that should theme.
 
 ### Tests
 
-Port the relevant tests from `../aegis-site/reference/react/tests/suite.js` one for one, then add what the reference lacked: keyboard, accessible name and role, `v-model` round trip, attribute fall-through, the axe pass. Use `vitest-browser-vue` (`render` is async) and `vitest/browser` locators (`page.getByRole`). Layout assertions (heights, wrapping, container queries) are real here because the tests run in a browser; keep the reference's.
+Port the relevant tests from `../eos-site/reference/react/tests/suite.js` one for one, then add what the reference lacked: keyboard, accessible name and role, `v-model` round trip, attribute fall-through, the axe pass. Use `vitest-browser-vue` (`render` is async) and `vitest/browser` locators (`page.getByRole`). Layout assertions (heights, wrapping, container queries) are real here because the tests run in a browser; keep the reference's.
 
 ```ts
 import { render } from "vitest-browser-vue";
 import { page } from "vitest/browser";
-const { container } = await render(AeChip, { props: { tone: "success" }, slots: { default: "Paid" } });
+const { container } = await render(EChip, { props: { tone: "success" }, slots: { default: "Paid" } });
 ```
 
 ### Definition of done
@@ -122,7 +122,7 @@ const { container } = await render(AeChip, { props: { tone: "success" }, slots: 
 2. `check-css`, `check-layers`, `vue-tsc` are clean for your files.
 3. `css-parity --grep` for each of your classes is clean (or allowed with a reason).
 4. The component has a README, an `index.ts`, and exported prop types where a consumer would name them.
-5. The component works without `createAegis()` installed (the config has a fallback) and with a theme applied.
+5. The component works without `createEos()` installed (the config has a fallback) and with a theme applied.
 
 ## Themes
 
@@ -144,4 +144,4 @@ Use a dependency where it is best in class and would otherwise mean hand-rolling
 
 ## Patterns
 
-The reference's six Pattern* previews (PayBill, Register, Schedule, SignForm, SignIn, Statements) are not components. They become example pages in aegis-site and integration tests there.
+The reference's six Pattern* previews (PayBill, Register, Schedule, SignForm, SignIn, Statements) are not components. They become example pages in eos-site and integration tests there.
