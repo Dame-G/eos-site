@@ -3,8 +3,9 @@ import localSearchIndex from "@localSearchIndex";
 import MiniSearch from "minisearch";
 import { computed, nextTick, ref, shallowRef, watch } from "vue";
 import { useRouter } from "vitepress";
-import { EDialog, ENavList, EText, ETextField } from "@eos-ui/vue";
-import type { NavItem } from "@eos-ui/vue";
+import { EDialog, EKbd, ESearchBar, ESearchResults, EVisuallyHidden } from "@eos-ui/vue";
+import type { SearchResultItem } from "@eos-ui/vue";
+import { searchBuildOptions, searchOptions, titleRank } from "../search";
 import { cleanPath } from "./nav";
 
 const open = defineModel<boolean>("open", { default: false });
@@ -18,23 +19,27 @@ interface Hit {
 const router = useRouter();
 const query = ref("");
 const hits = shallowRef<Hit[]>([]);
-const list = ref<HTMLElement | null>(null);
+const results = ref<{ focusFirst: () => void } | null>(null);
 const field = ref<{ focus: () => void } | null>(null);
 let index: MiniSearch<Hit> | null = null;
 
 async function load() {
   if (index) return;
   const mod = await (localSearchIndex as Record<string, () => Promise<{ default: string }>>)["root"]!();
-  index = MiniSearch.loadJSON<Hit>(mod.default, {
-    fields: ["title", "titles", "text"],
-    storeFields: ["title", "titles"],
-    searchOptions: { fuzzy: 0.2, prefix: true, boost: { title: 4, text: 2, titles: 1 } },
-  });
+  index = MiniSearch.loadJSON<Hit>(mod.default, { ...searchBuildOptions, searchOptions });
 }
 
 async function run() {
   await load();
-  hits.value = index && query.value.trim() ? (index.search(query.value).slice(0, 12) as unknown as Hit[]) : [];
+  const q = query.value.trim();
+  hits.value =
+    index && q
+      ? (index.search(q).slice(0, 40) as unknown as Hit[])
+          .map((h, at) => ({ h, at, rank: titleRank(h.title, q) }))
+          .sort((a, b) => a.rank - b.rank || a.at - b.at)
+          .slice(0, 12)
+          .map((x) => x.h)
+      : [];
 }
 
 watch(query, run);
@@ -46,9 +51,20 @@ watch(open, async (isOpen) => {
   field.value?.focus();
 });
 
-const items = computed<NavItem[]>(() =>
-  hits.value.map((h) => ({ label: [...h.titles, h.title].join(" > "), href: h.id.replace(/\.html(?=#|$)/, "") })),
+const status = computed(() => {
+  if (!query.value.trim()) return "";
+  const n = hits.value.length;
+  return n ? `${n} ${n === 1 ? "result" : "results"}` : "No results";
+});
+
+const items = computed<SearchResultItem[]>(() =>
+  hits.value.map((h) => ({
+    label: h.title,
+    description: h.titles.join(" › "),
+    href: h.id.replace(/\.html(?=#|$)/, ""),
+  })),
 );
+const emptyText = computed(() => (query.value.trim() ? `Nothing found for "${query.value}".` : undefined));
 
 function go(href: string) {
   open.value = false;
@@ -57,41 +73,50 @@ function go(href: string) {
   void router.go(cleanPath(path ?? "/") + (hash ? `#${hash}` : ""));
 }
 
-/** Arrow keys move between the box and the results; Enter opens the first result from the box. */
-function onKeydown(e: KeyboardEvent) {
-  const links = [...(list.value?.querySelectorAll<HTMLAnchorElement>("a") ?? [])];
-  const at = links.indexOf(document.activeElement as HTMLAnchorElement);
-  if (e.key === "ArrowDown" && links.length) {
+function onFieldKeydown(e: KeyboardEvent) {
+  if (e.key === "ArrowDown" && items.value.length) {
     e.preventDefault();
-    links[Math.min(at + 1, links.length - 1)]!.focus();
-  } else if (e.key === "ArrowUp" && at >= 0) {
-    e.preventDefault();
-    if (at === 0) field.value?.focus();
-    else links[at - 1]!.focus();
-  } else if (e.key === "Enter" && at < 0 && items.value[0]?.href) {
-    e.preventDefault();
-    go(items.value[0].href);
+    results.value?.focusFirst();
   }
 }
 
-function onResultClick(e: MouseEvent) {
-  const a = (e.target as HTMLElement).closest("a");
-  if (!a) return;
+function openFirst() {
+  const first = items.value[0]?.href;
+  if (first) go(first);
+}
+
+function onSelect(item: SearchResultItem, e: MouseEvent) {
   e.preventDefault();
-  e.stopPropagation();
-  go(a.getAttribute("href") ?? "/");
+  go(item.href ?? "/");
 }
 </script>
 
 <template>
   <EDialog v-model:open="open" title="Search" class="site-search">
-    <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
-    <div class="site-search-body" @keydown="onKeydown">
-      <ETextField ref="field" v-model="query" label="Search the docs" hide-label type="search" placeholder="Search the docs" autocomplete="off" />
-      <div ref="list" class="site-search-results" aria-live="polite" @click.capture="onResultClick">
-        <ENavList v-if="items.length" label="Search results" :items="items" dense />
-        <EText v-else-if="query.trim()" muted variant="small">Nothing found for "{{ query }}".</EText>
-      </div>
+    <div class="site-search-body">
+      <ESearchBar
+        ref="field"
+        v-model="query"
+        label="Search the docs"
+        placeholder="Search the docs"
+        hide-action
+        autocomplete="off"
+        @keydown="onFieldKeydown"
+        @submit="openFirst"
+      />
+      <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ status }}</EVisuallyHidden>
+      <ESearchResults
+        ref="results"
+        label="Search results"
+        :items="items"
+        :query="query"
+        :empty-text="emptyText"
+        @select="onSelect"
+        @edge="field?.focus()"
+      />
     </div>
+    <template #actions>
+      <p class="site-search-hint"><EKbd small>Esc</EKbd> to close</p>
+    </template>
   </EDialog>
 </template>

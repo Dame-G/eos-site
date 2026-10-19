@@ -3,7 +3,6 @@ import { mount, expectNoViolations, settle, watchConsole } from "./helpers";
 
 declare const __COMPONENTS__: string[];
 
-// Every component folder in the library needs a demo here, and every demo must render quietly and pass axe.
 const demos = import.meta.glob("../docs/components/demos/*.vue");
 const console_ = watchConsole();
 

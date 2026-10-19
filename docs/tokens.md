@@ -5,13 +5,17 @@ description: "Every Eos design token with its usage note and contrast, generated
 
 # Tokens
 
-Every value is read from `@eos-ui/tokens` at build time, so this page matches the code. Each token is a CSS custom property named `--e-<name>`. Components read tokens and never write a raw colour, size or duration.
+Each token is a CSS variable named `--e-<name>`. Components use tokens, never raw values. The values below come from `@eos-ui/tokens`. To change them, see [Theming](/guide/theming).
 
-To change them, see [Theming](/guide/theming).
+## Inputs
+
+`defineTheme()` takes 15 inputs and emits every token below. Each token's From column names the input it follows. Constants, such as `depth`, never change. Any token can be set by name in `tokens`.
+
+<TokenTables section="inputs" />
 
 ## Colour
 
-Each colour shows its ratio against its partner, the colour it is used with. Text needs 4.5:1 (AA) and the system aims for 7:1 (AAA). Edges and focus outlines need 3:1.
+Each colour shows its ratio against its partner. Text needs 4.5:1 (AA); edges and focus outlines 3:1.
 
 <TokenTables section="colour" />
 
@@ -25,8 +29,6 @@ Each colour shows its ratio against its partner, the colour it is used with. Tex
 
 ## Spacing
 
-Related things sit close, groups sit apart. See [Design principles](/guide/design-principles).
-
 <TokenTables section="spacing" />
 
 ## Radius
@@ -34,8 +36,6 @@ Related things sit close, groups sit apart. See [Design principles](/guide/desig
 <TokenTables section="radius" />
 
 ## Shadows
-
-Depth means "you can click this" or "this floats". Nothing else casts a shadow.
 
 <TokenTables section="shadow" />
 

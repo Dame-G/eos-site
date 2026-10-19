@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
+import { EHighlight } from "@eos-ui/vue";
 
-// Every file in docs/components/demos is a demo. Adding a component to the library = adding its file here.
 const demos = import.meta.glob("../../components/demos/*.vue");
 
 const props = defineProps<{ name: string }>();
@@ -13,7 +13,7 @@ const Demo = loader ? defineAsyncComponent(loader as () => Promise<{ default: ob
   <div class="demo">
     <div v-if="Demo" class="demo-stage e-root"><component :is="Demo" /></div>
     <p v-else class="demo-missing">
-      There is no demo for E{{ name }} yet. Add <code>docs/components/demos/{{ name }}.vue</code> to the site repository.
+      There is no demo for E{{ name }} yet. Add <EHighlight code>docs/components/demos/{{ name }}.vue</EHighlight> to the site repository.
     </p>
   </div>
 </template>

@@ -6,7 +6,6 @@ const last = ref("Nothing pressed yet.");
 
 <template>
   <EStack>
-    <!-- The label is the accessible name: write it as an action -->
     <EInline>
       <EIconButton icon="download" label="Download receipt" @click="last = 'Receipt downloaded.'" />
       <EIconButton icon="print" label="Print statement" @click="last = 'Statement sent to the printer.'" />

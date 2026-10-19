@@ -1,33 +1,29 @@
 ---
 title: Words and language
-description: "Replace every word a component says, and let money, dates and direction follow the locale."
+description: "Replace every word a component says; money, dates and direction follow the locale."
 ---
 
 # Words and language
-
-Every string a component writes can be replaced, and money, dates and numbers follow the locale. Set it once:
 
 ```ts
 createEos({
   locale: "fr-CA",
   currency: "CAD",
+  dir: "rtl", // optional; null follows the document
   messages: { required: "Obligatoire", optional: "Facultatif" },
 });
 ```
 
+- `locale` sets month and weekday names, first day of the week, date order and number formats.
+- `currency` is an ISO 4217 code: $162.40 in en-US, 162,40 $ in fr-CA.
+- `dir` mirrors layout and flips arrows. It sets the `dir` attribute on the theme target (`<html>` by default). With `dir: null` it follows the document.
+- Eos never sets `lang`. Set it on `<html>` yourself.
+
 ## Messages
 
-Each word is a message with a key. `defaultMessages` lists them all:
+`defaultMessages` lists every word by key. Override any key and the rest stay English. Placeholders such as `{n}` are filled by the component. Statuses are keys too (`status.paid`).
 
-```ts
-import { defaultMessages } from "@eos-ui/vue";
-
-defaultMessages.pageN; // "Page {n}"
-```
-
-Placeholders in braces are filled by the component: `removeItem: "Remove {label}"`. Override any key and leave the rest in English. Statuses are keys too (`status.paid`, `status.overdue`), so a stamp can say whatever your practice says.
-
-The config is reactive. Change it and every component updates:
+The config is reactive:
 
 ```ts
 const eos = createEos({ locale: "en-US" });
@@ -35,40 +31,16 @@ eos.config.locale = "de-DE";
 eos.config.messages = { required: "Pflichtfeld" };
 ```
 
-For `vue-i18n`, build `messages` from it and set `locale` from `useI18n().locale`. Dates and numbers follow.
-
-Use the same words in your own components with `useMessages()`:
+Use the same words and locale helpers in your own components:
 
 ```ts
-import { useMessages } from "@eos-ui/vue";
+import { useMessages, useLocale } from "@eos-ui/vue";
 
 const t = useMessages();
 t("pageN", { n: 3 }); // "Page 3"
-```
 
-## Locale
-
-The locale sets month and weekday names, the first day of the week, the order of day, month and year, and number formats. Switch it in the [playground](/playground) and watch the calendar change.
-
-`useLocale()` gives you the helpers the pickers use:
-
-```ts
 const { formatDate, parseDate, formatMoney } = useLocale();
-formatDate(new Date(2026, 9, 22)); // "10/22/2026" in en-US, "22/10/2026" in fr-CA
+formatDate(new Date(2026, 9, 22)); // "10/22/2026" in en-US
 ```
 
-A date typed with Arabic-Indic digits still parses. Dates are local days held at noon, so daylight saving never shifts one.
-
-## Currency
-
-`currency` is an ISO 4217 code. Amount components format with it: $162.40 in en-US, 162,40 $ in fr-CA.
-
-## Right to left
-
-Layout uses logical properties, so right-to-left text mirrors without extra CSS. Left and right arrows and chevrons flip. In a calendar, ArrowRight goes to the previous day.
-
-```ts
-createEos({ locale: "ar-EG", dir: "rtl" });
-```
-
-`dir` is applied to the theme target; leave it `null` to follow the document. Set `lang` and `dir` on `<html>` yourself: Eos never sets `lang`.
+With `vue-i18n`, build `messages` from it and set `locale` from `useI18n().locale`.

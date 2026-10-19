@@ -52,7 +52,7 @@ function search(q: string) {
 </script>
 
 <template>
-  <div class="pattern" style="max-width: 720px">
+  <div style="max-width: 720px">
     <EStack :gap="4">
       <EPageHeader :heading-level="2" title="Statements and receipts" description="Everything you have been billed, newest first." />
       <ESearchBar v-model="typed" placeholder="Search by visit or statement number" @submit="search" />

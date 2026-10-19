@@ -10,14 +10,12 @@ const items = [
 
 <template>
   <EStack>
-    <!-- One section open at a time: opening one closes the others -->
     <EAccordion :items="items">
       <template #billing>Your October statement of $162.40 is due on Oct 22, 2026.</template>
       <template #privacy>Choose who can see your visit history.</template>
       <template #reminders>Get a message two days before each visit.</template>
     </EAccordion>
 
-    <!-- Several sections can stay open -->
     <EAccordion
       multiple
       :items="[

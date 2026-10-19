@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eos.dame.gg/sitemap.xml

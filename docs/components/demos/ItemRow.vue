@@ -7,7 +7,6 @@ const signed = ref(false);
 
 <template>
   <EStack>
-    <!-- Outside an ItemList a row wraps itself in one -->
     <EItemRow
       title="New client form"
       subtitle="Due Oct 22, 2026"

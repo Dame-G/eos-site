@@ -15,5 +15,14 @@ const copies = ref<number | null>(null);
     <ENumberField v-model="copies" label="Copies of statement" prefix="x" optional />
     <ENumberField label="Guests" :model-value="9" :max="8" error="Up to 8 guests per booking." />
     <ENumberField label="Rooms" :model-value="1" disabled />
+    <div class="narrow">
+      <ENumberField label="Narrow field" :model-value="3" />
+    </div>
   </EStack>
 </template>
+
+<style scoped>
+.narrow {
+  max-width: 8rem;
+}
+</style>

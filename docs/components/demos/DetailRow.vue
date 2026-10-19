@@ -12,7 +12,6 @@ function editEmail() {
   <EStack>
     <EDetailRow label="Email" status="Verified" tone="success" @edit="editEmail">{{ email }}</EDetailRow>
     <EDetailRow label="Phone" status="Needs update" tone="warning" @edit="editEmail">(555) 010-2299</EDetailRow>
-    <!-- No edit listener, so no Edit button -->
     <EDetailRow label="Member since">Jan 14, 2024</EDetailRow>
   </EStack>
 </template>

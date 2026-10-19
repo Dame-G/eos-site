@@ -15,7 +15,6 @@ import { EHeading, EStack, EText } from "@eos-ui/vue";
     <EStack align="center">
       <EText>Centred across the column</EText>
     </EStack>
-    <!-- as="ul" gives real list semantics -->
     <EStack as="ul" :gap="2">
       <li>Statement of $162.40</li>
       <li>Receipt for Sep 3, 2026</li>

@@ -4,7 +4,6 @@ import { render } from "vitest-browser-vue";
 import { createEos } from "@eos-ui/vue";
 import type { Component } from "vue";
 
-/** Page-level rules that cannot pass for one demo mounted alone. */
 const PAGE_RULES = [
   "region",
   "landmark-one-main",

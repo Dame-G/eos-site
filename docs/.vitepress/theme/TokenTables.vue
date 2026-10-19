@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { EChip, EDataGrid, EGrid, EStack, ESurface, EText } from "@eos-ui/vue";
+import { EChip, EDataGrid, EGrid, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
 
 defineProps<{
-  section: "colour" | "type" | "spacing" | "radius" | "shadow" | "fontSize" | "size" | "stroke" | "motion" | "zIndex";
+  section: "inputs" | "colour" | "type" | "spacing" | "radius" | "shadow" | "fontSize" | "size" | "stroke" | "motion" | "zIndex";
 }>();
 
 type Partner = { name: string; value: string; role: string; ratio: number; level: string };
-type Token = { name: string; value: string; usage: string };
+type Token = { name: string; value: string; usage: string; from: string[]; input: boolean; constant: boolean };
+type Input = { name: string; controls: string; neutral: string; derives: string[] };
 
 function tone(level: string) {
   if (level === "AAA" || level === "AA") return "success";
@@ -16,19 +17,40 @@ function tone(level: string) {
   if (level.startsWith("Large")) return "warning";
   return "danger";
 }
-// Text colours show the word "Aa" in the colour of the pair, so the pair can be read at a glance.
 const isText = (p: Partner) => !/non-text|Decoration/.test(p.role);
 
 const withId = <T extends { name: string }>(rows: T[]) => rows.map((r) => ({ ...r, id: r.name }));
 const token = { key: "name", label: "Token", width: 200 };
 const value = { key: "value", label: "Value", width: 150 };
 const usage = { key: "usage", label: "Used for" };
-const plainColumns = [token, value, usage];
+const from = { key: "from", label: "From", width: 170 };
+const plainColumns = [token, value, from, usage];
+const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r.constant ? "constant" : r.from.join(", ") }));
 </script>
 
 <template>
-  <div class="tokens eos-live">
-    <template v-if="section === 'colour'">
+  <div class="eos-live">
+    <EDataGrid
+      v-if="section === 'inputs'"
+      plain
+      caption="Theme inputs"
+      :columns="[{ key: 'name', label: 'Input', width: 150 }, { key: 'controls', label: 'Controls' }, { key: 'derives', label: 'Derives' }, { key: 'neutral', label: 'Neutral', width: 150 }]"
+      :rows="withId(data.inputs as Input[])"
+    >
+      <template #cell-name="{ row }"
+        ><EHighlight code>{{ row.name }}</EHighlight></template
+      >
+      <template #cell-derives="{ row }">
+        <span class="derives"
+          ><EHighlight code v-for="n in row.derives as string[]" :key="n">{{ n }}</EHighlight></span
+        >
+      </template>
+      <template #cell-neutral="{ row }"
+        ><EHighlight code>{{ row.neutral }}</EHighlight></template
+      >
+    </EDataGrid>
+
+    <template v-else-if="section === 'colour'">
       <EGrid as="ul" min="22rem" :gap="4" class="swatches">
         <ESurface v-for="c in data.colours" :id="`color-${c.name}`" :key="c.name" as="li" pad="sm" class="swatch">
           <div
@@ -41,12 +63,13 @@ const plainColumns = [token, value, usage];
           </div>
           <div class="meta">
             <p class="name">
-              <code>--e-{{ c.name }}</code> <span class="hex">{{ c.source.startsWith("{") ? "= " + c.value : c.value }}</span>
+              <EHighlight code>--e-{{ c.name }}</EHighlight> <span class="hex">{{ c.source.startsWith("{") ? "= " + c.value : c.value }}</span>
             </p>
             <EText variant="small" muted class="usage">{{ c.usage }}</EText>
+            <EText variant="small" muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
             <ul v-if="c.partners.length" class="pairs">
               <li v-for="p in c.partners" :key="p.name">
-                <strong>{{ p.ratio }}:1</strong> with <code>{{ p.name }}</code>
+                <strong>{{ p.ratio }}:1</strong> with <EHighlight code>{{ p.name }}</EHighlight>
                 <EChip :tone="tone(p.level)">{{ p.level }}</EChip>
                 <span class="role">{{ p.role }}</span>
               </li>
@@ -60,19 +83,19 @@ const plainColumns = [token, value, usage];
       <EStack>
         <EText>
           Two families. <strong>Sans</strong> for reading, <strong>mono</strong> for kickers, chips, stamps and every amount, number and date. Fonts are
-          never bundled: load them yourself or import <code>@eos-ui/vue/fonts.css</code>.
+          never bundled: load them yourself or import <EHighlight code>@eos-ui/vue/fonts.css</EHighlight>.
         </EText>
         <EDataGrid
           plain
           caption="Font families"
-          :columns="[token, { key: 'stack', label: 'Stack' }, { key: 'sample', label: 'Sample' }]"
+          :columns="[token, { key: 'from', label: 'From', width: 100 }, { key: 'stack', label: 'Stack' }, { key: 'sample', label: 'Sample' }]"
           :rows="[
-            { id: 'sans', name: 'font-sans', stack: data.families.sans, sample: 'Your balance is due November 1.' },
-            { id: 'mono', name: 'font-mono', stack: data.families.mono, sample: '$162.40, Oct 22, 2026' },
+            { id: 'sans', name: 'font-sans', from: 'fonts', stack: data.families.sans, sample: 'Your balance is due November 1.' },
+            { id: 'mono', name: 'font-mono', from: 'fonts', stack: data.families.mono, sample: '$162.40, Oct 22, 2026' },
           ]"
         >
           <template #cell-name="{ row }"
-            ><code>--e-{{ row.name }}</code></template
+            ><EHighlight code>--e-{{ row.name }}</EHighlight></template
           >
           <template #cell-sample="{ row }"
             ><span :style="{ fontFamily: `var(--e-${row.name})` }">{{ row.sample }}</span></template
@@ -92,7 +115,7 @@ const plainColumns = [token, value, usage];
             :rows="g.styles.map((s: any) => ({ ...s, id: s.name, size: `${s.fontSize} / ${s.lineHeight}, weight ${s.fontWeight}` }))"
           >
             <template #cell-name="{ row }"
-              ><code>{{ row.name }}</code></template
+              ><EHighlight code>{{ row.name }}</EHighlight></template
             >
             <template #cell-sample="{ row }">
               <span
@@ -114,11 +137,11 @@ const plainColumns = [token, value, usage];
       v-else-if="section === 'spacing'"
       plain
       caption="Spacing"
-      :columns="[token, value, usage, { key: 'size', label: 'Size', width: 160 }]"
-      :rows="withId(data.spacing as Token[])"
+      :columns="[token, value, from, usage, { key: 'size', label: 'Size', width: 160 }]"
+      :rows="withFrom(data.spacing as Token[])"
     >
       <template #cell-name="{ row }"
-        ><code>--e-{{ row.name }}</code></template
+        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
       >
       <template #cell-size="{ row }"><span class="bar" :style="{ width: row.value as string }" /></template>
     </EDataGrid>
@@ -127,11 +150,11 @@ const plainColumns = [token, value, usage];
       v-else-if="section === 'radius'"
       plain
       caption="Corner radius"
-      :columns="[token, value, usage, { key: 'shape', label: 'Shape', width: 120 }]"
-      :rows="withId(data.radius as Token[])"
+      :columns="[token, value, from, usage, { key: 'shape', label: 'Shape', width: 120 }]"
+      :rows="withFrom(data.radius as Token[])"
     >
       <template #cell-name="{ row }"
-        ><code>--e-{{ row.name }}</code></template
+        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
       >
       <template #cell-shape="{ row }"><span class="box" :style="{ borderRadius: row.value as string }" /></template>
     </EDataGrid>
@@ -140,11 +163,11 @@ const plainColumns = [token, value, usage];
       v-else-if="section === 'shadow'"
       plain
       caption="Shadows"
-      :columns="[token, usage, { key: 'look', label: 'Look', width: 200 }]"
-      :rows="withId(data.shadow as Token[])"
+      :columns="[token, from, usage, { key: 'look', label: 'Look', width: 200 }]"
+      :rows="withFrom(data.shadow as Token[])"
     >
       <template #cell-name="{ row }"
-        ><code>--e-{{ row.name }}</code></template
+        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
       >
       <template #cell-look="{ row }"><span class="box wide" :style="{ boxShadow: `var(--e-${row.name})`, border: 'none' }" /></template>
     </EDataGrid>
@@ -153,11 +176,11 @@ const plainColumns = [token, value, usage];
       v-else-if="section === 'fontSize'"
       plain
       caption="Font sizes"
-      :columns="[token, value, usage, { key: 'sample', label: 'Sample', width: 120 }]"
-      :rows="withId(data.fontSize as Token[])"
+      :columns="[token, value, from, usage, { key: 'sample', label: 'Sample', width: 120 }]"
+      :rows="withFrom(data.fontSize as Token[])"
     >
       <template #cell-name="{ row }"
-        ><code>--e-{{ row.name }}</code></template
+        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
       >
       <template #cell-sample="{ row }"
         ><span :style="{ fontSize: row.value as string, lineHeight: 1.2 }">Aa</span></template
@@ -169,10 +192,10 @@ const plainColumns = [token, value, usage];
       plain
       :caption="section === 'size' ? 'Sizes' : section === 'stroke' ? 'Strokes' : section === 'motion' ? 'Motion' : 'Layers'"
       :columns="plainColumns"
-      :rows="withId((section === 'motion' ? [...data.duration, ...data.easing] : data[section]) as Token[])"
+      :rows="withFrom((section === 'motion' ? [...data.duration, ...data.easing] : data[section]) as Token[])"
     >
       <template #cell-name="{ row }"
-        ><code>--e-{{ row.name }}</code></template
+        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
       >
     </EDataGrid>
   </div>
@@ -233,6 +256,11 @@ const plainColumns = [token, value, usage];
 }
 .role {
   color: var(--e-muted);
+}
+.derives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-space-1);
 }
 .bar {
   display: block;

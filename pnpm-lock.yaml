@@ -176,6 +176,12 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44
     devDependencies:
+      '@fontsource-variable/jost':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource-variable/spline-sans-mono':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@vitejs/plugin-vue':
         specifier: ^6.0.10
         version: 6.0.10(vite@8.3.4(esbuild@0.28.2))(vue@3.5.44)
@@ -191,6 +197,9 @@ importers:
       playwright:
         specifier: ^1.64.1
         version: 1.64.1
+      shiki:
+        specifier: ^2.5.0
+        version: 2.5.0
       vite:
         specifier: ^8.3.4
         version: 8.3.4(esbuild@0.28.2)
@@ -671,6 +680,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource-variable/jost@5.3.0':
+    resolution: {integrity: sha512-9FS8iBMJnfyPqQOi9dfMjSwYBIWd0kBD3/jl8VvtbIMY2pK+CSp3oAaTLS1V60rDoM7AfyPvuT+IUfJfGeCTKg==}
+
+  '@fontsource-variable/spline-sans-mono@5.3.0':
+    resolution: {integrity: sha512-dH/qBj/MCE4ObiuCwlA9X1o3AftMO9dwfFgoRVYjy6VCPYkpWAlEtK/RjeyICgsR8rW763IAQARskVgShBY5JA==}
 
   '@iconify-json/simple-icons@1.2.100':
     resolution: {integrity: sha512-536pN2RCEQyy5bYwzayrs4e9egr8cmtVcbdSHLaQl/ULUsihzn1eZ0+Hhn50zgz9cbEotiynKsKQSEjFJ7qKmw==}
@@ -2348,6 +2363,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.2':
     optional: true
+
+  '@fontsource-variable/jost@5.3.0': {}
+
+  '@fontsource-variable/spline-sans-mono@5.3.0': {}
 
   '@iconify-json/simple-icons@1.2.100':
     dependencies:

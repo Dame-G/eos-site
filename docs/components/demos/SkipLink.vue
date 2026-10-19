@@ -3,7 +3,6 @@ import { ESkipLink, EText } from "@eos-ui/vue";
 </script>
 
 <template>
-  <!-- Hidden until it takes keyboard focus: press Tab here to see it -->
   <div style="position: relative; min-height: 4rem">
     <ESkipLink href="#statements-main" />
     <div id="statements-main" tabindex="-1">

@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { EButton, EStack, EToast } from "@eos-ui/vue";
 
-// Toasts are normally shown with useToast() (see ToastProvider). EToast on its own is for previews.
 const closable = ref(true);
 </script>
 
@@ -16,7 +15,6 @@ const closable = ref(true);
       You can bring it back for 30 days.
       <template #action><EButton variant="outline">Undo</EButton></template>
     </EToast>
-    <!-- The dismiss button shows only when a close listener is attached -->
     <EToast v-if="closable" title="Saved" @close="closable = false">Your changes were saved.</EToast>
   </EStack>
 </template>

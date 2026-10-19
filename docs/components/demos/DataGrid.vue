@@ -46,13 +46,10 @@ const sort = ref<{ key: string; dir: "asc" | "desc" } | null>({ key: "date", dir
     </EDataGrid>
     <p>Selected rows: {{ selected.length }}</p>
 
-    <!-- A bare table for a short list -->
     <EDataGrid plain caption="Recent payments" :columns="columns.slice(0, 2)" :rows="rows.slice(0, 3)" />
 
-    <!-- Placeholder rows while data loads -->
     <EDataGrid loading caption="Loading statements" :columns="columns" :rows="[]" />
 
-    <!-- Nothing to show -->
     <EDataGrid
       caption="Receipts"
       :columns="columns"

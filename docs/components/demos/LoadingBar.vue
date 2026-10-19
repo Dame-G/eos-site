@@ -4,7 +4,6 @@ import { ELoadingBar, EStack, EText } from "@eos-ui/vue";
 
 <template>
   <EStack>
-    <!-- Indeterminate: use it when you cannot say how long the wait is -->
     <ELoadingBar />
     <EText muted>The default label is "Loading".</EText>
     <ELoadingBar label="Loading statements" />

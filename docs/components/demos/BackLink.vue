@@ -5,7 +5,6 @@ import { EBackLink, EStack } from "@eos-ui/vue";
 <template>
   <EStack>
     <EBackLink href="#statements">Back to statements</EBackLink>
-    <!-- Without words it says "Back" -->
     <EBackLink />
   </EStack>
 </template>

@@ -1,12 +1,8 @@
-// Renders library components on the server with renderToString and reports what it finds.
-// Plain Node, no bundler: the library's JavaScript has no CSS imports, so this is what a server sees.
-// Run: node scripts/ssr-check.mjs   (the library must be built beside this repo)
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 
 const here = createRequire(import.meta.url);
 const libEntry = here.resolve("@eos-ui/vue");
-// Use the Vue the library itself resolves, so there is exactly one copy (as in a real app).
 const libRequire = createRequire(libEntry);
 const toUrl = (p) => pathToFileURL(p).href;
 const { createSSRApp, h } = await import(toUrl(libRequire.resolve("vue")));

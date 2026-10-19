@@ -24,7 +24,6 @@ const keep = ref(false);
 const submitted = ref(false);
 const code = ref("");
 
-// Password rules appear while the person types, in words ("met" or "not met yet").
 const rules = [
   { label: "At least 10 characters", test: (v: string) => v.length >= 10 },
   { label: "Includes a number", test: (v: string) => /\d/.test(v) },
@@ -41,7 +40,7 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
 </script>
 
 <template>
-  <EGrid min="20rem" :gap="6" class="pattern" style="max-width: 880px">
+  <EGrid min="20rem" :gap="6" style="max-width: 880px">
     <ESurface pad="lg">
       <form novalidate @submit.prevent="submitted = true">
         <EStack :gap="4">
@@ -88,7 +87,6 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
       </EStack>
     </ESurface>
 
-    <!-- Choosing a new password: the rules show as a checklist under the field -->
     <ESurface pad="lg">
       <EStack :gap="4">
         <EHeading :level="2">Choose a new password</EHeading>

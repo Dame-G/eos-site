@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { EButton, EInline, EStack } from "@eos-ui/vue";
-const busy = ref(false);
-function pay() {
-  busy.value = true;
-  setTimeout(() => (busy.value = false), 1200);
-}
 </script>
 
 <template>
   <EStack>
     <EInline>
-      <EButton icon="lock" @click="pay">Pay $162.40</EButton>
+      <EButton icon="lock">Pay $162.40</EButton>
       <EButton variant="secondary">Confirm</EButton>
       <EButton variant="outline">Cancel</EButton>
       <EButton variant="danger">Remove card</EButton>

@@ -2,8 +2,6 @@
 import { h, provide } from "vue";
 import { createToasts, EButton, EInline, EStack, EToastProvider, TOAST_KEY } from "@eos-ui/vue";
 
-// A provider normally wraps the whole app and components call useToast() below it.
-// This demo is the component that holds the provider, so it creates the store itself.
 const toasts = createToasts();
 provide(TOAST_KEY, toasts);
 

@@ -3,7 +3,6 @@ import { EGrid, EHeading, ESurface, EText } from "@eos-ui/vue";
 </script>
 
 <template>
-  <!-- As many columns as fit, based on the width of the container -->
   <EGrid min="12rem" :gap="3">
     <ESurface as="article" pad="md">
       <EHeading :level="3">September</EHeading>

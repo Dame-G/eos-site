@@ -4,7 +4,7 @@ import { ESignatureField, EStack } from "@eos-ui/vue";
 import type { SignatureValue } from "@eos-ui/vue";
 
 const signed = ref<SignatureValue>({ method: "type", name: "Ana Ruiz", image: "", agreed: true });
-const day = new Date(2026, 9, 22, 12); // a fixed date keeps the demo stable
+const day = new Date(2026, 9, 22, 12);
 </script>
 
 <template>
