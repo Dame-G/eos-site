@@ -3,7 +3,7 @@ import { sep } from "node:path";
 import { GROUPS, listComponents } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
 import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
-import { searchBuildOptions, searchOptions } from "./search";
+import { renderForSearch, searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
 
 const SITE = "https://eos.dame.gg";
@@ -163,7 +163,7 @@ export default defineConfig({
       "/playground": tools,
     },
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],
-    search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions } } },
+    search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions }, _render: renderForSearch } },
     outline: { level: [2, 3], label: "On this page" },
     notFound: { title: "That page is not here", quote: "It may have moved, or the component has not been written yet.", linkText: "Back to the home page" },
   },

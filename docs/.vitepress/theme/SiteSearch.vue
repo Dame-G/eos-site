@@ -5,7 +5,9 @@ import { computed, nextTick, ref, shallowRef, watch } from "vue";
 import { useRouter } from "vitepress";
 import { EDialog, EKbd, ESearchBar, ESearchResults, EVisuallyHidden } from "@eos-ui/vue";
 import type { SearchResultItem } from "@eos-ui/vue";
-import { searchBuildOptions, searchOptions, titleRank } from "../search";
+import { componentDocs, componentSearchOptions, searchBuildOptions, searchOptions, titleRank, type ComponentGroup } from "../search";
+// @ts-expect-error a build-time data loader (docs/data/components.data.js)
+import { data as componentGroups } from "../../data/components.data.js";
 import { cleanPath } from "./nav";
 
 const open = defineModel<boolean>("open", { default: false });
@@ -22,19 +24,23 @@ const hits = shallowRef<Hit[]>([]);
 const results = ref<{ focusFirst: () => void } | null>(null);
 const field = ref<{ focus: () => void } | null>(null);
 let index: MiniSearch<Hit> | null = null;
+let componentIndex: MiniSearch<Hit> | null = null;
 
 async function load() {
   if (index) return;
   const mod = await (localSearchIndex as Record<string, () => Promise<{ default: string }>>)["root"]!();
   index = MiniSearch.loadJSON<Hit>(mod.default, { ...searchBuildOptions, searchOptions });
+  componentIndex = new MiniSearch<Hit>(componentSearchOptions);
+  componentIndex.addAll(componentDocs(componentGroups as ComponentGroup[]) as unknown as Hit[]);
 }
 
 async function run() {
   await load();
   const q = query.value.trim();
   hits.value =
-    index && q
-      ? (index.search(q).slice(0, 40) as unknown as Hit[])
+    index && componentIndex && q
+      ? [...componentIndex.search(q, componentSearchOptions.searchOptions), ...index.search(q).slice(0, 40)]
+          .map((r) => r as unknown as Hit)
           .map((h, at) => ({ h, at, rank: titleRank(h.title, q) }))
           .sort((a, b) => a.rank - b.rank || a.at - b.at)
           .slice(0, 12)
