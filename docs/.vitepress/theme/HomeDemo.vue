@@ -105,7 +105,7 @@ const tone = { paid: "success", due: "info" } as const;
     <div ref="frame" class="home-demo-frame e-root" :style="style">
       <header class="home-demo-header">
         <span class="home-demo-brand">Elm Street Health</span>
-        <ENavList label="Patient portal" orientation="horizontal" :items="nav" :dense="vp.navDense" :class="['home-demo-nav', { 'home-demo-nav--dense': vp.navDense }]" />
+        <ENavList label="Patient portal" :items="nav" :dense="vp.navDense" :class="['home-demo-nav', { 'home-demo-nav--dense': vp.navDense }]" />
         <EMenu label="Account" :items="accountMenu" align="end">
           <template #trigger>
             <EAvatar as="button" name="Ada Lovelace" small aria-label="AL, account menu" />
@@ -250,6 +250,12 @@ const tone = { paid: "success", due: "info" } as const;
 .home-demo-nav {
   flex: 1;
   min-width: 0;
+}
+
+.home-demo-nav :deep(ul) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-space-1);
 }
 
 .home-demo-nav:not(.home-demo-nav--dense) :deep(.e-nav-item) {
