@@ -382,7 +382,7 @@ export const PRESETS: Preset[] = [
       ...withGround("dark"),
       elevation: "lifted",
       sans: "system",
-      variants: { nav: "outline", surface: "tint", disclosure: "card" },
+      variants: { surface: "tint", disclosure: "card" },
     },
   },
   {
@@ -421,7 +421,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 90,
       controlHeight: 44,
       motion: "snappy",
-      variants: { nav: "outline", pad: "sm", gap: "tight", grid: "plain" },
+      variants: { pad: "sm", gap: "tight", grid: "plain" },
     },
   },
   {
@@ -483,7 +483,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 90,
       controlHeight: 44,
       motion: "snappy",
-      variants: { nav: "outline", pad: "sm", grid: "plain" },
+      variants: { pad: "sm", grid: "plain" },
     },
   },
   {
@@ -547,7 +547,7 @@ function hsl(h: number, sat: number, lum: number): string {
 function randomVariants(spaceScale: number): Variants {
   const v: Variants = { ...DEFAULT_VARIANTS };
   const roomy = spaceScale >= 100;
-  if (chance(0.5)) v.nav = pickOne(["dense", "outline"] as const);
+  if (chance(0.5)) v.nav = "dense";
   if (chance(0.45)) v.surface = "tint";
   if (chance(0.5)) v.pad = roomy ? "lg" : "sm";
   if (chance(0.4)) v.grid = "plain";

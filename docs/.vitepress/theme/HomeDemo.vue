@@ -11,19 +11,18 @@ import {
   EHeading,
   EItemList,
   EItemRow,
+  EKicker,
   EMenu,
   ENavList,
   ENotice,
   EPageHeader,
   EPanel,
-  ESelect,
   EStack,
-  EStatementRow,
+  EStatementCard,
   ESurface,
   ESwitch,
   ETabs,
   EToast,
-  ETextField,
   CONFIG_KEY,
   useConfig,
   type EosConfig,
@@ -52,19 +51,13 @@ const nav = [
 ];
 const outline = [
   { label: "To do", href: "#home-todo", current: true },
-  { label: "Next visit", href: "#home-visit" },
-  { label: "Billing", href: "#home-billing" },
-  { label: "Profile", href: "#home-profile" },
+  { label: "Visit", href: "#home-visit" },
+  { label: "Balance", href: "#home-billing" },
+  { label: "Account", href: "#home-profile" },
+  { label: "Receipts", href: "#home-receipts" },
 ];
-const plan = ref("card");
-const planOptions = [
-  { value: "card", label: "Visa ending 4242" },
-  { value: "bank", label: "Bank account ending 6789" },
-];
-const email = ref("ada@example.com");
 const reminders = ref(true);
-const autopay = ref(false);
-const toast = ref<{ title: string; text: string } | null>({ title: "Payment received", text: "A receipt for $98.00 was sent to your email." });
+const toast = ref<{ title: string; text: string } | null>({ title: "Payment received", text: "A receipt for $25.00 was sent to your email." });
 function pay() {
   toast.value = { title: "Payment received", text: "A receipt for $162.40 was sent to your email." };
 }
@@ -77,14 +70,14 @@ const accountMenu = [
 ];
 const provider = { name: "Dr. Amara Singh", role: "Primary care" };
 const visitDate = new Date(2026, 9, 28);
-const octoberDetails = [
+const statementDetails = [
   { label: "Charges", value: 242.4 },
   { label: "Insurance paid", value: -80 },
 ];
 const receipts = [
-  { id: "r1", name: "September statement", date: "Sep 24", status: "paid", amount: "$98.00" },
+  { id: "r1", name: "Flu shot", date: "Sep 24", status: "paid", amount: "$25.00" },
   { id: "r2", name: "Lab work", date: "Sep 3", status: "paid", amount: "$41.50" },
-  { id: "r3", name: "August statement", date: "Aug 22", status: "paid", amount: "$120.50" },
+  { id: "r3", name: "Statement 4398", date: "Aug 22", status: "paid", amount: "$120.50" },
 ];
 const columns = [
   { key: "name", label: "Receipt" },
@@ -116,84 +109,79 @@ const tone = { paid: "success", due: "info" } as const;
       <div :class="['home-demo-body', { 'home-demo-body--rail': state.variants.nav === 'outline' }]">
         <ETabs v-if="state.variants.nav === 'outline'" dense orientation="vertical" label="On this page" :items="outline" class="home-demo-outline" />
         <div class="home-demo-page" :style="{ gap: `var(--e-space-${vp.gap})` }">
-          <EPageHeader title="Good morning, Ada" description="Three things need you before your visit on Oct 28." :heading-level="2">
+          <EPageHeader title="Good morning, Ada" description="Two forms to finish before your visit." :heading-level="2">
             <template #actions>
-              <EButton icon="lock" @click="pay">Pay $162.40</EButton>
-              <EButton variant="outline" icon="calendar">Book a visit</EButton>
+              <EButton icon="calendar">Book a visit</EButton>
             </template>
           </EPageHeader>
 
           <ENotice tone="info" title="Clinic closed Nov 11">Messages sent that day are answered Nov 12.</ENotice>
 
-          <div class="home-demo-cols" :style="{ gap: `var(--e-space-${vp.gap})` }">
-            <EStack :gap="vp.gap">
-              <EPanel id="home-todo" kicker="To do" title="Before your visit" :heading-level="3">
-                <EItemList>
-                  <EItemRow icon="form" title="Intake form" subtitle="Needed before Oct 28" status="action">
-                    <template #action><EButton variant="outline">Review and sign</EButton></template>
-                  </EItemRow>
-                  <EItemRow icon="card" title="Update your insurance card" subtitle="Your plan changed Oct 1" status="pending">
-                    <template #action><EButton variant="outline">Upload</EButton></template>
-                  </EItemRow>
-                  <EItemRow icon="receipt" title="October statement" subtitle="Due Oct 22" status="due">
-                    <template #action><EButton @click="pay">Pay now</EButton></template>
-                  </EItemRow>
-                </EItemList>
-              </EPanel>
+          <EPanel id="home-todo" kicker="To do" title="Before your visit" :heading-level="3">
+            <EItemList>
+              <EItemRow icon="form" title="Intake form" subtitle="Due Oct 25" status="action">
+                <template #action><EButton variant="outline">Review and sign</EButton></template>
+              </EItemRow>
+              <EItemRow icon="file" title="Medication list" subtitle="Confirm what you take" status="pending">
+                <template #action><EButton variant="outline">Review</EButton></template>
+              </EItemRow>
+            </EItemList>
+          </EPanel>
 
-              <EStack id="home-billing" :gap="vp.gap">
-                <EHeading :level="3" class="home-demo-h">Statements and receipts</EHeading>
-                <EStatementRow
-                  title="October statement"
-                  subtitle="Oct 1 to Oct 31"
-                  status="due"
-                  detail="Oct 22"
-                  :amount="162.4"
-                  amount-label="You owe"
-                  :details="octoberDetails"
-                  reason="Pay by Oct 22 to avoid a late fee."
-                >
-                  <template #actions><EButton @click="pay">Pay now</EButton></template>
-                </EStatementRow>
-              </EStack>
-
-              <ESurface :pad="vp.pad" :tone="vp.tone">
-                <EStack :gap="vp.gap">
-                  <ESelect v-model="plan" label="Pay with" :options="planOptions" />
-                  <ETextField v-model="email" label="Send my receipt to" type="email" autocomplete="email" />
-                  <ESwitch v-model="autopay" label="Pay my balance automatically" />
-                  <ESwitch v-model="reminders" label="Text reminders" />
-                </EStack>
-              </ESurface>
-            </EStack>
-
-            <EStack :gap="vp.gap">
-              <EBookingCard id="home-visit" :date="visitDate" time="9:30 am" title="Annual check-up" :provider="provider" location="Elm Street Clinic" status="confirmed">
+          <div class="home-demo-pair" :style="{ gap: `var(--e-space-${vp.gap})` }">
+            <section id="home-visit" class="home-demo-section" aria-labelledby="home-visit-title">
+              <EKicker id="home-visit-title" as="h3">Next visit</EKicker>
+              <EBookingCard :date="visitDate" time="9:30 am" title="Annual check-up" :provider="provider" location="Elm Street Clinic" status="confirmed">
                 <template #actions>
                   <EButton variant="outline">Reschedule</EButton>
                   <EButton variant="outline">Directions</EButton>
                 </template>
               </EBookingCard>
+            </section>
 
-              <EPanel id="home-profile" kicker="Profile" title="Insurance and contact" :heading-level="3">
-                <EDetailRow label="Insurance" status="Verified" tone="success" @edit="() => {}">Blue Cross PPO, member XZ4471</EDetailRow>
-                <EDetailRow label="Phone" @edit="() => {}">(555) 010-4471</EDetailRow>
-                <EDetailRow label="Home address" @edit="() => {}">12 Elm Street, Springfield</EDetailRow>
-              </EPanel>
-
-              <div :class="['home-demo-disclosures', { 'home-demo-disclosures--card': vp.disclosure === 'card' }]">
-                <EDisclosure :variant="vp.disclosure" title="What does this cover?" :meta="vp.disclosure === 'card' ? 'Oct' : undefined">Visits, labs and supplies from Oct 1 to Oct 31.</EDisclosure>
-                <EDisclosure :variant="vp.disclosure" title="When is it due?" :meta="vp.disclosure === 'card' ? 'Oct 22' : undefined">Payment is due 21 days after the statement is sent.</EDisclosure>
-              </div>
-            </EStack>
+            <section id="home-billing" class="home-demo-section" aria-labelledby="home-billing-title">
+              <EKicker id="home-billing-title" as="h3">Balance</EKicker>
+              <EStatementCard
+                title="Statement 4471"
+                subtitle="Visits Sep 1 to Sep 30"
+                status="due"
+                detail="Oct 22"
+                :amount="162.4"
+                amount-label="You owe"
+                :details="statementDetails"
+                reason="Pay by Oct 22 to avoid a late fee."
+              >
+                <template #actions><EButton @click="pay">Pay now</EButton></template>
+              </EStatementCard>
+            </section>
           </div>
 
-          <EStack :gap="vp.gap">
-            <EHeading :level="3" class="home-demo-h">Recent receipts</EHeading>
-            <EDataGrid :plain="vp.plain" caption="Recent receipts" :columns="columns" :rows="receipts">
+          <EStack id="home-receipts" :gap="vp.gap">
+            <EKicker as="h3">Receipts</EKicker>
+            <EDataGrid :plain="vp.plain" caption="Receipts" :columns="columns" :rows="receipts">
               <template #cell-status="{ row }"><EChip :tone="tone[row.status as keyof typeof tone]" :variant="vp.badge">{{ row.status }}</EChip></template>
             </EDataGrid>
           </EStack>
+
+          <div class="home-demo-pair" :style="{ gap: `var(--e-space-${vp.gap})` }">
+            <ESurface id="home-profile" as="section" :pad="vp.pad" :tone="vp.tone" aria-labelledby="home-profile-title">
+              <EStack :gap="vp.gap">
+                <EKicker id="home-profile-title" as="h3">Account</EKicker>
+                <EDetailRow label="Insurance" status="Verified" tone="success" @edit="() => {}">Blue Cross PPO, member XZ4471</EDetailRow>
+                <EDetailRow label="Payment method" @edit="() => {}">Visa ending 4242</EDetailRow>
+                <EDetailRow label="Phone" @edit="() => {}">(555) 010-4471</EDetailRow>
+                <ESwitch v-model="reminders" label="Text reminders for visits" />
+              </EStack>
+            </ESurface>
+
+            <EPanel kicker="Billing" title="Questions" :heading-level="3">
+              <div :class="['home-demo-disclosures', { 'home-demo-disclosures--card': vp.disclosure === 'card' }]">
+                <EDisclosure :variant="vp.disclosure" title="Can I set up a payment plan?" :meta="vp.disclosure === 'card' ? 'Billing' : undefined">Yes. Call billing before the due date and they will split the balance for you.</EDisclosure>
+                <EDisclosure :variant="vp.disclosure" title="Where do I find an itemised receipt?" :meta="vp.disclosure === 'card' ? 'Billing' : undefined">Open any paid statement and choose Download.</EDisclosure>
+                <EDisclosure :variant="vp.disclosure" title="Why did my balance change?" :meta="vp.disclosure === 'card' ? 'Billing' : undefined">Insurance payments post a few days after a visit and reduce what you owe.</EDisclosure>
+              </div>
+            </EPanel>
+          </div>
         </div>
       </div>
 
@@ -299,20 +287,21 @@ const tone = { paid: "success", due: "info" } as const;
   }
 }
 
-.home-demo-cols {
+.home-demo-pair {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  align-items: start;
+  align-items: stretch;
 }
 
 @container (min-width: 46rem) {
-  .home-demo-cols {
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  .home-demo-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.home-demo-h {
-  margin: 0;
+.home-demo-section {
+  display: grid;
+  gap: var(--e-space-2);
 }
 
 .home-demo-toast {
