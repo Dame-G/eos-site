@@ -1,15 +1,30 @@
 <script setup lang="ts">
-import { ENavList } from "@eos-ui/vue";
+import { EStack, ENavList, ETabs } from "@eos-ui/vue";
 
-// `count` is things waiting on the person; `current` marks the open page.
 const items = [
   { label: "Home", href: "#home", icon: "home" as const },
   { label: "Visits", href: "#visits", icon: "calendar" as const },
   { label: "Statements", href: "#statements", icon: "receipt" as const, count: 2, current: true },
   { label: "Forms", href: "#forms", icon: "form" as const, count: 1 },
 ];
+
+const header = [
+  { label: "Guide", href: "#guide" },
+  { label: "Components", href: "#components", current: true },
+  { label: "Playground", href: "#playground" },
+];
+
+const outline = [
+  { label: "Demo", href: "#demo" },
+  { label: "Props", href: "#props", current: true },
+  { label: "Accessibility", href: "#accessibility" },
+];
 </script>
 
 <template>
-  <ENavList label="Account" :items="items" />
+  <EStack :gap="6">
+    <ENavList label="Account" :items="items" />
+    <ENavList label="Site" orientation="horizontal" :items="header" />
+    <ETabs orientation="vertical" label="On this page" :items="outline" />
+  </EStack>
 </template>

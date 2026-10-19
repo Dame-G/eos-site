@@ -7,7 +7,6 @@ const step = ref(2);
 <template>
   <EStack>
     <EProgress label="Upload of insurance card" :value="40" />
-    <!-- Custom max, and your own text at the end of the row -->
     <EProgress label="Booking steps" :value="step" :max="4" :value-text="`${step} of 4`" />
     <EInline>
       <EButton variant="outline" :disabled="step <= 0" @click="step--">Back</EButton>

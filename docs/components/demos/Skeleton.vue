@@ -4,7 +4,6 @@ import { EInline, ESkeleton, EStack } from "@eos-ui/vue";
 
 <template>
   <EStack>
-    <!-- Make each block the size of what is coming -->
     <ESkeleton :height="120" />
     <ESkeleton :height="20" :width="160" />
     <ESkeleton :height="20" width="60%" />

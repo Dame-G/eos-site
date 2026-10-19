@@ -24,7 +24,6 @@ const some = computed(() => items.value.some(Boolean) && !all.value);
     <ECheckbox label="Save this card" disabled />
     <ECheckbox :model-value="true" label="Paperless statements" disabled />
 
-    <!-- Select all with the indeterminate state -->
     <ECheckbox v-model="all" :indeterminate="some" label="All statements" />
     <ECheckbox v-model="items[0]" label="September statement" />
     <ECheckbox v-model="items[1]" label="August statement" />

@@ -41,7 +41,6 @@ const stepper = computed(() =>
   })),
 );
 
-// Only the first step has rules in this example. The same shape works for each step.
 const errors = computed(() => {
   if (!submitted.value || step.value !== 0) return [];
   const list: { id: string; field: string; message: string }[] = [];
@@ -66,7 +65,7 @@ function back() {
 </script>
 
 <template>
-  <form class="pattern" novalidate style="max-width: 560px" @submit.prevent="next">
+  <form novalidate style="max-width: 560px" @submit.prevent="next">
     <EStack :gap="6">
       <EStepper label="Registration" :steps="stepper" />
 

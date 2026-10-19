@@ -23,7 +23,6 @@ const filter = ref("all");
     />
     <ESelect label="Statement" :options="['Sep 2026', 'Aug 2026']" error="Choose a statement to download." />
     <ESelect label="Branch" :options="['Downtown']" disabled optional />
-    <!-- Bare: no label on the page, so give it an accessible name -->
     <ESelect v-model="filter" bare aria-label="Show" :options="[{ value: 'all', label: 'All visits' }, { value: 'paid', label: 'Paid only' }]" />
   </EStack>
 </template>

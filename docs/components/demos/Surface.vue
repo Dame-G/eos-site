@@ -16,7 +16,6 @@ import { EButton, EGrid, EHeading, ESurface, EText } from "@eos-ui/vue";
       <EHeading :level="3">Float</EHeading>
       <EText>The lifted look of a toast.</EText>
     </ESurface>
-    <!-- The actions slot adds a footer bar, edge to edge -->
     <ESurface as="article" pad="md">
       <EHeading :level="3">October statement</EHeading>
       <EText>$162.40, due Oct 31, 2026.</EText>

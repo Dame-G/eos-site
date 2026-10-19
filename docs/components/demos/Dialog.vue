@@ -24,7 +24,6 @@ function cancel() {
       </template>
     </EDialog>
 
-    <!-- inline shows a dialog in the page without the backdrop or focus trap: only for a preview -->
     <EDialog inline :open="true" title="Pay $162.40?">
       The amount is taken from your card ending 4242.
       <template #actions>

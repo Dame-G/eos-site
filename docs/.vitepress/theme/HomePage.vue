@@ -1,53 +1,44 @@
 <script setup lang="ts">
-import { Content } from "vitepress";
-import { EActions, EButton, EGrid, EHeading, ELink, EStack, ESurface, EText } from "@eos-ui/vue";
+import { EActions, EButton, EHeading, ELink, EStack, ESurface, EText } from "@eos-ui/vue";
+import HighlightedCode from "./HighlightedCode.vue";
 
-const features = [
-  {
-    title: "Accessible",
-    text: "Real elements, keyboard use for every control, visible focus and 48px targets. Every state is checked with axe in a real browser.",
-    link: "/guide/accessibility",
-    linkText: "How it is tested",
-  },
-  {
-    title: "Themeable",
-    text: "Give defineTheme() a brand colour. It derives the deep action colours and names any contrast pair that fails.",
-    link: "/guide/theming",
-    linkText: "Theming",
-  },
-  {
-    title: "Yours to word and draw",
-    text: "Bring Lucide, Tabler, Heroicons, Phosphor or your own icons. Reword every message. Money, dates and direction follow the locale.",
-    link: "/guide/icons",
-    linkText: "Icons and words",
-  },
+const points = [
+  { title: "Accessible", text: "Keyboard-operable, visible focus, 48px targets. Checked with axe.", link: "/guide/accessibility" },
+  { title: "Themeable", text: "15 inputs restyle every component. Contrast is checked for you.", link: "/guide/theming" },
+  { title: "Localised", text: "Swap the icon set, reword any message. Money and dates follow the locale.", link: "/guide/icons" },
 ];
 </script>
 
 <template>
-  <main class="home">
-    <section class="home-hero" aria-labelledby="home-title">
-      <EStack :gap="4">
-        <h1 id="home-title" class="home-title">Eos</h1>
-        <EText variant="deck" class="home-lead">Accessible Vue 3 components with a token-based theme. Calm, high contrast, rebranded in a few lines.</EText>
-        <EActions>
-          <EButton href="/guide/getting-started">Get started</EButton>
-          <EButton href="/components/" variant="outline">Components</EButton>
-          <EButton href="/playground" variant="outline">Playground</EButton>
-        </EActions>
-      </EStack>
-    </section>
-
-    <EGrid min="17rem" :gap="4" class="home-features">
-      <ESurface v-for="f in features" :key="f.title" as="section" pad="md">
-        <EStack :gap="3">
-          <EHeading :level="2">{{ f.title }}</EHeading>
-          <EText>{{ f.text }}</EText>
-          <ELink :href="f.link">{{ f.linkText }}</ELink>
+  <main class="home" tabindex="-1">
+    <div class="home-top">
+      <section class="home-hero" aria-labelledby="home-title">
+        <EStack :gap="6">
+          <EStack :gap="3">
+            <h1 id="home-title" class="home-title">Eos</h1>
+            <EText variant="deck" class="home-lead">Accessible, themeable components.</EText>
+          </EStack>
+          <div class="eos-live home-install">
+            <HighlightedCode lang="bash" code="npm install @eos-ui/vue" copy-label="Copy install command" />
+          </div>
+          <EActions>
+            <EButton href="/guide/getting-started">Get started</EButton>
+            <EButton href="/components/" variant="outline">Components</EButton>
+            <EButton href="/playground" variant="outline">Playground</EButton>
+          </EActions>
         </EStack>
-      </ESurface>
-    </EGrid>
+      </section>
 
-    <div class="home-doc vp-doc"><Content /></div>
+      <ESurface class="home-points-card">
+        <ul class="home-points">
+          <li v-for="p in points" :key="p.title">
+            <EHeading :level="2" class="home-point-title"><ELink :href="p.link">{{ p.title }}</ELink></EHeading>
+            <EText>{{ p.text }}</EText>
+          </li>
+        </ul>
+      </ESurface>
+    </div>
+
+    <HomeDemo />
   </main>
 </template>

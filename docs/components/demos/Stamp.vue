@@ -18,11 +18,16 @@ import { EInline, EStack, EStamp } from "@eos-ui/vue";
       <EStamp status="pending" />
       <EStamp status="complete" />
     </EInline>
-    <!-- Small for rows, and overrides for your own word, tone or glyph -->
     <EInline>
       <EStamp status="paid" small />
       <EStamp tone="warning" label="Review" icon="pin" small />
       <EStamp tone="danger" label="Card declined" />
+    </EInline>
+    <EInline>
+      <EStamp status="paid" variant="subtle" />
+      <EStamp status="due" detail="Oct 31, 2026" variant="subtle" />
+      <EStamp status="overdue" detail="12 days" variant="subtle" />
+      <EStamp status="action" variant="subtle" />
     </EInline>
   </EStack>
 </template>

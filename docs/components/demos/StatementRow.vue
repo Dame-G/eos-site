@@ -9,7 +9,6 @@ const activity = [
 
 <template>
   <EStack>
-    <!-- Click a row to open it -->
     <EStatementRow
       title="October statement"
       subtitle="Oct 1 to Oct 31, 2026"

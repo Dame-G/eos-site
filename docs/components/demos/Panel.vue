@@ -13,7 +13,6 @@ import { EButton, EPanel, EStack } from "@eos-ui/vue";
       <p>You owe $162.40, due Oct 22, 2026.</p>
     </EPanel>
 
-    <!-- No header: only a body, named for assistive technology -->
     <EPanel aria-label="Notes">
       <p>Bring your insurance card to the visit.</p>
     </EPanel>

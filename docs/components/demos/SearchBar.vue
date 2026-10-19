@@ -8,7 +8,6 @@ const last = ref("");
 
 <template>
   <EStack>
-    <!-- One search landmark per page, so only one bar is shown here -->
     <ESearchBar v-model="query" placeholder="Search statements and visits" @submit="last = $event" />
     <p>{{ last ? `Searched for "${last}".` : "Press Enter or Search." }}</p>
   </EStack>

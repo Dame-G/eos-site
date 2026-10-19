@@ -26,7 +26,6 @@ function search(text: string) {
   <EStack>
     <ECombobox v-model="practitioner" label="Practitioner" placeholder="Type to search" :options="people" hint="Only listed names are accepted." />
     <p>Value: {{ practitioner || "none" }}</p>
-    <!-- The server filters, so the local filter lets everything through -->
     <ECombobox v-model="clinic" label="Clinic" :options="found" :loading="searching" :filter="() => true" @input-change="search" />
     <ECombobox label="Visit type" :options="['Checkup', 'Follow-up']" error="Choose a visit type." required />
     <ECombobox label="Region" :options="['North', 'South']" disabled />

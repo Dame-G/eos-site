@@ -3,7 +3,6 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
 </script>
 
 <template>
-  <!-- The shell fills its parent, so give it a box with a height -->
   <div style="height: 28rem; overflow: auto; border: 1px solid var(--e-border)">
     <EAppShell main-id="demo-main" sidebar-label="Account">
       <template #header>

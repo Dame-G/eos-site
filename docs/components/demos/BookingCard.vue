@@ -20,7 +20,6 @@ const cancelled = ref(false);
         <EButton variant="quiet" :disabled="!cancelled" @click="cancelled = false">Undo</EButton>
       </template>
     </EBookingCard>
-    <!-- No provider: the date tile leads -->
     <EBookingCard
       :date="new Date(2026, 10, 3)"
       time="2:00 pm"

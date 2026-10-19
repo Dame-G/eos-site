@@ -2,7 +2,6 @@
 import { computed, ref } from "vue";
 import { EActions, EBookingCard, EButton, ECalendar, EInline, ENotice, EPageHeader, ESlotPicker, EStack, ESurface, useLocale } from "@eos-ui/vue";
 
-// Times that are open on each weekday (0 is Sunday). Wednesday and the weekend are closed.
 const TIMES: Record<number, string[]> = {
   1: ["9:00 am", "9:30 am", "10:30 am", "1:00 pm"],
   2: ["8:30 am", "11:00 am", "2:00 pm", "3:30 pm"],
@@ -22,12 +21,12 @@ const when = computed(() => formatLong(day.value));
 function pick(d: Date | null) {
   if (!d) return;
   day.value = d;
-  time.value = null; // the old time may not exist on the new day
+  time.value = null;
 }
 </script>
 
 <template>
-  <div class="pattern" style="max-width: 760px">
+  <div style="max-width: 760px">
     <EStack :gap="6">
       <EPageHeader :heading-level="2" title="Book a visit" description="Follow-up visit with Amara Singh, Main office" />
 

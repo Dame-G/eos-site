@@ -1,0 +1,13 @@
+{
+  "name": "Eos",
+  "short_name": "Eos",
+  "description": "Accessible Vue 3 components with a token-based theme system.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#17586d",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

@@ -1,5 +1,3 @@
-// Opens built pages in a real browser and reports console errors, failed requests for site files and axe violations.
-// Usage: serve the build first (corepack pnpm docs:preview), then: node scripts/check-pages.mjs [baseUrl] [--all] [--shots dir]
 import { chromium } from "playwright";
 import { createRequire } from "node:module";
 import { readFileSync, mkdirSync } from "node:fs";
@@ -37,8 +35,6 @@ const pages = [
   ...(all ? listComponents() : ["Button", "Select", "DataGrid", "Calendar", "Dialog", "StatementRow"]).map((c) => `/components/${c}`),
 ];
 
-// Known and explained: the AppShell demo is a whole page frame with its own landmarks, and EPopover draws its title in a
-// <header> that is a banner landmark once it is portalled to the body (reported to the library).
 const ALLOWED = {
   "/components/AppShell": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique"],
   "/components/Popover": ["landmark-no-duplicate-banner", "landmark-unique"],

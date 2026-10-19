@@ -14,7 +14,6 @@ function fix() {
 
 <template>
   <EStack>
-    <!-- autoFocus is off here so the demo does not pull focus on load -->
     <EErrorSummary :errors="errors" :auto-focus="false" />
     <p v-if="!errors.length">Nothing is wrong, so nothing is shown.</p>
     <EButton variant="outline" :disabled="!errors.length" @click="fix">Fix the form</EButton>

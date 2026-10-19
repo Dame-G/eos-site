@@ -1,11 +1,12 @@
 ---
 layout: page
+sidebar: false
 title: Theme playground
-description: "Change the brand colour, corners, font, language and currency and watch real components follow, with the contrast check running live."
+description: "Edit the inputs of an Eos theme, see real components follow, and copy the defineTheme code."
 ---
 
 # Theme playground
 
-Change a colour, the corners, the font, the language or the currency. The preview is made of real components, themed the way your app would be. Copy the result when you like it.
+Edit the theme inputs. The preview shows real components under your theme. Copy the `defineTheme` code or share the link.
 
 <ThemePlayground />

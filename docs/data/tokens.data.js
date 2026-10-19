@@ -1,12 +1,10 @@
-// Reads the design tokens from @eos-ui/tokens at build time, so the Tokens page and the contrast table can never drift from the code.
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
-import { contrast, defaults, defineTheme } from "@eos-ui/tokens";
+import { constants, contrast, defaults, defineTheme, derivedFrom } from "@eos-ui/tokens";
 
 const require = createRequire(import.meta.url);
 const file = require.resolve("@eos-ui/tokens/tokens.json");
 
-/** The partner each colour is checked against, and what the pair carries. The first partner is the main one. */
 const PARTNERS = {
   "brand-blue": [["ink", "Decoration only"]],
   "brand-green": [["ink", "Decoration only"]],
@@ -30,6 +28,12 @@ const PARTNERS = {
   "danger-soft": [["danger", "Danger notice text"]],
   "warning-strong": [["warning-soft", "Warning notice text"]],
   "warning-soft": [["warning-strong", "Warning notice text"]],
+  background: [
+    ["ink", "Text on the page"],
+    ["muted", "Secondary text on the page"],
+    ["primary", "Links on the page"],
+    ["border", "Outline on the page (non-text)"],
+  ],
   surface: [["ink", "Body text"]],
   "surface-tint": [["ink", "Text on the tinted ground"]],
   ink: [["surface", "Body text"]],
@@ -40,7 +44,6 @@ const PARTNERS = {
   "focus-field": [["surface", "Text input focus (non-text)"]],
 };
 
-/** Non-text pairs need 3:1, text pairs 4.5:1 (7:1 is AAA). */
 const NON_TEXT = new Set(["border", "border-strong", "focus-ring", "focus-field"]);
 
 function resolveColour(name) {
@@ -58,7 +61,31 @@ function level(ratio, nonText) {
   return "Fails";
 }
 
+const INPUTS = [
+  ["brand", "The brand colour: action colour, tinted ground, input focus edge.", defaults["brand-blue"]],
+  ["accent", "A second brand colour for positive actions and the success tint.", defaults["brand-green"]],
+  ["danger", "The destructive action colour, its text and tint.", defaults["danger"]],
+  ["warning", "The caution colour: warning text and tint.", defaults["warning-strong"]],
+  ["background", "The page ground: the colour behind everything.", defaults["background"]],
+  ["surface", "Cards, fields, popovers and panels. A dark surface lifts the action colours.", defaults["surface"]],
+  ["foreground", "Text and lines: secondary text, edges, the focus outline.", defaults["ink"]],
+  ["fonts", "Font stacks, { sans, mono }. Never bundled.", "Jost, Spline Sans Mono"],
+  ["radius", "Corner style: sharp, default or round, or { sm, md, lg }.", "default"],
+  ["elevation", "How depth is drawn: outline, lifted or bold.", "outline"],
+  ["strokes", "Line weights in px, { hair, focus }.", "{ hair: 1, focus: 2 }"],
+  ["textScale", "Multiplier for the type scale.", "1"],
+  ["spaceScale", "Multiplier for the spacing scale.", "1"],
+  ["controlHeight", "Height in px of every tappable control; chips follow at half.", "48"],
+  ["motion", "How state changes feel: default, snappy, gentle or none.", "default"],
+];
+
 const round = (n) => Math.round(n * 10) / 10;
+
+const provenance = (t) => ({
+  from: t.from ? t.from.split(",") : [],
+  input: Boolean(t.input),
+  constant: Boolean(t.constant) || constants.includes(t.name),
+});
 
 export default {
   watch: [file],
@@ -75,10 +102,9 @@ export default {
           return { name: other, value: b, role, ratio: round(ratio), level: level(ratio, nonText || /non-text/.test(role)) };
         })
         .filter(Boolean);
-      return { name: t.name, value, source: t.value, usage: t.usage, partners };
+      return { name: t.name, value, source: t.value, usage: t.usage, partners, ...provenance(t) };
     });
 
-    // The pairs the system promises, checked in defineTheme(): the contrast table of the Accessibility page.
     const promised = [
       ["ink", "surface", 7, "Body text"],
       ["ink", "surface-tint", 7, "Text on the tinted ground"],
@@ -93,15 +119,28 @@ export default {
       ["secondary", "secondary-soft", 4.5, "Success chip, stamp and notice text"],
       ["border", "surface", 3, "Card outline (non-text)"],
       ["border-strong", "surface", 3, "Control edge (non-text)"],
+      ["ink", "background", 7, "Text on the page"],
+      ["muted", "background", 4.5, "Secondary text on the page"],
+      ["primary", "background", 4.5, "Links on the page"],
+      ["border", "background", 3, "Outline on the page (non-text)"],
     ].map(([fg, bg, min, use]) => {
       const ratio = contrast(resolveColour(fg), resolveColour(bg));
       return { fg, bg, fgValue: resolveColour(fg), bgValue: resolveColour(bg), min, use, ratio: round(ratio), level: level(ratio, min === 3) };
     });
 
     const theme = defineTheme({ name: "light" });
-    const scale = (key) => json[key].tokens.map((t) => ({ name: t.name, value: t.value, usage: t.usage }));
+    const scale = (key) => json[key].tokens.map((t) => ({ name: t.name, value: t.value, usage: t.usage, ...provenance(t) }));
+    const inputs = INPUTS.map(([name, controls, neutral]) => ({
+      name,
+      controls,
+      neutral,
+      derives: Object.entries(derivedFrom)
+        .filter(([, from]) => from.split(",").includes(name))
+        .map(([token]) => token),
+    }));
 
     return {
+      inputs,
       colours,
       promised,
       issues: theme.issues,

@@ -10,8 +10,6 @@ import Statements from "../docs/patterns/Statements.vue";
 
 const console_ = watchConsole();
 
-// Each pattern page is a working example: it renders quietly, behaves, and passes axe in its first state and after use.
-
 describe("Pay a bill", () => {
   it("offers the full balance, reveals the amount field for another amount, and pays", async () => {
     await mount(PayBill);

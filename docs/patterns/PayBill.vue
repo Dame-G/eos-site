@@ -24,14 +24,13 @@ const other = ref<number | null>(100);
 const method = ref("card");
 const paid = ref(false);
 
-// The Pay button names the exact amount it will take.
 const amount = computed(() => (mode.value === "full" ? BALANCE : (other.value ?? 0)));
 const tooMuch = computed(() => mode.value === "part" && (other.value ?? 0) > BALANCE);
 const canPay = computed(() => amount.value > 0 && !tooMuch.value);
 </script>
 
 <template>
-  <div class="pattern" style="max-width: 560px">
+  <div style="max-width: 560px">
     <ESurface pad="md">
       <EStack :gap="6">
         <EStack :gap="3">
@@ -51,7 +50,6 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
               { value: 'part', label: 'Another amount' },
             ]"
           >
-            <!-- "Another amount" reveals the field it needs, and nothing else does -->
             <template #reveal="{ option }">
               <ECurrencyField
                 v-if="option.value === 'part'"
@@ -75,7 +73,6 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
                 { value: 'new', label: 'A new card', icon: 'plus' },
               ]"
             />
-            <!-- Card details live in the payment processor's hosted frame; they never reach this page -->
             <ECardField v-if="method === 'new'" label="Card details">
               <div style="padding: var(--e-space-3); color: var(--e-muted)">The payment provider's card fields appear here</div>
             </ECardField>

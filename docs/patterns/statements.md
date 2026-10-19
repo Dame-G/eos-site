@@ -10,22 +10,17 @@ import Pattern from "./Statements.vue";
 
 # Statements
 
-Find, filter and open statements.
-
-**Built from:** EPageHeader, ESearchBar, EButtonGroup, EToggle, EStatementRow, EEmptyState, EPagination, EButton.
+Built from: EPageHeader, EStack, EInline, EText, ESearchBar, EButtonGroup, EToggle, EStatementRow, EEmptyState, EPagination, EButton.
 
 <div class="pattern-stage">
   <Pattern />
 </div>
 
-## Notes
+- Search narrows the list, the toggles filter it, and the count is announced.
+- "Needs payment" includes overdue statements.
 
-- Search narrows the list, the toggles filter it, and the count is announced politely.
-- Each row opens to show the amount, what it covers and the actions. "Needs payment" includes overdue statements.
-- When nothing matches, an empty state says so instead of leaving a blank.
+<EDisclosure title="Statements.vue">
 
-## Source
-
-::: details Statements.vue
 <<< @/patterns/Statements.vue
-:::
+
+</EDisclosure>

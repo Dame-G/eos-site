@@ -3,7 +3,6 @@ import { EMetaList } from "@eos-ui/vue";
 </script>
 
 <template>
-  <!-- Every item says its meaning in words: the icon is decoration. null items are skipped. -->
   <EMetaList
     :items="[
       { icon: 'calendar', text: 'Thursday, Oct 22, 2026 at 9:30 am' },

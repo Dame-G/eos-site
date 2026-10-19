@@ -12,11 +12,16 @@ import { EChip, EInline, EStack } from "@eos-ui/vue";
       <EChip tone="warning">Needs your attention</EChip>
       <EChip tone="danger">Overdue</EChip>
     </EInline>
-    <!-- Write sentence case; the chip sets it in capitals -->
     <EInline>
       <EChip tone="success">Signed</EChip>
       <EChip tone="info">Scheduled</EChip>
       <EChip tone="danger">Cancelled</EChip>
+    </EInline>
+    <EInline>
+      <EChip tone="success" variant="subtle">Signed</EChip>
+      <EChip tone="info" variant="subtle">Scheduled</EChip>
+      <EChip tone="warning" variant="subtle">Review</EChip>
+      <EChip tone="danger" variant="subtle">Cancelled</EChip>
     </EInline>
   </EStack>
 </template>

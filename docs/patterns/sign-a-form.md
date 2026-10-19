@@ -10,22 +10,17 @@ import Pattern from "./SignForm.vue";
 
 # Sign a form
 
-A list of forms to sign, and signing one.
-
-**Built from:** EItemList, EItemRow, ENotice, EHeading, ESurface, EBackLink, ESignatureField, EUpload, EIconButton, EActions, EButton.
+Built from: EItemList, EItemRow, ENotice, EHeading, EText, ESurface, EStack, EGrid, EBackLink, ESignatureField, EUpload, EIconButton, EActions, EButton.
 
 <div class="pattern-stage">
   <Pattern />
 </div>
 
-## Notes
+- A signature can be typed or drawn.
+- Submit waits until the person has agreed and signed.
 
-- A signature can be typed or drawn. A drawn one is never the only option.
-- The Submit button waits until the person has agreed and signed.
-- The status of each form is a stamp with a word and a glyph, not colour alone.
+<EDisclosure title="SignForm.vue">
 
-## Source
-
-::: details SignForm.vue
 <<< @/patterns/SignForm.vue
-:::
+
+</EDisclosure>

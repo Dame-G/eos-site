@@ -1,15 +1,14 @@
-// Reads the component library from disk. Used by the VitePress config, the page generators and the scripts.
-// The library is expected beside this repo (../eos). Set EOS_DIR to use another checkout.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { GROUP_OF } from "./groups.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const siteRoot = resolve(here, "../..");
 export const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
 export const componentsDir = join(eosRoot, "packages/vue/src/components");
 
-/** The groups, in the order the sidebar shows them. The layer is the cascade layer the library puts them in. */
+/** The groups, in the order the sidebar shows them. */
 export const GROUPS = [
   { id: "primitives", title: "Primitives" },
   { id: "blocks", title: "Blocks" },
@@ -28,14 +27,17 @@ export function listComponents() {
     .sort((a, b) => a.localeCompare(b));
 }
 
+/** The components by sidebar group, those without a group last under "More". Empty groups are left out. */
+export function groupedComponents() {
+  const names = listComponents();
+  return [...GROUPS, { id: "more", title: "More" }]
+    .map((g) => ({ ...g, names: names.filter((n) => (GROUP_OF[n] ?? "more") === g.id) }))
+    .filter((g) => g.names.length);
+}
+
 export function readReadme(name) {
   const file = join(componentsDir, name, "README.md");
   return existsSync(file) ? readFileSync(file, "utf8").replace(/\r\n/g, "\n") : "";
-}
-
-/** The component's Vue file name without the extension, such as "ESelect" for the folder "Select". */
-export function componentTag(name) {
-  return "E" + name;
 }
 
 /** Splits a README into its title, the introduction (up to the first "##" heading) and the rest. */
@@ -52,6 +54,11 @@ export function firstParagraph(markdown) {
   const body = markdown.replace(/^# .*\n+/, "");
   const para = body.split(/\n\s*\n/).find((p) => p.trim() && !p.startsWith("```") && !p.startsWith("|") && !p.startsWith("#"));
   return (para ?? "").replace(/\s+/g, " ").replace(/`/g, "").trim();
+}
+
+/** The first sentence of the description paragraph. */
+export function summaryOf(markdown) {
+  return firstParagraph(markdown).split(/(?<=\.)\s/)[0] ?? "";
 }
 
 /** Rows of the first "## Props" table: [{ prop, type, notes }]. */

@@ -14,7 +14,6 @@ const show = (d: Date | null) => (d ? d.toDateString() : "none");
   <EGrid>
     <EStack>
       <p>Visit day: {{ show(visit) }}</p>
-      <!-- Sundays are closed, days with a dot have times available -->
       <ECalendar
         v-model="visit"
         :month="oct"

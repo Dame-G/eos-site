@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { EButton, ENotice, EStack } from "@eos-ui/vue";
 
-const showDismissible = ref(true);
+const showClosable = ref(true);
 </script>
 
 <template>
@@ -15,8 +15,7 @@ const showDismissible = ref(true);
     </ENotice>
     <ENotice tone="danger" title="Card declined">Check the card number or use another card.</ENotice>
 
-    <!-- The dismiss button shows only when a listener is attached -->
-    <ENotice v-if="showDismissible" title="Reminders are on" @dismiss="showDismissible = false">
+    <ENotice v-if="showClosable" title="Reminders are on" @close="showClosable = false">
       We message you two days before each visit.
     </ENotice>
   </EStack>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EAppFooter, EAppHeader, EButton, EDrawer, EIconButton, ENavList, ESkipLink, EText } from "@eos-ui/vue";
+import { EAppFooter, EAppHeader, EButton, EDrawer, EIconButton, EKbd, ELink, ENavList, ESearchBar, ESkipLink, ETabs, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
+import GithubMark from "./GithubMark";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
 import SiteSearch from "./SiteSearch.vue";
@@ -17,17 +18,35 @@ const isWide = computed(() => frontmatter.value.layout === "page");
 const topNav = computed<NavItem[]>(() => {
   const here = cleanPath(route.path);
   const items = (theme.value.nav ?? []) as { text: string; link: string; activeMatch?: string }[];
-  const links: NavItem[] = items.map((n) => ({
+  return items.map((n) => ({
     label: n.text,
     href: n.link,
     current: n.activeMatch ? here.startsWith(cleanPath(n.activeMatch)) : here === cleanPath(n.link),
   }));
+});
+
+const githubUrl = computed(() => {
   const github = (theme.value.socialLinks ?? []).find((s: { icon: unknown }) => s.icon === "github") as { link: string } | undefined;
-  return github ? [...links, { label: "GitHub", href: github.link }] : links;
+  return github?.link;
 });
 
 const sections = computed(() => toSections(sidebarFor(theme.value.sidebar, route.path), route.path));
-const hasSidebar = computed(() => !isHome.value && !page.value.isNotFound && sections.value.length > 0);
+const hasSidebar = computed(() => !isHome.value && !page.value.isNotFound && frontmatter.value.sidebar !== false && sections.value.length > 0);
+const menuSplit = computed(() => {
+  const at = topNav.value.findIndex((i) => i.current);
+  return at < 0 || !hasSidebar.value
+    ? { before: topNav.value, after: [] as NavItem[] }
+    : { before: topNav.value.slice(0, at + 1), after: topNav.value.slice(at + 1) };
+});
+const filter = ref("");
+const filterable = computed(() => route.path.startsWith("/components"));
+const shown = computed(() => {
+  const q = filter.value.trim().toLowerCase();
+  if (!filterable.value || !q) return sections.value;
+  return sections.value
+    .map((s) => ({ ...s, items: s.items.filter((i) => i.label.toLowerCase().includes(q)) }))
+    .filter((s) => s.items.length);
+});
 
 const pager = computed(() => {
   const all = flatten(sections.value);
@@ -35,7 +54,6 @@ const pager = computed(() => {
   return i < 0 ? { prev: undefined, next: undefined } : { prev: all[i - 1], next: all[i + 1] };
 });
 
-/** "On this page": the second-level headings of the article, with the one being read marked. */
 const headings = ref<{ id: string; text: string }[]>([]);
 const activeId = ref("");
 const showOutline = computed(() => !isHome.value && !isWide.value && frontmatter.value.aside !== false && headings.value.length > 1);
@@ -50,19 +68,39 @@ function readHeadings() {
 }
 
 function onScroll() {
-  let current = "";
-  for (const h of headings.value) {
-    const el = document.getElementById(h.id);
-    if (el && el.getBoundingClientRect().top <= 120) current = h.id;
+  const list = headings.value;
+  if (!list.length) {
+    activeId.value = "";
+    return;
+  }
+  const root = document.documentElement;
+  const scrolled = window.scrollY > 4;
+  const atEnd = scrolled && window.scrollY + window.innerHeight >= root.scrollHeight - 4;
+  let current = list[0]!.id;
+  if (atEnd) current = list[list.length - 1]!.id;
+  else {
+    const line = window.innerHeight * 0.35;
+    for (const h of list) {
+      const el = document.getElementById(h.id);
+      if (el && el.getBoundingClientRect().top <= line) current = h.id;
+    }
   }
   activeId.value = current;
 }
 
-/** Keeps the current page in view in a long sidebar. */
 function showCurrent() {
   const side = document.querySelector<HTMLElement>(".site-side");
   const here = side?.querySelector<HTMLElement>("[aria-current=page]");
   if (side && here) side.scrollTop = Math.max(0, here.offsetTop - side.clientHeight / 3);
+}
+
+const searching = ref(false);
+function onShortcut(e: KeyboardEvent) {
+  const typing = (e.target as HTMLElement | null)?.closest("input, textarea, select, [contenteditable]");
+  if ((e.key === "k" && (e.ctrlKey || e.metaKey)) || (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey)) {
+    e.preventDefault();
+    searching.value = true;
+  }
 }
 
 onMounted(() => {
@@ -82,33 +120,45 @@ onContentUpdated(() =>
   }),
 );
 
-/** Search opens with / or Ctrl+K, unless the person is typing somewhere. */
-const searching = ref(false);
-function onShortcut(e: KeyboardEvent) {
-  const typing = (e.target as HTMLElement | null)?.closest("input, textarea, select, [contenteditable]");
-  if ((e.key === "k" && (e.ctrlKey || e.metaKey)) || (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey)) {
-    e.preventDefault();
-    searching.value = true;
-  }
-}
-
 const menuOpen = ref(false);
 watch(
   () => route.path,
   () => (menuOpen.value = false),
+);
+
+const announcement = ref("");
+watch(
+  () => page.value.relativePath,
+  async () => {
+    await nextTick();
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    const target = hash ? document.getElementById(hash) : null;
+    if (target) {
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    } else {
+      document.getElementById("main")?.focus({ preventScroll: true });
+    }
+    announcement.value = "";
+    await nextTick();
+    announcement.value = page.value.isNotFound ? "Page not found" : page.value.title;
+  },
 );
 </script>
 
 <template>
   <div class="site e-root">
     <ESkipLink href="#main" />
-    <EAppHeader sticky class="site-header">
+    <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
+    <EAppHeader sticky>
       <template #logo>
-        <a class="site-brand" href="/"><img src="/favicon.svg" alt="" width="32" height="32" /><span>Eos</span></a>
+        <a class="site-brand" href="/" aria-label="Eos, home">Eos</a>
       </template>
       <template #actions>
-        <ENavList class="site-topnav" label="Site" :items="topNav" />
-        <EButton variant="outline" icon="search" class="site-search-button" @click="searching = true">Search</EButton>
+        <ETabs class="site-topnav" label="Site" :items="topNav" />
+        <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
+          Search<EKbd small aria-hidden="true">/</EKbd>
+        </EButton>
         <EIconButton icon="menu" label="Menu" class="site-menu-button" @click="menuOpen = true" />
       </template>
     </EAppHeader>
@@ -117,7 +167,11 @@ watch(
 
     <div v-else class="site-body" :class="{ 'site-body--side': hasSidebar, 'site-body--outline': showOutline, 'site-body--wide': isWide }">
       <div v-if="hasSidebar" class="site-side">
-        <ENavList dense label="Pages" :sections="sections" />
+        <div v-if="filterable" class="site-filter">
+          <ESearchBar v-model="filter" label="Filter components" placeholder="Filter components" hide-action autocomplete="off" />
+        </div>
+        <ETabs dense orientation="vertical" label="Pages" :sections="shown" />
+        <EText v-if="filterable && filter.trim() && !shown.length" variant="small" muted class="site-filter-empty">No component matches "{{ filter }}".</EText>
       </div>
       <main id="main" class="site-main" tabindex="-1">
         <NotFoundPage v-if="page.isNotFound" />
@@ -129,19 +183,31 @@ watch(
           </nav>
         </template>
       </main>
-      <aside v-if="showOutline" class="site-outline" aria-label="Page outline">
-        <p class="site-outline-title">On this page</p>
-        <ENavList dense label="On this page" :items="outline" />
+      <aside v-if="showOutline" class="site-outline" aria-labelledby="site-outline-title">
+        <p id="site-outline-title" class="site-outline-title">On this page</p>
+        <ETabs dense orientation="vertical" label="On this page" :items="outline" />
       </aside>
     </div>
 
-    <EAppFooter class="site-footer">
-      <EText variant="small" muted>Eos is released under the MIT license. Its icons are Phosphor (MIT).</EText>
+    <EAppFooter>
+      <EText variant="small" muted>Eos is released under the MIT license.</EText>
+      <nav class="site-footer-links" aria-label="Project">
+        <ELink v-if="githubUrl" :href="githubUrl" external :icon="GithubMark">GitHub</ELink>
+        <ELink href="https://github.com/Dame-G/eos/releases" external>Releases</ELink>
+        <ELink href="https://github.com/Dame-G/eos/blob/main/CONTRIBUTING.md" external>Contributing</ELink>
+        <ELink href="https://github.com/Dame-G/eos/issues/new/choose" external>Report an issue</ELink>
+      </nav>
     </EAppFooter>
 
-    <EDrawer v-model:open="menuOpen" side="left" title="Menu" class="site-drawer">
-      <ENavList label="Site menu" :items="topNav" />
-      <ENavList v-if="hasSidebar" dense label="Pages" :sections="sections" class="site-drawer-pages" />
+    <EDrawer v-model:open="menuOpen" side="left" title="Menu">
+      <ENavList label="Site menu" :items="menuSplit.before" />
+      <div v-if="hasSidebar" class="site-drawer-pages">
+        <div v-if="filterable" class="site-filter site-filter--drawer">
+          <ESearchBar v-model="filter" label="Filter components" placeholder="Filter components" hide-action autocomplete="off" />
+        </div>
+        <ETabs dense orientation="vertical" label="Pages" :sections="shown" />
+      </div>
+      <ENavList v-if="menuSplit.after.length" label="More of the site" :items="menuSplit.after" />
     </EDrawer>
     <SiteSearch v-model:open="searching" />
   </div>

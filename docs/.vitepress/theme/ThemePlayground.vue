@@ -1,315 +1,445 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, provide, reactive, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import {
-  CONFIG_KEY,
   EButton,
-  ECalendar,
-  ECheckbox,
-  EChip,
   EColorField,
-  EDisclosure,
   EGrid,
-  EHeading,
   EInline,
   EKicker,
-  ENotice,
-  ERadioGroup,
+  ENumberField,
   ESegmented,
   ESelect,
   EStack,
-  EStamp,
-  ESurface,
   ESwitch,
+  ETabs,
   EText,
   ETextField,
-  defineTheme,
-  type EosConfig,
+  EVisuallyHidden,
 } from "@eos-ui/vue";
-import CodeBlock from "./CodeBlock.vue";
+import { groups } from "@eos-ui/tokens";
+import HighlightedCode from "./HighlightedCode.vue";
+import ControlsDock from "./playground/ControlsDock.vue";
+import PlaygroundPresets from "./playground/PlaygroundPresets.vue";
+import PlaygroundPreview from "./playground/PlaygroundPreview.vue";
+import TokenOverrides from "./playground/TokenOverrides.vue";
+import {
+  CURRENCIES,
+  LOCALES,
+  MONO,
+  NEUTRAL,
+  SAFE,
+  SANS,
+  applyPreset,
+  applyRandom,
+  build,
+  cssChanges,
+  cssFull,
+  decode,
+  derivedTokens,
+  encode,
+  groundOf,
+  initialState,
+  themeCode,
+  variantCode,
+  type State,
+  type VariantKey,
+} from "./playground/state";
 
-const DEFAULT_BRAND = "#2c95b4";
-const DEFAULT_ACCENT = "#72c451";
-const DEFAULT_MUTED = "#515151";
-const DEFAULT_BORDER = "#7f8f96";
-const FONTS: Record<string, string> = {
-  jost: '"Jost", Futura, "Century Gothic", "Avenir Next", system-ui, sans-serif',
-  system: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-  serif: 'Georgia, "Times New Roman", serif',
-  verdana: "Verdana, Geneva, sans-serif",
-};
-const LOCALES = [
-  { value: "en-US", label: "English (United States)" },
-  { value: "en-CA", label: "English (Canada)" },
-  { value: "fr-CA", label: "French (Canada)" },
-  { value: "de-DE", label: "German" },
-  { value: "ja-JP", label: "Japanese" },
-  { value: "ar-EG", label: "Arabic (right to left)" },
-];
-const CURRENCIES = ["USD", "CAD", "EUR", "GBP", "JPY"];
+const s = reactive<State>(initialState());
+const built = computed(() => build(s));
+const tokens = computed(() => built.value.theme.tokens);
+const cssVars = computed(() => Object.fromEntries(Object.entries(tokens.value).map(([k, v]) => [`--e-${k}`, v])));
 
-const brand = ref(DEFAULT_BRAND);
-const accent = ref(DEFAULT_ACCENT);
-const radius = ref<"sharp" | "default" | "round">("default");
-const font = ref("jost");
-const locale = ref("en-US");
-const currency = ref("USD");
-// Two raw overrides, so the contrast check has something to catch.
-const muted = ref("");
-const border = ref("");
-
-const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
-
-const input = computed(() => {
-  const o: Parameters<typeof defineTheme>[0] = { name: "preview" };
-  if (isHex(brand.value) && brand.value.toLowerCase() !== DEFAULT_BRAND) o.brand = brand.value;
-  if (isHex(accent.value) && accent.value.toLowerCase() !== DEFAULT_ACCENT) o.accent = accent.value;
-  if (font.value !== "jost") o.fonts = { sans: FONTS[font.value] };
-  if (radius.value !== "default") o.radius = radius.value;
-  const tokens: Record<string, string> = {};
-  if (isHex(muted.value)) tokens.muted = muted.value;
-  if (isHex(border.value)) tokens.border = border.value;
-  if (Object.keys(tokens).length) o.tokens = tokens;
-  return o;
+const sig = () => JSON.stringify({ ...s, preset: "" });
+let snapshot = sig();
+function usePreset(id: string) {
+  if (id === "random" || id === "custom") return;
+  applyPreset(s, id);
+  snapshot = sig();
+}
+function useRandom() {
+  applyRandom(s);
+  snapshot = sig();
+}
+watch(sig, (v) => {
+  if (v !== snapshot && s.preset !== "custom") s.preset = "custom";
 });
-const theme = computed(() => defineTheme(input.value));
-const dir = computed(() => (locale.value.startsWith("ar") ? "rtl" : "ltr"));
 
-const style = computed(() => Object.fromEntries(Object.entries(theme.value.tokens).map(([k, v]) => [`--e-${k}`, v])));
+let timer: ReturnType<typeof setTimeout> | undefined;
+const HASH = "#t=";
+watch(
+  () => encode(s),
+  (code) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      try {
+        history.replaceState(null, "", code ? `${HASH}${code}` : location.pathname + location.search);
+      } catch {
+      }
+    }, 200);
+  },
+);
+const copied = ref("");
+async function copyLink() {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    copied.value = "Link copied";
+  } catch {
+    copied.value = "Copy the address bar";
+  }
+  setTimeout(() => (copied.value = ""), 2500);
+}
 
-// The preview has its own config, so changing the locale here never changes the rest of the site.
-const config = reactive<EosConfig>({
-  locale: locale.value,
-  currency: currency.value,
-  dir: null,
-  messages: {},
-  icons: {},
-  portalTarget: "body",
-});
-provide(CONFIG_KEY, config);
-watch([locale, currency], () => {
-  config.locale = locale.value;
-  config.currency = currency.value;
-});
-const scope = ref<HTMLElement | null>(null);
+const wholePage = ref(false);
+let pageKeys: string[] = [];
+function syncPage() {
+  const root = document.documentElement;
+  for (const k of pageKeys) root.style.removeProperty(k);
+  pageKeys = [];
+  if (!wholePage.value) return;
+  for (const [k, v] of Object.entries(cssVars.value)) {
+    root.style.setProperty(k, v);
+    pageKeys.push(k);
+  }
+}
+watch([wholePage, cssVars], syncPage);
+
+function loadHash() {
+  const m = /^#t=([\w-]+)$/.exec(location.hash);
+  const loaded = m ? decode(m[1]!) : null;
+  if (loaded && encode(loaded) !== encode(s)) {
+    Object.assign(s, loaded);
+    snapshot = sig();
+  }
+}
 onMounted(() => {
-  // Floating parts (the select list) render inside the themed wrapper so they carry the theme.
-  config.portalTarget = scope.value!;
+  loadHash();
+  window.addEventListener("hashchange", loadHash);
 });
-onBeforeUnmount(() => (config.portalTarget = "body"));
+onBeforeUnmount(() => {
+  window.removeEventListener("hashchange", loadHash);
+  wholePage.value = false;
+  syncPage();
+  clearTimeout(timer);
+});
 
-const money = computed(() => new Intl.NumberFormat(locale.value, { style: "currency", currency: currency.value }).format(162.4));
+const GROUND = [
+  ["background", "Background", "The page: sets background."],
+  ["surface", "Surface", "Cards and fields: sets surface, its tint and the status tints."],
+  ["foreground", "Foreground", "Text and lines: sets ink, secondary text and edges."],
+] as const;
+const TONES = [
+  ["brand", "Brand", "Sets primary and the tinted ground."],
+  ["accent", "Accent", "Sets secondary and the success tint."],
+  ["danger", "Danger", "Sets danger, its text and tint."],
+  ["warning", "Warning", "Sets the warning text and tint."],
+] as const;
+const COLOUR_SET = new Set<string>(groups.color);
+const LISTS = {
+  colour: derivedTokens("colour"),
+  shape: derivedTokens("shape"),
+  type: derivedTokens("type"),
+  space: derivedTokens("space"),
+  motion: derivedTokens("motion"),
+};
+function resetColours() {
+  for (const k of Object.keys(s.t)) if (COLOUR_SET.has(k)) delete s.t[k];
+}
+function setToken(name: string, value: string) {
+  const v = value.trim();
+  if (!v) delete s.t[name];
+  else if (SAFE.test(v)) s.t[name] = v;
+}
+function followAgain(name: string) {
+  delete s.t[name];
+}
+function followTab(tab: keyof typeof LISTS) {
+  for (const { name } of LISTS[tab]) delete s.t[name];
+}
+function setScheme(v: string) {
+  s.scheme = v as State["scheme"];
+  Object.assign(s, groundOf(s.scheme));
+  resetColours();
+}
+function setGround(name: "background" | "surface" | "foreground", v: string) {
+  s[name] = v;
+  s.scheme = "custom";
+}
+const schemeOptions = computed(() => [
+  { value: "light", label: "Light" },
+  { value: "paper", label: "Paper" },
+  { value: "dark", label: "Dark" },
+  { value: "contrast", label: "Contrast" },
+  ...(s.scheme === "custom" ? [{ value: "custom", label: "Custom" }] : []),
+]);
 
-// Preview state
-const email = ref("name@");
-const plan = ref("card");
-const agree = ref(true);
-const method = ref("full");
-const reminders = ref(true);
-const day = ref(new Date(2026, 9, 22));
-const planOptions = [
-  { value: "card", label: "Visa ending 4242" },
-  { value: "bank", label: "Bank account ending 6789" },
-  { value: "cash", label: "Cash at the office" },
+const FALLBACK = { ...NEUTRAL, textScale: 100, spaceScale: 100 } as const;
+function setField(field: keyof typeof FALLBACK, v: number | null) {
+  s[field] = v ?? FALLBACK[field];
+  if (field === "textScale") followTab("type");
+  if (field === "spaceScale") for (const { name } of LISTS.space) if (name.startsWith("space-")) delete s.t[name];
+}
+function setRadius(v: string) {
+  s.radius = v as State["radius"];
+  for (const k of ["radius-sm", "radius-md", "radius-lg"]) delete s.t[k];
+}
+function setElevation(v: string) {
+  s.elevation = v as State["elevation"];
+  for (const k of ["edge", "well", "float"]) delete s.t[k];
+}
+function setMotion(v: string) {
+  s.motion = v as State["motion"];
+  followTab("motion");
+}
+const VARIANT_FIELDS: { key: VariantKey; label: string; hint: string; options: { value: string; label: string }[] }[] = [
+  { key: "nav", label: "Navigation list", hint: "ENavList dense, or ETabs vertical as an outline.", options: [{ value: "default", label: "Default" }, { value: "dense", label: "Dense" }, { value: "outline", label: "Outline" }] },
+  { key: "surface", label: "Surfaces", hint: "ESurface tone.", options: [{ value: "default", label: "Default" }, { value: "tint", label: "Tint" }] },
+  { key: "pad", label: "Surface padding", hint: "ESurface pad.", options: [{ value: "sm", label: "Small" }, { value: "md", label: "Medium" }, { value: "lg", label: "Large" }] },
+  { key: "grid", label: "Data grid", hint: "EDataGrid plain.", options: [{ value: "default", label: "Default" }, { value: "plain", label: "Plain" }] },
+  { key: "badge", label: "Status badges", hint: "EStamp and EChip variant.", options: [{ value: "solid", label: "Solid" }, { value: "subtle", label: "Subtle" }] },
+  { key: "disclosure", label: "Disclosure", hint: "EDisclosure variant.", options: [{ value: "row", label: "Row" }, { value: "card", label: "Card" }] },
+  { key: "gap", label: "Gaps", hint: "EStack, EInline and EGrid gap.", options: [{ value: "tight", label: "Tight" }, { value: "default", label: "Default" }, { value: "roomy", label: "Roomy" }] },
+];
+function setVariant(key: VariantKey, v: string) {
+  (s.variants as Record<string, string>)[key] = v;
+}
+const variantTags = computed(() => variantCode(s.variants));
+const sansOptions = Object.entries(SANS).map(([value, f]) => ({ value, label: f.label }));
+const monoOptions = Object.entries(MONO).map(([value, f]) => ({ value, label: f.label }));
+
+const controlTab = ref("colour");
+const controlItems = [
+  { id: "colour", label: "Colour" },
+  { id: "shape", label: "Shape" },
+  { id: "type", label: "Type" },
+  { id: "space", label: "Space" },
+  { id: "motion", label: "Motion" },
+];
+const stageTab = ref("preview");
+const stageItems = [
+  { id: "preview", label: "Preview" },
+  { id: "export", label: "Export" },
 ];
 
-const snippet = computed(() => {
-  const t = input.value;
-  const parts: string[] = [];
-  if (t.brand) parts.push(`brand: "${t.brand}"`);
-  if (t.accent) parts.push(`accent: "${t.accent}"`);
-  if (t.fonts) parts.push(`fonts: { sans: ${JSON.stringify(t.fonts.sans)} }`);
-  if (t.radius) parts.push(`radius: "${t.radius}"`);
-  if (t.tokens) parts.push(`tokens: { ${Object.entries(t.tokens).map(([k, v]) => `"${k}": "${v}"`).join(", ")} }`);
-  const themeText = parts.length ? `\n  theme: { ${parts.join(", ")} },` : "";
-  return `import { createEos } from "@eos-ui/vue";\n\napp.use(\n  createEos({\n    locale: "${locale.value}",\n    currency: "${currency.value}",${themeText}\n  }),\n);`;
+const format = ref("code");
+const code = computed(() => {
+  if (format.value === "css") return cssChanges(built.value);
+  if (format.value === "full") return cssFull(built.value);
+  return themeCode(built.value);
 });
-
-const defaultTokens = defineTheme({}).tokens;
-const cssBlock = computed(() => {
-  const changed = Object.entries(theme.value.tokens).filter(([k, v]) => defaultTokens[k] !== v);
-  if (!changed.length) return ":root {\n  /* No changes: these are the defaults. */\n}";
-  return `:root {\n${changed.map(([k, v]) => `  --e-${k}: ${v};`).join("\n")}\n}`;
-});
+const codeLang = computed(() => (format.value === "code" ? "ts" : "css"));
+const copyLabel = computed(() => ({ code: "Copy code", css: "Copy CSS", full: "Copy full CSS" })[format.value] ?? "Copy");
+const changedCount = computed(() => Object.keys(built.value.extra).length + Object.keys(built.value.input).filter((k) => k !== "name" && k !== "tokens").length);
 </script>
 
 <template>
   <div class="playground eos-live">
-    <EStack as="section" aria-labelledby="pg-controls" class="controls">
-      <EHeading id="pg-controls">Theme</EHeading>
-      <EGrid min="9rem" :gap="3">
-        <EColorField v-model="brand" label="Brand colour" />
-        <EColorField v-model="accent" label="Accent colour" />
-      </EGrid>
-      <EText variant="small" muted>The deep action colours are derived from these so white text on them keeps at least 7:1.</EText>
-      <ESegmented
-        v-model="radius"
-        label="Corners"
-        :options="[
-          { value: 'sharp', label: 'Sharp' },
-          { value: 'default', label: 'Default' },
-          { value: 'round', label: 'Round' },
-        ]"
-      />
-      <ESelect
-        v-model="font"
-        label="Font"
-        :options="[
-          { value: 'jost', label: 'Jost (default)' },
-          { value: 'system', label: 'System UI' },
-          { value: 'serif', label: 'Serif' },
-          { value: 'verdana', label: 'Verdana' },
-        ]"
-      />
-      <ESelect v-model="locale" label="Language and region" :options="LOCALES" />
-      <ESelect v-model="currency" label="Currency" :options="CURRENCIES" />
-      <EDisclosure title="Try a failing colour">
-        <EStack :gap="3">
-          <EText variant="small" muted>Plain token overrides are not corrected. Pick a pale grey to see the contrast check catch it.</EText>
-          <EGrid min="9rem" :gap="3">
-            <EColorField label="Secondary text" :model-value="muted || DEFAULT_MUTED" @update:model-value="muted = $event" />
-            <EColorField label="Card edge" :model-value="border || DEFAULT_BORDER" @update:model-value="border = $event" />
-          </EGrid>
-          <div><EButton variant="quiet" @click="((muted = ''), (border = ''))">Reset both</EButton></div>
-        </EStack>
-      </EDisclosure>
-    </EStack>
-
-    <EStack :gap="8" class="stage">
-      <EStack as="section" :gap="3" aria-labelledby="pg-issues">
-        <EHeading id="pg-issues">Contrast check</EHeading>
-        <ENotice v-if="theme.issues.length" tone="danger" :title="`${theme.issues.length} contrast ${theme.issues.length === 1 ? 'pair fails' : 'pairs fail'}`">
-          <ul class="issues">
-            <li v-for="i in theme.issues" :key="i.pair.join()">
-              <strong>{{ i.role }}</strong
-              >: <code>{{ i.pair[0] }}</code> on <code>{{ i.pair[1] }}</code> is {{ i.ratio }}:1, needs {{ i.min }}:1.
-            </li>
-          </ul>
-        </ENotice>
-        <ENotice v-else tone="success" title="Every promised pair holds">
-          <code>defineTheme().issues</code> is empty for this theme.
-        </ENotice>
-      </EStack>
-
-      <EStack as="section" :gap="3" aria-labelledby="pg-preview">
-        <EHeading id="pg-preview">Preview</EHeading>
-        <div ref="scope" class="preview e-root" data-e-theme="preview" :style="style" :dir="dir">
-          <EGrid min="19rem" :gap="4">
-            <ESurface pad="md">
-              <EStack>
-                <EKicker>Buttons</EKicker>
-                <EInline>
-                  <EButton icon="lock">Pay {{ money }}</EButton>
-                  <EButton variant="secondary">Confirm</EButton>
-                  <EButton variant="outline">Cancel</EButton>
-                  <EButton variant="danger">Remove</EButton>
-                  <EButton variant="quiet">Skip</EButton>
-                  <EButton disabled>Disabled</EButton>
-                </EInline>
-              </EStack>
-            </ESurface>
-            <ESurface pad="md">
-              <EStack>
-                <EKicker>Stamps and chips</EKicker>
-                <EInline>
-                  <EStamp status="paid" />
-                  <EStamp status="due" detail="Nov 1" />
-                  <EStamp status="action" />
-                  <EStamp status="overdue" />
-                  <EChip>Draft</EChip>
-                  <EChip tone="success">Paid</EChip>
-                  <EChip tone="info">Scheduled</EChip>
-                  <EChip tone="warning">Review</EChip>
-                  <EChip tone="danger">Failed</EChip>
-                </EInline>
-              </EStack>
-            </ESurface>
-            <ESurface pad="md">
-              <EStack>
-                <EKicker>Fields</EKicker>
-                <ETextField v-model="email" label="Email" type="email" error="Enter an email address like name@example.com" />
-                <ESelect v-model="plan" label="Pay with" :options="planOptions" />
-                <ECheckbox v-model="agree" label="Keep me signed in" description="On this device only." />
-                <ESwitch v-model="reminders" label="Text reminders" />
-                <ERadioGroup
-                  v-model="method"
-                  label="How much would you like to pay?"
-                  :options="[
-                    { value: 'full', label: 'The full balance', description: money },
-                    { value: 'part', label: 'Another amount' },
-                  ]"
-                />
-              </EStack>
-            </ESurface>
-            <ESurface pad="md">
-              <EStack>
-                <EKicker>Notices</EKicker>
-                <ENotice tone="info" title="Your visit is Thursday">Main office, 9:30 am.</ENotice>
-                <ENotice tone="success" title="Payment received">We emailed your receipt.</ENotice>
-                <ENotice tone="warning" title="Form due">Please sign before Oct 22.</ENotice>
-                <ENotice tone="danger" title="Card declined">Try another card.</ENotice>
-              </EStack>
-            </ESurface>
-            <ESurface pad="md">
-              <EStack>
-                <EKicker>Calendar</EKicker>
-                <ECalendar v-model="day" :month="day" :footer="false" />
-              </EStack>
-            </ESurface>
-          </EGrid>
+    <section class="bar" aria-label="Presets">
+      <PlaygroundPresets :model-value="s.preset" :tokens="tokens" @select="usePreset" @random="useRandom" />
+      <div class="bar-row">
+        <div class="bar-info">
+          <EText variant="small" muted role="status">{{ copied }}</EText>
         </div>
-      </EStack>
+        <div class="bar-actions">
+          <ESwitch v-model="wholePage" label="Apply to the whole page" />
+          <div class="bar-buttons">
+            <EButton variant="outline" @click="usePreset('eos')">Reset</EButton>
+            <EButton variant="outline" icon="link" @click="copyLink">Copy link</EButton>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <EStack as="section" :gap="4" aria-labelledby="pg-code">
-        <EHeading id="pg-code">Use this theme</EHeading>
-        <EStack :gap="3">
-          <EHeading :level="3">In your app</EHeading>
-          <CodeBlock :code="snippet" what="code" />
-        </EStack>
-        <EStack :gap="3">
-          <EHeading :level="3">Or as plain CSS</EHeading>
-          <EText variant="small" muted>Only the values that differ from the defaults. It wins because the library is layered.</EText>
-          <CodeBlock :code="cssBlock" what="CSS" />
-        </EStack>
-      </EStack>
-    </EStack>
+    <div class="workbench">
+      <ControlsDock>
+        <ETabs v-model="controlTab" :items="controlItems" class="groups">
+          <template #colour>
+            <EStack :gap="4">
+              <ESegmented :model-value="s.scheme" label="Scheme" :options="schemeOptions" @update:model-value="setScheme" />
+              <EKicker>Ground</EKicker>
+              <EGrid min="9rem" :gap="3">
+                <EColorField v-for="[k, label, hint] in GROUND" :key="k" :label="label" :hint="hint" :model-value="s[k]" @update:model-value="setGround(k, $event)" />
+              </EGrid>
+              <EKicker>Tones</EKicker>
+              <EGrid min="9rem" :gap="3">
+                <EColorField v-for="[k, label, hint] in TONES" :key="k" :label="label" :hint="hint" v-model="s[k]" />
+              </EGrid>
+              <TokenOverrides title="All colour tokens" colour :items="LISTS.colour" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
+            </EStack>
+          </template>
+
+          <template #shape>
+            <EStack :gap="4">
+              <ESegmented :model-value="s.radius" label="Corners" :options="[{ value: 'sharp', label: 'Sharp' }, { value: 'default', label: 'Default' }, { value: 'round', label: 'Round' }]" @update:model-value="setRadius" />
+              <ESegmented :model-value="s.elevation" label="Elevation" :options="[{ value: 'outline', label: 'Outline' }, { value: 'lifted', label: 'Lifted' }, { value: 'bold', label: 'Bold' }]" hint="Edges are rings of the card edge colour." @update:model-value="setElevation" />
+              <EKicker>Strokes</EKicker>
+              <EGrid min="8rem" :gap="3">
+                <ENumberField label="Hairline" hint="Dividers, edges" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.hair" @update:model-value="setField('hair', $event)" />
+                <ENumberField label="Focus outline" hint="At least 2" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.focus" @update:model-value="setField('focus', $event)" />
+              </EGrid>
+              <EKicker>Variants</EKicker>
+              <EText variant="small" muted>Component props, not tokens. They are not part of defineTheme.</EText>
+              <ESegmented v-for="f in VARIANT_FIELDS" :key="f.key" :model-value="s.variants[f.key]" :label="f.label" :options="f.options" :hint="f.hint" @update:model-value="setVariant(f.key, $event)" />
+              <TokenOverrides title="All shape tokens" :items="LISTS.shape" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
+            </EStack>
+          </template>
+
+          <template #type>
+            <EStack :gap="4">
+              <EGrid min="9rem" :gap="3">
+                <ESelect v-model="s.sans" label="Text font" :options="sansOptions" />
+                <ESelect v-model="s.mono" label="Label font" :options="monoOptions" />
+              </EGrid>
+              <ETextField v-if="s.sans === 'custom'" v-model="s.sansCustom" label="Font stack" placeholder='"Inter", system-ui, sans-serif' spellcheck="false" hint="Fonts are never bundled: install or load them yourself." />
+              <ETextField v-if="s.mono === 'custom'" v-model="s.monoCustom" label="Mono stack" placeholder='"JetBrains Mono", monospace' spellcheck="false" />
+              <ENumberField label="Text size" hint="Percent of the default scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.textScale" @update:model-value="setField('textScale', $event)" />
+              <EKicker>Language</EKicker>
+              <EGrid min="9rem" :gap="3">
+                <ESelect v-model="s.locale" label="Language and region" :options="LOCALES" />
+                <ESelect v-model="s.currency" label="Currency" :options="CURRENCIES" />
+              </EGrid>
+              <TokenOverrides title="All type tokens" :items="LISTS.type" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
+            </EStack>
+          </template>
+
+          <template #space>
+            <EStack :gap="4">
+              <EGrid min="8rem" :gap="3">
+                <ENumberField label="Spacing" hint="Percent of the default scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.spaceScale" @update:model-value="setField('spaceScale', $event)" />
+                <ENumberField label="Control height" hint="Buttons, inputs" suffix="px" :min="32" :max="72" :model-value="s.controlHeight" @update:model-value="setField('controlHeight', $event)" />
+              </EGrid>
+              <TokenOverrides title="All space tokens" :items="LISTS.space" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
+            </EStack>
+          </template>
+
+          <template #motion>
+            <EStack :gap="4">
+              <ESegmented :model-value="s.motion" label="Feel" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }, { value: 'none', label: 'None' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
+              <EText variant="small" muted>Try it with Replay in the preview. Everything stops under reduced motion.</EText>
+              <TokenOverrides title="All motion tokens" :items="LISTS.motion" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
+            </EStack>
+          </template>
+        </ETabs>
+      </ControlsDock>
+
+      <section class="stage" aria-labelledby="playground-result">
+        <EVisuallyHidden as="h2" id="playground-result">Result</EVisuallyHidden>
+        <ETabs v-model="stageTab" :items="stageItems" class="stage-tabs">
+          <template #preview>
+            <PlaygroundPreview :tokens="cssVars" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
+          </template>
+          <template #export>
+            <EStack :gap="3">
+              <EInline>
+                <ESegmented v-model="format" label="Format" :options="[{ value: 'code', label: 'defineTheme' }, { value: 'css', label: 'CSS changes' }, { value: 'full', label: 'Full CSS' }]" />
+              </EInline>
+              <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
+              <template v-if="variantTags">
+                <EText variant="small" muted>Variants are component props, not tokens. This look also used:</EText>
+                <HighlightedCode lang="vue" copy-label="Copy variants" :code="variantTags" />
+              </template>
+              <EText variant="small" muted>{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. The link in the address bar holds this theme.</EText>
+            </EStack>
+          </template>
+        </ETabs>
+      </section>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .playground {
   display: grid;
-  grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr);
-  gap: var(--e-space-8);
-  align-items: start;
-  padding-block: var(--e-space-6);
-}
-@media (max-width: 64rem) {
-  .playground {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-.controls {
-  position: sticky;
-  top: calc(var(--site-header) + var(--e-space-4));
-}
-@media (max-width: 64rem) {
-  .controls {
-    position: static;
-  }
-}
-.stage {
+  gap: var(--e-space-6);
+  padding-block: var(--e-space-2) var(--e-space-4);
   min-width: 0;
 }
-.issues {
-  margin: var(--e-space-2) 0 0;
-  padding-inline-start: var(--e-space-4);
+.bar {
+  display: grid;
+  gap: var(--e-space-3);
+  padding-block-end: var(--e-space-6);
+  border-bottom: var(--e-stroke-hair) solid var(--e-border);
+  min-width: 0;
 }
-.preview {
-  padding: var(--e-space-4);
-  border: var(--e-stroke-hair) solid var(--e-border);
-  border-radius: var(--e-radius-lg);
-  background: var(--e-surface-tint);
-  color: var(--e-ink);
-  font-family: var(--e-font-sans);
+.bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-space-3) var(--e-space-5);
+}
+.bar-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex: 1 1 18rem;
+  gap: var(--e-space-1) var(--e-space-3);
+  min-width: 0;
+}
+.bar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-3) var(--e-space-4);
+  min-width: 0;
+}
+.bar-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--e-space-2);
+  width: 100%;
+}
+@media (min-width: 30rem) {
+  .bar-buttons {
+    display: flex;
+    width: auto;
+  }
+}
+.workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--e-space-4);
+  align-items: start;
+  min-width: 0;
+}
+.stage {
+  display: grid;
+  gap: var(--e-space-3);
+  min-width: 0;
+}
+.stage-tabs > :deep(.e-tabpanel) {
+  padding-top: var(--e-space-3);
+  min-width: 0;
+}
+.groups > :deep(.e-tablist) {
+  overflow-x: hidden;
+}
+.groups > :deep(.e-tablist .e-tab) {
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  padding-inline: var(--e-space-1);
+}
+.groups :deep(.e-seg-text) {
+  min-width: 0;
+  padding-inline: var(--e-space-3);
+}
+@media (min-width: 64rem) {
+  .workbench {
+    grid-template-columns: minmax(22rem, 26rem) minmax(0, 1fr);
+    gap: calc(var(--e-space-8) * 1.5);
+  }
+  .groups {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  .groups > :deep(.e-tabpanel) {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-inline-end: var(--e-space-1);
+  }
 }
 </style>

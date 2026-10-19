@@ -1,15 +1,15 @@
 ---
 title: Patterns
-description: "Six whole pages built only from Eos components: pay a bill, sign in, register, schedule a visit, sign a form and statements."
+description: "Six whole pages built only from Eos components."
 ---
 
 # Patterns
 
-Whole tasks built only from Eos components. Each is a live page with its source below, tested for rendering, behaviour and accessibility on every change. If a pattern needs a custom box, a building block is missing from the library.
+Whole tasks built only from Eos components, with source. If a pattern needs a custom box, the library is missing a building block.
 
-- [Pay a bill](/patterns/pay-a-bill): amount choice, saved card, hosted card frame, pay button.
-- [Sign in](/patterns/sign-in): password, code and password rules.
-- [Register](/patterns/register): a multi-step form with a stepper and an error summary.
-- [Schedule a visit](/patterns/schedule-a-visit): calendar, time slots and the booking.
-- [Sign a form](/patterns/sign-a-form): a list of forms and a signature.
-- [Statements](/patterns/statements): search, filter, rows and pages.
+- [Pay a bill](/patterns/pay-a-bill)
+- [Sign in](/patterns/sign-in)
+- [Register](/patterns/register)
+- [Schedule a visit](/patterns/schedule-a-visit)
+- [Sign a form](/patterns/sign-a-form)
+- [Statements](/patterns/statements)

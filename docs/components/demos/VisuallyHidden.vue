@@ -4,7 +4,6 @@ import { EButton, EInline, EStack, EText, EVisuallyHidden } from "@eos-ui/vue";
 
 <template>
   <EStack>
-    <!-- Screen readers hear "Download receipt 8842"; sighted people see "Download" -->
     <EInline>
       <EButton icon="download" variant="outline">Download <EVisuallyHidden>receipt 8842</EVisuallyHidden></EButton>
       <EButton icon="download" variant="outline">Download <EVisuallyHidden>receipt 8843</EVisuallyHidden></EButton>

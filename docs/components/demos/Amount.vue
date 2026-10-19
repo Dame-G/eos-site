@@ -13,7 +13,6 @@ import { EAmount, EGrid } from "@eos-ui/vue";
         { label: 'Due', value: 'Oct 22, 2026' },
       ]"
     />
-    <!-- currency and locale override the configured ones for one figure -->
     <EAmount label="Paid" :amount="1280" currency="EUR" locale="de-DE" />
   </EGrid>
 </template>
