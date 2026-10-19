@@ -1,7 +1,0 @@
-<!-- @dsCard group="Display" height=290 subtitle="Stacked, one open at a time" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:520}},h(P.Accordion,{items:[{id:"a",title:"Payment methods",meta:"2 cards",defaultOpen:true,content:"Visa ending 4242, and a checking account ending 0182."},{id:"b",title:"Statements",meta:"Paperless",content:"We email you when a new statement is ready."},{id:"c",title:"Reminders",meta:"Email and text",content:"Sent 24 hours before each visit."}]})));
-</script>

@@ -1,1 +1,0 @@
-A labelled detail from the account (name, email, phone, address) with a quiet Edit button. Props: `label`, children (the value), optional `status` and `tone` (a Chip such as Verified or Needs update) and `onEdit`. The Edit button is labelled "Edit {label}" for screen readers. Stack them inside a Panel; on a phone the value takes the full width and the chip and Edit sit beneath.

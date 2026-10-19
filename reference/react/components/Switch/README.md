@@ -1,1 +1,0 @@
-A pill switch for a setting that takes effect the moment it is flipped. Props: `label`, `description`, `checked` or `defaultChecked`, `onChange(checked, event)`, `disabled`, `name`, `value`, `id`, `inputRef`. On is `primary` with the knob at the end; off is tinted with the knob at the start, so state never depends on colour. A choice submitted later with a form is a Checkbox.

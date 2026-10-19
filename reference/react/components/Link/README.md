@@ -1,1 +1,0 @@
-An inline anchor. Props: `href`, children, `external` (new tab). `primary` with an underline, `ink` on hover. Links go somewhere; things that change something are Buttons. A dotted underline belongs to a Popover term.

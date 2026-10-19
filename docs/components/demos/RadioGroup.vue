@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { ERadioGroup, ETextField, EStack } from "@eos-ui/vue";
+import { ERadioGroup, ETextField, EStack, EText } from "@eos-ui/vue";
 
 const amount = ref("part");
 const other = ref("50.00");
@@ -22,7 +22,7 @@ const method = ref("card");
         <ETextField v-if="option.value === 'part'" v-model="other" label="Amount" prefix="$" hide-label inputmode="decimal" />
       </template>
     </ERadioGroup>
-    <p>Choice: {{ amount }}</p>
+    <EText variant="small" muted>Choice: {{ amount }}</EText>
     <ERadioGroup
       v-model="method"
       label="Pay with"

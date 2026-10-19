@@ -1,3 +1,0 @@
-Two date boxes and one calendar for choosing a span. Props: `label`, `value` or `defaultValue` (`{start, end}` of Dates), `onChange({start, end})`, `min`, `max`, `presets` (`{label, get()}`; defaults are Last 7 days, Last 30 days, This month), `hint`, `error`, `disabled`. The first click in the calendar sets the start, the second the end and closes it; clicking before the start restarts the range. Typing in either box works the same as DatePicker.
-
-Pass `startName` and `endName` to submit both dates as `YYYY-MM-DD`. It follows the configured locale like DatePicker, and takes `required` or `optional`.

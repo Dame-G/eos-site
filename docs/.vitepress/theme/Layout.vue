@@ -157,7 +157,7 @@ watch(
       <template #actions>
         <ETabs class="site-topnav" label="Site" :items="topNav" />
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
-          Search<EKbd small aria-hidden="true">/</EKbd>
+          Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
         <EIconButton icon="menu" label="Menu" class="site-menu-button" @click="menuOpen = true" />
       </template>

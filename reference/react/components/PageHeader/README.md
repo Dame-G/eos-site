@@ -1,1 +1,0 @@
-The top of a page's content. Props: `title` (the page's one h1; `headingLevel` to change it), `description`, `breadcrumb`, `status` (a StatusStamp) and `actions` (Buttons, main first). Every page has exactly one. The title says where you are in the words people use ("Visit on Oct 2"), not the component or feature name.

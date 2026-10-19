@@ -1,8 +1,0 @@
-<!-- @dsCard group="Forms" height=440 subtitle="Custom dropdown with descriptions and groups" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"grid",gap:16,maxWidth:380}},h(P.Select,{label:"Pay with",required:true,placeholder:"Choose a payment method",defaultValue:"visa",hint:"Your card is charged when you tap Pay.",options:[{value:"visa",label:"Visa ending 4242",description:"Expires 08/28",group:"Cards",icon:"card"},{value:"mc",label:"Mastercard ending 1881",description:"Expires 02/27",group:"Cards",icon:"card"},{value:"bank",label:"Checking ending 0182",description:"Takes 1 to 3 business days",group:"Bank accounts",icon:"wallet"},{value:"new",label:"Add a new card",group:"Other",icon:"plus"}]})));
-  setTimeout(function(){var b=document.querySelector('.op-sel-trigger'); if(b) b.click();},350);
-</script>

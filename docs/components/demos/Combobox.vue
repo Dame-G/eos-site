@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { ECombobox, EStack } from "@eos-ui/vue";
+import { ECombobox, EStack, EText } from "@eos-ui/vue";
 
 const practitioner = ref("");
 const clinic = ref("");
@@ -25,7 +25,7 @@ function search(text: string) {
 <template>
   <EStack>
     <ECombobox v-model="practitioner" label="Practitioner" placeholder="Type to search" :options="people" hint="Only listed names are accepted." />
-    <p>Value: {{ practitioner || "none" }}</p>
+    <EText variant="small" muted>Value: {{ practitioner || "none" }}</EText>
     <ECombobox v-model="clinic" label="Clinic" :options="found" :loading="searching" :filter="() => true" @input-change="search" />
     <ECombobox label="Visit type" :options="['Checkup', 'Follow-up']" error="Choose a visit type." required />
     <ECombobox label="Region" :options="['North', 'South']" disabled />

@@ -1,1 +1,0 @@
-A progress bar. Props: `label`, `value`, `max` and optional `valueText` (default is a percentage). The track is outlined and the fill is `primary`, so the filled share reads without colour. Use it for a known fraction; use Spinner when the length is unknown.

@@ -1,1 +1,0 @@
-The bar across the top of the page. Props: `logo`, `actions` (the person's menu or a sign-in Button) and the navigation as children; `sticky` pins it to the top. The navigation sits on its own row and scrolls sideways on a narrow screen rather than collapsing into a hidden menu, so every destination stays one tap away.

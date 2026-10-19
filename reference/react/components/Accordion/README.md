@@ -1,1 +1,0 @@
-A stack of sections that open and close. Props: `items` (`{id, title, meta, content, defaultOpen}`) and `multiple` to allow several open at once. Native details, so it works without script. Use it to hide secondary detail on a page of settings; a single hidden section is a disclosure, as in StatementCard.

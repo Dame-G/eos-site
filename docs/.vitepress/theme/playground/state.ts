@@ -1,11 +1,11 @@
 import { constants, contrast, defaults, defineTheme, derivedFrom, groups, inputTokens, type Theme, type ThemeInput } from "@eos-ui/tokens";
 
-export type Scheme = "light" | "paper" | "dark" | "contrast" | "custom";
-export type RadiusStyle = "sharp" | "default" | "round";
-export type ElevationStyle = "outline" | "lifted" | "bold";
-export type MotionStyle = "default" | "snappy" | "gentle" | "none";
+type Scheme = "light" | "paper" | "dark" | "contrast" | "custom";
+type RadiusStyle = "sharp" | "default" | "round";
+type ElevationStyle = "outline" | "lifted" | "bold";
+type MotionStyle = "default" | "snappy" | "gentle" | "none";
 
-export const VARIANT_VALUES = {
+const VARIANT_VALUES = {
   nav: ["default", "dense", "outline"],
   surface: ["default", "tint"],
   pad: ["sm", "md", "lg"],
@@ -18,7 +18,7 @@ export const VARIANT_VALUES = {
 export type Variants = { [K in keyof typeof VARIANT_VALUES]: (typeof VARIANT_VALUES)[K][number] };
 export type VariantKey = keyof Variants;
 
-export const VARIANT_KEYS = Object.keys(VARIANT_VALUES) as VariantKey[];
+const VARIANT_KEYS = Object.keys(VARIANT_VALUES) as VariantKey[];
 
 export const DEFAULT_VARIANTS: Variants = { nav: "default", surface: "default", pad: "md", grid: "default", disclosure: "row", badge: "solid", gap: "default" };
 
@@ -62,20 +62,20 @@ export interface State {
   t: Record<string, string>;
 }
 
-export const DEFAULT_BRAND = defaults["brand-blue"];
-export const DEFAULT_ACCENT = defaults["brand-green"];
-export const DEFAULT_DANGER = defaults["danger"];
-export const DEFAULT_WARNING = defaults["warning-strong"];
+const DEFAULT_BRAND = defaults["brand-blue"];
+const DEFAULT_ACCENT = defaults["brand-green"];
+const DEFAULT_DANGER = defaults["danger"];
+const DEFAULT_WARNING = defaults["warning-strong"];
 export const NEUTRAL = { hair: 1, focus: 2, controlHeight: 48 } as const;
-export const DEFAULT_GROUND = { background: defaults["background"], surface: defaults["surface"], foreground: defaults["ink"] };
+const DEFAULT_GROUND = { background: defaults["background"], surface: defaults["surface"], foreground: defaults["ink"] };
 
-export interface Ground {
+interface Ground {
   background: string;
   surface: string;
   foreground: string;
 }
 
-export const SCHEMES: Record<Exclude<Scheme, "custom">, Ground> = {
+const SCHEMES: Record<Exclude<Scheme, "custom">, Ground> = {
   light: { ...DEFAULT_GROUND },
   paper: { background: "#f7f0e3", surface: "#fffdf7", foreground: "#1f1a14" },
   dark: { background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" },
@@ -113,7 +113,7 @@ export const LOCALES = [
 ];
 export const CURRENCIES = ["USD", "CAD", "EUR", "GBP", "JPY"];
 
-export const COLOUR_KEYS = [
+const COLOUR_KEYS = [
   "background",
   "surface",
   "surface-tint",
@@ -165,7 +165,7 @@ export function initialState(): State {
 }
 
 /** What a scheme adds beyond the three ground colours. Only the high contrast scheme pins values by hand. */
-export function schemeTokens(scheme: Scheme): Record<string, string> {
+function schemeTokens(scheme: Scheme): Record<string, string> {
   if (scheme === "contrast") {
     return {
       "surface-tint": "#f2f2f2",
@@ -181,7 +181,7 @@ export function schemeTokens(scheme: Scheme): Record<string, string> {
 export const SAFE = /^[^;{}<>\\]*$/;
 const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
 
-export interface Built {
+interface Built {
   /** The `defineTheme` input that reproduces this state with the least code. */
   input: ThemeInput;
   theme: Theme;
@@ -255,7 +255,7 @@ function pickColours(t: Record<string, string>) {
   return out;
 }
 
-export type ControlTab = "colour" | "shape" | "type" | "space" | "motion";
+type ControlTab = "colour" | "shape" | "type" | "space" | "motion";
 
 const TAB_GROUPS: Record<ControlTab, readonly (keyof typeof groups)[]> = {
   colour: ["color"],
@@ -280,7 +280,7 @@ export function derivedTokens(tab: ControlTab): DerivedToken[] {
     .map((name) => ({ name, from: derivedFrom[name]!.split(",").join(", ") }));
 }
 
-export interface Pair {
+interface Pair {
   fg: string;
   bg: string;
   min: number;
@@ -290,7 +290,7 @@ export interface Pair {
 }
 
 /** The pairs `defineTheme` promises, in its own order, then a few it does not check but the components rely on. */
-export const PAIRS: Pair[] = [
+const PAIRS: Pair[] = [
   { fg: "ink", bg: "surface", min: 7, role: "Body text" },
   { fg: "ink", bg: "surface-tint", min: 7, role: "Text on the tinted ground" },
   { fg: "muted", bg: "surface", min: 4.5, role: "Secondary text" },
@@ -313,7 +313,7 @@ export const PAIRS: Pair[] = [
   { fg: "focus-field", bg: "surface", min: 3, role: "Input focus edge (non-text)", extra: true },
 ];
 
-export interface PairResult extends Pair {
+interface PairResult extends Pair {
   ratio: number;
   pass: boolean;
   fgValue: string;
@@ -328,7 +328,7 @@ export function resolve(tokens: Record<string, string>, name: string, seen = new
   return resolve(tokens, m[1]!, seen);
 }
 
-export function checkPairs(tokens: Record<string, string>): PairResult[] {
+function checkPairs(tokens: Record<string, string>): PairResult[] {
   const out: PairResult[] = [];
   for (const p of PAIRS) {
     const fgValue = resolve(tokens, p.fg);
@@ -340,9 +340,9 @@ export function checkPairs(tokens: Record<string, string>): PairResult[] {
   return out;
 }
 
-export type PresetSet = Omit<Partial<State>, "variants"> & { variants?: Partial<Variants> };
+type PresetSet = Omit<Partial<State>, "variants"> & { variants?: Partial<Variants> };
 
-export interface Preset {
+interface Preset {
   id: string;
   label: string;
   note: string;
@@ -601,7 +601,7 @@ function approved(set: Partial<State>): boolean {
 }
 
 /** A new random but coherent look: one ground hue, action colours kept off it, variants picked about half the time. It only returns a look where every contrast pair passes, drawing again until one does. */
-export function randomSet(): Partial<State> {
+function randomSet(): Partial<State> {
   for (let i = 0; i < 400; i++) {
     const set = randomOnce();
     if (approved(set)) return set;
@@ -751,8 +751,8 @@ export function cssFull(b: Built): string {
   return b.theme.css({ header: true });
 }
 
-export const SPACE_GAP = { tight: 3, default: 4, roomy: 6 } as const;
-export const INLINE_GAP = { tight: 1, default: 2, roomy: 3 } as const;
+const SPACE_GAP = { tight: 3, default: 4, roomy: 6 } as const;
+const INLINE_GAP = { tight: 1, default: 2, roomy: 3 } as const;
 
 /** The props each variant maps to, as the previews apply them. */
 export function variantProps(v: Variants) {

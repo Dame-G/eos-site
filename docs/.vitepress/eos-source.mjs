@@ -5,7 +5,7 @@ import { GROUP_OF } from "./groups.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const siteRoot = resolve(here, "../..");
-export const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
+const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
 export const componentsDir = join(eosRoot, "packages/vue/src/components");
 
 /** The groups, in the order the sidebar shows them. */

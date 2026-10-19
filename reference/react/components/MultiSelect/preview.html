@@ -1,8 +1,0 @@
-<!-- @dsCard group="Forms" height=420 subtitle="Several choices as removable tags" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:420}},h(P.MultiSelect,{label:"Send reminders by",placeholder:"Add a way to reach you",defaultValue:["email","text"],options:[{value:"email",label:"Email",description:"maria@example.com",icon:"mail"},{value:"text",label:"Text message",description:"(555) 010-4471",icon:"phone"},{value:"call",label:"Phone call",description:"Weekdays only",icon:"phone"}]})));
-  setTimeout(function(){var b=document.querySelector(".op-combo-btn[aria-label='Show options']"); if(b) b.click();},350);
-</script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { ESegmented, EStack } from "@eos-ui/vue";
+import { ESegmented, EStack, EText } from "@eos-ui/vue";
 
 const range = ref("Month");
 const view = ref("list");
@@ -9,7 +9,7 @@ const view = ref("list");
 <template>
   <EStack>
     <ESegmented v-model="range" label="Show statements for" :options="['Day', 'Week', 'Month']" />
-    <p>Showing {{ range.toLowerCase() }} view.</p>
+    <EText variant="small" muted>Showing {{ range.toLowerCase() }} view.</EText>
     <ESegmented
       v-model="view"
       label="View"

@@ -1,7 +1,0 @@
-<!-- @dsCard group="Forms" height=210 subtitle="24px box in a 48px row" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:420}},h(P.Checkbox,{label:"Use this card for future payments",defaultChecked:true}),h(P.Checkbox,{label:"Email me a receipt",description:"Sent to maria@example.com."}),h(P.Checkbox,{label:"Turn on autopay",description:"Add a card first.",disabled:true})));
-</script>

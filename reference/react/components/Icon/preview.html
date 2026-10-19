@@ -1,7 +1,0 @@
-<!-- @dsCard group="Foundations" height=430 subtitle="Every icon, by name" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("ul",{className:"op-icongrid"},P.Icon.names.map(function(n){return h("li",{key:n,className:"op-icongrid-item"},h(P.Icon,{name:n}),h("span",null,n));})));
-</script>

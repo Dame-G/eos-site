@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { ETabs, EStack } from "@eos-ui/vue";
+import { ETabs, EStack, EText } from "@eos-ui/vue";
 
 const tab = ref("open");
 const items = [
@@ -17,6 +17,6 @@ const items = [
       <template #paid>Statements you have paid show here.</template>
       <template #panel="{ item }">Every statement, newest first ({{ item.label }}).</template>
     </ETabs>
-    <p>Selected: {{ tab }}</p>
+    <EText variant="small" muted>Selected: {{ tab }}</EText>
   </EStack>
 </template>

@@ -1,6 +1,7 @@
-import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { groupedComponents, listComponents, propsTable, readReadme, siteRoot, summaryOf } from "../docs/.vitepress/eos-source.mjs";
+import { DESIGN, GUIDE, PATTERNS } from "../docs/.vitepress/pages.mjs";
 
 const SITE = "https://eos.dame.gg";
 const out = [];
@@ -13,34 +14,17 @@ line();
 
 line("## Guide");
 line();
-const guide = [
-  ["getting-started", "Getting started", "Install, plugin, first component, Vite auto-import"],
-  ["theming", "Theming", "defineTheme inputs, CSS variables, scoped themes, portalTarget, cascade layers"],
-  ["icons", "Icons", "Built-in icons and bringing your own icon set"],
-  ["language", "Words and language", "Messages, locale, currency, right to left"],
-  ["forms", "Forms and validation", "v-model, labels, hints, errors, ErrorSummary"],
-  ["accessibility", "Accessibility", "Contrast table, keyboard, forced colours, what is tested"],
-  ["design-principles", "Design principles", "Spacing rhythm, depth, control height, actions"],
-  ["ssr", "Nuxt and SSR", "What was verified about server rendering"],
-  ["vuetify", "Migrating from Vuetify", "Concept mapping and coexistence"],
-  ["versioning", "Versioning and support", "Pre-1.0 stability, semver, supported Vue and browsers"],
-];
-for (const [slug, name, note] of guide) line(`- [${name}](${SITE}/guide/${slug}): ${note}`);
+for (const { slug, name, note } of GUIDE) line(`- [${name}](${SITE}/guide/${slug}): ${note}`);
 line();
 
 line("## Design");
 line();
-line(`- [Tokens](${SITE}/tokens): the theme inputs, then every colour, size, radius, shadow and motion token with the input it follows, usage notes and contrast`);
-line(`- [Theme playground](${SITE}/playground): change the theme inputs (colours, corners, elevation, strokes, fonts, text and space scale, control height, motion), locale and currency, with exportable defineTheme code`);
+for (const { slug, name, note } of DESIGN) line(`- [${name}](${SITE}/${slug}): ${note}`);
 line();
 
 line("## Patterns");
 line();
-const patterns = readdirSync(join(siteRoot, "docs/patterns")).filter((f) => f.endsWith(".md") && f !== "index.md");
-for (const f of patterns.sort()) {
-  const slug = f.replace(/\.md$/, "");
-  line(`- [${slug.replace(/-/g, " ")}](${SITE}/patterns/${slug})`);
-}
+for (const { slug, name } of PATTERNS) line(`- [${name}](${SITE}/patterns/${slug})`);
 line();
 
 line("## Components");

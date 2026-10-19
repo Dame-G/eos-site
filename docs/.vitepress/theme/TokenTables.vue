@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EChip, EDataGrid, EGrid, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
+import { EChip, EDataGrid, EGrid, EHeading, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
 
@@ -20,10 +20,10 @@ function tone(level: string) {
 const isText = (p: Partner) => !/non-text|Decoration/.test(p.role);
 
 const withId = <T extends { name: string }>(rows: T[]) => rows.map((r) => ({ ...r, id: r.name }));
-const token = { key: "name", label: "Token", width: 200 };
-const value = { key: "value", label: "Value", width: 150 };
+const token = { key: "name", label: "Token" };
+const value = { key: "value", label: "Value" };
 const usage = { key: "usage", label: "Used for" };
-const from = { key: "from", label: "From", width: 170 };
+const from = { key: "from", label: "From" };
 const plainColumns = [token, value, from, usage];
 const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r.constant ? "constant" : r.from.join(", ") }));
 </script>
@@ -34,7 +34,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       v-if="section === 'inputs'"
       plain
       caption="Theme inputs"
-      :columns="[{ key: 'name', label: 'Input', width: 150 }, { key: 'controls', label: 'Controls' }, { key: 'derives', label: 'Derives' }, { key: 'neutral', label: 'Neutral', width: 150 }]"
+      :columns="[{ key: 'name', label: 'Input' }, { key: 'controls', label: 'Controls' }, { key: 'derives', label: 'Derives' }, { key: 'neutral', label: 'Neutral' }]"
       :rows="withId(data.inputs as Input[])"
     >
       <template #cell-name="{ row }"
@@ -88,7 +88,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         <EDataGrid
           plain
           caption="Font families"
-          :columns="[token, { key: 'from', label: 'From', width: 100 }, { key: 'stack', label: 'Stack' }, { key: 'sample', label: 'Sample' }]"
+          :columns="[token, { key: 'from', label: 'From' }, { key: 'stack', label: 'Stack' }, { key: 'sample', label: 'Sample' }]"
           :rows="[
             { id: 'sans', name: 'font-sans', from: 'fonts', stack: data.families.sans, sample: 'Your balance is due November 1.' },
             { id: 'mono', name: 'font-mono', from: 'fonts', stack: data.families.mono, sample: '$162.40, Oct 22, 2026' },
@@ -102,13 +102,13 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           >
         </EDataGrid>
         <template v-for="g in data.typeGroups" :key="g.name">
-          <h3 :id="`type-${g.name.toLowerCase().replace(/ /g, '-')}`">{{ g.name }}</h3>
+          <EHeading :id="`type-${g.name.toLowerCase().replace(/ /g, '-')}`" :level="3">{{ g.name }}</EHeading>
           <EDataGrid
             plain
             :caption="g.name"
             :columns="[
-              { key: 'name', label: 'Style', width: 190 },
-              { key: 'size', label: 'Size and line', width: 230 },
+              { key: 'name', label: 'Style' },
+              { key: 'size', label: 'Size and line' },
               { key: 'usage', label: 'Used for' },
               { key: 'sample', label: 'Sample' },
             ]"
@@ -137,7 +137,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       v-else-if="section === 'spacing'"
       plain
       caption="Spacing"
-      :columns="[token, value, from, usage, { key: 'size', label: 'Size', width: 160 }]"
+      :columns="[token, value, from, usage, { key: 'size', label: 'Size' }]"
       :rows="withFrom(data.spacing as Token[])"
     >
       <template #cell-name="{ row }"
@@ -150,7 +150,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       v-else-if="section === 'radius'"
       plain
       caption="Corner radius"
-      :columns="[token, value, from, usage, { key: 'shape', label: 'Shape', width: 120 }]"
+      :columns="[token, value, from, usage, { key: 'shape', label: 'Shape' }]"
       :rows="withFrom(data.radius as Token[])"
     >
       <template #cell-name="{ row }"
@@ -163,7 +163,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       v-else-if="section === 'shadow'"
       plain
       caption="Shadows"
-      :columns="[token, from, usage, { key: 'look', label: 'Look', width: 200 }]"
+      :columns="[token, from, usage, { key: 'look', label: 'Look' }]"
       :rows="withFrom(data.shadow as Token[])"
     >
       <template #cell-name="{ row }"
@@ -176,7 +176,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       v-else-if="section === 'fontSize'"
       plain
       caption="Font sizes"
-      :columns="[token, value, from, usage, { key: 'sample', label: 'Sample', width: 120 }]"
+      :columns="[token, value, from, usage, { key: 'sample', label: 'Sample' }]"
       :rows="withFrom(data.fontSize as Token[])"
     >
       <template #cell-name="{ row }"
@@ -203,6 +203,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
 <style scoped>
 .swatches {
+  --swatch-size: calc(var(--e-space-8) * 2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -217,8 +218,8 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
   display: grid;
   flex: none;
   place-items: center;
-  width: 64px;
-  height: 64px;
+  width: var(--swatch-size);
+  height: var(--swatch-size);
   border: var(--e-stroke-hair) solid var(--e-border);
   border-radius: var(--e-radius-md);
   font: 500 var(--e-text-xl) / 1 var(--e-font-sans);
@@ -264,19 +265,20 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 }
 .bar {
   display: block;
-  height: 16px;
+  height: var(--e-space-4);
   background: var(--e-primary);
   border-radius: var(--e-radius-sm);
 }
 .box {
+  --box-size: calc(var(--e-space-8) + var(--e-space-6));
   display: block;
-  width: 56px;
-  height: 56px;
+  width: var(--box-size);
+  height: var(--box-size);
   border: var(--e-stroke-edge) solid var(--e-border-strong);
   background: var(--e-surface-tint);
 }
 .box.wide {
-  width: 120px;
+  width: calc(var(--box-size) * 2);
   background: var(--e-surface);
 }
 </style>

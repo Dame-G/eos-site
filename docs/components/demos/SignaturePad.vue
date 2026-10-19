@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { ESignaturePad, EStack } from "@eos-ui/vue";
+import { ESignaturePad, EStack, EText } from "@eos-ui/vue";
 
 const image = ref("");
 </script>
@@ -8,6 +8,6 @@ const image = ref("");
 <template>
   <EStack>
     <ESignaturePad v-model="image" :height="180" />
-    <p>{{ image ? "Signature drawn" : "Nothing drawn yet" }}</p>
+    <EText variant="small" muted>{{ image ? "Signature drawn" : "Nothing drawn yet" }}</EText>
   </EStack>
 </template>

@@ -2,7 +2,8 @@ import { chromium } from "playwright";
 import { createRequire } from "node:module";
 import { readFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { listComponents, siteRoot } from "../docs/.vitepress/eos-source.mjs";
+import { listComponents } from "../docs/.vitepress/eos-source.mjs";
+import { STATIC_PATHS } from "../docs/.vitepress/pages.mjs";
 
 const args = process.argv.slice(2);
 const base = args.find((a) => a.startsWith("http")) ?? "http://localhost:4173";
@@ -12,26 +13,7 @@ const shots = args.includes("--shots") ? args[args.indexOf("--shots") + 1] : nul
 const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
 
 const pages = [
-  "/",
-  "/guide/getting-started",
-  "/guide/theming",
-  "/guide/icons",
-  "/guide/language",
-  "/guide/forms",
-  "/guide/accessibility",
-  "/guide/design-principles",
-  "/guide/ssr",
-  "/guide/vuetify",
-  "/tokens",
-  "/playground",
-  "/patterns/",
-  "/patterns/pay-a-bill",
-  "/patterns/sign-in",
-  "/patterns/register",
-  "/patterns/schedule-a-visit",
-  "/patterns/sign-a-form",
-  "/patterns/statements",
-  "/components/",
+  ...STATIC_PATHS,
   ...(all ? listComponents() : ["Button", "Select", "DataGrid", "Calendar", "Dialog", "StatementRow"]).map((c) => `/components/${c}`),
 ];
 

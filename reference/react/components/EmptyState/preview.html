@@ -1,7 +1,0 @@
-<!-- @dsCard group="Feedback" height=330 subtitle="When there is nothing to show yet" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:520}},h(P.EmptyState,{icon:"calendar",title:"No upcoming appointments",action:h(P.Button,{icon:"plus"},"Schedule a visit")},"When you schedule a visit it will show up here, with a reminder before it.")));
-</script>

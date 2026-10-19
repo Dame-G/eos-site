@@ -1,3 +1,0 @@
-A one-line statement: stamp, title and subtitle, amount. It opens to the breakdown. It is clickable, so it has an underside that darkens and a tinted background on hover; what is inside is flat.
-
-Takes the same props as StatementCard. Opened, it reads top to bottom: the reason in one sentence, beside (or, when narrow, above) the breakdown that adds up to what you owe (`details` are the lines above the total, `amountLabel` names the total); then label and text rows for what it covers, how to pay and when it is due; the history; and the Buttons. The amount shows once in the row and once as the total, never as a third big figure. Use rows for a list of statements; the stamp and the amount line up down the list.

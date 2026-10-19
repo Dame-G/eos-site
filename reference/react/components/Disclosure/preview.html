@@ -1,7 +1,0 @@
-<!-- @dsCard group="Display" height=270 subtitle="Native open and close, two variants" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"grid",gap:20,maxWidth:480}},h(P.Disclosure,{title:"History (3)",defaultOpen:true},h(P.Text,{variant:"small"},"Statement sent by email on Oct 14. You viewed it on Oct 15.")),h("div",{style:{boxShadow:"var(--edge)",borderRadius:8,overflow:"hidden"}},h(P.Disclosure,{variant:"card",title:"Payment plan terms",meta:"12 months"},"Equal monthly payments, no interest and no fees. You can pay it off early."))));
-</script>

@@ -1,8 +1,0 @@
-<!-- @dsCard group="Forms" height=340 subtitle="Draw a signature" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:480}},h(P.SignaturePad,{onChange:function(){}})));
-</script>

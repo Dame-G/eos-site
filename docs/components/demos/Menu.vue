@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EInline, EMenu, EStack } from "@eos-ui/vue";
+import { EInline, EMenu, EStack, EText } from "@eos-ui/vue";
 
 const last = ref("Nothing chosen yet");
 
@@ -20,6 +20,6 @@ const items = [
       <EMenu label="More" variant="secondary" :items="items" @select="(item) => (last = `Selected: ${item.label}`)" />
       <EMenu label="Account" variant="quiet" icon="user" :items="items" />
     </EInline>
-    <p>{{ last }}</p>
+    <EText variant="small" muted>{{ last }}</EText>
   </EStack>
 </template>

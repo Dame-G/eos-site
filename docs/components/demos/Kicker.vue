@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { EHeading, EKicker, EStack } from "@eos-ui/vue";
+import { EHeading, EKicker, EStack, EText } from "@eos-ui/vue";
 </script>
 
 <template>
   <EStack>
     <div>
       <EKicker>Balance</EKicker>
-      <p>$162.40</p>
+      <EText>$162.40</EText>
     </div>
     <div>
       <EKicker>Due date</EKicker>
-      <p>Oct 31, 2026</p>
+      <EText>Oct 31, 2026</EText>
     </div>
     <div>
       <EKicker as="span">October statement</EKicker>
