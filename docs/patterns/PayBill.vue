@@ -30,7 +30,7 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
 </script>
 
 <template>
-  <div style="max-width: 560px">
+  <div class="pattern-narrow">
     <ESurface pad="md">
       <EStack :gap="6">
         <EStack :gap="3">

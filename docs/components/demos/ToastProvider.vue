@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, provide } from "vue";
-import { createToasts, EButton, EInline, EStack, EToastProvider, TOAST_KEY } from "@eos-ui/vue";
+import { createToasts, EButton, EInline, EStack, EToastProvider, TOAST_KEY, EText } from "@eos-ui/vue";
 
 const toasts = createToasts();
 provide(TOAST_KEY, toasts);
@@ -29,7 +29,7 @@ function undo() {
         <EButton variant="outline" @click="undo">Remove statement</EButton>
         <EButton variant="quiet" @click="toasts.clear()">Clear all</EButton>
       </EInline>
-      <p>Success and information go after five seconds. Errors and toasts with an action stay until dismissed.</p>
+      <EText variant="small" muted>Success and information go after five seconds. Errors and toasts with an action stay until dismissed.</EText>
     </EStack>
   </EToastProvider>
 </template>

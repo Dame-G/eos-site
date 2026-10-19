@@ -4,7 +4,12 @@ import { ESelect, EVisuallyHidden } from "@eos-ui/vue";
 import PresetSwatch from "./PresetSwatch.vue";
 import { PRESETS, applyPreset, build, initialState } from "./state";
 
-const props = defineProps<{ modelValue: string; tokens: Record<string, string> }>();
+const props = defineProps<{
+  modelValue: string;
+  name: string;
+  tokens?: Record<string, string>;
+  select?: boolean;
+}>();
 const emit = defineEmits<{ select: [id: string]; random: [] }>();
 
 interface Swatch {
@@ -13,15 +18,13 @@ interface Swatch {
   tokens: Record<string, string>;
 }
 
-const pick = (id: string, label: string, tokens: Record<string, string>): Swatch => ({ id, label, tokens });
-
 const fixed: Swatch[] = PRESETS.map((p) => {
   const st = initialState();
   applyPreset(st, p.id);
-  return pick(p.id, p.label, build(st).theme.tokens);
+  return { id: p.id, label: p.label, tokens: build(st).theme.tokens };
 });
 
-const items = computed(() => (props.modelValue === "custom" ? [...fixed, pick("custom", "Custom", props.tokens)] : fixed));
+const items = computed(() => (props.modelValue === "custom" ? [...fixed, { id: "custom", label: "Custom", tokens: props.tokens ?? {} }] : fixed));
 const options = computed(() => {
   const list = items.value.map((i) => ({ value: i.id, label: i.label }));
   return props.modelValue === "random" ? [...list, { value: "random", label: "Randomized" }] : list;
@@ -43,26 +46,18 @@ onBeforeUnmount(() => clearTimeout(timer));
 </script>
 
 <template>
-  <div class="presets">
-    <div class="presets-radios">
+  <div :class="['presets', { 'presets--select': select }]">
+    <div class="presets-row">
       <div class="presets-group" role="radiogroup" aria-label="Preset">
         <label v-for="i in items" :key="i.id" class="preset">
-          <input class="preset-input" type="radio" name="playground-preset" :value="i.id" :checked="modelValue === i.id" :disabled="i.id === 'custom'" @change="choose(i.id)" />
+          <input class="preset-input" type="radio" :name="name" :value="i.id" :checked="modelValue === i.id" :disabled="i.id === 'custom'" @change="choose(i.id)" />
           <span class="preset-face">
             <PresetSwatch :tokens="i.tokens" />
             {{ i.label }}
           </span>
         </label>
       </div>
-      <button type="button" class="preset preset-roll" :aria-current="rolled ? 'true' : undefined" @click="randomize">
-        <span class="preset-face">
-          <PresetSwatch random />
-          Randomize
-        </span>
-      </button>
-    </div>
-    <div class="presets-narrow">
-      <ESelect class="presets-select" :model-value="modelValue" label="Preset" :options="options" @update:model-value="choose(String($event))" />
+      <ESelect v-if="select" class="presets-select" :model-value="modelValue" label="Preset" :options="options" @update:model-value="choose(String($event))" />
       <button type="button" class="preset preset-roll" :aria-current="rolled ? 'true' : undefined" @click="randomize">
         <span class="preset-face">
           <PresetSwatch random />
@@ -75,30 +70,16 @@ onBeforeUnmount(() => clearTimeout(timer));
 </template>
 
 <style scoped>
-.presets-narrow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
+.presets-row {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--e-space-2);
-}
-.presets-select {
-  display: block;
-}
-.presets-radios {
-  display: none;
-}
-@media (min-width: 64rem) {
-  .presets-narrow {
-    display: none;
-  }
-  .presets-radios {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--e-space-1);
-  }
 }
 .presets-group {
   display: contents;
+}
+.presets-select {
+  display: none;
 }
 .preset {
   position: relative;
@@ -123,9 +104,6 @@ onBeforeUnmount(() => clearTimeout(timer));
   content: "";
   position: absolute;
   inset: calc(var(--e-space-1) * -1);
-}
-.presets-narrow .preset-roll {
-  margin-block-end: var(--e-space-1);
 }
 .preset-face {
   display: inline-flex;
@@ -161,6 +139,23 @@ onBeforeUnmount(() => clearTimeout(timer));
 }
 .preset-input:disabled + .preset-face {
   cursor: default;
+}
+@media (max-width: 63.999rem) {
+  .presets--select .presets-row {
+    flex-wrap: nowrap;
+    align-items: flex-end;
+  }
+  .presets--select .presets-group {
+    display: none;
+  }
+  .presets--select .presets-select {
+    display: block;
+    flex: 1;
+    min-width: 0;
+  }
+  .presets--select .preset-roll {
+    margin-block-end: var(--e-space-1);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .preset-face {

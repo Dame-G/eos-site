@@ -1,1 +1,0 @@
-An icon-only control with a 48px target. Props: `icon`, a `label` (read by screen readers, so write it as an action, such as "Download receipt"), `onClick` and `disabled`. Use it where a text Button would crowd the row; never for the main action. Pair it with a Tooltip when the icon is not obvious.

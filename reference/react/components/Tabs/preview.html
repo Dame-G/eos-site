@@ -1,7 +1,0 @@
-<!-- @dsCard group="Navigation" height=240 subtitle="Switch between views of one thing" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:560}},h(P.Tabs,{defaultValue:"up",items:[{id:"up",label:"Upcoming",count:2,content:h("p",{style:{margin:0}},"Two visits are coming up.")},{id:"past",label:"Past",count:14,content:h("p",{style:{margin:0}},"Visits you have already had.")},{id:"cancel",label:"Cancelled",content:h("p",{style:{margin:0}},"Nothing has been cancelled.")}]})));
-</script>

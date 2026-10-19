@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EButton, EDataGrid, EStack } from "@eos-ui/vue";
+import { EButton, EDataGrid, EStack, EText } from "@eos-ui/vue";
 
 const rows = [
   { id: 1, date: "Oct 22, 2026", service: "Annual check-up", status: "Due", amount: 162.4 },
@@ -44,7 +44,7 @@ const sort = ref<{ key: string; dir: "asc" | "desc" } | null>({ key: "date", dir
       <template #cell-amount="{ value }">${{ Number(value).toFixed(2) }}</template>
       <template #bulk-actions><EButton variant="outline">Download selected</EButton></template>
     </EDataGrid>
-    <p>Selected rows: {{ selected.length }}</p>
+    <EText variant="small" muted>Selected rows: {{ selected.length }}</EText>
 
     <EDataGrid plain caption="Recent payments" :columns="columns.slice(0, 2)" :rows="rows.slice(0, 3)" />
 

@@ -1,1 +1,0 @@
-The first focusable thing on every page: it stays out of sight until a keyboard user focuses it, then lets them jump past the navigation to the content (WCAG 2.4.1). Props: `href` (default `#main`) and optionally the text. AppShell renders one for you.

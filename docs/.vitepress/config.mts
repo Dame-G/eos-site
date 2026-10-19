@@ -2,6 +2,7 @@ import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
 import { sep } from "node:path";
 import { GROUPS, listComponents } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
+import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
 import { searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
 
@@ -21,48 +22,16 @@ function componentSidebar(): DefaultTheme.SidebarItem[] {
   return [{ text: "Overview", link: "/components/" }, ...groups.filter((g) => g.items.length)];
 }
 
-const guide: DefaultTheme.SidebarItem[] = [
-  {
-    text: "Guide",
-    items: [
-      { text: "Getting started", link: "/guide/getting-started" },
-      { text: "Theming", link: "/guide/theming" },
-      { text: "Icons", link: "/guide/icons" },
-      { text: "Words and language", link: "/guide/language" },
-      { text: "Forms and validation", link: "/guide/forms" },
-      { text: "Accessibility", link: "/guide/accessibility" },
-      { text: "Design principles", link: "/guide/design-principles" },
-      { text: "Nuxt and SSR", link: "/guide/ssr" },
-      { text: "Migrating from Vuetify", link: "/guide/vuetify" },
-      { text: "Versioning and support", link: "/guide/versioning" },
-    ],
-  },
-];
+const guide: DefaultTheme.SidebarItem[] = [{ text: "Guide", items: GUIDE.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })) }];
 
 const patterns: DefaultTheme.SidebarItem[] = [
   {
     text: "Patterns",
-    items: [
-      { text: "Overview", link: "/patterns/" },
-      { text: "Pay a bill", link: "/patterns/pay-a-bill" },
-      { text: "Sign in", link: "/patterns/sign-in" },
-      { text: "Register", link: "/patterns/register" },
-      { text: "Schedule a visit", link: "/patterns/schedule-a-visit" },
-      { text: "Sign a form", link: "/patterns/sign-a-form" },
-      { text: "Statements", link: "/patterns/statements" },
-    ],
+    items: [{ text: "Overview", link: "/patterns/" }, ...PATTERNS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` }))],
   },
 ];
 
-const tools: DefaultTheme.SidebarItem[] = [
-  {
-    text: "Design",
-    items: [
-      { text: "Tokens", link: "/tokens" },
-      { text: "Theme playground", link: "/playground" },
-    ],
-  },
-];
+const tools: DefaultTheme.SidebarItem[] = [{ text: "Design", items: DESIGN.map((d) => ({ text: d.name, link: `/${d.slug}` })) }];
 
 function vitepressInLayer() {
   const isThemeCss = (id: string) =>

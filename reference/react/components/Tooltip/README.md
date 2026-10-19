@@ -1,1 +1,0 @@
-A label that names an icon-only control. Wrap one focusable child and provide `label`. Shows on hover, keyboard focus and touch, Escape hides it, black on white, and never holds anything you must read or click: use a Popover for that.

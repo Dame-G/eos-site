@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { EIconButton, EInline, ELink, EStack, ETooltip } from "@eos-ui/vue";
+import { EIconButton, EInline, ELink, EStack, ETooltip, EText } from "@eos-ui/vue";
 </script>
 
 <template>
   <EStack>
-    <p>Hover or focus a control to see its tooltip.</p>
+    <EText variant="small" muted>Hover or focus a control to see its tooltip.</EText>
     <EInline>
       <ETooltip label="Download receipt">
         <EIconButton icon="download" label="Download receipt" />

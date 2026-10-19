@@ -1,8 +1,0 @@
-<!-- @dsCard group="Layout" height=120 subtitle="Text only screen readers get" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",null,h(P.Button,{variant:"outline",icon:"download"},"Download",h(P.VisuallyHidden,null," receipt 8842")),h(P.Text,{variant:"small",muted:true},"The button above also says \"receipt 8842\" to a screen reader.")));
-</script>

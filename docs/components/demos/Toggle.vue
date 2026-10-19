@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EButtonGroup, EStack, EToggle } from "@eos-ui/vue";
+import { EButtonGroup, EStack, EToggle, EText } from "@eos-ui/vue";
 
 const unpaid = ref(true);
 const recent = ref(false);
@@ -14,6 +14,6 @@ const paper = ref(false);
       <EToggle v-model="recent">Last 30 days</EToggle>
       <EToggle v-model="paper" disabled>Paper only</EToggle>
     </EButtonGroup>
-    <p>Unpaid only: {{ unpaid ? "on" : "off" }}, last 30 days: {{ recent ? "on" : "off" }}</p>
+    <EText variant="small" muted>Unpaid only: {{ unpaid ? "on" : "off" }}, last 30 days: {{ recent ? "on" : "off" }}</EText>
   </EStack>
 </template>

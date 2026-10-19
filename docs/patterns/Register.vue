@@ -65,7 +65,7 @@ function back() {
 </script>
 
 <template>
-  <form novalidate style="max-width: 560px" @submit.prevent="next">
+  <form novalidate class="pattern-narrow" @submit.prevent="next">
     <EStack :gap="6">
       <EStepper label="Registration" :steps="stepper" />
 

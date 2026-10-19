@@ -1,8 +1,0 @@
-<!-- @dsCard group="Forms" height=400 subtitle="Free text with suggestions" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{maxWidth:400}},h(P.Autocomplete,{label:"Street address",placeholder:"Start typing your address",hint:"Pick a suggestion or type your own.",options:[{value:"120 Park Street",label:"120 Park Street",description:"Springfield, IL 62701"},{value:"120 Park Avenue",label:"120 Park Avenue",description:"Springfield, IL 62704"},{value:"12 Parkview Lane",label:"12 Parkview Lane",description:"Springfield, IL 62711"},{value:"48 Mill Road",label:"48 Mill Road",description:"Springfield, IL 62702"}]})));
-  setTimeout(function(){var i=document.querySelector('input[role=combobox]'); if(i){i.focus(); var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; s.call(i,'120 P'); i.dispatchEvent(new Event('input',{bubbles:true}));}},350);
-</script>

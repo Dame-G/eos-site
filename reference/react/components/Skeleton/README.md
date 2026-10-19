@@ -1,1 +1,0 @@
-A single placeholder block shown while content loads. Props: `height` (px, default 96) and `width` (default full width), and `circle` for a photo. Make it the size of what is coming: a statement card is about 220px tall, one line of text about 20px. It pulses slowly, and is static under reduced motion. Screen readers hear "Loading". Use Spinner for a single action instead.

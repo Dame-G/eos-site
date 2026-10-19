@@ -25,7 +25,7 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
 </script>
 
 <template>
-  <EGrid min="22rem" :gap="6" style="max-width: 900px">
+  <EGrid min="22rem" :gap="6" class="pattern-lg">
     <EStack :gap="3">
       <EHeading :level="2" kicker="Forms">To do before your visit</EHeading>
       <ENotice tone="warning" title="2 forms need your signature">Please finish them before Oct 22.</ENotice>

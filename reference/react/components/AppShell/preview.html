@@ -1,8 +1,0 @@
-<!-- @dsCard group="Navigation" height=820 subtitle="The page frame" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-
-  ReactDOM.createRoot(document.getElementById("root")).render(h(P.Surface,{clip:true,style:{minHeight:560}},h(P.AppShell,{header:h(P.AppHeader,{logo:h("strong",{style:{font:"500 20px var(--font-sans)"}},"OpenPractice"),actions:h(P.Button,{variant:"outline",icon:"user"},"Maria")}),sidebar:h(P.NavList,{label:"Account",items:[{label:"Home",icon:"home",current:true},{label:"Pay a bill",icon:"card"},{label:"Statements",icon:"receipt"},{label:"Appointments",icon:"calendar"},{label:"Forms",icon:"form",count:2}]}),footer:h(P.AppFooter,null,"\u00a9 2026 OpenPractice")},h(P.PageHeader,{title:"Your account",description:"Pay a bill, check a statement or book a visit."}),h(P.Notice,{tone:"warning",title:"A form needs your signature",actions:h(P.Button,{variant:"outline"},"Sign form")},"Please sign the new client form before your visit on Oct 22."))));
-</script>

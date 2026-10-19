@@ -40,7 +40,7 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
 </script>
 
 <template>
-  <EGrid min="20rem" :gap="6" style="max-width: 880px">
+  <EGrid min="20rem" :gap="6" class="pattern-lg">
     <ESurface pad="lg">
       <form novalidate @submit.prevent="submitted = true">
         <EStack :gap="4">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EButton, EInline, EPopover, EStack } from "@eos-ui/vue";
+import { EButton, EInline, EPopover, EStack, EText } from "@eos-ui/vue";
 
 const open = ref(true);
 </script>
@@ -24,6 +24,6 @@ const open = ref(true);
       <template #trigger>Late fees</template>
       A $10.00 fee applies to balances paid after the due date.
     </EPopover>
-    <p>The late fees panel is {{ open ? "open" : "closed" }}.</p>
+    <EText variant="small" muted>The late fees panel is {{ open ? "open" : "closed" }}.</EText>
   </EStack>
 </template>

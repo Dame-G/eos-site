@@ -3,7 +3,7 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
 </script>
 
 <template>
-  <div style="height: 28rem; overflow: auto; border: 1px solid var(--e-border)">
+  <div class="frame">
     <EAppShell main-id="demo-main" sidebar-label="Account">
       <template #header>
         <EAppHeader><template #logo><a href="#home">Elm Street Health</a></template></EAppHeader>
@@ -27,3 +27,12 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
     </EAppShell>
   </div>
 </template>
+
+<style scoped>
+.frame {
+  --frame-height: 28rem;
+  height: var(--frame-height);
+  overflow: auto;
+  border: var(--e-stroke-card) solid var(--e-border);
+}
+</style>

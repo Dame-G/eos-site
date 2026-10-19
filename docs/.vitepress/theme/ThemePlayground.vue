@@ -19,8 +19,8 @@ import {
 import { groups } from "@eos-ui/tokens";
 import HighlightedCode from "./HighlightedCode.vue";
 import ControlsDock from "./playground/ControlsDock.vue";
-import PlaygroundPresets from "./playground/PlaygroundPresets.vue";
 import PlaygroundPreview from "./playground/PlaygroundPreview.vue";
+import PresetPicker from "./playground/PresetPicker.vue";
 import TokenOverrides from "./playground/TokenOverrides.vue";
 import {
   CURRENCIES,
@@ -235,7 +235,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 <template>
   <div class="playground eos-live">
     <section class="bar" aria-label="Presets">
-      <PlaygroundPresets :model-value="s.preset" :tokens="tokens" @select="usePreset" @random="useRandom" />
+      <PresetPicker :model-value="s.preset" name="playground-preset" :tokens="tokens" select @select="usePreset" @random="useRandom" />
       <div class="bar-row">
         <div class="bar-info">
           <EText variant="small" muted role="status">{{ copied }}</EText>

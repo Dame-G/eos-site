@@ -1,9 +1,0 @@
-<!-- @dsCard group="Forms" height=460 subtitle="A group of controls under one legend" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h(P.Stack,{gap:6,style:{maxWidth:420}},
-    h(P.Fieldset,{legend:"Emergency contact",optional:true},h(P.Field,{label:"Name",autoComplete:"off"}),h(P.PhoneField,{label:"Phone"})),
-    h(P.Fieldset,{bare:true,legend:"How should we contact you?",required:true,hint:"We only use this for reminders about your visits."},h(P.Stack,{gap:1},h(P.Checkbox,{label:"Text message",defaultChecked:true}),h(P.Checkbox,{label:"Email"}),h(P.Checkbox,{label:"Phone call"})))));
-</script>

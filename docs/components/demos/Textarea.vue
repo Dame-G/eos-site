@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { ETextarea, EStack } from "@eos-ui/vue";
+import { ETextarea, EStack, EText } from "@eos-ui/vue";
 
 const note = ref("");
 </script>
@@ -15,7 +15,7 @@ const note = ref("");
       :rows="5"
       optional
     />
-    <p>{{ note.length }} characters</p>
+    <EText variant="small" muted>{{ note.length }} characters</EText>
     <ETextarea label="Reason for dispute" model-value="" error="Tell us what looks wrong with this charge." required />
     <ETextarea label="Notes" model-value="Locked after Oct 22, 2026." disabled />
   </EStack>

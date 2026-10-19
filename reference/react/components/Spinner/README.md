@@ -1,1 +1,0 @@
-A ring that shows something is loading. Props: an optional `label` (shown; otherwise it is read out as Loading) and `block` to centre it in a panel. Use it after about a second of waiting; say what is being waited for ("Processing your payment"). Stops spinning fast under reduced motion.

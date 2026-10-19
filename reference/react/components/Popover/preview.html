@@ -1,8 +1,0 @@
-<!-- @dsCard group="Feedback" height=300 subtitle="Floating panel with title and actions" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"flex",gap:24,flexWrap:"wrap"}},h(P.Popover,{label:"About payment plans",trigger:"What is a payment plan?",title:"Payment plan",actions:[h(P.Button,{key:"b",variant:"outline"},"Set up a plan")]},"Split your balance into equal monthly payments. There is no interest and no fee."),h(P.Popover,{label:"About the balance",trigger:"Balance due"},"What you owe after insurance and any payments you have made.")));
-  setTimeout(function(){var el=document.querySelector(".op-popover");if(el&&el.showPopover)el.showPopover();},350);
-</script>

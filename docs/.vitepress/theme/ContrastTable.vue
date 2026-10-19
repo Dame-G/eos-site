@@ -51,8 +51,8 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
 }
 .dot {
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  width: var(--e-space-4);
+  height: var(--e-space-4);
   border: var(--e-stroke-hair) solid var(--e-border-strong);
   border-radius: var(--e-radius-pill);
 }

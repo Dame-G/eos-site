@@ -1,1 +1,0 @@
-Text that is read out but not shown, for the context a sighted person gets from layout: "receipt 8842" after a Download button, "(done)" after a completed step. Props: the text as children. Never hide text that a sighted person also needs, and never use it to repeat visible text.

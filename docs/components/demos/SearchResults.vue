@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { ESearchBar, ESearchResults, EStack, EVisuallyHidden } from "@eos-ui/vue";
+import { ESearchBar, ESearchResults, EStack, EVisuallyHidden, EText } from "@eos-ui/vue";
 import type { SearchResultItem } from "@eos-ui/vue";
 
 const all: SearchResultItem[] = [
@@ -44,6 +44,6 @@ function onKeydown(e: KeyboardEvent) {
       @select="onSelect"
       @edge="field?.focus()"
     />
-    <p>{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</p>
+    <EText variant="small" muted>{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
   </EStack>
 </template>

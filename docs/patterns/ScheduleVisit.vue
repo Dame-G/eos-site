@@ -15,7 +15,7 @@ const day = ref<Date>(new Date(2026, 9, 22, 12));
 const time = ref<string | null>("9:30 am");
 const booked = ref(false);
 
-const slots = computed(() => TIMES[day.value.getDay()] ?? []);
+const times = computed(() => TIMES[day.value.getDay()] ?? []);
 const when = computed(() => formatLong(day.value));
 
 function pick(d: Date | null) {
@@ -26,7 +26,7 @@ function pick(d: Date | null) {
 </script>
 
 <template>
-  <div style="max-width: 760px">
+  <div class="pattern-md">
     <EStack :gap="6">
       <EPageHeader :heading-level="2" title="Book a visit" description="Follow-up visit with Amara Singh, Main office" />
 
@@ -44,7 +44,7 @@ function pick(d: Date | null) {
         </ESurface>
 
         <EStack :gap="4" style="flex: 1 1 16rem">
-          <ESlotPicker v-model="time" :label="`Times on ${when}`" :slots="slots" />
+          <ESlotPicker v-model="time" :label="`Times on ${when}`" :options="times" />
 
           <ENotice v-if="time && !booked" tone="info" :title="`${when} at ${time}`">Main office, 120 Park Street. You can reschedule up to 24 hours before.</ENotice>
 

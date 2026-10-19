@@ -24,19 +24,12 @@ import {
   ETabs,
   EToast,
   ETextField,
-  EVisuallyHidden,
   CONFIG_KEY,
   useConfig,
   type EosConfig,
 } from "@eos-ui/vue";
-import PresetSwatch from "./playground/PresetSwatch.vue";
-import { PRESETS, applyPreset, applyRandom, build, initialState, variantProps } from "./playground/state";
-
-function tokensFor(id: string): Record<string, string> {
-  const s = reactive(initialState());
-  applyPreset(s, id);
-  return build(s).theme.tokens as Record<string, string>;
-}
+import PresetPicker from "./playground/PresetPicker.vue";
+import { applyPreset, applyRandom, build, initialState, variantProps } from "./playground/state";
 
 const baseConfig = useConfig();
 const config = reactive<EosConfig>({ ...baseConfig, portalTarget: "body" });
@@ -45,22 +38,10 @@ const frame = ref<HTMLElement | null>(null);
 onMounted(() => (config.portalTarget = frame.value!));
 onBeforeUnmount(() => (config.portalTarget = "body"));
 
-const presets = PRESETS.map((p) => ({ value: p.id, label: p.label, tokens: tokensFor(p.id) }));
 const state = reactive(initialState());
-const rolled = computed(() => state.preset === "random");
 const tokens = computed(() => build(state).theme.tokens as Record<string, string>);
 const style = computed(() => Object.fromEntries(Object.entries(tokens.value).map(([k, v]) => [`--e-${k}`, v])));
 const vp = computed(() => variantProps(state.variants));
-
-const announced = ref("");
-let timer: ReturnType<typeof setTimeout> | undefined;
-function randomize() {
-  applyRandom(state);
-  announced.value = "";
-  clearTimeout(timer);
-  timer = setTimeout(() => (announced.value = "Randomized theme"), 60);
-}
-onBeforeUnmount(() => clearTimeout(timer));
 
 const nav = [
   { label: "Home", href: "#home", current: true },
@@ -118,19 +99,7 @@ const tone = { paid: "success", due: "info" } as const;
   <div class="eos-live home-demo">
     <section class="home-picker" aria-labelledby="home-picker-title">
       <EHeading id="home-picker-title" :level="2" class="home-picker-title">Make it yours</EHeading>
-      <fieldset class="home-presets">
-        <legend><EVisuallyHidden>Preset</EVisuallyHidden></legend>
-        <label v-for="p in presets" :key="p.value" class="home-preset">
-          <input type="radio" name="home-preset" :value="p.value" :checked="state.preset === p.value" class="home-preset-input" @change="applyPreset(state, p.value)" />
-          <PresetSwatch :tokens="p.tokens" />
-          <span class="home-preset-label">{{ p.label }}</span>
-        </label>
-        <button type="button" class="home-preset home-roll" :aria-current="rolled ? 'true' : undefined" @click="randomize">
-          <PresetSwatch random />
-          <span class="home-preset-label">Randomize</span>
-        </button>
-        <span role="status"><EVisuallyHidden>{{ announced }}</EVisuallyHidden></span>
-      </fieldset>
+      <PresetPicker :model-value="state.preset" name="home-preset" @select="applyPreset(state, $event)" @random="applyRandom(state)" />
     </section>
 
     <div ref="frame" class="home-demo-frame e-root" :style="style">
@@ -139,7 +108,7 @@ const tone = { paid: "success", due: "info" } as const;
         <ENavList label="Patient portal" orientation="horizontal" :items="nav" :dense="vp.navDense" :class="['home-demo-nav', { 'home-demo-nav--dense': vp.navDense }]" />
         <EMenu label="Account" :items="accountMenu" align="end">
           <template #trigger>
-            <button type="button" class="home-demo-avatar" aria-label="AL, account menu"><EAvatar name="Ada Lovelace" small /></button>
+            <EAvatar as="button" name="Ada Lovelace" small aria-label="AL, account menu" />
           </template>
         </EMenu>
       </header>
@@ -250,58 +219,9 @@ const tone = { paid: "success", due: "info" } as const;
   margin: 0;
 }
 
-.home-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-space-2);
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.home-preset {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--e-space-2);
-  min-height: 2.25rem;
-  padding: 0 var(--e-space-3) 0 var(--e-space-2);
-  border: var(--e-stroke-hair) solid var(--e-border);
-  border-radius: var(--e-radius-pill);
-  background: var(--e-surface);
-  color: var(--e-ink);
-  font-size: var(--e-text-sm);
-  cursor: pointer;
-}
-
-.home-preset:hover {
-  border-color: var(--e-border-strong);
-}
-
-.home-preset:has(:checked),
-.home-roll[aria-current="true"] {
-  border-color: var(--e-primary);
-  border-width: calc(var(--e-stroke-hair) * 2);
-  padding: 0 calc(var(--e-space-3) - var(--e-stroke-hair)) 0 calc(var(--e-space-2) - var(--e-stroke-hair));
-  font-weight: 600;
-}
-
-.home-preset:has(:focus-visible),
-.home-roll:focus-visible {
-  outline: var(--e-stroke-focus) solid var(--e-focus-ring);
-  outline-offset: var(--e-focus-gap);
-}
-
-.home-preset-input {
-  position: absolute;
-  inset: calc(var(--e-space-1) * -1);
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-}
-
 .home-demo-frame {
+  --rail-width: 11rem;
+  --toast-width: 22rem;
   position: relative;
   container-type: inline-size;
   overflow: hidden;
@@ -332,19 +252,8 @@ const tone = { paid: "success", due: "info" } as const;
   min-width: 0;
 }
 
-.home-roll {
-  font: inherit;
-  font-size: var(--e-text-sm);
-}
-
-.home-roll::after {
-  content: "";
-  position: absolute;
-  inset: calc(var(--e-space-1) * -1);
-}
-
 .home-demo-nav:not(.home-demo-nav--dense) :deep(.e-nav-item) {
-  height: 2.75rem;
+  height: var(--site-tap);
   padding-inline: var(--e-space-3);
   font-size: var(--e-text-sm);
 }
@@ -354,8 +263,8 @@ const tone = { paid: "success", due: "info" } as const;
     display: none;
   }
 
-  .home-demo-header .e-avatar {
-    margin-inline-start: auto;
+  .home-demo-brand {
+    margin-inline-end: auto;
   }
 }
 
@@ -376,26 +285,12 @@ const tone = { paid: "success", due: "info" } as const;
 
 @media (min-width: 48rem) {
   .home-demo-body--rail {
-    grid-template-columns: 11rem minmax(0, 1fr);
+    grid-template-columns: var(--rail-width) minmax(0, 1fr);
   }
 
   .home-demo-outline {
     padding: var(--e-space-4) 0 var(--e-space-4) var(--e-space-4);
   }
-}
-
-.home-demo-avatar {
-  display: inline-flex;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: none;
-  cursor: pointer;
-}
-
-.home-demo-avatar:focus-visible {
-  outline: var(--e-stroke-focus) solid var(--e-focus-ring);
-  outline-offset: var(--e-focus-gap);
 }
 
 .home-demo-cols {
@@ -418,7 +313,7 @@ const tone = { paid: "success", due: "info" } as const;
   position: absolute;
   inset-block-end: var(--e-space-4);
   inset-inline-end: var(--e-space-4);
-  inline-size: min(22rem, calc(100% - 2 * var(--e-space-4)));
+  inline-size: min(var(--toast-width), calc(100% - 2 * var(--e-space-4)));
 }
 
 .home-demo-page :deep(.e-pagehead) {

@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { EButton, EPanel, EStack } from "@eos-ui/vue";
+import { EButton, EPanel, EStack, EText } from "@eos-ui/vue";
 </script>
 
 <template>
   <EStack>
     <EPanel kicker="Account" title="Contact details">
       <template #action><EButton variant="outline">Edit</EButton></template>
-      <p>Jordan Lee, jordan@example.com</p>
+      <EText>Jordan Lee, jordan@example.com</EText>
     </EPanel>
 
     <EPanel title="Balance" :heading-level="2">
-      <p>You owe $162.40, due Oct 22, 2026.</p>
+      <EText>You owe $162.40, due Oct 22, 2026.</EText>
     </EPanel>
 
     <EPanel aria-label="Notes">
-      <p>Bring your insurance card to the visit.</p>
+      <EText>Bring your insurance card to the visit.</EText>
     </EPanel>
   </EStack>
 </template>

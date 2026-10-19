@@ -1,1 +1,0 @@
-Running text in three sizes. Props: `variant` (`body` 16px, `deck` 18px for the one-sentence reading of a statement, `small` 14px), `muted` for secondary copy, `as` to change the element. Capped at 62 characters wide.

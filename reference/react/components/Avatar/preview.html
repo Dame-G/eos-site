@@ -1,8 +1,0 @@
-<!-- @dsCard group="Display" height=130 subtitle="Photo or initials on a tile" -->
-<style>body{margin:0;padding:16px;background:var(--surface)}</style>
-<div id="root" class="op-root"></div>
-<script>
-  var P = window.OpenPractice, h = React.createElement;
-  function photo(bg, skin, shirt) { return "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="' + bg + '"/><circle cx="32" cy="26" r="11" fill="' + skin + '"/><path d="M10 64c2-16 12-22 22-22s20 6 22 22z" fill="' + shirt + '"/></svg>'); }
-  ReactDOM.createRoot(document.getElementById("root")).render(h("div",{style:{display:"flex",gap:16,alignItems:"center",flexWrap:"wrap"}},h(P.Avatar,{name:"Amara Singh",src:photo("#eaf4f8","#c98f66","#17586d"),large:true}),h(P.Avatar,{name:"Marcus Webb",large:true}),h(P.Avatar,{name:"Maria Okafor"}),h(P.Avatar,{name:"Priya Nair",src:photo("#e8f5e1","#8d5a3b","#2b5c1b")}),h(P.Avatar,{name:"Leo Okafor",small:true}),h(P.Avatar,{name:"Amara Singh",small:true,src:photo("#eaf4f8","#c98f66","#17586d")})));
-</script>

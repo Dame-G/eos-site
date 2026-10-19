@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EButton, EDialog, EStack } from "@eos-ui/vue";
+import { EButton, EDialog, EStack, EText } from "@eos-ui/vue";
 
 const open = ref(false);
 const cancelled = ref(false);
@@ -14,7 +14,7 @@ function cancel() {
 <template>
   <EStack>
     <EButton variant="outline" @click="open = true">Cancel appointment</EButton>
-    <p>{{ cancelled ? "Your Oct 22, 2026 visit was cancelled." : "Your visit on Oct 22, 2026 is booked." }}</p>
+    <EText variant="small" muted>{{ cancelled ? "Your Oct 22, 2026 visit was cancelled." : "Your visit on Oct 22, 2026 is booked." }}</EText>
 
     <EDialog v-model:open="open" title="Cancel this appointment?">
       You can book again at any time.

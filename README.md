@@ -5,8 +5,6 @@ Private source of https://eos.dame.gg, the documentation and live-preview site f
 The site is built with [VitePress](https://vitepress.dev) and uses the library it documents. The page frame (header, navigation, search, footer), the home page, the tokens page and the playground are Eos components. Only the markdown prose and code blocks use VitePress styles, and those read the library's tokens.
 
 - `docs/`: guide pages, the tokens page, the theme playground, patterns, and one generated page per component.
-- `reference/react/`: the React design system the library was ported from. Read only.
-
 ## Run it
 
 The library sits beside this repo (`../eos`) and is built. Set `EOS_DIR` to use a checkout elsewhere.
@@ -76,4 +74,4 @@ To use registry versions, replace the two lines with versions (`"@eos-ui/vue": "
 `wrangler.jsonc` describes a Worker named `eos-site` that serves `docs/.vitepress/dist` as static assets. Unknown paths get VitePress's `404.html`. The Worker uses the custom domain `eos.dame.gg`, and Cloudflare creates the DNS record and certificate on deploy.
 
 - `.github/workflows/ci.yml`: on pull requests, checks out `Dame-G/eos` beside the site, builds the library and the docs, runs the tests, `pages:check` and `ssr:check`. No deploy.
-- `.github/workflows/deploy.yml`: on push to `main`, builds and tests, then runs `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+- `.github/workflows/deploy.yml`: runs on demand from the Actions tab. It builds and tests, then runs `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy from your machine instead, run `pnpm docs:build` and `pnpm deploy`.
