@@ -259,10 +259,6 @@ body {
   font: 500 var(--site-display) / 1 var(--e-font-sans);
 }
 
-.home-lead {
-  max-width: var(--e-measure);
-}
-
 .home-install {
   max-width: var(--site-install);
 }

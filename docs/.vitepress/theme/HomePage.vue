@@ -14,10 +14,7 @@ const points = [
     <div class="home-top">
       <section class="home-hero" aria-labelledby="home-title">
         <EStack :gap="6">
-          <EStack :gap="3">
-            <h1 id="home-title" class="home-title">Eos</h1>
-            <EText variant="deck" class="home-lead">Accessible, themeable components.</EText>
-          </EStack>
+          <h1 id="home-title" class="home-title">Eos</h1>
           <div class="eos-live home-install">
             <HighlightedCode lang="bash" code="npm install @eos-ui/vue" copy-label="Copy install command" />
           </div>
