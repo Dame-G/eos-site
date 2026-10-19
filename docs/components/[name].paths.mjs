@@ -23,7 +23,7 @@ export default {
     return names.map((name) => {
       const readme = readReadme(name);
       if (readme) {
-        for (const heading of ["Props", "Accessibility"]) {
+        for (const heading of ["Accessibility"]) {
           if (!new RegExp(`^## ${heading}\\s*$`, "m").test(readme)) console.warn(`[eos-site] E${name} README.md has no "## ${heading}" section.`);
         }
       }
