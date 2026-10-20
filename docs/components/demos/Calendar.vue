@@ -13,7 +13,7 @@ const show = (d: Date | null) => (d ? d.toDateString() : "none");
 <template>
   <EGrid>
     <EStack>
-      <EText variant="small" muted>Visit day: {{ show(visit) }}</EText>
+      <EText small muted>Visit day: {{ show(visit) }}</EText>
       <ECalendar
         v-model="visit"
         :month="oct"
@@ -26,7 +26,7 @@ const show = (d: Date | null) => (d ? d.toDateString() : "none");
       />
     </EStack>
     <EStack>
-      <EText variant="small" muted>Stay: {{ show(from) }} to {{ show(to) }}</EText>
+      <EText small muted>Stay: {{ show(from) }} to {{ show(to) }}</EText>
       <ECalendar mode="range" v-model:start="from" v-model:end="to" :month="oct" :footer="false" />
     </EStack>
   </EGrid>

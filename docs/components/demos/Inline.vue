@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { EChip, EHeading, EInline, EStack, EText } from "@eos-ui/vue";
+import { EStamp, EHeading, EInline, EStack, EText } from "@eos-ui/vue";
 </script>
 
 <template>
   <EStack>
     <EInline>
-      <EChip tone="success">Paid</EChip>
-      <EChip tone="info">Scheduled</EChip>
-      <EChip tone="danger">Overdue</EChip>
+      <EStamp tone="success" size="sm">Paid</EStamp>
+      <EStamp tone="info" size="sm">Scheduled</EStamp>
+      <EStamp tone="danger" size="sm">Overdue</EStamp>
     </EInline>
     <EInline justify="between">
       <EText as="span">October statement</EText>
@@ -16,7 +16,7 @@ import { EChip, EHeading, EInline, EStack, EText } from "@eos-ui/vue";
     <EInline justify="end"><EText as="span" muted>Due Oct 31, 2026</EText></EInline>
     <EInline align="baseline" :gap="3">
       <EHeading :level="2">$162.40</EHeading>
-      <EText as="span" variant="small" muted>balance</EText>
+      <EText as="span" small muted>balance</EText>
     </EInline>
   </EStack>
 </template>

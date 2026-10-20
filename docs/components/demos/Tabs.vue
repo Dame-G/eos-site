@@ -17,6 +17,6 @@ const items = [
       <template #paid>Statements you have paid show here.</template>
       <template #panel="{ item }">Every statement, newest first ({{ item.label }}).</template>
     </ETabs>
-    <EText variant="small" muted>Selected: {{ tab }}</EText>
+    <EText small muted>Selected: {{ tab }}</EText>
   </EStack>
 </template>

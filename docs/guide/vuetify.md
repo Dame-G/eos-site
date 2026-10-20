@@ -13,7 +13,7 @@ This page maps Vuetify concepts to Eos. It is not a codemod.
 | Theme colours | Tokens (`--e-primary`, `--e-danger`), derived from `brand` |
 | Dark theme | A dark `surface`, `foreground` and `background` in `defineTheme()`; see [Theming](/guide/theming#background-surface-and-foreground) |
 | `v-text-field` | `ETextField` (label above, not floating) |
-| `v-select`, `v-combobox`, `v-autocomplete` | `ESelect`, `ECombobox`, `EAutocomplete`, `EMultiSelect` |
+| `v-select`, `v-combobox`, `v-autocomplete` | `ESelect`, `ECombobox` (`freeform`, `multiple`) |
 | `v-checkbox`, `v-radio-group`, `v-switch` | `ECheckbox`, `ERadioGroup`, `ESwitch` |
 | `v-btn` | `EButton` with `variant` |
 | `v-alert` | `ENotice` with a `tone` |
@@ -22,8 +22,8 @@ This page maps Vuetify concepts to Eos. It is not a codemod.
 | `v-data-table` | `EDataGrid` |
 | `v-date-picker` | `EDatePicker`, `ERangePicker`, `ECalendar` |
 | `v-container`, `v-row`, `v-col` | `EStack`, `EInline`, `EGrid` |
-| `v-card` | `ESurface`, `EPanel` |
-| `v-form` rules | Your validation, the `error` prop, `EErrorSummary` |
+| `v-card` | `ESurface` (see [Recipes](/guide/recipes#panel)) |
+| `v-form` rules | Your validation, the `error` prop on each field |
 | `v-icon` | `EIcon`, with [any icon set](/guide/icons) |
 | Locale and i18n adapter | [`locale`, `currency`, `messages`](/guide/language) |
 

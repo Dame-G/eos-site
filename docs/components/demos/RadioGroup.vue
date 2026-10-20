@@ -22,7 +22,7 @@ const method = ref("card");
         <ETextField v-if="option.value === 'part'" v-model="other" label="Amount" prefix="$" hide-label inputmode="decimal" />
       </template>
     </ERadioGroup>
-    <EText variant="small" muted>Choice: {{ amount }}</EText>
+    <EText small muted>Choice: {{ amount }}</EText>
     <ERadioGroup
       v-model="method"
       label="Pay with"

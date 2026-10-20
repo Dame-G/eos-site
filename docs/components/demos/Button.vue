@@ -13,7 +13,6 @@ import { EButton, EInline, EStack } from "@eos-ui/vue";
     </EInline>
     <EInline>
       <EButton disabled>Disabled</EButton>
-      <EButton variant="outline" disabled>Disabled outline</EButton>
     </EInline>
     <EButton block>Full width</EButton>
   </EStack>

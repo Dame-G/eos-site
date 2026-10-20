@@ -31,6 +31,7 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
 <style scoped>
 .frame {
   --frame-height: 28rem;
+  --e-shell-rail: transparent;
   height: var(--frame-height);
   overflow: auto;
   border: var(--e-stroke-card) solid var(--e-border);

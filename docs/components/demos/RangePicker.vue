@@ -9,7 +9,7 @@ const to = ref<Date | null>(new Date(2026, 9, 18, 12));
 <template>
   <EStack>
     <ERangePicker v-model:start="from" v-model:end="to" label="Statement period" start-name="from" end-name="to" />
-    <EText variant="small" muted>{{ from?.toDateString() ?? "none" }} to {{ to?.toDateString() ?? "none" }}</EText>
+    <EText small muted>{{ from?.toDateString() ?? "none" }} to {{ to?.toDateString() ?? "none" }}</EText>
     <ERangePicker label="Stay dates" hint="Check in and check out." required :min="new Date(2026, 10, 1, 12)" />
     <ERangePicker label="Billing dates" error="Choose both dates." />
     <ERangePicker label="Closed period" disabled optional />

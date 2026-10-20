@@ -31,7 +31,7 @@ The site imports the library's built `dist`. After a library change (a new compo
 
 Component pages are generated from the library's folders. A new component appears in the sidebar and gets a page after two steps:
 
-1. Add `docs/components/demos/<Name>.vue`, named after the component folder (`Chip.vue`). Copy an existing demo. Show the default and the interesting states: error, disabled, loading, open.
+1. Add `docs/components/demos/<Name>.vue`, named after the component folder (`Stamp.vue`). Copy an existing demo. Show the default and the interesting states: error, disabled, loading, open.
 2. Add the component to `docs/.vitepress/groups.mjs` so it lands in the right sidebar group. Without a line it appears under "More".
 
 The page is the component's `README.md` from the library, read at build time and never copied. The demo follows the introduction, with its source in a panel. `tests/demos.test.ts` fails if a component has no demo, and checks every demo for console errors and axe violations.
@@ -46,7 +46,7 @@ The page is the component's `README.md` from the library, read at build time and
 | `docs/.vitepress/theme/` | Installs `createEos`, maps `--e-*` to VitePress variables (`custom.css`), demo and token components, the playground |
 | `docs/components/[name].md`, `[name].paths.mjs` | One page per component folder |
 | `docs/components/demos/` | One hand-written demo per component |
-| `docs/patterns/` | Six example pages, each a Vue component and a page |
+| `docs/patterns/` | Five example pages, each a Vue component and a page |
 | `docs/data/` | Build-time loaders for the component list, the tokens page and the contrast table |
 | `scripts/gen-llms.mjs` | Writes `docs/public/llms.txt` (pages and component props) |
 | `scripts/check-pages.mjs` | Page checks against a running preview |

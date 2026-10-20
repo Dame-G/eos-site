@@ -16,6 +16,10 @@ import { EFieldset, ETextField, EStack } from "@eos-ui/vue";
       <ETextField label="Card number" autocomplete="cc-number" />
       <ETextField label="Expiry" placeholder="MM/YY" autocomplete="cc-exp" />
     </EFieldset>
+    <EFieldset legend="Your details" section hint="As they appear on your card.">
+      <ETextField label="Name" autocomplete="name" />
+      <ETextField label="Email" type="email" autocomplete="email" />
+    </EFieldset>
     <EFieldset legend="Previous address" disabled>
       <ETextField label="Street" model-value="12 Elm Street" />
     </EFieldset>

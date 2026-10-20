@@ -54,7 +54,7 @@ function vitepressInLayer() {
 }
 
 export default defineConfig({
-  title: "Eos",
+  title: "eos",
   titleTemplate: ":title · Eos",
   description: "Accessible Vue 3 components with a token-based theme system. Calm, high contrast and rebrandable with a few lines.",
   sitemap: { hostname: SITE },
@@ -74,14 +74,14 @@ export default defineConfig({
     const head: HeadConfig[] = [
       ["link", { rel: "canonical", href: url }],
       ["meta", { property: "og:type", content: "website" }],
-      ["meta", { property: "og:site_name", content: "Eos" }],
+      ["meta", { property: "og:site_name", content: "eos" }],
       ["meta", { property: "og:title", content: title }],
       ["meta", { property: "og:description", content: description }],
       ["meta", { property: "og:url", content: url }],
       ["meta", { property: "og:image", content: IMAGE }],
       ["meta", { name: "twitter:card", content: "summary_large_image" }],
     ];
-    const font = assets.find((a) => /\/jost-latin-wght-normal\.[^/]*\.woff2$/.test(a));
+    const font = assets.find((a) => /\/bricolage-grotesque-latin-wght-normal\.[^/]*\.woff2$/.test(a));
     if (font) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: font, crossorigin: "" }]);
     if (pageData.relativePath === "index.md") {
       head.push([
@@ -90,7 +90,7 @@ export default defineConfig({
         JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareSourceCode",
-          name: "Eos",
+          name: "eos",
           description,
           url: SITE,
           codeRepository: "https://github.com/Dame-G/eos",
@@ -147,19 +147,17 @@ export default defineConfig({
   },
   themeConfig: {
     logo: { src: "/favicon.svg", alt: "" },
-    siteTitle: "Eos",
+    siteTitle: "eos",
     nav: [
       { text: "Guide", link: "/guide/getting-started", activeMatch: "/guide/" },
       { text: "Components", link: "/components/", activeMatch: "/components/" },
       { text: "Patterns", link: "/patterns/", activeMatch: "/patterns/" },
-      { text: "Tokens", link: "/tokens" },
       { text: "Playground", link: "/playground" },
     ],
     sidebar: {
       "/guide/": guide,
       "/components/": componentSidebar(),
       "/patterns/": patterns,
-      "/tokens": tools,
       "/playground": tools,
     },
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],

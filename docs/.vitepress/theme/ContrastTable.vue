@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EChip, EDataGrid, EHighlight, EStack, EText } from "@eos-ui/vue";
+import { EStamp, EDataGrid, EHighlight, EStack, EText } from "@eos-ui/vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
 
@@ -26,7 +26,7 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
 
 <template>
   <EStack class="eos-live">
-    <EDataGrid plain caption="Promised contrast pairs" :columns="columns" :rows="rows">
+    <EDataGrid bare caption="Promised contrast pairs" :columns="columns" :rows="rows">
       <template #cell-pair="{ row }">
         <span class="pair">
           <span class="dot" :style="{ background: row.fgValue as string }" role="img" :aria-label="`${row.fg} ${row.fgValue}`" />
@@ -35,10 +35,10 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
           <EHighlight code>{{ row.bg }}</EHighlight>
         </span>
       </template>
-      <template #cell-level="{ row }"><EChip :tone="tone(row.level as string)">{{ row.level }}</EChip></template>
+      <template #cell-level="{ row }"><EStamp :tone="tone(row.level as string)" size="sm">{{ row.level }}</EStamp></template>
     </EDataGrid>
-    <EText v-if="!data.issues.length" variant="small" muted>Every pair above is checked by <EHighlight code>defineTheme()</EHighlight> for the default theme, and none fails.</EText>
-    <EText v-else variant="small" muted>{{ data.issues.length }} pairs fail in the default theme. This should never ship.</EText>
+    <EText v-if="!data.issues.length" small muted>Every pair above is checked by <EHighlight code>defineTheme()</EHighlight> for the default theme, and none fails.</EText>
+    <EText v-else small muted>{{ data.issues.length }} pairs fail in the default theme. This should never ship.</EText>
   </EStack>
 </template>
 
@@ -54,6 +54,9 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
   width: var(--e-space-4);
   height: var(--e-space-4);
   border: var(--e-stroke-hair) solid var(--e-border-strong);
+  --e-bc: var(--e-border-strong);
+  outline: var(--e-stroke-hair) solid var(--e-bc);
+  outline-offset: calc(-1 * var(--e-stroke-hair));
   border-radius: var(--e-radius-pill);
 }
 </style>

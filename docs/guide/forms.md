@@ -27,9 +27,9 @@ Every field takes:
 
 For a text-like control, use `useFieldAttrs()` with `inheritAttrs: false`: `class` and `style` stay on the wrapper, the rest goes to the input.
 
-## Error summary
+## Errors
 
-After a failed submit, `EErrorSummary` lists what went wrong at the top. It takes `errors`, a list of `{ field?, message }`. It takes focus when errors appear, and each field still shows its own error. Put `novalidate` on the form so your messages show, not the browser's.
+After a failed submit, give each field its own `error`, so the message sits next to the control it describes. Put `novalidate` on the form so your messages show, not the browser's.
 
 ```vue
 <script setup lang="ts">
@@ -37,16 +37,12 @@ import { computed, ref } from "vue";
 
 const first = ref("");
 const submitted = ref(false);
-
-const errors = computed(() =>
-  submitted.value && !first.value.trim() ? [{ field: "First name", message: "Enter your first name" }] : [],
-);
+const firstError = computed(() => (submitted.value && !first.value.trim() ? "Enter your first name" : undefined));
 </script>
 
 <template>
   <form novalidate @submit.prevent="submitted = true">
-    <EErrorSummary :errors="errors" />
-    <ETextField v-model="first" label="First name" autocomplete="given-name" :error="errors[0]?.message" />
+    <ETextField v-model="first" label="First name" autocomplete="given-name" :error="firstError" />
     <EButton type="submit">Continue</EButton>
   </form>
 </template>

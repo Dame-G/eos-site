@@ -17,7 +17,7 @@ const amount = ref("162.40");
       hint="We send receipts here."
       required
     />
-    <EText variant="small" muted>You typed: {{ email || "nothing yet" }}</EText>
+    <EText small muted>You typed: {{ email || "nothing yet" }}</EText>
     <ETextField v-model="amount" label="Payment amount" prefix="$" suffix="USD" inputmode="decimal" optional />
     <ETextField label="Card number" model-value="4242 42" error="Enter all 16 digits." autocomplete="cc-number" />
     <ETextField label="Account number" model-value="Not editable" disabled />

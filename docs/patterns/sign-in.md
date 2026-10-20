@@ -10,7 +10,7 @@ import Pattern from "./SignIn.vue";
 
 # Sign in
 
-Built from: ESurface, EGrid, EStack, EHeading, EText, ETextField, EPasswordField, ECheckbox, ELink, EErrorSummary, EOtpField, EBackLink, EActions, EButton.
+Built from: ESurface, EGrid, EStack, EHeading, EText, ETextField, EPasswordField, ECheckbox, ELink, EOtpField, EActions, EButton.
 
 <div class="pattern-stage">
   <Pattern />

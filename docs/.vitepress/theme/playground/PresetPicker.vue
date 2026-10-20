@@ -112,6 +112,9 @@ onBeforeUnmount(() => clearTimeout(timer));
   min-height: 2.25rem;
   padding-inline: var(--e-space-2) var(--e-space-3);
   border: var(--e-stroke-hair) solid var(--e-border);
+  --e-bc: var(--e-border);
+  outline: var(--e-stroke-hair) solid var(--e-bc);
+  outline-offset: calc(-1 * var(--e-stroke-hair));
   border-radius: var(--e-radius-pill);
   color: var(--e-ink);
   font: 500 var(--e-text-sm) / 1 var(--e-font-sans);
@@ -124,6 +127,8 @@ onBeforeUnmount(() => clearTimeout(timer));
 .preset-input:checked + .preset-face,
 .preset-roll[aria-current="true"] .preset-face {
   border-color: var(--e-primary);
+
+  --e-bc: var(--e-primary);
   border-width: calc(var(--e-stroke-hair) * 2);
   padding-inline: calc(var(--e-space-2) - var(--e-stroke-hair)) calc(var(--e-space-3) - var(--e-stroke-hair));
   background: var(--e-surface-tint);

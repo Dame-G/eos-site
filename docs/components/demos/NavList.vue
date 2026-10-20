@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EStack, ENavList, ETabs } from "@eos-ui/vue";
+import { EStack, ENavList } from "@eos-ui/vue";
 
 const items = [
   { label: "Home", href: "#home", icon: "home" as const },
@@ -25,6 +25,6 @@ const outline = [
   <EStack :gap="6">
     <ENavList label="Account" :items="items" />
     <ENavList label="Site" orientation="horizontal" :items="header" />
-    <ETabs orientation="vertical" label="On this page" :items="outline" />
+    <ENavList label="On this page" :items="outline" />
   </EStack>
 </template>

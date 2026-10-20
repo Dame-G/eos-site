@@ -5,7 +5,6 @@ import {
   EButton,
   ECalendar,
   ECheckbox,
-  EChip,
   EDataGrid,
   EDialog,
   EDisclosure,
@@ -25,7 +24,6 @@ import {
   ESelect,
   EStack,
   EStamp,
-  EStatementCard,
   EStepper,
   ESurface,
   ESwitch,
@@ -41,6 +39,7 @@ const props = withDefaults(defineProps<{ tokens: Record<string, string>; locale:
 const vp = computed(() => variantProps(props.variants));
 
 const money = computed(() => new Intl.NumberFormat(props.locale, { style: "currency", currency: props.currency }).format(162.4));
+const formatMoney = (n: number) => new Intl.NumberFormat(props.locale, { style: "currency", currency: props.currency }).format(n);
 
 const email = ref("name@");
 const plan = ref("card");
@@ -96,7 +95,7 @@ const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "curren
 <template>
   <ThemedScope :tokens="tokens" :locale="locale" :currency="currency">
     <div class="pv-cols">
-      <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-card">
+      <ESurface :pad="vp.pad" class="pv-card">
         <EStack :gap="vp.gap">
           <EKicker>Actions</EKicker>
           <EInline :gap="vp.inlineGap">
@@ -109,11 +108,11 @@ const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "curren
             <EMenu label="More" :items="menuItems" />
             <ETooltip label="Help"><EIconButton icon="info" label="Help" /></ETooltip>
           </EInline>
-          <EText variant="small">Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
+          <EText small>Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
         </EStack>
       </ESurface>
 
-      <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-card">
+      <ESurface :pad="vp.pad" class="pv-card">
         <EStack :gap="vp.gap">
           <EKicker>Fields</EKicker>
           <ETextField v-model="email" label="Email" type="email" error="Enter an email address like name@example.com" />
@@ -133,33 +132,36 @@ const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "curren
         </EStack>
       </ESurface>
 
-      <EStatementCard class="pv-card"
-        title="October statement"
-        :heading-level="2"
-        subtitle="Oct 1 to Oct 31"
-        status="due"
-        detail="Oct 22"
-        :amount="162.4"
-        amount-label="You owe"
-        :details="[{ label: 'Insurance paid', value: 80 }]"
-        reason="Your balance is due October 22. Pay online in about a minute."
-      />
+      <ESurface :pad="vp.pad" class="pv-card">
+        <EStack :gap="vp.gap">
+          <EInline justify="between">
+            <EHeading :level="2" kicker="Oct 1 to Oct 31">October statement</EHeading>
+            <EStamp status="due" detail="Oct 22" />
+          </EInline>
+          <EStack :gap="1">
+            <EKicker>You owe</EKicker>
+            <p class="site-figure">{{ formatMoney(162.4) }}</p>
+            <EText small muted>Insurance paid {{ formatMoney(80) }}</EText>
+          </EStack>
+          <EText small muted>Your balance is due October 22. Pay online in about a minute.</EText>
+        </EStack>
+      </ESurface>
 
-      <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-card">
+      <ESurface :pad="vp.pad" class="pv-card">
         <EStack :gap="vp.gap">
           <EKicker>Status</EKicker>
           <EInline :gap="vp.inlineGap">
-            <EStamp status="paid" :variant="vp.badge" />
-            <EStamp status="due" detail="Nov 1" :variant="vp.badge" />
-            <EStamp status="action" :variant="vp.badge" />
-            <EStamp status="overdue" :variant="vp.badge" />
+            <EStamp status="paid" />
+            <EStamp status="due" detail="Nov 1" />
+            <EStamp status="action" />
+            <EStamp status="overdue" />
           </EInline>
           <EInline :gap="vp.inlineGap">
-            <EChip :variant="vp.badge">Draft</EChip>
-            <EChip tone="success" :variant="vp.badge">Paid</EChip>
-            <EChip tone="info" :variant="vp.badge">Scheduled</EChip>
-            <EChip tone="warning" :variant="vp.badge">Review</EChip>
-            <EChip tone="danger" :variant="vp.badge">Failed</EChip>
+            <EStamp size="sm">Draft</EStamp>
+            <EStamp tone="success" size="sm">Paid</EStamp>
+            <EStamp tone="info" size="sm">Scheduled</EStamp>
+            <EStamp tone="warning" size="sm">Review</EStamp>
+            <EStamp tone="danger" size="sm">Failed</EStamp>
           </EInline>
           <ENotice tone="info" title="Your visit is Thursday">Main office, 9:30 am.</ENotice>
           <ENotice tone="success" title="Payment received">We emailed your receipt.</ENotice>
@@ -168,7 +170,7 @@ const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "curren
         </EStack>
       </ESurface>
 
-      <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-card">
+      <ESurface :pad="vp.pad" class="pv-card">
         <EStack :gap="vp.gap">
           <EKicker>Motion</EKicker>
           <EProgress label="Uploading" :value="progress" />
@@ -180,20 +182,20 @@ const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "curren
         </EStack>
       </ESurface>
 
-      <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-card">
+      <ESurface :pad="vp.pad" class="pv-card">
         <EStack :gap="vp.gap">
           <EKicker>Type</EKicker>
           <EHeading :level="1">Your account</EHeading>
           <EHeading :level="2">Upcoming visits</EHeading>
           <EHeading :level="3">Visit on Oct 2</EHeading>
-          <EText variant="deck">Your balance is due November 1.</EText>
+          <EText large>Your balance is due November 1.</EText>
           <EText>Pay online in about a minute. Receipts are emailed the same day.</EText>
-          <EText variant="small" muted>Statement 4471, sent Oct 14</EText>
+          <EText small muted>Statement 4471, sent Oct 14</EText>
           <EKicker>History</EKicker>
         </EStack>
       </ESurface>
 
-      <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-card">
+      <ESurface :pad="vp.pad" class="pv-card">
         <EStack :gap="vp.gap">
           <EKicker>Dialog and float</EKicker>
           <EButton variant="outline" @click="dialogOpen = !dialogOpen">{{ dialogOpen ? "Hide" : "Show" }} dialog</EButton>
@@ -204,15 +206,14 @@ const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "curren
               <EButton variant="outline" @click="dialogOpen = false">Keep it</EButton>
             </template>
           </EDialog>
-          <ESurface tone="float" pad="sm"><EText variant="small">A floating surface: menus, lists and toasts.</EText></ESurface>
+          <ESurface raised pad="sm"><EText small>A floating surface: menus, lists and toasts.</EText></ESurface>
         </EStack>
       </ESurface>
 
-      <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-card">
+      <ESurface :pad="vp.pad" class="pv-card">
         <EStack :gap="vp.gap">
           <EKicker>Navigation</EKicker>
-          <ETabs v-if="vp.navOutline" dense orientation="vertical" label="Account sections" :items="navItems" />
-          <ENavList v-else label="Account sections" :items="navItems" :dense="vp.navDense" />
+          <ENavList label="Account sections" :items="navItems" />
           <ETabs
             v-model="tab"
             :items="[
@@ -221,24 +222,24 @@ const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "curren
               { id: 'settings', label: 'Settings' },
             ]"
           >
-            <template #panel="{ item }"><EText variant="small" muted>{{ item.label }} panel.</EText></template>
+            <template #panel="{ item }"><EText small muted>{{ item.label }} panel.</EText></template>
           </ETabs>
           <EStepper :steps="steps" label="Checkout" />
           <EPagination v-model="page" :page-count="6" aria-label="Visit pages" />
           <div :class="['pv-disclosures', { 'pv-disclosures--card': vp.disclosure === 'card' }]">
-            <EDisclosure :variant="vp.disclosure" title="What does this cover?" :meta="vp.disclosure === 'card' ? 'Oct' : undefined">Visits, labs and supplies from Oct 1 to Oct 31.</EDisclosure>
-            <EDisclosure :variant="vp.disclosure" title="When is it due?" :meta="vp.disclosure === 'card' ? 'Oct 22' : undefined">Payment is due 21 days after the statement is sent.</EDisclosure>
+            <EDisclosure title="What does this cover?">Visits, labs and supplies from Oct 1 to Oct 31.</EDisclosure>
+            <EDisclosure title="When is it due?">Payment is due 21 days after the statement is sent.</EDisclosure>
           </div>
         </EStack>
       </ESurface>
     </div>
 
-    <ESurface :pad="vp.pad" :tone="vp.tone" class="pv-wide">
+    <ESurface :pad="vp.pad" class="pv-wide">
       <EStack :gap="vp.gap">
         <EKicker>Data</EKicker>
-        <EDataGrid caption="Statements" :columns="columns" :rows="rows" :plain="vp.plain" :searchable="!vp.plain" :selectable="!vp.plain" :page-size="4">
+        <EDataGrid caption="Statements" :columns="columns" :rows="rows" searchable selectable :page-size="4">
           <template #cell-status="{ row }">
-            <EChip :tone="tone[row.status as keyof typeof tone]" :variant="vp.badge">{{ row.status }}</EChip>
+            <EStamp :tone="tone[row.status as keyof typeof tone]" size="sm">{{ row.status }}</EStamp>
           </template>
           <template #cell-amount="{ value }">{{ fmt(value) }}</template>
         </EDataGrid>

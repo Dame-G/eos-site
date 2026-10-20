@@ -44,6 +44,6 @@ function onKeydown(e: KeyboardEvent) {
       @select="onSelect"
       @edge="field?.focus()"
     />
-    <EText variant="small" muted>{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
+    <EText small muted>{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
   </EStack>
 </template>

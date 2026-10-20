@@ -12,6 +12,7 @@ const step = ref(2);
       <EButton variant="outline" :disabled="step <= 0" @click="step--">Back</EButton>
       <EButton :disabled="step >= 4" @click="step++">Next step</EButton>
     </EInline>
+    <EProgress label="Checking your account" />
     <EProgress label="Statement paid" :value="162.4" :max="162.4" value-text="$162.40 of $162.40" />
   </EStack>
 </template>

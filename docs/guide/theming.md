@@ -5,7 +5,7 @@ description: "Rebrand Eos with defineTheme, plain CSS variables or a scoped them
 
 # Theming
 
-A theme is a set of `--e-*` CSS variables ([all tokens](/tokens)). Build one with `defineTheme()`, which also checks contrast, or override the variables in CSS. Try values in the [playground](/playground).
+A theme is a set of `--e-*` CSS variables ([all tokens](/guide/tokens)). Build one with `defineTheme()`, which also checks contrast, or override the variables in CSS. Try values in the [playground](/playground).
 
 ```ts
 import { createEos, defineTheme } from "@eos-ui/vue";
@@ -22,7 +22,7 @@ clinic.issues; // [] when every contrast pair holds
 app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be2" } })
 ```
 
-`defineTheme()` takes 15 inputs and emits every token. Any token can also be set by name in `tokens`, which wins over everything derived.
+`defineTheme()` takes 16 inputs and emits every token. Any token can also be set by name in `tokens`, which wins over everything derived.
 
 | Input | Derives |
 | --- | --- |
@@ -31,18 +31,20 @@ app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be
 | `background`, `surface`, `foreground` | the grounds, `ink`, `muted`, `border`, `border-strong`; a dark surface lifts the action colours |
 | `fonts`, `radius` | `font-sans`, `font-mono`; `radius-sm` to `radius-lg` |
 | `textScale`, `spaceScale` | `text-xs` to `text-4xl`; `space-1` to `space-8` (1 is the default) |
-| `strokes` `{ hair, focus }` | `stroke-hair`, `stroke-edge`, `stroke-focus`, `focus-gap`, `focus-gap-field` |
+| `strokes` `{ hair, focus, edge, card }` | `stroke-hair`, `stroke-card`, `stroke-edge`, `stroke-focus`, `focus-gap` (`focus-gap-field` follows `stroke-edge`). `edge` and `card` set their token outright; without them `edge` is 1.5 times `hair` and `card` is `hair` (2px on a bold elevation) |
+| `contrast` `"standard" | "high"` | `high`: `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey, `scrim` is darker |
 | `motion` `"default" \| "snappy" \| "gentle" \| "none"` | `duration-tap`, `duration-move`, `easing-out` |
 | `elevation` `"outline" \| "lifted" \| "bold"` | `edge`, `well`, `float`; shadow tint follows `background` |
 | `controlHeight` | `control-height`, `chip-height` |
 
-Three more options are not inputs. `name` is the value of `data-e-theme` when the theme is applied to an element. `tokens` sets any token by name, wins over derived values and is not contrast-corrected. `strict` throws on a contrast failure instead of listing it in `issues`. The [tokens page](/tokens) lists each token with the input it follows.
+Three more options are not inputs. `name` is the value of `data-e-theme` when the theme is applied to an element. `tokens` sets any token by name, wins over derived values and is not contrast-corrected. `strict` throws on a contrast failure instead of listing it in `issues`. The [token reference](/guide/tokens) lists each token with the input it follows.
 
 ## One example per family
 
 ```ts
 defineTheme({ brand: "#8a2be2", accent: "#2e7d32", danger: "#b3261e" }); // colour
 defineTheme({ radius: "round", elevation: "lifted", strokes: { hair: 1, focus: 3 } }); // shape
+defineTheme({ contrast: "high", elevation: "bold", strokes: { hair: 2, edge: 2 } }); // high contrast
 defineTheme({ fonts: { sans: "Inter, system-ui, sans-serif" }, textScale: 1.1 }); // type
 defineTheme({ spaceScale: 1.25, controlHeight: 56 }); // space
 defineTheme({ motion: "snappy" }); // motion
@@ -108,4 +110,4 @@ eos.config.portalTarget = el; // or a selector such as "#portal"
 
 ## Cascade layers
 
-From lowest: `e.reset, e.tokens, e.base, e.primitives, e.blocks, e.controls, e.composites, e.containers, e.account, e.page`. With another layered framework, declare the order once and early: `@layer framework, e.reset, e.tokens, ...`.
+From lowest: `e.reset, e.tokens, e.base, e.primitives, e.blocks, e.controls, e.composites, e.containers, e.page`. With another layered framework, declare the order once and early: `@layer framework, e.reset, e.tokens, ...`.

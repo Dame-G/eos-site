@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EAppFooter, EAppHeader, EButton, EDrawer, EIconButton, EKbd, ELink, ENavList, ESearchBar, ESkipLink, ETabs, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EAppFooter, EAppHeader, EButton, EDrawer, EIconButton, EKbd, ELink, ENavList, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
 import GithubMark from "./GithubMark";
 import HomePage from "./HomePage.vue";
@@ -37,15 +37,6 @@ const menuSplit = computed(() => {
   return at < 0 || !hasSidebar.value
     ? { before: topNav.value, after: [] as NavItem[] }
     : { before: topNav.value.slice(0, at + 1), after: topNav.value.slice(at + 1) };
-});
-const filter = ref("");
-const filterable = computed(() => route.path.startsWith("/components"));
-const shown = computed(() => {
-  const q = filter.value.trim().toLowerCase();
-  if (!filterable.value || !q) return sections.value;
-  return sections.value
-    .map((s) => ({ ...s, items: s.items.filter((i) => i.label.toLowerCase().includes(q)) }))
-    .filter((s) => s.items.length);
 });
 
 const pager = computed(() => {
@@ -91,7 +82,10 @@ function onScroll() {
 function showCurrent() {
   const side = document.querySelector<HTMLElement>(".site-side");
   const here = side?.querySelector<HTMLElement>("[aria-current=page]");
-  if (side && here) side.scrollTop = Math.max(0, here.offsetTop - side.clientHeight / 3);
+  if (!side || !here) return;
+  const top = here.offsetTop - side.scrollTop;
+  if (top >= 0 && top + here.offsetHeight <= side.clientHeight) return;
+  side.scrollTop = Math.max(0, here.offsetTop - side.clientHeight / 3);
 }
 
 const searching = ref(false);
@@ -147,15 +141,15 @@ watch(
 </script>
 
 <template>
-  <div class="site e-root">
+  <div class="site e-root e-shell">
     <ESkipLink href="#main" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
     <EAppHeader sticky>
       <template #logo>
-        <a class="site-brand" href="/" aria-label="Eos, home">Eos</a>
+        <a class="site-brand" href="/" aria-label="eos, home">eos</a>
       </template>
       <template #actions>
-        <ETabs class="site-topnav" label="Site" :items="topNav" />
+        <ENavList class="site-topnav" label="Site" orientation="horizontal" :items="topNav" />
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
@@ -166,13 +160,9 @@ watch(
     <HomePage v-if="isHome" id="main" />
 
     <div v-else class="site-body" :class="{ 'site-body--side': hasSidebar, 'site-body--outline': showOutline, 'site-body--wide': isWide }">
-      <div v-if="hasSidebar" class="site-side">
-        <div v-if="filterable" class="site-filter">
-          <ESearchBar v-model="filter" label="Filter components" placeholder="Filter components" hide-action autocomplete="off" />
-        </div>
-        <ETabs dense orientation="vertical" label="Pages" :sections="shown" />
-        <EText v-if="filterable && filter.trim() && !shown.length" variant="small" muted class="site-filter-empty">No component matches "{{ filter }}".</EText>
-      </div>
+      <div v-if="hasSidebar" class="site-rail site-rail--side"><div class="site-side">
+        <ENavList label="Pages" :sections="sections" />
+      </div></div>
       <main id="main" class="site-main" tabindex="-1">
         <NotFoundPage v-if="page.isNotFound" />
         <template v-else>
@@ -183,14 +173,16 @@ watch(
           </nav>
         </template>
       </main>
-      <aside v-if="showOutline" class="site-outline" aria-labelledby="site-outline-title">
-        <p id="site-outline-title" class="site-outline-title">On this page</p>
-        <ETabs dense orientation="vertical" label="On this page" :items="outline" />
-      </aside>
+      <div v-if="showOutline" class="site-rail site-rail--outline">
+        <aside class="site-outline" aria-labelledby="site-outline-title">
+          <p id="site-outline-title" class="site-outline-title">On this page</p>
+          <ENavList label="On this page" :items="outline" />
+        </aside>
+      </div>
     </div>
 
     <EAppFooter>
-      <EText variant="small" muted>Eos is released under the MIT license.</EText>
+      <EText small muted>Eos is released under the MIT license.</EText>
       <nav class="site-footer-links" aria-label="Project">
         <ELink v-if="githubUrl" :href="githubUrl" external :icon="GithubMark">GitHub</ELink>
         <ELink href="https://github.com/Dame-G/eos/releases" external>Releases</ELink>
@@ -202,10 +194,7 @@ watch(
     <EDrawer v-model:open="menuOpen" side="left" title="Menu">
       <ENavList label="Site menu" :items="menuSplit.before" />
       <div v-if="hasSidebar" class="site-drawer-pages">
-        <div v-if="filterable" class="site-filter site-filter--drawer">
-          <ESearchBar v-model="filter" label="Filter components" placeholder="Filter components" hide-action autocomplete="off" />
-        </div>
-        <ETabs dense orientation="vertical" label="Pages" :sections="shown" />
+        <ENavList label="Pages" :sections="sections" />
       </div>
       <ENavList v-if="menuSplit.after.length" label="More of the site" :items="menuSplit.after" />
     </EDrawer>
