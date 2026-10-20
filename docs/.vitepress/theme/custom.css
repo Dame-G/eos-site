@@ -482,8 +482,9 @@ body:has(.site-body, .home) .site {
 
 .component-card:hover,
 .component-card:has(:focus-visible) {
-  outline: var(--e-stroke-edge) solid var(--e-border-strong);
+  outline: var(--e-stroke-edge) solid var(--e-primary);
   outline-offset: 0;
+  background: var(--e-surface-hover);
 }
 
 .component-card:has(:focus-visible) {
