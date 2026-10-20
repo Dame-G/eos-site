@@ -9,7 +9,7 @@ Some things are a few lines of the pieces Eos already has. They are recipes, not
 
 ## Toggle button
 
-A button with two states, for a filter or a view option. Use an outline `EButton` with `aria-pressed`: Eos draws `aria-pressed="true"` as selected (a tinted fill and a primary edge, and `Highlight` in forced colours). Keep the label the same in both states. Use `ESwitch` for a setting that saves.
+A button with two states, for a filter or a view option. Use an outline [`EButton`](/components/Button) with `aria-pressed`: Eos draws `aria-pressed="true"` as selected (a tinted fill and a primary edge, and `Highlight` in forced colours). Keep the label the same in both states. Use [`ESwitch`](/components/Switch) for a setting that saves.
 
 ```vue
 <script setup lang="ts">
@@ -26,7 +26,7 @@ const unpaid = ref(false);
 
 ## Button group
 
-Buttons that belong together, side by side, announced as one labelled group. `EActions` does this when you give it a `label`. Use `ESegmented` when the reader picks one option from several.
+Buttons that belong together, side by side, announced as one labelled group. [`EActions`](/components/Actions) does this when you give it a `label`. Use [`ESegmented`](/components/Segmented) when the reader picks one option from several.
 
 ```vue
 <EActions label="Show">
@@ -38,7 +38,7 @@ Buttons that belong together, side by side, announced as one labelled group. `EA
 
 ## Link card
 
-A card with a title, a short description and one link, where the whole card is the click target. Put one `a` in an `ESurface`, stretch its `::after` over the card, and keep everything else in the card free of links and buttons.
+A card with a title, a short description and one link, where the whole card is the click target. Put one `a` in an [`ESurface`](/components/Surface), stretch its `::after` over the card, and keep everything else in the card free of links and buttons.
 
 ```vue
 <ESurface as="li" pad="sm" class="link-card">
@@ -86,7 +86,7 @@ The component list on this site is built this way.
 
 ## Back link
 
-A link back to the previous page, with an arrow and words that name the destination ("Back to statements"). It is an `ELink` with the `arrow-left` icon. For a router, wrap `RouterLink` in the same way or use the `a` that your router renders.
+A link back to the previous page, with an arrow and words that name the destination ("Back to statements"). It is an [`ELink`](/components/Link) with the `arrow-left` icon. For a router, wrap `RouterLink` in the same way or use the `a` that your router renders.
 
 ```vue
 <ELink href="/statements" icon="arrow-left">Back to statements</ELink>
@@ -94,7 +94,7 @@ A link back to the previous page, with an arrow and words that name the destinat
 
 ## Panel
 
-A flat, outlined container for statements, detail rows and forms. Render an `ESurface` as a `section`, and put an `EHeading` (with its `kicker`) at the top. Pick the heading level that fits the page outline.
+A flat, outlined container for statements, detail rows and forms. Render an `ESurface` as a `section`, and put an [`EHeading`](/components/Heading) (with its `kicker`) at the top. Pick the heading level that fits the page outline.
 
 ```vue
 <ESurface as="section" pad="md">
@@ -105,4 +105,4 @@ A flat, outlined container for statements, detail rows and forms. Render an `ESu
 </ESurface>
 ```
 
-For an action beside the title, put the heading and an `EButton` in an `EInline` with `justify="between"`.
+For an action beside the title, put the heading and an `EButton` in an [`EInline`](/components/Inline) with `justify="between"`.
