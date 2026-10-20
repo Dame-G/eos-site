@@ -79,8 +79,12 @@ body {
   font-family: var(--e-font-sans);
 }
 
-body:has(.site-body) .site {
-  background: var(--e-surface-tint);
+body:has(.site-body, .home) .site {
+  background: var(--site-ground);
+}
+
+.site {
+  --site-ground: #e6e6e6;
 }
 
 .site .e-appfooter {
@@ -138,6 +142,8 @@ body:has(.site-body) .site {
 
 /* The page (nav lists and content together) is white and the ground outside it is tinted, so it reads as one sheet that the header lines continue down. */
 .site-body {
+  position: relative;
+  z-index: 1;
   border-inline: var(--e-stroke-hair) solid var(--e-border);
   background: var(--e-surface);
   display: grid;
@@ -267,6 +273,10 @@ body:has(.site-body) .site {
   max-width: var(--site-wide);
   margin-inline: auto;
   padding: var(--e-space-8) var(--e-space-4);
+  position: relative;
+  z-index: 1;
+  border-inline: var(--e-stroke-hair) solid var(--e-border);
+  background: var(--e-surface);
 }
 
 .home-top {

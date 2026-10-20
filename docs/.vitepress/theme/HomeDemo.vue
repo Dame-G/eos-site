@@ -70,7 +70,6 @@ const deliverables = [
   { name: "Brand guide", meta: "48 pages · updated yesterday", icon: "form" as const, tone: "warning" as const, status: "Needs review" },
   { name: "Social templates", meta: "8 files · Ada is working on it", icon: "file" as const, tone: "info" as const, status: "In progress" },
 ];
-const team = ["Ada Lovelace", "Grace Hopper", "Alan Turing"];
 
 const marked = [new Date(2026, 9, 24), new Date(2026, 9, 31)];
 const deadline = ref<Date | null>(null);
@@ -104,9 +103,6 @@ function remind() {
           <EBreadcrumb :items="crumbs" />
           <EPageHeader title="Brand refresh" description="Harbor & Pine · due Nov 14" :heading-level="2">
             <template #actions>
-              <span class="hd-team" role="img" aria-label="Team: Ada, Grace and Alan">
-                <EAvatar v-for="n in team" :key="n" :name="n" small />
-              </span>
               <EButton icon="plus">Add deliverable</EButton>
             </template>
           </EPageHeader>
@@ -194,10 +190,10 @@ function remind() {
   outline: var(--e-stroke-card) solid var(--e-bc);
   outline-offset: calc(-1 * var(--e-stroke-card));
   border-radius: var(--e-radius-lg);
-  background: var(--e-surface-tint);
+  background: var(--e-surface);
   color: var(--e-ink);
   font-family: var(--e-font-sans);
-  box-shadow: var(--e-float);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 6px 16px -6px rgb(0 0 0 / 0.08);
 }
 
 .hd-top {
@@ -250,18 +246,6 @@ function remind() {
   .hd-page {
     padding: var(--e-space-6);
   }
-}
-
-.hd-team {
-  display: inline-flex;
-}
-
-.hd-team > :deep(.e-avatar + .e-avatar) {
-  margin-inline-start: calc(-1 * var(--e-space-1));
-}
-
-.hd-team > :deep(.e-avatar) {
-  box-shadow: 0 0 0 var(--e-stroke-edge) var(--e-surface-tint);
 }
 
 .hd-files {
