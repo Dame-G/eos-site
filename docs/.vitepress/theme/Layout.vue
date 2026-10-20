@@ -8,6 +8,13 @@ import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
 import SiteSearch from "./SiteSearch.vue";
 import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
+import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
+import { followScheme, schemeChoice, setChoice } from "./site-theme";
+
+const ORDER = ["system", "light", "dark"] as const;
+const SCHEME_ICON = { system: MonitorIcon, light: SunIcon, dark: MoonIcon };
+const nextChoice = computed(() => ORDER[(ORDER.indexOf(schemeChoice.value) + 1) % ORDER.length]!);
+const schemeLabel = computed(() => `Colour scheme: ${schemeChoice.value}. Switch to ${nextChoice.value}`);
 
 const { theme, page, frontmatter } = useData();
 const route = useRoute();
@@ -98,6 +105,7 @@ function onShortcut(e: KeyboardEvent) {
 }
 
 onMounted(() => {
+  followScheme();
   readHeadings();
   showCurrent();
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -147,12 +155,13 @@ watch(
     <EAppHeader sticky>
       <template #logo>
         <a class="site-brand" href="/" aria-label="eos, home">eos</a>
-      </template>
-      <template #actions>
-        <ENavList class="site-topnav" label="Site" orientation="horizontal" :items="topNav" />
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
+      </template>
+      <template #actions>
+        <ENavList class="site-topnav" label="Site" orientation="horizontal" :items="topNav" />
+        <EIconButton :icon="SCHEME_ICON[schemeChoice]" :label="schemeLabel" @click="setChoice(nextChoice)" />
         <EIconButton icon="menu" label="Menu" class="site-menu-button" @click="menuOpen = true" />
       </template>
     </EAppHeader>
@@ -185,6 +194,7 @@ watch(
       <EText small muted>Eos is released under the MIT license.</EText>
       <nav class="site-footer-links" aria-label="Project">
         <ELink v-if="githubUrl" :href="githubUrl" external :icon="GithubMark">GitHub</ELink>
+        <ELink href="https://npmx.dev/package/@eos-ui/vue" external>npmx</ELink>
         <ELink href="https://github.com/Dame-G/eos/releases" external>Releases</ELink>
         <ELink href="https://github.com/Dame-G/eos/blob/main/CONTRIBUTING.md" external>Contributing</ELink>
         <ELink href="https://github.com/Dame-G/eos/issues/new/choose" external>Report an issue</ELink>

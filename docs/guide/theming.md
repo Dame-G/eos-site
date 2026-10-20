@@ -59,7 +59,7 @@ Three colours set the neutrals. Everything else follows from them.
 
 | Input | Token it sets | What it derives |
 | --- | --- | --- |
-| `background` | `--e-background`, painted by `EAppShell` | The tint of shadows. Checked against ink, muted text, primary and the border |
+| `background` | `--e-background`, painted by [`EAppShell`](/components/AppShell) | The tint of shadows. Checked against ink, muted text, primary and the border |
 | `surface` | `--e-surface` | `--e-surface-tint`, the second ground (wells, hovered rows, table headers): its lightness moved 0.045 toward the foreground, in the brand hue, or 0.06 the other way on a dark surface. Also `--e-secondary-soft`, `--e-danger-soft` and `--e-warning-soft`, at the same offset from the surface |
 | `foreground` | `--e-ink` | `--e-muted`: ink softened toward the surface until it holds 7:1 (never below 4.5). `--e-border` at 3.4:1 and `--e-border-strong` at 4.5:1 on the surface. The focus ring and the hover and press washes follow ink |
 

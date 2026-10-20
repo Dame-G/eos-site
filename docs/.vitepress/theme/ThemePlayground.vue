@@ -247,7 +247,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
     <div class="workbench">
       <ControlsDock>
-        <ETabs v-model="controlTab" :items="controlItems" fill class="groups">
+        <ETabs v-model="controlTab" :items="controlItems" fill framed class="groups">
           <template #colour>
             <EStack :gap="4">
               <ESegmented :model-value="s.scheme" label="Scheme" :options="schemeOptions" @update:model-value="setScheme" />
@@ -425,7 +425,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
     flex: 1;
     min-height: 0;
     overflow-y: auto;
-    padding-inline-end: var(--e-space-1);
+
   }
 }
 </style>

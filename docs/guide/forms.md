@@ -5,7 +5,7 @@ description: "v-model, labels, hints and errors, your own controls with EField, 
 
 # Forms and validation
 
-The main value of every control is `v-model`. A range picker has two (`v-model:start`, `v-model:end`). Leave it off and the control keeps its own state. Other signals are events with the value first, such as `@submit` on `ESearchBar` and `@select` on `EMenu`.
+The main value of every control is `v-model`. A range picker has two (`v-model:start`, `v-model:end`). Leave it off and the control keeps its own state. Other signals are events with the value first, such as `@submit` on [`ESearchBar`](/components/SearchBar) and `@select` on [`EMenu`](/components/Menu).
 
 Every field takes:
 
@@ -17,7 +17,7 @@ Every field takes:
 
 ## Your own control
 
-`EField` gives a control of yours the label, hint and error, and hands you the ids:
+[`EField`](/components/Field) gives a control of yours the label, hint and error, and hands you the ids:
 
 ```vue
 <EField label="Preferred pharmacy" hint="We send the prescription here." v-slot="{ id, ariaInvalid, ariaDescribedby }">

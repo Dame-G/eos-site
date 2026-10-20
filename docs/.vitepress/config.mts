@@ -1,10 +1,11 @@
 import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
 import { sep } from "node:path";
-import { GROUPS, listComponents } from "./eos-source.mjs";
+import { GROUPS, libraryVersion, listComponents } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
 import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
 import { renderForSearch, searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
+import { BOOT_SCRIPT, darkCss } from "./scheme";
 
 const SITE = "https://eos.dame.gg";
 const IMAGE = SITE + "/og.png";
@@ -107,6 +108,8 @@ export default defineConfig({
     ["link", { rel: "apple-touch-icon", href: "/apple-touch-icon.png" }],
     ["link", { rel: "manifest", href: "/site.webmanifest" }],
     ["meta", { name: "theme-color", content: "#17586d" }],
+    ["script", {}, BOOT_SCRIPT],
+    ["style", {}, darkCss],
   ],
   markdown: {
     theme: SHIKI_THEME,
@@ -121,7 +124,7 @@ export default defineConfig({
         }
         env.tableCount = (env.tableCount ?? 0) + 1;
         const label = md.utils.escapeHtml(`${heading || "Page"}, table ${env.tableCount}`);
-        return `<div class="table-wrap"><div class="table-scroll" tabindex="0" role="region" aria-label="${label}"><table>`;
+        return `<div class="e-table-wrap e-table-wrap--striped e-table-wrap--dense"><div class="e-table-scroll" tabindex="0" role="region" aria-label="${label}"><table class="e-table">`;
       };
       md.renderer.rules.table_close = () => "</table></div></div>";
       const linkOpen = md.renderer.rules.link_open ?? ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
@@ -167,6 +170,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [vitepressInLayer()],
+    define: { __EOS_VERSION__: JSON.stringify(libraryVersion) },
     resolve: {
       dedupe: ["vue"],
     },

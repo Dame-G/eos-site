@@ -11,6 +11,8 @@ export default {
     const fixRelative = (md, self) =>
       md.replace(/\]\((\.{1,2}\/[^)\s]*)\)/g, (m, target) => {
         if (/icons\/README/.test(target)) return "](/guide/icons)";
+        const sibling = /^\.\.\/([A-Z][A-Za-z]+)\/README\.md$/.exec(target);
+        if (sibling && known.has(sibling[1])) return `](/components/${sibling[1]})`;
         const path = new URL(target, `https://x/packages/vue/src/components/${self}/`).pathname.slice(1);
         return `](https://github.com/Dame-G/eos/blob/main/${path})`;
       });

@@ -10,7 +10,7 @@ import Pattern from "./Register.vue";
 
 # Register
 
-Built from: EStepper, EFieldset, ETextField, EDatePicker, EPhoneField, ESelect, ERadioGroup, ESignatureField, EDescriptionList, ENotice, EStack, EActions, EButton.
+Built from: [`EStepper`](/components/Stepper), [`EFieldset`](/components/Fieldset), [`ETextField`](/components/TextField), [`EDatePicker`](/components/DatePicker), [`EPhoneField`](/components/PhoneField), [`ESelect`](/components/Select), [`ERadioGroup`](/components/RadioGroup), [`ESignatureField`](/components/SignatureField), [`EDescriptionList`](/components/DescriptionList), [`ENotice`](/components/Notice), [`EStack`](/components/Stack), [`EActions`](/components/Actions), [`EButton`](/components/Button).
 
 <div class="pattern-stage">
   <Pattern />

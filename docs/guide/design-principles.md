@@ -7,8 +7,8 @@ description: "The layout rules that make every Eos theme feel like the same syst
 
 These rules hold in every theme. A theme changes colours, corners, fonts, scales and control height. It does not change the rules.
 
-- **Compose.** A card is `ESurface`, buttons go in `EActions`, label and text rows are `EDescriptionList`. If you need a custom box or a hand-written flex row, a building block is missing: report it.
-- **The parent owns space.** Children set no outer margin. `EStack`, `EInline`, `EGrid` and `EActions` space them.
+- **Compose.** A card is [`ESurface`](/components/Surface), buttons go in [`EActions`](/components/Actions), label and text rows are [`EDescriptionList`](/components/DescriptionList). If you need a custom box or a hand-written flex row, a building block is missing: report it.
+- **The parent owns space.** Children set no outer margin. [`EStack`](/components/Stack), [`EInline`](/components/Inline), [`EGrid`](/components/Grid) and `EActions` space them.
 - **One control height.** Every tappable control has the same height (48px by default), so a button lines up beside an input.
 - **Depth means "click" or "floats".** Buttons and rows have a bottom edge (the `depth` token), inputs are wells, popovers and toasts float. Everything else is flat and outlined.
 - **One filled button per page.** Put the main action first, left-aligned under what it acts on. Name it with a verb: "Pay $162.40".

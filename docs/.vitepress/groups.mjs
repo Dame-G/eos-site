@@ -4,7 +4,7 @@ export const GROUP_OF = {
   Progress: "primitives", Skeleton: "primitives", Spinner: "primitives", Stamp: "primitives", Text: "primitives",
   VisuallyHidden: "primitives",
   Actions: "blocks", CodeBlock: "blocks", DescriptionList: "blocks", Grid: "blocks", Inline: "blocks",
-  Stack: "blocks", Surface: "blocks",
+  Stack: "blocks", Surface: "blocks", Table: "blocks",
   Checkbox: "controls", Combobox: "controls", Field: "controls", Fieldset: "controls",
   NumberField: "controls", OtpField: "controls", RadioGroup: "controls", SearchBar: "controls",
   SearchResults: "controls", Segmented: "controls", Select: "controls", Switch: "controls", TextField: "controls",

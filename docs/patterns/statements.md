@@ -10,7 +10,7 @@ import Pattern from "./Statements.vue";
 
 # Statements
 
-Built from: EPageHeader, EStack, EInline, EText, ESearchBar, EActions, EExpandableRow, EStamp, EDescriptionList, EEmptyState, EPagination, EButton.
+Built from: [`EPageHeader`](/components/PageHeader), [`EStack`](/components/Stack), [`EInline`](/components/Inline), [`EText`](/components/Text), [`ESearchBar`](/components/SearchBar), [`EActions`](/components/Actions), [`EExpandableRow`](/components/ExpandableRow), [`EStamp`](/components/Stamp), [`EDescriptionList`](/components/DescriptionList), [`EEmptyState`](/components/EmptyState), [`EPagination`](/components/Pagination), [`EButton`](/components/Button).
 
 <div class="pattern-stage">
   <Pattern />

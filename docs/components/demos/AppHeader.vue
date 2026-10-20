@@ -8,6 +8,7 @@ import { EAppHeader, EButton, ENavList } from "@eos-ui/vue";
     <template #actions><EButton variant="outline">Sign out</EButton></template>
     <ENavList
       label="Sections"
+      orientation="horizontal"
       :items="[
         { label: 'Visits', href: '#visits' },
         { label: 'Statements', href: '#statements', count: 2, current: true },
