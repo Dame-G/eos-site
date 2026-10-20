@@ -422,12 +422,6 @@ body:has(.site-body, .home) .site {
 
   :scope div[class*="language-"] {
     border: var(--e-stroke-hair) solid var(--e-border);
-
-    --e-bc: var(--e-border);
-
-    outline: var(--e-stroke-hair) solid var(--e-bc);
-
-    outline-offset: calc(-1 * var(--e-stroke-hair));
     border-radius: var(--e-radius-md);
   }
 }
@@ -534,6 +528,15 @@ body:has(.site-body, .home) .site {
 
 .vp-doc .e-code {
   margin: var(--e-space-4) 0;
+}
+
+/* Stacked code blocks keep the seam the component draws: this rule is unlayered, so it would otherwise out-rank the component and open a gap. */
+.vp-doc .e-code + .e-code {
+  margin-top: max(var(--e-stroke-card), 1px);
+}
+
+.vp-doc .e-code:has(+ .e-code) {
+  margin-bottom: 0;
 }
 
 .site-search-hint {

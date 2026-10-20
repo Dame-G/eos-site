@@ -186,9 +186,6 @@ function remind() {
   container-type: inline-size;
   overflow: hidden;
   border: var(--e-stroke-card) solid var(--e-border);
-  --e-bc: var(--e-border);
-  outline: var(--e-stroke-card) solid var(--e-bc);
-  outline-offset: calc(-1 * var(--e-stroke-card));
   border-radius: var(--e-radius-lg);
   background: var(--e-surface);
   color: var(--e-ink);
