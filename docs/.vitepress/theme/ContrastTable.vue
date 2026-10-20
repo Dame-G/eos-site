@@ -54,9 +54,6 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
   width: var(--e-space-4);
   height: var(--e-space-4);
   border: var(--e-stroke-hair) solid var(--e-border-strong);
-  --e-bc: var(--e-border-strong);
-  outline: var(--e-stroke-hair) solid var(--e-bc);
-  outline-offset: calc(-1 * var(--e-stroke-hair));
   border-radius: var(--e-radius-pill);
 }
 </style>

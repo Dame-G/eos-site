@@ -221,9 +221,6 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
   width: var(--swatch-size);
   height: var(--swatch-size);
   border: var(--e-stroke-hair) solid var(--e-border);
-  --e-bc: var(--e-border);
-  outline: var(--e-stroke-hair) solid var(--e-bc);
-  outline-offset: calc(-1 * var(--e-stroke-hair));
   border-radius: var(--e-radius-md);
   font: 500 var(--e-text-xl) / 1 var(--e-font-sans);
 }
