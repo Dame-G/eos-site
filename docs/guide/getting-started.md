@@ -16,7 +16,7 @@ npm install @eos-ui/vue
 import { createApp } from "vue";
 import { createEos } from "@eos-ui/vue";
 import "@eos-ui/vue/style.css";
-import "@eos-ui/vue/fonts.css"; // optional: Jost and Spline Sans Mono from Google Fonts
+import "@eos-ui/vue/fonts.css"; // optional: Bricolage Grotesque and Geist Mono from Google Fonts
 import App from "./App.vue";
 
 createApp(App)

@@ -19,15 +19,15 @@ import { EInline, EStack, EStamp } from "@eos-ui/vue";
       <EStamp status="complete" />
     </EInline>
     <EInline>
-      <EStamp status="paid" small />
-      <EStamp tone="warning" label="Review" icon="pin" small />
+      <EStamp status="paid" size="sm" />
+      <EStamp tone="warning" label="Review" size="sm" />
       <EStamp tone="danger" label="Card declined" />
     </EInline>
     <EInline>
-      <EStamp status="paid" variant="subtle" />
-      <EStamp status="due" detail="Oct 31, 2026" variant="subtle" />
-      <EStamp status="overdue" detail="12 days" variant="subtle" />
-      <EStamp status="action" variant="subtle" />
+      <EStamp>Draft</EStamp>
+      <EStamp tone="ink" size="sm">Ink</EStamp>
+      <EStamp tone="success">Signed</EStamp>
+      <EStamp tone="info" size="sm">Scheduled</EStamp>
     </EInline>
   </EStack>
 </template>

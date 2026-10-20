@@ -10,7 +10,7 @@ const autopay = ref(false);
   <EStack>
     <ESwitch v-model="reminders" label="Text reminders" description="The day before a visit." />
     <ESwitch v-model="autopay" label="Autopay" description="Pay each statement on its due date." />
-    <EText variant="small" muted>Reminders are {{ reminders ? "on" : "off" }}. Autopay is {{ autopay ? "on" : "off" }}.</EText>
+    <EText small muted>Reminders are {{ reminders ? "on" : "off" }}. Autopay is {{ autopay ? "on" : "off" }}.</EText>
     <ESwitch :model-value="false" label="Paper statements" disabled />
     <ESwitch :model-value="true" label="Sign-in alerts" disabled />
   </EStack>

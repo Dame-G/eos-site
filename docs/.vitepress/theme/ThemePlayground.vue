@@ -192,12 +192,7 @@ function setMotion(v: string) {
   followTab("motion");
 }
 const VARIANT_FIELDS: { key: VariantKey; label: string; hint: string; options: { value: string; label: string }[] }[] = [
-  { key: "nav", label: "Navigation list", hint: "ENavList dense, or ETabs vertical as an outline.", options: [{ value: "default", label: "Default" }, { value: "dense", label: "Dense" }, { value: "outline", label: "Outline" }] },
-  { key: "surface", label: "Surfaces", hint: "ESurface tone.", options: [{ value: "default", label: "Default" }, { value: "tint", label: "Tint" }] },
   { key: "pad", label: "Surface padding", hint: "ESurface pad.", options: [{ value: "sm", label: "Small" }, { value: "md", label: "Medium" }, { value: "lg", label: "Large" }] },
-  { key: "grid", label: "Data grid", hint: "EDataGrid plain.", options: [{ value: "default", label: "Default" }, { value: "plain", label: "Plain" }] },
-  { key: "badge", label: "Status badges", hint: "EStamp and EChip variant.", options: [{ value: "solid", label: "Solid" }, { value: "subtle", label: "Subtle" }] },
-  { key: "disclosure", label: "Disclosure", hint: "EDisclosure variant.", options: [{ value: "row", label: "Row" }, { value: "card", label: "Card" }] },
   { key: "gap", label: "Gaps", hint: "EStack, EInline and EGrid gap.", options: [{ value: "tight", label: "Tight" }, { value: "default", label: "Default" }, { value: "roomy", label: "Roomy" }] },
 ];
 function setVariant(key: VariantKey, v: string) {
@@ -238,7 +233,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
       <PresetPicker :model-value="s.preset" name="playground-preset" :tokens="tokens" select @select="usePreset" @random="useRandom" />
       <div class="bar-row">
         <div class="bar-info">
-          <EText variant="small" muted role="status">{{ copied }}</EText>
+          <EText small muted role="status">{{ copied }}</EText>
         </div>
         <div class="bar-actions">
           <ESwitch v-model="wholePage" label="Apply to the whole page" />
@@ -277,8 +272,8 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
                 <ENumberField label="Hairline" hint="Dividers, edges" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.hair" @update:model-value="setField('hair', $event)" />
                 <ENumberField label="Focus outline" hint="At least 2" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.focus" @update:model-value="setField('focus', $event)" />
               </EGrid>
-              <EKicker>Variants</EKicker>
-              <EText variant="small" muted>Component props, not tokens. They are not part of defineTheme.</EText>
+              <EKicker>Spacing</EKicker>
+              <EText small muted>Component props, not tokens. They are not part of defineTheme.</EText>
               <ESegmented v-for="f in VARIANT_FIELDS" :key="f.key" :model-value="s.variants[f.key]" :label="f.label" :options="f.options" :hint="f.hint" @update:model-value="setVariant(f.key, $event)" />
               <TokenOverrides title="All shape tokens" :items="LISTS.shape" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
@@ -315,7 +310,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
           <template #motion>
             <EStack :gap="4">
               <ESegmented :model-value="s.motion" label="Feel" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }, { value: 'none', label: 'None' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
-              <EText variant="small" muted>Try it with Replay in the preview. Everything stops under reduced motion.</EText>
+              <EText small muted>Try it with Replay in the preview. Everything stops under reduced motion.</EText>
               <TokenOverrides title="All motion tokens" :items="LISTS.motion" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
           </template>
@@ -335,10 +330,10 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
               </EInline>
               <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
               <template v-if="variantTags">
-                <EText variant="small" muted>Variants are component props, not tokens. This look also used:</EText>
-                <HighlightedCode lang="vue" copy-label="Copy variants" :code="variantTags" />
+                <EText small muted>Spacing is set with component props, not tokens. This look also used:</EText>
+                <HighlightedCode lang="vue" copy-label="Copy spacing props" :code="variantTags" />
               </template>
-              <EText variant="small" muted>{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. The link in the address bar holds this theme.</EText>
+              <EText small muted>{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. The link in the address bar holds this theme.</EText>
             </EStack>
           </template>
         </ETabs>

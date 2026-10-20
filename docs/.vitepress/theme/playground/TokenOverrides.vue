@@ -26,7 +26,7 @@ const hintOf = (item: DerivedToken) => {
 <template>
   <EDisclosure :title="title">
     <EStack :gap="4">
-      <EText variant="small" muted>Each follows the input named under it. Set one by hand and it stops following.</EText>
+      <EText small muted>Each follows the input named under it. Set one by hand and it stops following.</EText>
       <div v-for="item in items" :key="item.name" class="row">
         <EColorField
           v-if="colour && hexOf(item.name)"

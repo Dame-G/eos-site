@@ -10,7 +10,7 @@ import Pattern from "./PayBill.vue";
 
 # Pay a bill
 
-Built from: ESurface, EStack, EBackLink, EHeading, EAmount, ERadioGroup, ECurrencyField, ESelect, ECardField, ENotice, EActions, EButton.
+Built from: ESurface, EStack, ELink, EHeading, EKicker, ERadioGroup, ECurrencyField, ESelect, ENotice, EActions, EButton.
 
 <div class="pattern-stage">
   <Pattern />
@@ -18,7 +18,7 @@ Built from: ESurface, EStack, EBackLink, EHeading, EAmount, ERadioGroup, ECurren
 
 - Each choice reveals only the next thing it needs.
 - The Pay button names the exact amount and is the only filled button.
-- `ECardField` frames the payment provider's hosted card fields, so card details never reach your page.
+- A new card is entered with your payment provider's hosted fields, so card details never reach your page.
 
 <EDisclosure title="PayBill.vue">
 

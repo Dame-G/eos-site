@@ -2,15 +2,15 @@
 import { computed, ref } from "vue";
 import {
   EActions,
-  EAmount,
-  EBackLink,
-  ECardField,
+  EKicker,
   ECurrencyField,
   EHeading,
+  ELink,
   ENotice,
   ERadioGroup,
   ESelect,
   EStack,
+  EText,
   ESurface,
   EButton,
   useLocale,
@@ -34,10 +34,14 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
     <ESurface pad="md">
       <EStack :gap="6">
         <EStack :gap="3">
-          <EBackLink href="#statements">Back to statements</EBackLink>
+          <ELink href="#statements" icon="arrow-left">Back to statements</ELink>
           <EStack :gap="3">
             <EHeading :level="2" kicker="Statement 4471">Pay your balance</EHeading>
-            <EAmount label="You owe" :amount="BALANCE" :details="[{ label: 'Due', value: 'Nov 1' }]" />
+            <EStack :gap="1">
+            <EKicker>You owe</EKicker>
+            <p class="site-figure">{{ formatMoney(BALANCE) }}</p>
+            <EText small muted>Due Nov 1</EText>
+          </EStack>
           </EStack>
         </EStack>
 
@@ -73,9 +77,7 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
                 { value: 'new', label: 'A new card', icon: 'plus' },
               ]"
             />
-            <ECardField v-if="method === 'new'" label="Card details">
-              <div style="padding: var(--e-space-3); color: var(--e-muted)">The payment provider's card fields appear here</div>
-            </ECardField>
+            <ENotice v-if="method === 'new'" tone="info" title="Enter the card on the next step">Card details are collected by our payment provider, so they never reach this page.</ENotice>
           </EStack>
         </EStack>
 

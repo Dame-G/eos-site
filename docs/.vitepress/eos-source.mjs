@@ -15,7 +15,6 @@ export const GROUPS = [
   { id: "controls", title: "Form controls" },
   { id: "composites", title: "Composite controls" },
   { id: "containers", title: "Containers and feedback" },
-  { id: "account", title: "Account" },
   { id: "page", title: "Page" },
 ];
 
@@ -61,9 +60,9 @@ export function summaryOf(markdown) {
   return firstParagraph(markdown).split(/(?<=\.)\s/)[0] ?? "";
 }
 
-/** Rows of the first "## Props" table: [{ prop, type, notes }]. */
+/** Rows of the first "## Props" table (| Prop | Type | Default | Notes |): [{ prop, type, def, notes }]. */
 export function propsTable(markdown) {
-  const m = /^## Props\s*\n([\s\S]*?)(?=\n## |$)/m.exec(markdown);
+  const m = /^## Props\s*\n([\s\S]*?)(?=\n## |(?![\s\S]))/m.exec(markdown);
   if (!m) return [];
   const rows = m[1].split("\n").filter((l) => l.trim().startsWith("|"));
   const cells = (l) => l.trim().replace(/^[|]|[|]$/g, "").split(/(?<![\\])[|]/).map((c) => c.trim().replace(/[\\][|]/g, "|"));
@@ -71,5 +70,5 @@ export function propsTable(markdown) {
     .slice(2)
     .map(cells)
     .filter((c) => c.length >= 2)
-    .map(([prop, type, notes]) => ({ prop: prop.replace(/`/g, ""), type: (type ?? "").replace(/`/g, ""), notes: (notes ?? "").replace(/`/g, "") }));
+    .map(([prop, type, def, notes]) => ({ prop: prop.replace(/`/g, ""), type: (type ?? "").replace(/`/g, ""), def: (def ?? "").replace(/[`*]/g, ""), notes: (notes ?? "").replace(/`/g, "") }));
 }

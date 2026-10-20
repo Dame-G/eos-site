@@ -14,12 +14,12 @@ const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/
 
 const pages = [
   ...STATIC_PATHS,
-  ...(all ? listComponents() : ["Button", "Select", "DataGrid", "Calendar", "Dialog", "StatementRow"]).map((c) => `/components/${c}`),
+  ...(all ? listComponents() : ["Button", "Select", "DataGrid", "Calendar", "Dialog", "ExpandableRow"]).map((c) => `/components/${c}`),
 ];
 
 const ALLOWED = {
   "/components/AppShell": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique"],
-  "/components/Popover": ["landmark-no-duplicate-banner", "landmark-unique"],
+  "/components/Definition": ["landmark-no-duplicate-banner", "landmark-unique"],
 };
 
 const browser = await chromium.launch(process.env.CI ? {} : { channel: "msedge" });

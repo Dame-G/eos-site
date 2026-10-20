@@ -2,10 +2,8 @@
 import { computed, ref } from "vue";
 import {
   EActions,
-  EBackLink,
   EButton,
   ECheckbox,
-  EErrorSummary,
   EGrid,
   EHeading,
   ELink,
@@ -45,7 +43,6 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
       <form novalidate @submit.prevent="submitted = true">
         <EStack :gap="4">
           <EHeading :level="2">Sign in</EHeading>
-          <EErrorSummary :errors="problems" :auto-focus="false" />
           <ETextField
             id="si-email"
             v-model="email"
@@ -76,7 +73,7 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
 
     <ESurface pad="lg">
       <EStack :gap="4">
-        <EBackLink href="#sign-in">Back to sign in</EBackLink>
+        <ELink href="#sign-in" icon="arrow-left">Back to sign in</ELink>
         <EHeading :level="2">Check your email</EHeading>
         <EText muted>We sent a 6-digit code to m***@example.com. It expires in 10 minutes.</EText>
         <EOtpField v-model="code" label="Sign-in code" :length="6" :group-size="3" hint="Enter the code from the email." />

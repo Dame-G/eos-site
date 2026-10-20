@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EChip, EDataGrid, EGrid, EHeading, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
+import { EStamp, EDataGrid, EGrid, EHeading, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
 
@@ -32,7 +32,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
   <div class="eos-live">
     <EDataGrid
       v-if="section === 'inputs'"
-      plain
+      bare
       caption="Theme inputs"
       :columns="[{ key: 'name', label: 'Input' }, { key: 'controls', label: 'Controls' }, { key: 'derives', label: 'Derives' }, { key: 'neutral', label: 'Neutral' }]"
       :rows="withId(data.inputs as Input[])"
@@ -65,12 +65,12 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
             <p class="name">
               <EHighlight code>--e-{{ c.name }}</EHighlight> <span class="hex">{{ c.source.startsWith("{") ? "= " + c.value : c.value }}</span>
             </p>
-            <EText variant="small" muted class="usage">{{ c.usage }}</EText>
-            <EText variant="small" muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
+            <EText small muted class="usage">{{ c.usage }}</EText>
+            <EText small muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
             <ul v-if="c.partners.length" class="pairs">
               <li v-for="p in c.partners" :key="p.name">
                 <strong>{{ p.ratio }}:1</strong> with <EHighlight code>{{ p.name }}</EHighlight>
-                <EChip :tone="tone(p.level)">{{ p.level }}</EChip>
+                <EStamp :tone="tone(p.level)" size="sm">{{ p.level }}</EStamp>
                 <span class="role">{{ p.role }}</span>
               </li>
             </ul>
@@ -86,7 +86,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           never bundled: load them yourself or import <EHighlight code>@eos-ui/vue/fonts.css</EHighlight>.
         </EText>
         <EDataGrid
-          plain
+          bare
           caption="Font families"
           :columns="[token, { key: 'from', label: 'From' }, { key: 'stack', label: 'Stack' }, { key: 'sample', label: 'Sample' }]"
           :rows="[
@@ -104,7 +104,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         <template v-for="g in data.typeGroups" :key="g.name">
           <EHeading :id="`type-${g.name.toLowerCase().replace(/ /g, '-')}`" :level="3">{{ g.name }}</EHeading>
           <EDataGrid
-            plain
+            bare
             :caption="g.name"
             :columns="[
               { key: 'name', label: 'Style' },
@@ -135,7 +135,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
     <EDataGrid
       v-else-if="section === 'spacing'"
-      plain
+      bare
       caption="Spacing"
       :columns="[token, value, from, usage, { key: 'size', label: 'Size' }]"
       :rows="withFrom(data.spacing as Token[])"
@@ -148,7 +148,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
     <EDataGrid
       v-else-if="section === 'radius'"
-      plain
+      bare
       caption="Corner radius"
       :columns="[token, value, from, usage, { key: 'shape', label: 'Shape' }]"
       :rows="withFrom(data.radius as Token[])"
@@ -161,7 +161,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
     <EDataGrid
       v-else-if="section === 'shadow'"
-      plain
+      bare
       caption="Shadows"
       :columns="[token, from, usage, { key: 'look', label: 'Look' }]"
       :rows="withFrom(data.shadow as Token[])"
@@ -174,7 +174,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
     <EDataGrid
       v-else-if="section === 'fontSize'"
-      plain
+      bare
       caption="Font sizes"
       :columns="[token, value, from, usage, { key: 'sample', label: 'Sample' }]"
       :rows="withFrom(data.fontSize as Token[])"
@@ -189,7 +189,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
     <EDataGrid
       v-else
-      plain
+      bare
       :caption="section === 'size' ? 'Sizes' : section === 'stroke' ? 'Strokes' : section === 'motion' ? 'Motion' : 'Layers'"
       :columns="plainColumns"
       :rows="withFrom((section === 'motion' ? [...data.duration, ...data.easing] : data[section]) as Token[])"
@@ -221,6 +221,9 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
   width: var(--swatch-size);
   height: var(--swatch-size);
   border: var(--e-stroke-hair) solid var(--e-border);
+  --e-bc: var(--e-border);
+  outline: var(--e-stroke-hair) solid var(--e-bc);
+  outline-offset: calc(-1 * var(--e-stroke-hair));
   border-radius: var(--e-radius-md);
   font: 500 var(--e-text-xl) / 1 var(--e-font-sans);
 }

@@ -9,6 +9,6 @@ const last = ref("");
 <template>
   <EStack>
     <ESearchBar v-model="query" placeholder="Search statements and visits" @submit="last = $event" />
-    <EText variant="small" muted>{{ last ? `Searched for "${last}".` : "Press Enter or Search." }}</EText>
+    <EText small muted>{{ last ? `Searched for "${last}".` : "Press Enter or Search." }}</EText>
   </EStack>
 </template>

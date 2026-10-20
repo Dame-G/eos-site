@@ -10,6 +10,5 @@ Whole tasks built only from Eos components, with source. If a pattern needs a cu
 - [Pay a bill](/patterns/pay-a-bill)
 - [Sign in](/patterns/sign-in)
 - [Register](/patterns/register)
-- [Schedule a visit](/patterns/schedule-a-visit)
 - [Sign a form](/patterns/sign-a-form)
 - [Statements](/patterns/statements)

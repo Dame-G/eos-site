@@ -13,7 +13,13 @@ const open = ref(false);
 
     <EDisclosure v-model:open="open" title="Itemised charges">Visit $120.00, lab work $42.40.</EDisclosure>
     <EText>The itemised charges are {{ open ? "open" : "closed" }}.</EText>
-
-    <EDisclosure variant="card" title="Insurance" meta="Active">Coverage runs to Dec 31, 2026.</EDisclosure>
+    <EStack :gap="0">
+      <EDisclosure group="faq" title="Opening hours">Monday to Friday, 8:00 to 17:00.</EDisclosure>
+      <EDisclosure group="faq" title="Parking">Free for the first two hours.</EDisclosure>
+      <EDisclosure group="faq">
+        <template #title>Getting <em>there</em></template>
+        Take the number 12 bus to Elm Street.
+      </EDisclosure>
+    </EStack>
   </EStack>
 </template>

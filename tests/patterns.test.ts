@@ -4,7 +4,6 @@ import { mount, expectNoViolations, settle, watchConsole } from "./helpers";
 import PayBill from "../docs/patterns/PayBill.vue";
 import SignIn from "../docs/patterns/SignIn.vue";
 import Register from "../docs/patterns/Register.vue";
-import ScheduleVisit from "../docs/patterns/ScheduleVisit.vue";
 import SignForm from "../docs/patterns/SignForm.vue";
 import Statements from "../docs/patterns/Statements.vue";
 
@@ -29,13 +28,12 @@ describe("Pay a bill", () => {
 });
 
 describe("Sign in", () => {
-  it("shows an error summary and field errors after an empty submit, and the code step waits for six digits", async () => {
+  it("shows field errors after an empty submit, and the code step waits for six digits", async () => {
     await mount(SignIn);
     await settle();
     await expectNoViolations(document.body);
 
     await page.getByRole("button", { name: "Sign in" }).click();
-    await expect.element(page.getByText("There is a problem")).toBeVisible();
     await expect.element(page.getByText("Enter your password").first()).toBeVisible();
     await expectNoViolations(document.body);
 
@@ -51,7 +49,6 @@ describe("Register", () => {
     await expectNoViolations(document.body);
 
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect.element(page.getByText("There is a problem")).toBeVisible();
     await expect.element(page.getByText("Enter your first name").first()).toBeVisible();
     await expectNoViolations(document.body);
 
@@ -60,20 +57,6 @@ describe("Register", () => {
     await page.getByRole("textbox", { name: /Mobile phone/ }).fill("5551234567");
     await page.getByRole("button", { name: "Continue" }).click();
     await expect.element(page.getByText("How you will pay").first()).toBeVisible();
-    await expectNoViolations(document.body);
-    console_.expectQuiet();
-  });
-});
-
-describe("Schedule a visit", () => {
-  it("lists the times of the chosen day and confirms the booking", async () => {
-    await mount(ScheduleVisit);
-    await settle();
-    await expect.element(page.getByRole("button", { name: "Confirm appointment" })).toBeEnabled();
-    await expectNoViolations(document.body);
-
-    await page.getByRole("button", { name: "Confirm appointment" }).click();
-    await expect.element(page.getByRole("img", { name: "Confirmed" })).toBeVisible();
     await expectNoViolations(document.body);
     console_.expectQuiet();
   });

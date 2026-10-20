@@ -2,22 +2,21 @@
 import { computed, ref } from "vue";
 import {
   EActions,
-  EAddressField,
   EButton,
   EDatePicker,
   EDescriptionList,
-  EErrorSummary,
-  EFormSection,
+  EFieldset,
   ENotice,
   EPhoneField,
   ERadioGroup,
+  ESelect,
   ESignatureField,
   EStack,
   EStepper,
   ETextField,
   useLocale,
+  type SignatureValue,
 } from "@eos-ui/vue";
-import type { Address, SignatureValue } from "@eos-ui/vue";
 
 const STEPS = ["Your details", "How you will pay", "Forms", "Review"];
 const step = ref(0);
@@ -28,7 +27,10 @@ const first = ref("");
 const last = ref("");
 const born = ref<Date | null>(null);
 const phone = ref("");
-const address = ref<Address>({});
+const street = ref("");
+const city = ref("");
+const region = ref<string | null>(null);
+const postal = ref("");
 const pay = ref("card");
 const signature = ref<SignatureValue>({ method: "type", name: "", image: "", agreed: false });
 
@@ -72,17 +74,29 @@ function back() {
       <ENotice v-if="done" tone="success" title="You are registered">We sent a confirmation to your phone.</ENotice>
 
       <template v-else>
-        <EErrorSummary :errors="errors" :auto-focus="false" />
-
-        <EFormSection v-if="step === 0" title="Your details" description="We use these to find your account and send reminders.">
+        <EFieldset v-if="step === 0" section legend="Your details" hint="We use these to find your account and send reminders.">
           <ETextField id="reg-first" v-model="first" label="First name" required autocomplete="given-name" :error="errorOf('reg-first')" />
           <ETextField id="reg-last" v-model="last" label="Last name" required autocomplete="family-name" :error="errorOf('reg-last')" />
           <EDatePicker v-model="born" label="Date of birth" required :max="new Date(2026, 9, 18, 12)" hint="Type it or choose from the calendar." />
           <EPhoneField id="reg-phone" v-model="phone" label="Mobile phone" required hint="We will text a code to confirm it." :error="errorOf('reg-phone')" />
-          <EAddressField v-model="address" legend="Home address" name="home" />
-        </EFormSection>
+          <EFieldset legend="Home address">
+            <ETextField v-model="street" label="Street" autocomplete="address-line1" />
+            <ETextField v-model="city" label="City" autocomplete="address-level2" />
+            <ESelect
+              v-model="region"
+              label="State"
+              :options="[
+                { value: 'CA', label: 'California' },
+                { value: 'NY', label: 'New York' },
+                { value: 'TX', label: 'Texas' },
+                { value: 'WA', label: 'Washington' },
+              ]"
+            />
+            <ETextField v-model="postal" label="ZIP code" autocomplete="postal-code" inputmode="numeric" />
+          </EFieldset>
+        </EFieldset>
 
-        <EFormSection v-else-if="step === 1" title="How you will pay" description="You can change this at any time.">
+        <EFieldset v-else-if="step === 1" section legend="How you will pay" hint="You can change this at any time.">
           <ERadioGroup
             v-model="pay"
             label="Payment method"
@@ -91,13 +105,13 @@ function back() {
               { value: 'later', label: 'Pay at each visit' },
             ]"
           />
-        </EFormSection>
+        </EFieldset>
 
-        <EFormSection v-else-if="step === 2" title="Forms" description="Typing your name is your signature.">
+        <EFieldset v-else-if="step === 2" section legend="Forms" hint="Typing your name is your signature.">
           <ESignatureField v-model="signature" label="New client form" mode="both" :date="new Date(2026, 9, 18, 12)" />
-        </EFormSection>
+        </EFieldset>
 
-        <EFormSection v-else title="Review" description="Check your details, then finish.">
+        <EFieldset v-else section legend="Review" hint="Check your details, then finish.">
           <EDescriptionList
             :items="[
               { label: 'Name', text: `${first} ${last}`.trim() || 'Not entered' },
@@ -107,7 +121,7 @@ function back() {
               { label: 'Form', text: signature.agreed ? 'Signed' : 'Not signed' },
             ]"
           />
-        </EFormSection>
+        </EFieldset>
 
         <EActions>
           <EButton type="submit">{{ step === STEPS.length - 1 ? "Finish registration" : "Continue" }}</EButton>

@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import {
+  EActions,
   EButton,
-  EButtonGroup,
+  EDescriptionList,
   EEmptyState,
+  EExpandableRow,
   EInline,
   EPageHeader,
   EPagination,
   ESearchBar,
   EStack,
-  EStatementRow,
+  EStamp,
   EText,
-  EToggle,
 } from "@eos-ui/vue";
 
 type Filter = "all" | "due" | "paid";
@@ -26,6 +27,7 @@ const all = [
 ] as const;
 
 const PER_PAGE = 3;
+const money = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
 const query = ref("");
 const typed = ref("");
 const filter = ref<Filter>("all");
@@ -58,34 +60,29 @@ function search(q: string) {
       <ESearchBar v-model="typed" placeholder="Search by visit or statement number" @submit="search" />
 
       <EInline justify="between">
-        <EButtonGroup label="Show">
-          <EToggle :model-value="filter === 'all'" @update:model-value="setFilter('all')">All</EToggle>
-          <EToggle :model-value="filter === 'due'" @update:model-value="setFilter('due')">Needs payment</EToggle>
-          <EToggle :model-value="filter === 'paid'" @update:model-value="setFilter('paid')">Paid</EToggle>
-        </EButtonGroup>
-        <EText variant="small" muted role="status">{{ matches.length }} {{ matches.length === 1 ? "statement" : "statements" }}</EText>
+        <EActions label="Show">
+          <EButton variant="outline" :aria-pressed="filter === 'all'" @click="setFilter('all')">All</EButton>
+          <EButton variant="outline" :aria-pressed="filter === 'due'" @click="setFilter('due')">Needs payment</EButton>
+          <EButton variant="outline" :aria-pressed="filter === 'paid'" @click="setFilter('paid')">Paid</EButton>
+        </EActions>
+        <EText small muted role="status">{{ matches.length }} {{ matches.length === 1 ? "statement" : "statements" }}</EText>
       </EInline>
 
       <EStack v-if="shown.length" :gap="2">
-        <EStatementRow
-          v-for="s in shown"
-          :key="s.id"
-          :title="s.title"
-          :subtitle="s.sub"
-          :status="s.status"
-          :amount="s.amount"
-          :reason="s.reason"
-        >
+        <EExpandableRow v-for="s in shown" :key="s.id" :title="s.title" :subtitle="s.sub">
+          <template #leading><EStamp :status="s.status" size="sm" /></template>
+          <template #trailing>{{ money(s.amount) }}</template>
+          <EDescriptionList :items="[{ label: 'Status', text: s.reason }]" />
           <template #actions>
             <template v-if="s.status === 'paid'">
               <EButton variant="outline" icon="download">Download receipt</EButton>
             </template>
             <template v-else>
-              <EButton icon="card">Pay ${{ s.amount.toFixed(2) }}</EButton>
+              <EButton icon="card">Pay {{ money(s.amount) }}</EButton>
               <EButton variant="outline" icon="download">Download</EButton>
             </template>
           </template>
-        </EStatementRow>
+        </EExpandableRow>
       </EStack>
       <EEmptyState v-else title="No statements match" description="Try a different word, or show all statements." />
 

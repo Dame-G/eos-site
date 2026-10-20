@@ -44,9 +44,9 @@ const sort = ref<{ key: string; dir: "asc" | "desc" } | null>({ key: "date", dir
       <template #cell-amount="{ value }">${{ Number(value).toFixed(2) }}</template>
       <template #bulk-actions><EButton variant="outline">Download selected</EButton></template>
     </EDataGrid>
-    <EText variant="small" muted>Selected rows: {{ selected.length }}</EText>
+    <EText small muted>Selected rows: {{ selected.length }}</EText>
 
-    <EDataGrid plain caption="Recent payments" :columns="columns.slice(0, 2)" :rows="rows.slice(0, 3)" />
+    <EDataGrid bare caption="Recent payments" :columns="columns.slice(0, 2)" :rows="rows.slice(0, 3)" />
 
     <EDataGrid loading caption="Loading statements" :columns="columns" :rows="[]" />
 

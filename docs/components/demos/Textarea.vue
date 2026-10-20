@@ -15,7 +15,7 @@ const note = ref("");
       :rows="5"
       optional
     />
-    <EText variant="small" muted>{{ note.length }} characters</EText>
+    <EText small muted>{{ note.length }} characters</EText>
     <ETextarea label="Reason for dispute" model-value="" error="Tell us what looks wrong with this charge." required />
     <ETextarea label="Notes" model-value="Locked after Oct 22, 2026." disabled />
   </EStack>

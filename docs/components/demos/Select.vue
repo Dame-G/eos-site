@@ -10,7 +10,7 @@ const filter = ref("all");
 <template>
   <EStack>
     <ESelect v-model="method" label="Pay with" :options="['Visa ending 4242', 'Bank account', 'Cash']" required />
-    <EText variant="small" muted>Chosen: {{ method || "nothing yet" }}</EText>
+    <EText small muted>Chosen: {{ method || "nothing yet" }}</EText>
     <ESelect
       v-model="plan"
       label="Plan"

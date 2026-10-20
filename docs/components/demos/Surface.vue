@@ -8,13 +8,9 @@ import { EButton, EGrid, EHeading, ESurface, EText } from "@eos-ui/vue";
       <EHeading :level="3">Default</EHeading>
       <EText>Flat and outlined, with medium padding.</EText>
     </ESurface>
-    <ESurface as="article" pad="md" tone="tint">
-      <EHeading :level="3">Tint</EHeading>
-      <EText>A tinted look for secondary blocks.</EText>
-    </ESurface>
-    <ESurface as="article" pad="md" tone="float">
-      <EHeading :level="3">Float</EHeading>
-      <EText>The lifted look of a toast.</EText>
+    <ESurface as="article" pad="md" raised>
+      <EHeading :level="3">Raised</EHeading>
+      <EText>The lifted shadow of a toast.</EText>
     </ESurface>
     <ESurface as="article" pad="md">
       <EHeading :level="3">October statement</EHeading>

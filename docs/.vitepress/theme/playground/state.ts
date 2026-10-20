@@ -6,12 +6,7 @@ type ElevationStyle = "outline" | "lifted" | "bold";
 type MotionStyle = "default" | "snappy" | "gentle" | "none";
 
 const VARIANT_VALUES = {
-  nav: ["default", "dense", "outline"],
-  surface: ["default", "tint"],
   pad: ["sm", "md", "lg"],
-  grid: ["default", "plain"],
-  disclosure: ["row", "card"],
-  badge: ["solid", "subtle"],
   gap: ["tight", "default", "roomy"],
 } as const;
 
@@ -20,7 +15,7 @@ export type VariantKey = keyof Variants;
 
 const VARIANT_KEYS = Object.keys(VARIANT_VALUES) as VariantKey[];
 
-export const DEFAULT_VARIANTS: Variants = { nav: "default", surface: "default", pad: "md", grid: "default", disclosure: "row", badge: "solid", gap: "default" };
+export const DEFAULT_VARIANTS: Variants = { pad: "md", gap: "default" };
 
 export interface State {
   /** The preset last applied, `random` after Randomize, or `custom` once anything was edited. */
@@ -89,7 +84,7 @@ export function groundOf(scheme: Scheme): Ground {
 const withGround = (scheme: Exclude<Scheme, "custom">): Pick<State, "scheme" | keyof Ground> => ({ scheme, ...SCHEMES[scheme] });
 
 export const SANS: Record<string, { label: string; stack: string }> = {
-  jost: { label: "Jost (default)", stack: defaults["font-sans"] },
+  bricolage: { label: "Bricolage Grotesque (default)", stack: defaults["font-sans"] },
   system: { label: "System UI", stack: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' },
   humanist: { label: "Humanist", stack: 'Seravek, "Gill Sans Nova", Calibri, "Trebuchet MS", sans-serif' },
   serif: { label: "Serif", stack: 'Georgia, "Times New Roman", serif' },
@@ -97,7 +92,7 @@ export const SANS: Record<string, { label: string; stack: string }> = {
   custom: { label: "Custom stack", stack: "" },
 };
 export const MONO: Record<string, { label: string; stack: string }> = {
-  spline: { label: "Spline Sans Mono (default)", stack: defaults["font-mono"] },
+  geist: { label: "Geist Mono (default)", stack: defaults["font-mono"] },
   system: { label: "System mono", stack: 'ui-monospace, "Cascadia Code", Menlo, Consolas, monospace' },
   courier: { label: "Courier", stack: '"Courier New", Courier, monospace' },
   custom: { label: "Custom stack", stack: "" },
@@ -153,29 +148,15 @@ export function initialState(): State {
     hair: NEUTRAL.hair,
     focus: NEUTRAL.focus,
     controlHeight: NEUTRAL.controlHeight,
-    sans: "jost",
+    sans: "bricolage",
     sansCustom: "",
-    mono: "spline",
+    mono: "geist",
     monoCustom: "",
     locale: "en-US",
     currency: "USD",
     variants: { ...DEFAULT_VARIANTS },
     t: {},
   };
-}
-
-/** What a scheme adds beyond the three ground colours. Only the high contrast scheme pins values by hand. */
-function schemeTokens(scheme: Scheme): Record<string, string> {
-  if (scheme === "contrast") {
-    return {
-      "surface-tint": "#f2f2f2",
-      muted: "#262626",
-      border: "#000000",
-      "border-strong": "#000000",
-      scrim: "rgb(0 0 0 / 0.75)",
-    };
-  }
-  return {};
 }
 
 export const SAFE = /^[^;{}<>\\]*$/;
@@ -185,7 +166,7 @@ interface Built {
   /** The `defineTheme` input that reproduces this state with the least code. */
   input: ThemeInput;
   theme: Theme;
-  /** Explicit token overrides: what the inputs do not produce. */
+  /** Explicit token overrides: what the inputs do not produce. Empty for every preset and for any state set only through the controls. */
   extra: Record<string, string>;
   /** Every override, before diffing against the derived base. */
   overrides: Record<string, string>;
@@ -207,8 +188,10 @@ function followShadows(base: Record<string, string>, next: Record<string, string
   return out;
 }
 
+/** Overrides of tokens that have a typed input: lifted out of `t` so the export says `strokes: { edge: 2 }` rather than a raw token. */
+const TYPED_STROKES = { "stroke-edge": "edge", "stroke-card": "card" } as const;
+
 export function build(s: State, name = "my-theme"): Built {
-  const colours = schemeTokens(s.scheme);
   const input: ThemeInput = { name };
   const hex = (v: string, fallback: string) => (isHex(v) ? v : fallback);
   for (const [k, v, d] of [
@@ -232,17 +215,34 @@ export function build(s: State, name = "my-theme"): Built {
   if (s.radius !== "default") input.radius = s.radius;
   if (s.textScale !== 100) input.textScale = s.textScale / 100;
   if (s.spaceScale !== 100) input.spaceScale = s.spaceScale / 100;
-  const strokes: { hair?: number; focus?: number } = {};
+  // The page and text colours follow the surface when omitted, so they are written whenever that would change what is on screen.
+  if (input.surface) {
+    if (!input.background && hex(s.background, DEFAULT_GROUND.background).toLowerCase() !== input.surface.toLowerCase()) input.background = hex(s.background, DEFAULT_GROUND.background);
+    if (!input.foreground) {
+      const fg = hex(s.foreground, DEFAULT_GROUND.foreground);
+      if (defineTheme({ surface: input.surface }).tokens["ink"]!.toLowerCase() !== fg.toLowerCase()) input.foreground = fg;
+    }
+  }
+  if (s.scheme === "contrast") input.contrast = "high";
+  const strokes: NonNullable<ThemeInput["strokes"]> = {};
   if (s.hair !== NEUTRAL.hair) strokes.hair = s.hair;
   if (s.focus !== NEUTRAL.focus) strokes.focus = s.focus;
-  if (strokes.hair !== undefined || strokes.focus !== undefined) input.strokes = strokes;
+  const t = { ...s.t };
+  for (const [token, field] of Object.entries(TYPED_STROKES)) {
+    const m = /^(\d+(?:\.\d+)?)px$/.exec(t[token] ?? "");
+    if (m && +m[1]! > 0) {
+      strokes[field] = +m[1]!;
+      delete t[token];
+    }
+  }
+  if (Object.keys(strokes).length) input.strokes = strokes;
   if (s.motion !== "default") input.motion = s.motion;
   if (s.elevation !== "outline" || input.surface || input.foreground) input.elevation = s.elevation;
   if (s.controlHeight !== NEUTRAL.controlHeight) input.controlHeight = s.controlHeight;
 
   const base = defineTheme(input).tokens;
-  const follow = followShadows(base, { ...base, ...colours, ...pickColours(s.t) });
-  const overrides: Record<string, string> = { ...colours, ...follow, ...s.t };
+  const follow = followShadows(base, { ...base, ...pickColours(t) });
+  const overrides: Record<string, string> = { ...follow, ...t };
   const extra: Record<string, string> = {};
   for (const [k, v] of Object.entries(overrides)) if (base[k] !== v && SAFE.test(v)) extra[k] = v;
   if (Object.keys(extra).length) input.tokens = extra as ThemeInput["tokens"];
@@ -402,8 +402,8 @@ export const PRESETS: Preset[] = [
       textScale: 112,
       controlHeight: 52,
       motion: "none",
-      t: { "stroke-edge": "2px", "focus-gap-field": "1px" },
-      variants: { pad: "lg", disclosure: "card", nav: "dense" },
+      t: { "stroke-edge": "2px" },
+      variants: { pad: "lg" },
     },
   },
   {
@@ -421,7 +421,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 90,
       controlHeight: 44,
       motion: "snappy",
-      variants: { pad: "sm", gap: "tight", grid: "plain" },
+      variants: { pad: "sm", gap: "tight" },
     },
   },
   {
@@ -441,7 +441,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 125,
       controlHeight: 56,
       motion: "gentle",
-      variants: { pad: "lg", surface: "tint", gap: "roomy", disclosure: "card" },
+      variants: { pad: "lg", gap: "roomy" },
     },
   },
   {
@@ -460,7 +460,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 75,
       controlHeight: 40,
       motion: "none",
-      variants: { nav: "dense", grid: "plain", pad: "sm", gap: "tight" },
+      variants: { pad: "sm", gap: "tight" },
     },
   },
   {
@@ -483,7 +483,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 90,
       controlHeight: 44,
       motion: "snappy",
-      variants: { pad: "sm", grid: "plain" },
+      variants: { pad: "sm" },
     },
   },
   {
@@ -547,12 +547,7 @@ function hsl(h: number, sat: number, lum: number): string {
 function randomVariants(spaceScale: number): Variants {
   const v: Variants = { ...DEFAULT_VARIANTS };
   const roomy = spaceScale >= 100;
-  if (chance(0.5)) v.nav = "dense";
-  if (chance(0.45)) v.surface = "tint";
   if (chance(0.5)) v.pad = roomy ? "lg" : "sm";
-  if (chance(0.4)) v.grid = "plain";
-  if (chance(0.5)) v.disclosure = "card";
-  if (chance(0.35)) v.badge = "subtle";
   if (chance(0.45)) v.gap = roomy ? "roomy" : "tight";
   return v;
 }
@@ -585,8 +580,8 @@ function randomOnce(): Partial<State> {
     elevation: weighted([["outline", 4], ["lifted", 4], ["bold", 2]] as const),
     hair: weighted([[1, 6], [1.5, 2], [2, 3]] as const),
     focus: weighted([[2, 7], [3, 3]] as const),
-    sans: weighted([["jost", 3], ["system", 2], ["humanist", 2], ["serif", 2], ["verdana", 1]] as const),
-    mono: weighted([["spline", 3], ["system", 2], ["courier", 1]] as const),
+    sans: weighted([["bricolage", 3], ["system", 2], ["humanist", 2], ["serif", 2], ["verdana", 1]] as const),
+    mono: weighted([["geist", 3], ["system", 2], ["courier", 1]] as const),
     textScale: chance(0.8) ? int(100, 112, 2) : int(94, 98, 2),
     spaceScale,
     controlHeight: int(44, 56, 2),
@@ -663,7 +658,7 @@ const COLOUR_FIELDS = new Set(["brand", "accent", "danger", "warning", "backgrou
 
 const LEGACY: { token: string; field: "hair" | "focus" | "controlHeight"; siblings: string[] }[] = [
   { token: "stroke-hair", field: "hair", siblings: ["stroke-edge"] },
-  { token: "stroke-focus", field: "focus", siblings: ["focus-gap", "focus-gap-field"] },
+  { token: "stroke-focus", field: "focus", siblings: ["focus-gap"] },
   { token: "control-height", field: "controlHeight", siblings: ["chip-height"] },
 ];
 
@@ -726,6 +721,7 @@ export function themeCode(b: Built): string {
   for (const k of ["brand", "accent", "danger", "warning", "background", "surface", "foreground"] as const) if (i[k]) lines.push(`${k}: ${q(i[k])},`);
   if (i.radius) lines.push(`radius: ${q(i.radius as string)},`);
   if (i.elevation) lines.push(`elevation: ${q(i.elevation)},`);
+  if (i.contrast) lines.push(`contrast: ${q(i.contrast)},`);
   if (i.strokes) lines.push(`strokes: { ${Object.entries(i.strokes).map(([k, v]) => `${k}: ${v}`).join(", ")} },`);
   if (i.fonts) lines.push(`fonts: { ${Object.entries(i.fonts).map(([k, v]) => `${k}: ${q(v)}`).join(", ")} },`);
   if (i.textScale) lines.push(`textScale: ${i.textScale},`);
@@ -758,12 +754,6 @@ const INLINE_GAP = { tight: 1, default: 2, roomy: 3 } as const;
 export function variantProps(v: Variants) {
   return {
     pad: v.pad,
-    tone: v.surface === "tint" ? ("tint" as const) : ("default" as const),
-    navDense: v.nav === "dense",
-    navOutline: v.nav === "outline",
-    plain: v.grid === "plain",
-    disclosure: v.disclosure,
-    badge: v.badge,
     gap: SPACE_GAP[v.gap],
     inlineGap: INLINE_GAP[v.gap],
   };
@@ -773,12 +763,7 @@ export function variantProps(v: Variants) {
 export function variantCode(v: Variants): string {
   const g = SPACE_GAP[v.gap];
   const lines = [
-    v.nav === "dense" ? "<ENavList dense />" : v.nav === "outline" ? '<ETabs orientation="vertical" />' : "",
-    v.surface === "tint" ? '<ESurface tone="tint" />' : "",
     v.pad === "md" ? "" : `<ESurface pad="${v.pad}" />`,
-    v.grid === "plain" ? "<EDataGrid plain />" : "",
-    v.disclosure === "card" ? '<EDisclosure variant="card" />' : "",
-    v.badge === "subtle" ? '<EStamp variant="subtle" />\n<EChip variant="subtle" />' : "",
     v.gap === "default" ? "" : `<EStack :gap="${g}" />\n<EGrid :gap="${g}" />`,
   ];
   return lines.filter(Boolean).join("\n");

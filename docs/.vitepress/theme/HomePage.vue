@@ -4,7 +4,7 @@ import HighlightedCode from "./HighlightedCode.vue";
 
 const points = [
   { title: "Accessible", text: "Keyboard-operable, visible focus, 48px targets. Checked with axe.", link: "/guide/accessibility" },
-  { title: "Themeable", text: "15 inputs restyle every component. Contrast is checked for you.", link: "/guide/theming" },
+  { title: "Themeable", text: "16 inputs restyle every component. Contrast is checked for you.", link: "/guide/theming" },
   { title: "Localised", text: "Swap the icon set, reword any message. Money and dates follow the locale.", link: "/guide/icons" },
 ];
 </script>
@@ -14,7 +14,7 @@ const points = [
     <div class="home-top">
       <section class="home-hero" aria-labelledby="home-title">
         <EStack :gap="6">
-          <h1 id="home-title" class="home-title">Eos</h1>
+          <h1 id="home-title" class="home-title">eos</h1>
           <div class="eos-live home-install">
             <HighlightedCode lang="bash" code="npm install @eos-ui/vue" copy-label="Copy install command" />
           </div>

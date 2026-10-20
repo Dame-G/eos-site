@@ -15,7 +15,7 @@ const bottom = ref(false);
       <EButton variant="outline" @click="bottom = true">Open from the bottom</EButton>
     </EInline>
 
-    <EDrawer v-model:open="right" title="October statement">
+    <EDrawer v-model:open="right" dismissible title="October statement">
       <EText>Visit on Oct 8, 2026: $120.00</EText>
       <EText>Lab work: $42.40</EText>
       <EText>Total due Oct 22, 2026: $162.40</EText>
@@ -25,9 +25,9 @@ const bottom = ref(false);
       </template>
     </EDrawer>
 
-    <EDrawer v-model:open="left" side="left" title="Filters">Show statements from the last 12 months.</EDrawer>
+    <EDrawer v-model:open="left" dismissible side="left" title="Filters">Show statements from the last 12 months.</EDrawer>
 
-    <EDrawer v-model:open="bottom" side="bottom" title="Pay a bill">
+    <EDrawer v-model:open="bottom" dismissible side="bottom" title="Pay a bill">
       <EText>Total due Oct 22, 2026: $162.40</EText>
       <template #actions>
         <EButton>Pay now</EButton>

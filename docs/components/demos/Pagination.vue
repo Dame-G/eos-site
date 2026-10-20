@@ -8,7 +8,7 @@ const short = ref(1);
 
 <template>
   <EStack>
-    <EText variant="small" muted>Statements, page {{ page }} of 12</EText>
+    <EText small muted>Statements, page {{ page }} of 12</EText>
     <EPagination v-model="page" :page-count="12" aria-label="Statement pages" />
     <EPagination v-model="short" :page-count="3" aria-label="Receipt pages" />
   </EStack>

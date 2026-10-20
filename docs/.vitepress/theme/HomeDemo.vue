@@ -1,35 +1,36 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, provide, reactive, ref } from "vue";
 import {
+  EActions,
   EAvatar,
-  EBookingCard,
+  EBreadcrumb,
   EButton,
-  EChip,
-  EDataGrid,
-  EDetailRow,
-  EDisclosure,
+  ECalendar,
+  EGrid,
   EHeading,
-  EItemList,
-  EItemRow,
+  EIcon,
+  EInline,
   EKicker,
   EMenu,
   ENavList,
   ENotice,
   EPageHeader,
-  EPanel,
+  EProgress,
   EStack,
-  EStatementCard,
+  EStamp,
+  EStepper,
   ESurface,
-  ESwitch,
-  ETabs,
+  EText,
   EToast,
   CONFIG_KEY,
   useConfig,
+  useLocale,
   type EosConfig,
 } from "@eos-ui/vue";
 import PresetPicker from "./playground/PresetPicker.vue";
 import { applyPreset, applyRandom, build, initialState, variantProps } from "./playground/state";
 
+const { formatMoney } = useLocale();
 const baseConfig = useConfig();
 const config = reactive<EosConfig>({ ...baseConfig, portalTarget: "body" });
 provide(CONFIG_KEY, config);
@@ -43,49 +44,41 @@ const style = computed(() => Object.fromEntries(Object.entries(tokens.value).map
 const vp = computed(() => variantProps(state.variants));
 
 const nav = [
-  { label: "Home", href: "#home", current: true },
-  { label: "Visits", href: "#visits" },
-  { label: "Billing", href: "#billing" },
-  { label: "Forms", href: "#forms" },
-  { label: "Profile", href: "#profile" },
+  { label: "Overview", href: "#overview" },
+  { label: "Projects", href: "#projects", current: true },
+  { label: "Invoices", href: "#invoices", count: 2 },
+  { label: "Calendar", href: "#calendar" },
 ];
-const outline = [
-  { label: "To do", href: "#home-todo", current: true },
-  { label: "Visit", href: "#home-visit" },
-  { label: "Balance", href: "#home-billing" },
-  { label: "Account", href: "#home-profile" },
-  { label: "Receipts", href: "#home-receipts" },
-];
-const reminders = ref(true);
-const toast = ref<{ title: string; text: string } | null>({ title: "Payment received", text: "A receipt for $25.00 was sent to your email." });
-function pay() {
-  toast.value = { title: "Payment received", text: "A receipt for $162.40 was sent to your email." };
-}
 const accountMenu = [
   { label: "My profile", icon: "user" as const },
-  { label: "Insurance and forms", icon: "form" as const },
-  { label: "Statements and receipts", icon: "receipt" as const },
+  { label: "Invoices", icon: "receipt" as const },
   { divider: true as const },
   { label: "Sign out" },
 ];
-const provider = { name: "Dr. Amara Singh", role: "Primary care" };
-const visitDate = new Date(2026, 9, 28);
-const statementDetails = [
-  { label: "Charges", value: 242.4 },
-  { label: "Insurance paid", value: -80 },
+const crumbs = [{ label: "Projects", href: "#projects" }, { label: "Brand refresh" }];
+
+const steps = [
+  { label: "Brief", state: "done" },
+  { label: "Concepts", state: "done" },
+  { label: "Review", state: "current" },
+  { label: "Handoff", state: "upcoming" },
+] as const;
+const stepItems = [...steps];
+
+const deliverables = [
+  { name: "Logo suite", meta: "12 files · updated 2 hours ago", icon: "file" as const, tone: "success" as const, status: "Approved" },
+  { name: "Brand guide", meta: "48 pages · updated yesterday", icon: "form" as const, tone: "warning" as const, status: "Needs review" },
+  { name: "Social templates", meta: "8 files · Ada is working on it", icon: "file" as const, tone: "info" as const, status: "In progress" },
 ];
-const receipts = [
-  { id: "r1", name: "Flu shot", date: "Sep 24", status: "paid", amount: "$25.00" },
-  { id: "r2", name: "Lab work", date: "Sep 3", status: "paid", amount: "$41.50" },
-  { id: "r3", name: "Statement 4398", date: "Aug 22", status: "paid", amount: "$120.50" },
-];
-const columns = [
-  { key: "name", label: "Receipt" },
-  { key: "date", label: "Paid" },
-  { key: "status", label: "Status" },
-  { key: "amount", label: "Amount", numeric: true },
-];
-const tone = { paid: "success", due: "info" } as const;
+const team = ["Ada Lovelace", "Grace Hopper", "Alan Turing"];
+
+const marked = [new Date(2026, 9, 24), new Date(2026, 9, 31)];
+const deadline = ref<Date | null>(null);
+
+const toast = ref<{ title: string; text: string } | null>(null);
+function remind() {
+  toast.value = { title: "Reminder sent", text: "Harbor & Pine was nudged about invoice 0412." };
+}
 </script>
 
 <template>
@@ -96,9 +89,9 @@ const tone = { paid: "success", due: "info" } as const;
     </section>
 
     <div ref="frame" class="home-demo-frame e-root" :style="style">
-      <header class="home-demo-header">
-        <span class="home-demo-brand">Elm Street Health</span>
-        <ENavList label="Patient portal" :items="nav" :dense="vp.navDense" :class="['home-demo-nav', { 'home-demo-nav--dense': vp.navDense }]" />
+      <header class="hd-top">
+        <p class="hd-brand"><span class="hd-mark" aria-hidden="true" />Larkspur</p>
+        <ENavList label="Studio" orientation="horizontal" :items="nav" class="hd-nav" />
         <EMenu label="Account" :items="accountMenu" align="end">
           <template #trigger>
             <EAvatar as="button" name="Ada Lovelace" small aria-label="AL, account menu" />
@@ -106,83 +99,67 @@ const tone = { paid: "success", due: "info" } as const;
         </EMenu>
       </header>
 
-      <div :class="['home-demo-body', { 'home-demo-body--rail': state.variants.nav === 'outline' }]">
-        <ETabs v-if="state.variants.nav === 'outline'" dense orientation="vertical" label="On this page" :items="outline" class="home-demo-outline" />
-        <div class="home-demo-page" :style="{ gap: `var(--e-space-${vp.gap})` }">
-          <EPageHeader title="Good morning, Ada" description="Two forms to finish before your visit." :heading-level="2">
+      <div class="hd-page" :style="{ gap: `var(--e-space-${vp.gap})` }">
+        <EStack :gap="2">
+          <EBreadcrumb :items="crumbs" />
+          <EPageHeader title="Brand refresh" description="Harbor & Pine · due Nov 14" :heading-level="2">
             <template #actions>
-              <EButton icon="calendar">Book a visit</EButton>
+              <span class="hd-team" role="img" aria-label="Team: Ada, Grace and Alan">
+                <EAvatar v-for="n in team" :key="n" :name="n" small />
+              </span>
+              <EButton icon="plus">Add deliverable</EButton>
             </template>
           </EPageHeader>
+        </EStack>
 
-          <ENotice tone="info" title="Clinic closed Nov 11">Messages sent that day are answered Nov 12.</ENotice>
+        <ENotice tone="warning" title="Brand guide needs your review">Approve it or request changes by Oct 24 to keep the Nov 14 handoff on track.</ENotice>
 
-          <EPanel id="home-todo" kicker="To do" title="Before your visit" :heading-level="3">
-            <EItemList>
-              <EItemRow icon="form" title="Intake form" subtitle="Due Oct 25" status="action">
-                <template #action><EButton variant="outline">Review and sign</EButton></template>
-              </EItemRow>
-              <EItemRow icon="file" title="Medication list" subtitle="Confirm what you take" status="pending">
-                <template #action><EButton variant="outline">Review</EButton></template>
-              </EItemRow>
-            </EItemList>
-          </EPanel>
+        <ESurface :pad="vp.pad">
+          <EStepper label="Brand refresh progress" :steps="stepItems" />
+        </ESurface>
 
-          <div class="home-demo-pair" :style="{ gap: `var(--e-space-${vp.gap})` }">
-            <section id="home-visit" class="home-demo-section" aria-labelledby="home-visit-title">
-              <EKicker id="home-visit-title" as="h3">Next visit</EKicker>
-              <EBookingCard :date="visitDate" time="9:30 am" title="Annual check-up" :provider="provider" location="Elm Street Clinic" status="confirmed">
-                <template #actions>
-                  <EButton variant="outline">Reschedule</EButton>
-                  <EButton variant="outline">Directions</EButton>
-                </template>
-              </EBookingCard>
-            </section>
+        <EGrid masonry min="19rem" :gap="vp.gap">
+          <ESurface as="section" :pad="vp.pad" aria-labelledby="hd-files">
+            <EStack :gap="vp.gap">
+              <EInline justify="between">
+                <EHeading id="hd-files" :level="3" kicker="Review">Deliverables</EHeading>
+                <EText small muted>3 of 8 done</EText>
+              </EInline>
+              <ul class="hd-files">
+                <li v-for="d in deliverables" :key="d.name" class="hd-file">
+                  <span class="hd-tile" aria-hidden="true"><EIcon :name="d.icon" /></span>
+                  <div class="hd-file-main">
+                    <p class="hd-file-name">{{ d.name }}</p>
+                    <p class="hd-file-meta">{{ d.meta }}</p>
+                  </div>
+                  <EStamp :tone="d.tone" :label="d.status" size="sm" />
+                </li>
+              </ul>
+            </EStack>
+          </ESurface>
 
-            <section id="home-billing" class="home-demo-section" aria-labelledby="home-billing-title">
-              <EKicker id="home-billing-title" as="h3">Balance</EKicker>
-              <EStatementCard
-                title="Statement 4471"
-                subtitle="Visits Sep 1 to Sep 30"
-                status="due"
-                detail="Oct 22"
-                :amount="162.4"
-                amount-label="You owe"
-                :details="statementDetails"
-                reason="Pay by Oct 22 to avoid a late fee."
-              >
-                <template #actions><EButton @click="pay">Pay now</EButton></template>
-              </EStatementCard>
-            </section>
-          </div>
-
-          <EStack id="home-receipts" :gap="vp.gap">
-            <EKicker as="h3">Receipts</EKicker>
-            <EDataGrid :plain="vp.plain" caption="Receipts" :columns="columns" :rows="receipts">
-              <template #cell-status="{ row }"><EChip :tone="tone[row.status as keyof typeof tone]" :variant="vp.badge">{{ row.status }}</EChip></template>
-            </EDataGrid>
-          </EStack>
-
-          <div class="home-demo-pair" :style="{ gap: `var(--e-space-${vp.gap})` }">
-            <ESurface id="home-profile" as="section" :pad="vp.pad" :tone="vp.tone" aria-labelledby="home-profile-title">
-              <EStack :gap="vp.gap">
-                <EKicker id="home-profile-title" as="h3">Account</EKicker>
-                <EDetailRow label="Insurance" status="Verified" tone="success" @edit="() => {}">Blue Cross PPO, member XZ4471</EDetailRow>
-                <EDetailRow label="Payment method" @edit="() => {}">Visa ending 4242</EDetailRow>
-                <EDetailRow label="Phone" @edit="() => {}">(555) 010-4471</EDetailRow>
-                <ESwitch v-model="reminders" label="Text reminders for visits" />
+          <ESurface as="section" :pad="vp.pad" aria-labelledby="hd-bill">
+            <EStack :gap="vp.gap">
+              <EInline justify="between">
+                <EHeading id="hd-bill" :level="3" kicker="Invoice 0412">Billing</EHeading>
+                <EStamp status="due" detail="Oct 31" size="sm" />
+              </EInline>
+              <EStack :gap="1">
+                <EKicker>Outstanding</EKicker>
+                <p class="site-figure">{{ formatMoney(4820) }}</p>
               </EStack>
-            </ESurface>
+              <EProgress label="Paid so far" :value="39" :value-text="`${formatMoney(3100)} of ${formatMoney(7920)}`" />
+              <EActions><EButton variant="secondary" @click="remind">Send reminder</EButton></EActions>
+            </EStack>
+          </ESurface>
 
-            <EPanel kicker="Billing" title="Questions" :heading-level="3">
-              <div :class="['home-demo-disclosures', { 'home-demo-disclosures--card': vp.disclosure === 'card' }]">
-                <EDisclosure :variant="vp.disclosure" title="Can I set up a payment plan?" :meta="vp.disclosure === 'card' ? 'Billing' : undefined">Yes. Call billing before the due date and they will split the balance for you.</EDisclosure>
-                <EDisclosure :variant="vp.disclosure" title="Where do I find an itemised receipt?" :meta="vp.disclosure === 'card' ? 'Billing' : undefined">Open any paid statement and choose Download.</EDisclosure>
-                <EDisclosure :variant="vp.disclosure" title="Why did my balance change?" :meta="vp.disclosure === 'card' ? 'Billing' : undefined">Insurance payments post a few days after a visit and reduce what you owe.</EDisclosure>
-              </div>
-            </EPanel>
-          </div>
-        </div>
+          <ESurface as="section" :pad="vp.pad" aria-labelledby="hd-cal">
+            <EStack :gap="vp.gap">
+              <EHeading id="hd-cal" :level="3" kicker="Calendar">Milestones</EHeading>
+              <ECalendar v-model="deadline" :marked="marked" mark-label="Milestone" />
+            </EStack>
+          </ESurface>
+        </EGrid>
       </div>
 
       <div v-if="toast" class="home-demo-toast">
@@ -208,20 +185,22 @@ const tone = { paid: "success", due: "info" } as const;
 }
 
 .home-demo-frame {
-  --rail-width: 11rem;
   --toast-width: 22rem;
   position: relative;
   container-type: inline-size;
   overflow: hidden;
   border: var(--e-stroke-card) solid var(--e-border);
+  --e-bc: var(--e-border);
+  outline: var(--e-stroke-card) solid var(--e-bc);
+  outline-offset: calc(-1 * var(--e-stroke-card));
   border-radius: var(--e-radius-lg);
-  background: var(--e-background);
+  background: var(--e-surface-tint);
   color: var(--e-ink);
   font-family: var(--e-font-sans);
-  box-shadow: var(--e-shadow-md);
+  box-shadow: var(--e-float);
 }
 
-.home-demo-header {
+.hd-top {
   display: flex;
   align-items: center;
   gap: var(--e-space-4);
@@ -230,78 +209,107 @@ const tone = { paid: "success", due: "info" } as const;
   background: var(--e-surface);
 }
 
-.home-demo-brand {
+.hd-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--e-space-2);
+  margin: 0;
   font: 600 var(--e-text-lg) / 1 var(--e-font-sans);
-  color: var(--e-primary);
+  color: var(--e-ink);
 }
 
-.home-demo-nav {
+.hd-mark {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
+  background: var(--e-primary);
+}
+
+.hd-nav {
   flex: 1;
   min-width: 0;
 }
 
-.home-demo-nav :deep(ul) {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-space-1);
-}
-
-.home-demo-nav:not(.home-demo-nav--dense) :deep(.e-nav-item) {
-  height: var(--site-tap);
-  padding-inline: var(--e-space-3);
-  font-size: var(--e-text-sm);
-}
-
 @media (max-width: 40rem) {
-  .home-demo-nav {
+  .hd-nav {
     display: none;
   }
 
-  .home-demo-brand {
+  .hd-brand {
     margin-inline-end: auto;
   }
 }
 
-.home-demo-page {
-  display: grid;
-  gap: var(--e-space-4);
-  padding: var(--e-space-3) var(--e-space-4) var(--e-space-4);
-}
-
-.home-demo-body {
+.hd-page {
   display: grid;
   min-width: 0;
-}
-
-.home-demo-outline {
-  padding: var(--e-space-3) var(--e-space-4) 0;
-}
-
-@media (min-width: 48rem) {
-  .home-demo-body--rail {
-    grid-template-columns: var(--rail-width) minmax(0, 1fr);
-  }
-
-  .home-demo-outline {
-    padding: var(--e-space-4) 0 var(--e-space-4) var(--e-space-4);
-  }
-}
-
-.home-demo-pair {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: stretch;
+  padding: var(--e-space-4);
 }
 
 @container (min-width: 46rem) {
-  .home-demo-pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .hd-page {
+    padding: var(--e-space-6);
   }
 }
 
-.home-demo-section {
+.hd-team {
+  display: inline-flex;
+}
+
+.hd-team > :deep(.e-avatar + .e-avatar) {
+  margin-inline-start: calc(-1 * var(--e-space-1));
+}
+
+.hd-team > :deep(.e-avatar) {
+  box-shadow: 0 0 0 var(--e-stroke-edge) var(--e-surface-tint);
+}
+
+.hd-files {
   display: grid;
-  gap: var(--e-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hd-file {
+  display: flex;
+  align-items: center;
+  gap: var(--e-space-3);
+  padding: var(--e-space-3) 0;
+}
+
+.hd-file + .hd-file {
+  border-top: var(--e-stroke-hair) solid var(--e-border);
+}
+
+.hd-tile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--e-radius-md);
+  background: color-mix(in srgb, var(--e-primary) 12%, var(--e-surface));
+  color: var(--e-primary);
+}
+
+.hd-file-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.hd-file-name,
+.hd-file-meta {
+  margin: 0;
+}
+
+.hd-file-name {
+  font: 500 var(--e-text-md) / 1.3 var(--e-font-sans);
+}
+
+.hd-file-meta {
+  color: var(--e-muted);
+  font: 400 var(--e-text-sm) / 1.4 var(--e-font-sans);
 }
 
 .home-demo-toast {
@@ -311,7 +319,7 @@ const tone = { paid: "success", due: "info" } as const;
   inline-size: min(var(--toast-width), calc(100% - 2 * var(--e-space-4)));
 }
 
-.home-demo-page :deep(.e-pagehead) {
+.hd-page :deep(.e-pagehead) {
   margin-bottom: 0;
 }
 </style>
