@@ -115,14 +115,6 @@ export default defineConfig({
   markdown: {
     theme: SHIKI_THEME,
     config(md) {
-      // A literal colour in inline code, such as `#2c95b4`, gets the library's own swatch beside it.
-      const inlineCode = md.renderer.rules.code_inline!;
-      md.renderer.rules.code_inline = (tokens, idx, options, env, self) => {
-        const text = tokens[idx]!.content;
-        const code = inlineCode(tokens, idx, options, env, self);
-        const swatch = `<span class="e-highlight-swatch" style="--e-swatch:${md.utils.escapeHtml(text.trim())}" aria-hidden="true"></span>`;
-        return isColor(text) ? code.replace(/<\/code>$/, `${swatch}</code>`) : code;
-      };
       md.renderer.rules.table_open = (tokens, idx, _options, env) => {
         let heading = "";
         for (let i = idx - 1; i >= 0; i--) {
@@ -141,9 +133,12 @@ export default defineConfig({
         if (!tokens[idx]!.attrGet("class")?.includes("header-anchor")) tokens[idx]!.attrJoin("class", "e-link");
         return linkOpen(tokens, idx, options, env, self);
       };
+      // Inline code is the library's EHighlight. A literal colour in it, such as `#2c95b4`, gets the library's own swatch beside it.
       md.renderer.rules.code_inline = (tokens, idx) => {
-        const text = md.utils.escapeHtml(tokens[idx]!.content).replace(/[{}]/g, (c) => (c === "{" ? "&#123;" : "&#125;"));
-        return `<EHighlight code>${text}</EHighlight>`;
+        const content = tokens[idx]!.content;
+        const text = md.utils.escapeHtml(content).replace(/[{}]/g, (c) => (c === "{" ? "&#123;" : "&#125;"));
+        const swatch = isColor(content) ? ` swatch="${md.utils.escapeHtml(content.trim())}"` : "";
+        return `<EHighlight code${swatch}>${text}</EHighlight>`;
       };
       const fence = md.renderer.rules.fence!;
       md.renderer.rules.fence = (...args) => {
