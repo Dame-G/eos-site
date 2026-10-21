@@ -367,6 +367,16 @@ body:has(.site-body, .home) .site {
   line-height: 1;
 }
 
+/* The margins make the space above the line (from the title's slab to the top of the capitals) match the space below it (from the baseline to the install block), measured on the letters rather than the boxes. */
+.home-tagline {
+  margin: -4px 0 10px;
+  text-align: center;
+  color: var(--e-ink);
+  font-size: var(--e-text-xl);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
 .home-install {
   max-width: var(--site-install);
 }

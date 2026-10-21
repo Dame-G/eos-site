@@ -14,6 +14,7 @@ const build = __EOS_BUILD__;
     <FlowField />
     <div class="home-heading">
       <h1 id="home-title" class="home-title"><BubbleTitle /></h1>
+      <p class="home-tagline">A component library for Vue.</p>
     </div>
 
     <section class="home-hero" aria-labelledby="home-title">

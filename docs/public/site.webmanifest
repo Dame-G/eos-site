@@ -1,7 +1,7 @@
 {
   "name": "EOS",
   "short_name": "EOS",
-  "description": "Accessible Vue 3 components with a token-based theme system.",
+  "description": "A component library for Vue.",
   "start_url": "/",
   "display": "browser",
   "background_color": "#0a0e11",

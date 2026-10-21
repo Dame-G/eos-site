@@ -9,7 +9,7 @@ const line = (s = "") => out.push(s);
 
 line("# EOS");
 line();
-line("> Accessible Vue 3 components with a token-based theme system. Install `@eos-ui/vue`, add `createEos()`, and use components such as `EButton` and `ETextField`. Themes are built with `defineTheme()` and checked for contrast.");
+line("> A component library for Vue. Install `@eos-ui/vue`, add `createEos()`, and use components such as `EButton` and `ETextField`. Themes are built with `defineTheme()` and checked for contrast.");
 line();
 
 line("## Guide");

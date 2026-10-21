@@ -1,6 +1,6 @@
 ---
 layout: home
-title: "EOS: accessible Vue 3 components"
+title: "EOS: a component library for Vue"
 titleTemplate: false
-description: "Accessible Vue 3 components with a token-based theme system. High contrast by default, rebrandable with a few lines."
+description: "A component library for Vue. High contrast by default, rebrandable with a few lines."
 ---
