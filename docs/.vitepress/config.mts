@@ -58,7 +58,7 @@ function vitepressInLayer() {
 export default defineConfig({
   title: "EOS",
   titleTemplate: ":title · EOS",
-  description: "Accessible Vue 3 components with a token-based theme system. Calm, high contrast and rebrandable with a few lines.",
+  description: "A component library for Vue. Calm, high contrast and rebrandable with a few lines.",
   sitemap: { hostname: SITE },
   lang: "en-US",
   cleanUrls: true,
