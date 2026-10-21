@@ -61,6 +61,7 @@
   --site-side: 17rem;
   --site-outline: 13rem;
   --site-tap: 2.75rem;
+  --site-footer: 6rem;
   --site-install: 44rem;
   --site-display: clamp(7.5rem, 32vw, 8rem);
   --site-table-min: 34rem;
@@ -198,8 +199,9 @@ body:has(.site-body, .home) .site {
     padding-inline-start: var(--e-space-4);
   }
 
+  /* The footer's height is left out of the height so the list never reaches the end of its column. A sticky list that does is pushed up by the column's end, and jumps back down whenever the page grows beneath it, such as when a demo's source opens. */
   .site-side {
-    max-height: calc(100dvh - var(--site-header) - var(--e-space-8));
+    max-height: calc(100dvh - var(--site-header) - var(--e-space-8) - var(--site-footer));
     overflow-y: auto;
     overscroll-behavior: contain;
   }
