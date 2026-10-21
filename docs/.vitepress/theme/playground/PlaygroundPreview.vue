@@ -104,7 +104,7 @@ const sceneItems = [
 ];
 const scene = ref("overview");
 
-/** The scene list sits beside the scene when there is room, above it when there is not. */
+/** The scene list sits beside the scene, on its right, when there is room, above it when there is not. */
 const wrap = ref<HTMLElement | null>(null);
 const narrow = ref(false);
 let watcher: ResizeObserver | undefined;
@@ -118,7 +118,7 @@ onBeforeUnmount(() => watcher?.disconnect());
 <template>
   <ThemedScope :tokens="tokens" :locale="locale" :currency="currency">
     <div ref="wrap" class="pv-wrap">
-      <ETabs v-model="scene" :items="sceneItems" framed :orientation="narrow ? 'horizontal' : 'vertical'" class="pv">
+      <ETabs v-model="scene" :items="sceneItems" framed :orientation="narrow ? 'horizontal' : 'vertical'" side="end" class="pv">
           <template #overview>
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="A bill, the way a page would use it">Overview</EHeading>

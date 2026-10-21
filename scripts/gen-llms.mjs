@@ -7,7 +7,7 @@ const SITE = "https://eos.dame.gg";
 const out = [];
 const line = (s = "") => out.push(s);
 
-line("# Eos");
+line("# EOS");
 line();
 line("> Accessible Vue 3 components with a token-based theme system. Install `@eos-ui/vue`, add `createEos()`, and use components such as `EButton` and `ETextField`. Themes are built with `defineTheme()` and checked for contrast.");
 line();

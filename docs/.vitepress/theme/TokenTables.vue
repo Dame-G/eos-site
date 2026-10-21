@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ColorValue from "./ColorValue.vue";
 import { EStamp, EDataGrid, EGrid, EHeading, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
@@ -46,8 +47,8 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         >
       </template>
       <template #cell-neutral="{ row }"
-        ><EHighlight code>{{ row.neutral }}</EHighlight></template
-      >
+        ><ColorValue :value="row.neutral as string"
+      /></template>
     </EDataGrid>
 
     <template v-else-if="section === 'colour'">
@@ -63,7 +64,9 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           </div>
           <div class="meta">
             <p class="name">
-              <EHighlight code>--e-{{ c.name }}</EHighlight> <span class="hex">{{ c.source.startsWith("{") ? "= " + c.value : c.value }}</span>
+              <EHighlight code>--e-{{ c.name }}</EHighlight> <span class="hex"
+                ><template v-if="c.source.startsWith('{')">= {{ c.value }}</template><ColorValue v-else :value="c.value"
+              /></span>
             </p>
             <EText small muted class="usage">{{ c.usage }}</EText>
             <EText small muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
