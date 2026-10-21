@@ -298,109 +298,47 @@ body:has(.site-body, .home) .site {
   user-select: text;
 }
 
-/* A faint honeycomb behind the home content. It is an SVG pattern the browser rasterises once; the pointer's light is a masked copy slid about by transforms alone, so the page never repaints for them. */
-.hex-field {
+/* Faint flowing lines behind the home content. It is an SVG pattern the browser rasterises once; the pointer's light is a masked copy slid about by transforms alone, so the page never repaints for them. */
+.flow-field {
   position: absolute;
   inset: 0;
   overflow: hidden;
   container-type: size;
   pointer-events: none;
-  animation: hex-in 1.2s ease-out both;
+  animation: flow-in 1.2s ease-out both;
 }
 
-.hex-defs {
-  position: absolute;
-}
-
-.hex-layer {
+.flow-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
 
-.hx {
+.fl {
   fill: none;
-  stroke-width: 0.6;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1;
 }
 
-.hx-base {
-  stroke: var(--e-ink);
-  stroke-opacity: 0.075;
+.flow-base {
+  color: var(--e-ink);
+  stroke-opacity: 0.14;
 }
 
-.hx-lit {
-  stroke: var(--e-primary);
-  stroke-opacity: 0.55;
-}
-
-.hx-lit:not(.hx-open) {
-  fill: var(--e-primary);
-  fill-opacity: 0.1;
-}
-
-/* The pointer's light: a soft disc that follows the pointer. Its content is moved the other way, so the lit hexagons stay on the grid. */
-.hex-spot,
-.hex-spot-in {
-  position: absolute;
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
-
-.hex-spot {
-  overflow: hidden;
-  opacity: 0;
-  mask-image:
-    radial-gradient(circle at 50% 50%, #000 0, #000 14%, transparent 60%),
-    radial-gradient(circle at 36% 58%, #000 0, transparent 46%),
-    radial-gradient(circle at 63% 40%, #000 0, transparent 50%),
-    radial-gradient(circle at 55% 71%, #000 0, transparent 38%);
-  transition:
-    transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
-    opacity 0.35s ease-out;
-}
-
-.hex-spot-in {
-  width: 100cqw;
-  height: 100cqh;
-  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.hex-field.is-live .hex-spot {
-  opacity: 1;
-}
-
-.hex-lit {
-  transition: opacity 0.12s ease-out;
-}
-
-.hex-field.is-press .hex-lit {
-  opacity: 0.6;
-}
-
-@keyframes hex-in {
+@keyframes flow-in {
   from {
     opacity: 0;
   }
 }
 
-.hex-field.is-still {
+.flow-field.is-still {
   animation: none;
 }
 
-.hex-field.is-still .hex-spot {
-  display: none;
-}
-
-@media (hover: none) {
-  .hex-spot {
-    display: none;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .hex-field {
+  .flow-field {
     animation: none;
   }
 }

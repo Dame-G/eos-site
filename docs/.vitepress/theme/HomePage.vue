@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { EActions, EButton, EKicker, ELink, EStack } from "@eos-ui/vue";
-import HexField from "./HexField.vue";
+import FlowField from "./FlowField.vue";
 import HighlightedCode from "./HighlightedCode.vue";
 
 declare const __EOS_VERSION__: string;
@@ -9,7 +9,7 @@ const version = __EOS_VERSION__;
 
 <template>
   <main class="home" tabindex="-1">
-    <HexField />
+    <FlowField />
     <div class="home-heading">
       <h1 id="home-title" class="home-title">eos</h1>
       <EKicker class="home-version"><ELink :href="`https://npmx.dev/package/@eos-ui/vue/v/${version}`" external>v{{ version }}</ELink></EKicker>
