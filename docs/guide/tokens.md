@@ -59,6 +59,10 @@ Two rules keep a custom screen accessible. Put `ink` and `muted` only on `surfac
 
 <TokenTables section="inputs" />
 
+## For design tools
+
+`theme.dtcg()` returns the theme as [W3C Design Tokens](https://www.designtokens.org) JSON, and the default theme ships as `@eos-ui/tokens/tokens.dtcg.json`. Import it into Tokens Studio for Figma or feed it to Style Dictionary. A token that is just another token becomes an alias (`{color.ink}`), and each token's usage note is its description. Values no design-token type can hold, such as a stacked shadow, stay as CSS strings.
+
 ## Colour
 
 Each swatch lists what the colour is for, which inputs it follows and its contrast against the colour it is paired with. Text needs 4.5:1 (AA), and edges and focus outlines need 3:1. The tints (`*-soft`) never mark a boundary on their own.

@@ -3,6 +3,7 @@ export const GUIDE = [
   { slug: "theming", name: "Theming", note: "defineTheme inputs, CSS variables, scoped themes, portalTarget, cascade layers" },
   { slug: "tokens", name: "Token reference", note: "The tokens you will use most, the theme inputs, then every colour, size, radius, shadow and motion token with usage notes and contrast" },
   { slug: "icons", name: "Icons", note: "Built-in icons and bringing your own icon set" },
+  { slug: "composables", name: "Composables", note: "useAnnouncer, useShortcuts, useCopy, useToast: screen reader announcements, keyboard shortcuts, copying, toasts" },
   { slug: "language", name: "Words and language", note: "Messages, locale, currency, right to left" },
   { slug: "forms", name: "Forms and validation", note: "v-model, labels, hints, errors" },
   { slug: "accessibility", name: "Accessibility", note: "Contrast table, keyboard, forced colours, what is tested" },
