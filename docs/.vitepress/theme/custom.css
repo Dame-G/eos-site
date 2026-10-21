@@ -152,7 +152,6 @@ body:has(.site-body, .home) .site {
 .site-body {
   position: relative;
   z-index: 1;
-  border-inline: var(--e-stroke-hair) solid var(--e-border);
   background: var(--e-surface);
   display: grid;
   flex: 1;
@@ -283,8 +282,15 @@ body:has(.site-body, .home) .site {
   padding: var(--e-space-8) var(--e-space-4);
   position: relative;
   z-index: 1;
-  border-inline: var(--e-stroke-hair) solid var(--e-border);
   background: var(--e-surface);
+}
+
+/* The sheet has hairlines down its sides only where the page is narrower than the screen, as in the shell; on a phone they would sit on the screen edge. */
+@media (min-width: 64rem) {
+  .site-body,
+  .home {
+    border-inline: var(--e-stroke-hair) solid var(--e-border);
+  }
 }
 
 .home-heading {
