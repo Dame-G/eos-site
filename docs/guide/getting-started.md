@@ -58,6 +58,10 @@ export default {
 };
 ```
 
+## Using an AI assistant
+
+The site publishes [`/llms.txt`](/llms.txt), an index of every component. The library ships the complete documentation in one file as `@eos-ui/vue/llms-full.txt` (in `node_modules/@eos-ui/vue/dist/llms-full.txt`), which you can hand to an AI coding assistant so it writes correct props and slots.
+
 ## Next
 
-[Theming](/guide/theming), [Components](/components/), [Patterns](/patterns/).
+[Theming](/guide/theming), [Composables](/guide/composables), [Components](/components/), [Patterns](/patterns/).

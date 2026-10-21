@@ -27,6 +27,9 @@ line();
 for (const { slug, name } of PATTERNS) line(`- [${name}](${SITE}/patterns/${slug})`);
 line();
 
+line("The complete library documentation in one file ships with the package as `@eos-ui/vue/llms-full.txt`.");
+line();
+
 line("## Components");
 line();
 line("Every component has a page with its README and a live demo. Props are listed as name (type).");

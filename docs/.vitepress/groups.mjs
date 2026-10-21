@@ -1,5 +1,5 @@
 export const GROUP_OF = {
-  Avatar: "primitives", Button: "primitives", Divider: "primitives", Heading: "primitives",
+  Avatar: "primitives", CopyButton: "primitives", Button: "primitives", Divider: "primitives", Heading: "primitives",
   Highlight: "primitives", Icon: "primitives", IconButton: "primitives", Kbd: "primitives", Kicker: "primitives", Link: "primitives",
   Progress: "primitives", Skeleton: "primitives", Spinner: "primitives", Stamp: "primitives", Text: "primitives",
   VisuallyHidden: "primitives",
@@ -12,7 +12,7 @@ export const GROUP_OF = {
   Calendar: "composites", ColorField: "composites", CurrencyField: "composites",
   DatePicker: "composites", Pagination: "composites", PasswordField: "composites",
   PhoneField: "composites", RangePicker: "composites", SignatureField: "composites", SignaturePad: "composites",
-  DataGrid: "containers", Dialog: "containers", Disclosure: "containers", Drawer: "containers", ExpandableRow: "containers",
+  CommandPalette: "containers", DataGrid: "containers", Dialog: "containers", Disclosure: "containers", Drawer: "containers", ExpandableRow: "containers",
   EmptyState: "containers", Menu: "containers", Notice: "containers",
   Definition: "containers", Tabs: "containers", Toast: "containers", ToastProvider: "containers", Tooltip: "containers",
   AppFooter: "page", AppHeader: "page", AppShell: "page", Breadcrumb: "page", NavList: "page",
