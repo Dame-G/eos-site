@@ -3,7 +3,6 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
 import { EAppFooter, EAppHeader, EButton, EDrawer, EIconButton, EKbd, ELink, ENavList, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
-import GithubMark from "./GithubMark";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
 import SiteSearch from "./SiteSearch.vue";
@@ -193,11 +192,8 @@ watch(
     <EAppFooter>
       <EText small muted>Eos is released under the MIT license.</EText>
       <nav class="site-footer-links" aria-label="Project">
-        <ELink v-if="githubUrl" :href="githubUrl" external :icon="GithubMark">GitHub</ELink>
+        <ELink v-if="githubUrl" :href="githubUrl" external>GitHub</ELink>
         <ELink href="https://npmx.dev/package/@eos-ui/vue" external>npmx</ELink>
-        <ELink href="https://github.com/Dame-G/eos/releases" external>Releases</ELink>
-        <ELink href="https://github.com/Dame-G/eos/blob/main/CONTRIBUTING.md" external>Contributing</ELink>
-        <ELink href="https://github.com/Dame-G/eos/issues/new/choose" external>Report an issue</ELink>
       </nav>
     </EAppFooter>
 
