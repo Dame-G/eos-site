@@ -61,7 +61,7 @@
   --site-side: 17rem;
   --site-outline: 13rem;
   --site-tap: 2.75rem;
-  --site-install: 30rem;
+  --site-install: 44rem;
   --site-display: clamp(7.5rem, 32vw, 8rem);
   --site-table-min: 34rem;
   --site-pattern-md: 46rem;
@@ -373,9 +373,10 @@ body:has(.site-body, .home) .site {
 
 .home-hero {
   justify-self: center;
-  width: 100%;
-  max-width: var(--site-install);
-  min-width: 0;
+  /* As wide as the install line needs, so it never scrolls, but never narrower than a comfortable block or wider than the page. */
+  width: fit-content;
+  min-width: min(100%, 26rem);
+  max-width: min(100%, var(--site-install));
 }
 
 @scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-details) {

@@ -23,6 +23,8 @@ jobs:
           repository: Dame-G/eos
           ref: ${{ vars.EOS_REF || 'main' }}
           path: eos
+          fetch-depth: 0
+          fetch-tags: true
       - run: corepack enable
       - uses: actions/setup-node@v7
         with:
