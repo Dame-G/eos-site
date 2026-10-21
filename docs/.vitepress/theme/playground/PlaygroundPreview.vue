@@ -6,6 +6,7 @@ import {
   ECalendar,
   ECheckbox,
   EDataGrid,
+  EDefinition,
   EDialog,
   EDisclosure,
   EHeading,
@@ -166,6 +167,11 @@ onBeforeUnmount(() => watcher?.disconnect());
                 <EInline :gap="vp.inlineGap">
                   <EMenu label="More" :items="menuItems" />
                   <ETooltip label="Help"><EIconButton icon="info" label="Help" /></ETooltip>
+                  <EDefinition label="About payment plans" title="Payment plan">
+                    <template #trigger>What is a payment plan?</template>
+                    Split your balance of {{ formatMoney(162.4) }} into equal monthly payments. There is no interest and no fee.
+                    <template #actions><EButton variant="outline">Set up a plan</EButton></template>
+                  </EDefinition>
                 </EInline>
                 <EText small>Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
               </EStack>
