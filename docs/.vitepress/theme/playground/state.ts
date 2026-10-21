@@ -350,7 +350,7 @@ interface Preset {
 }
 
 export const PRESETS: Preset[] = [
-  { id: "eos", label: "Eos", note: "The library defaults.", set: {} },
+  { id: "eos", label: "EOS", note: "The library defaults.", set: {} },
   {
     id: "paper",
     label: "Paper",

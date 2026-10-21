@@ -62,8 +62,7 @@
   --site-outline: 13rem;
   --site-tap: 2.75rem;
   --site-install: 30rem;
-  --site-display: clamp(3.5rem, 8vw, 5.5rem);
-  --site-wordmark: "Fredoka", var(--e-font-sans);
+  --site-display: clamp(7.5rem, 32vw, 8rem);
   --site-table-min: 34rem;
   --site-pattern-md: 46rem;
   --site-pattern-lg: 56rem;
@@ -115,8 +114,8 @@ body:has(.site-body, .home) .site {
   align-items: center;
   min-height: var(--site-tap);
   color: var(--e-primary);
-  font: 500 var(--e-text-3xl) / 1 var(--site-wordmark);
-  text-shadow: 0 1px 0 color-mix(in srgb, var(--e-primary), var(--e-shade-slab)), 0 2px 0 color-mix(in srgb, var(--e-primary), var(--e-shade-slab));
+  font-size: var(--e-text-3xl);
+  line-height: 1;
   text-decoration: none;
 }
 
@@ -277,7 +276,7 @@ body:has(.site-body, .home) .site {
   flex: 1;
   grid-template-columns: minmax(0, 1fr);
   align-content: center;
-  gap: var(--e-space-8);
+  gap: 0;
   width: 100%;
   max-width: var(--site-wide);
   margin-inline: auto;
@@ -316,15 +315,21 @@ body:has(.site-body, .home) .site {
 }
 
 .fl {
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-width: 1;
+  fill: currentColor;
 }
 
+/* The opacity sits on the whole group, so where one tile overlaps the next the line is not darker. */
 .flow-base {
   color: var(--e-ink);
-  stroke-opacity: 0.14;
+}
+
+.flow-lines {
+  opacity: 0.019;
+}
+
+/* Dark ink on a light page needs more to be seen at all. */
+:root[data-scheme="light"] .flow-lines {
+  opacity: 0.14;
 }
 
 @keyframes flow-in {
@@ -354,62 +359,12 @@ body:has(.site-body, .home) .site {
   gap: 0;
 }
 
-.home-version {
-  text-transform: none;
-  margin: calc(-1 * var(--e-space-1)) 0 0;
-  color: var(--e-muted);
-  font-family: var(--e-font-mono);
-  font-size: var(--e-text-sm);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  opacity: 0.8;
-}
-
-.home-version a {
-  text-decoration: none;
-}
-
-.home-version a:hover {
-  text-decoration: underline;
-}
-
 .home-title {
   margin: 0;
   text-align: center;
   color: var(--e-primary);
-  font: 500 var(--site-display) / 1 var(--site-wordmark);
-  text-shadow: 0 1px 0 color-mix(in srgb, var(--e-primary), var(--e-shade-slab)), 0 2px 0 color-mix(in srgb, var(--e-primary), var(--e-shade-slab)), 0 3px 0 color-mix(in srgb, var(--e-primary), var(--e-shade-slab)), 0 4px 0 color-mix(in srgb, var(--e-primary), var(--e-shade-slab));
-}
-
-/* A slow swell of light passes through the version. */
-.home-version a {
-  background: linear-gradient(100deg, var(--e-muted) 35%, var(--e-ink) 50%, var(--e-muted) 65%) 100% 0 / 300% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: dawn-sweep 7s ease-in-out infinite;
-}
-
-@keyframes dawn-sweep {
-  0%,
-  15% {
-    background-position: 100% 0;
-  }
-  70%,
-  100% {
-    background-position: 0 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-version a {
-    animation: none;
-  }
-
-  .home-version a {
-    background: none;
-    color: inherit;
-  }
+  font-size: var(--site-display);
+  line-height: 1;
 }
 
 .home-install {
@@ -615,11 +570,30 @@ body:has(.site-body, .home) .site {
   }
 }
 
+/* VitePress pads and tints every inline code element. EHighlight is a colour only, so its code keeps none of that and commas sit right against it. */
+.vp-doc :not(pre) > code.e-highlight {
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+
 .site-footer-links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--e-space-2) var(--e-space-4);
   font-size: var(--e-text-sm);
+}
+
+.site-footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-space-2);
+}
+
+.site-footer-mark {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
 }
 
 @media (prefers-reduced-motion: reduce) {

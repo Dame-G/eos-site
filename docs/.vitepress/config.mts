@@ -1,5 +1,6 @@
 import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
 import { sep } from "node:path";
+import { isColor } from "./color.mjs";
 import { GROUPS, libraryVersion, listComponents } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
 import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
@@ -55,8 +56,8 @@ function vitepressInLayer() {
 }
 
 export default defineConfig({
-  title: "eos",
-  titleTemplate: ":title · Eos",
+  title: "EOS",
+  titleTemplate: ":title · EOS",
   description: "Accessible Vue 3 components with a token-based theme system. Calm, high contrast and rebrandable with a few lines.",
   sitemap: { hostname: SITE },
   lang: "en-US",
@@ -75,7 +76,7 @@ export default defineConfig({
     const head: HeadConfig[] = [
       ["link", { rel: "canonical", href: url }],
       ["meta", { property: "og:type", content: "website" }],
-      ["meta", { property: "og:site_name", content: "eos" }],
+      ["meta", { property: "og:site_name", content: "EOS" }],
       ["meta", { property: "og:title", content: title }],
       ["meta", { property: "og:description", content: description }],
       ["meta", { property: "og:url", content: url }],
@@ -91,7 +92,7 @@ export default defineConfig({
         JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareSourceCode",
-          name: "eos",
+          name: "EOS",
           description,
           url: SITE,
           codeRepository: "https://github.com/Dame-G/eos",
@@ -114,6 +115,14 @@ export default defineConfig({
   markdown: {
     theme: SHIKI_THEME,
     config(md) {
+      // A literal colour in inline code, such as `#2c95b4`, gets the library's own swatch beside it.
+      const inlineCode = md.renderer.rules.code_inline!;
+      md.renderer.rules.code_inline = (tokens, idx, options, env, self) => {
+        const text = tokens[idx]!.content;
+        const code = inlineCode(tokens, idx, options, env, self);
+        const swatch = `<span class="e-highlight-swatch" style="--e-swatch:${md.utils.escapeHtml(text.trim())}" aria-hidden="true"></span>`;
+        return isColor(text) ? code.replace(/<\/code>$/, `${swatch}</code>`) : code;
+      };
       md.renderer.rules.table_open = (tokens, idx, _options, env) => {
         let heading = "";
         for (let i = idx - 1; i >= 0; i--) {
@@ -150,7 +159,7 @@ export default defineConfig({
   },
   themeConfig: {
     logo: { src: "/favicon.svg", alt: "" },
-    siteTitle: "eos",
+    siteTitle: "EOS",
     nav: [
       { text: "Guide", link: "/guide/getting-started", activeMatch: "/guide/" },
       { text: "Components", link: "/components/", activeMatch: "/components/" },

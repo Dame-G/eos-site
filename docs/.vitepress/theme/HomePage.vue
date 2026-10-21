@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { EActions, EButton, EKicker, ELink, EStack } from "@eos-ui/vue";
+import { EActions, EButton, EStack } from "@eos-ui/vue";
+import BubbleTitle from "./BubbleTitle.vue";
 import FlowField from "./FlowField.vue";
 import HighlightedCode from "./HighlightedCode.vue";
 
@@ -11,14 +12,13 @@ const version = __EOS_VERSION__;
   <main class="home" tabindex="-1">
     <FlowField />
     <div class="home-heading">
-      <h1 id="home-title" class="home-title">eos</h1>
-      <EKicker class="home-version"><ELink :href="`https://npmx.dev/package/@eos-ui/vue/v/${version}`" external>v{{ version }}</ELink></EKicker>
+      <h1 id="home-title" class="home-title"><BubbleTitle /></h1>
     </div>
 
     <section class="home-hero" aria-labelledby="home-title">
       <EStack :gap="3">
         <div class="eos-live home-install">
-          <HighlightedCode lang="bash" code="npm install @eos-ui/vue" copy-label="Copy install command" />
+          <HighlightedCode lang="bash" code="npm install @eos-ui/vue" :note="`v${version}`" copy-label="Copy install command" />
         </div>
         <EActions>
           <EButton href="/guide/getting-started">Get started</EButton>

@@ -3,16 +3,17 @@ import { ref, watch } from "vue";
 import { ECodeBlock } from "@eos-ui/vue";
 import { highlight } from "./highlight";
 
-const props = defineProps<{ code: string; lang: string; copyLabel?: string }>();
+// `note` is shown after the code as a comment, but is not part of what the copy button copies.
+const props = defineProps<{ code: string; lang: string; copyLabel?: string; note?: string }>();
 
 const html = ref("");
 let latest = 0;
 watch(
-  () => [props.code, props.lang] as const,
-  async ([code, lang]) => {
+  () => [props.code, props.lang, props.note] as const,
+  async ([code, lang, note]) => {
     const run = ++latest;
     html.value = "";
-    const out = await highlight(code, lang);
+    const out = await highlight(note ? `${code}  # ${note}` : code, lang);
     if (run === latest) html.value = out;
   },
   { immediate: true },

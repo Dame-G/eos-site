@@ -8,6 +8,8 @@ import NotFoundPage from "./NotFoundPage.vue";
 import SiteSearch from "./SiteSearch.vue";
 import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
 import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
+import BubbleTitle from "./BubbleTitle.vue";
+import { GithubIcon, NpmxIcon } from "./BrandIcons";
 import { followScheme, schemeChoice, setChoice } from "./site-theme";
 
 const ORDER = ["system", "light", "dark"] as const;
@@ -153,7 +155,7 @@ watch(
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
     <EAppHeader sticky>
       <template #logo>
-        <a class="site-brand" href="/" aria-label="eos, home">eos</a>
+        <a class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></a>
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
@@ -190,10 +192,10 @@ watch(
     </div>
 
     <EAppFooter>
-      <EText small muted>Eos is released under the MIT license.</EText>
+      <EText small muted>EOS is released under the MIT license.</EText>
       <nav class="site-footer-links" aria-label="Project">
-        <ELink v-if="githubUrl" :href="githubUrl" external>GitHub</ELink>
-        <ELink href="https://npmx.dev/package/@eos-ui/vue" external>npmx</ELink>
+        <ELink v-if="githubUrl" :href="githubUrl" external><GithubIcon class="site-footer-mark" />GitHub</ELink>
+        <ELink href="https://npmx.dev/package/@eos-ui/vue" external><NpmxIcon class="site-footer-mark" />npmx</ELink>
       </nav>
     </EAppFooter>
 
