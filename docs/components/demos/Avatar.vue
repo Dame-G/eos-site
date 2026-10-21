@@ -15,6 +15,12 @@ import { EAvatar, EInline, EStack, EText } from "@eos-ui/vue";
       <EAvatar name="Mary Ann Evans" />
     </EInline>
     <EInline>
+      <EAvatar name="Ada Lovelace" as="button" small />
+      <EAvatar name="Grace Hopper" as="button" />
+      <EAvatar name="Mary Ann Evans" as="button" large />
+      <EText>Pressable, like the trigger of a menu</EText>
+    </EInline>
+    <EInline>
       <EAvatar name="Dr. Priya Shah" src="data:image/gif;base64,AAAA" large />
       <EText>Dr. Priya Shah, your Oct 22, 2026 visit</EText>
     </EInline>
