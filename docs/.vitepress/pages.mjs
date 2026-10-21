@@ -10,7 +10,6 @@ export const GUIDE = [
   { slug: "design-principles", name: "Design principles", note: "Spacing rhythm, depth, control height, actions" },
   { slug: "ssr", name: "Nuxt and SSR", note: "What was verified about server rendering" },
   { slug: "recipes", name: "Recipes", note: "Toggle button, button group, link card, back link and panel built from other components" },
-  { slug: "vuetify", name: "Migrating from Vuetify", note: "Concept mapping and coexistence" },
   { slug: "versioning", name: "Versioning and support", note: "Pre-1.0 stability, semver, supported Vue and browsers" },
 ];
 
