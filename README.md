@@ -9,6 +9,16 @@ The site is built with [VitePress](https://vitepress.dev) and uses the library i
 
 The library sits beside this repo (`../eos`) and is built. Set `EOS_DIR` to use a checkout elsewhere.
 
+### Which library version the site shows
+
+The site documents whatever commit of the library is checked out, and the line under the install command on the home page says which one:
+
+- a release tag (`@eos-ui/vue@0.7.0`) shows `v0.7.0`;
+- a branch shows its name (`detached` for a bare commit), with ` + changes` when tracked files are modified, so a development build never claims to be a release;
+- `EOS_LABEL="text"` replaces the text.
+
+To see another version, check it out in the library (`git checkout @eos-ui/vue@0.5.3`, or a branch) and restart `docs:dev`, or point `EOS_DIR` at a `git worktree` of it. In CI, set the repository variable `EOS_REF` to a branch, tag or commit, or give the Deploy workflow an `eos_ref` when you run it by hand.
+
 ```bash
 # once, in ../eos
 corepack pnpm install
@@ -74,4 +84,4 @@ To use registry versions, replace the two lines with versions (`"@eos-ui/vue": "
 `wrangler.jsonc` describes a Worker named `eos-site` that serves `docs/.vitepress/dist` as static assets. Unknown paths get VitePress's `404.html`. The Worker uses the custom domain `eos.dame.gg`, and Cloudflare creates the DNS record and certificate on deploy.
 
 - `.github/workflows/ci.yml`: on pull requests, checks out `Dame-G/eos` beside the site, builds the library and the docs, runs the tests, `pages:check` and `ssr:check`. No deploy.
-- `.github/workflows/deploy.yml`: runs on demand from the Actions tab. It builds and tests, then runs `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy from your machine instead, run `pnpm docs:build` and `pnpm deploy`.
+- `.github/workflows/deploy.yml`: runs on demand from the Actions tab, with an optional `eos_ref` to build against another library branch, tag or commit. It builds and tests, then runs `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy from your machine instead, run `pnpm docs:build` and `pnpm deploy`.
