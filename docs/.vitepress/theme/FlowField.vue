@@ -94,7 +94,6 @@ onMounted(() => {
     alive = false;
     removeEventListener("resize", grow);
   });
-  });
 });
 
 onBeforeUnmount(() => {
