@@ -118,7 +118,7 @@ onBeforeUnmount(() => watcher?.disconnect());
 <template>
   <ThemedScope :tokens="tokens" :locale="locale" :currency="currency">
     <div ref="wrap" class="pv-wrap">
-      <ETabs v-model="scene" :items="sceneItems" framed :orientation="narrow ? 'horizontal' : 'vertical'" side="end" class="pv">
+      <ETabs v-model="scene" :items="sceneItems" framed :orientation="narrow ? 'horizontal' : 'vertical'" side="start" class="pv">
           <template #overview>
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="A bill, the way a page would use it">Overview</EHeading>
