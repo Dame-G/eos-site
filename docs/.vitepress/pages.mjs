@@ -33,6 +33,7 @@ export const DESIGN = [
 export const STATIC_PATHS = [
   "/",
   ...GUIDE.map((g) => `/guide/${g.slug}`),
+  "/changelog",
   ...DESIGN.map((d) => `/${d.slug}`),
   "/patterns/",
   ...PATTERNS.map((p) => `/patterns/${p.slug}`),
