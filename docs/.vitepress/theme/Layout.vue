@@ -9,7 +9,7 @@ import SiteSearch from "./SiteSearch.vue";
 import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
 import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
 import BubbleTitle from "./BubbleTitle.vue";
-import { GithubIcon, NpmxIcon } from "./BrandIcons";
+import { GithubIcon, NpmxIcon, ScaleIcon } from "./BrandIcons";
 import { followScheme, schemeChoice, setChoice } from "./site-theme";
 
 const ORDER = ["system", "light", "dark"] as const;
@@ -192,7 +192,7 @@ watch(
     </div>
 
     <EAppFooter>
-      <EText small muted>EOS is released under the MIT license.</EText>
+      <EText small muted class="site-footer-license"><ScaleIcon class="site-footer-mark" />EOS is released under the MIT license.</EText>
       <nav class="site-footer-links" aria-label="Project">
         <ELink v-if="githubUrl" :href="githubUrl" external><GithubIcon class="site-footer-mark" />GitHub</ELink>
         <ELink href="https://npmx.dev/package/@eos-ui/vue" external><NpmxIcon class="site-footer-mark" />npmx</ELink>

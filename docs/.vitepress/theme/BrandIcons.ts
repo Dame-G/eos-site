@@ -12,3 +12,14 @@ export const GithubIcon = solid(
 
 // The npmx mark: its slash, with the small square the slash stands beside.
 export const NpmxIcon = solid(h("rect", { x: 3.5, y: 14.4, width: 3, height: 3 }), h("path", { d: "M11.2 19 17.1 4.2h2.6L13.8 19z" }));
+
+/** Balance scales, for the licence line. Drawn as an outline, unlike the solid marks above. */
+export const ScaleIcon: FunctionalComponent = (props) =>
+  h(
+    "svg",
+    { ...props, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true", focusable: "false" },
+    [
+      h("path", { d: "M12 3v18M8 21h8M5 7h14" }),
+      h("path", { d: "m5 7-3 8a3.2 3.2 0 0 0 6 0zM19 7l-3 8a3.2 3.2 0 0 0 6 0z" }),
+    ],
+  );

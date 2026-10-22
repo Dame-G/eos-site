@@ -605,6 +605,7 @@ body:has(.site-body, .home) .site {
   font-size: var(--e-text-sm);
 }
 
+.site-footer-license,
 .site-footer-links a {
   display: inline-flex;
   align-items: center;
