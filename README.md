@@ -17,7 +17,15 @@ The site documents whatever commit of the library is checked out, and the line u
 - a branch shows its name (`detached` for a bare commit), with ` + changes` when tracked files are modified, so a development build never claims to be a release;
 - `EOS_LABEL="text"` replaces the text.
 
-To see another version, check it out in the library (`git checkout @eos-ui/vue@0.5.3`, or a branch) and restart `docs:dev`, or point `EOS_DIR` at a `git worktree` of it. In CI, set the repository variable `EOS_REF` to a branch, tag or commit, or give the Deploy workflow an `eos_ref` when you run it by hand.
+To see another version locally, check it out in the library (`git checkout @eos-ui/vue@0.5.3`, or a branch) and restart `docs:dev`, or point `EOS_DIR` at a `git worktree` of it.
+
+In CI the library ref is chosen like this:
+
+- **Production** (the push-to-main deploy, and the deploy the library's release workflow starts) builds against the latest released library: the highest `@eos-ui/vue@x.y.z` tag in `Dame-G/eos`, looked up when the workflow runs. If no such tag can be found the job fails with a message. It never falls back to `main`.
+- A manual run of the Deploy workflow with `eos_ref` uses that branch, tag or commit instead. Failing that, the repository variable `EOS_REF` is used. Set `EOS_REF` only to pin production to something other than the latest release, and clear it afterwards.
+- **Pull requests** build against the library's `main` (or `EOS_REF` when set), so a site change that needs unreleased library code is caught before it merges.
+
+This means documentation for unreleased library code appears only in pull request builds and local dev. It reaches eos.dame.gg once the library is released and the site is redeployed.
 
 ```bash
 # once, in ../eos
@@ -30,7 +38,7 @@ corepack pnpm docs:dev        # http://localhost:5173
 corepack pnpm docs:build      # static site in docs/.vitepress/dist
 corepack pnpm docs:preview    # serve the build
 corepack pnpm test            # Vitest browser mode with Playwright (Edge locally, Chromium when CI is set)
-corepack pnpm pages:check     # checks the pages of a running preview (pass its URL)
+corepack pnpm pages:check     # checks the pages of a running preview (pass its URL), in the light and dark scheme
 corepack pnpm ssr:check       # renders components with renderToString and reports the result
 corepack pnpm llms            # writes docs/public/llms.txt (dev and build run it)
 ```
@@ -83,5 +91,6 @@ To use registry versions, replace the two lines with versions (`"@eos-ui/vue": "
 
 `wrangler.jsonc` describes a Worker named `eos-site` that serves `docs/.vitepress/dist` as static assets. Unknown paths get VitePress's `404.html`. The Worker uses the custom domain `eos.dame.gg`, and Cloudflare creates the DNS record and certificate on deploy.
 
-- `.github/workflows/ci.yml`: on pull requests, checks out `Dame-G/eos` beside the site, builds the library and the docs, runs the tests, `pages:check` and `ssr:check`. No deploy.
-- `.github/workflows/deploy.yml`: runs on demand from the Actions tab, with an optional `eos_ref` to build against another library branch, tag or commit. It builds and tests, then runs `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy from your machine instead, run `pnpm docs:build` and `pnpm deploy`.
+- `.github/actions/verify/action.yml`: the shared steps. It checks out `Dame-G/eos` beside the site, builds the library, installs the site, then runs `knip`, the docs build, the tests, `pages:check` (axe, 404 and console checks on full pages, in both the light and dark scheme) and `ssr:check`. CI and Deploy both call it, so they run the same gates.
+- `.github/workflows/ci.yml`: on pull requests, runs the shared steps against the library's `main`. No deploy.
+- `.github/workflows/deploy.yml`: runs on every push to `main` and on demand from the Actions tab. It runs the same shared steps against the latest released library (see above), then `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy from your machine instead, run `pnpm docs:build` and `pnpm deploy`.

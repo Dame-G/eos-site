@@ -9,6 +9,9 @@ const args = process.argv.slice(2);
 const base = args.find((a) => a.startsWith("http")) ?? "http://localhost:4173";
 const all = args.includes("--all");
 const shots = args.includes("--shots") ? args[args.indexOf("--shots") + 1] : null;
+// Every page is checked in both schemes unless one is named: --scheme light or --scheme dark.
+const only = args.includes("--scheme") ? args[args.indexOf("--scheme") + 1] : null;
+const schemes = only ? [only] : ["light", "dark"];
 
 const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
 
@@ -23,10 +26,18 @@ const ALLOWED = {
 };
 
 const browser = await chromium.launch(process.env.CI ? {} : { channel: "msedge" });
-const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 if (shots) mkdirSync(shots, { recursive: true });
 let failures = 0;
 
+for (const scheme of schemes) {
+console.log(`\n${scheme} scheme`);
+// The site reads the saved choice before the first paint (docs/.vitepress/scheme.ts), so it is set before any page script runs.
+const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+await context.addInitScript((value) => {
+  try {
+    localStorage.setItem("eos-scheme", value);
+  } catch {}
+}, scheme);
 for (const path of pages) {
   const page = await context.newPage();
   const problems = [];
@@ -46,12 +57,15 @@ for (const path of pages) {
     return r.violations.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(" ") + " :: " + (n.failureSummary || "").replace(/\s+/g, " ").slice(0, 160)) }));
   });
   for (const v of violations.filter((x) => !(ALLOWED[path] ?? []).includes(x.id))) problems.push(`axe ${v.id} (${v.impact}): ${v.nodes.join(" | ")}`);
-  if (shots) await page.screenshot({ path: join(shots, (path.replace(/\W+/g, "_") || "home") + ".png"), fullPage: true });
+  if (shots) await page.screenshot({ path: join(shots, (path.replace(/\W+/g, "_") || "home") + `.${scheme}.png`), fullPage: true });
   console.log(`${problems.length ? "FAIL" : "ok  "} ${path}`);
   for (const p of problems) console.log("      " + p);
   if (problems.length) failures++;
   await page.close();
 }
+await context.close();
+}
 await browser.close();
-console.log(failures ? `\n${failures} of ${pages.length} pages have problems` : `\nAll ${pages.length} pages are clean`);
+const total = pages.length * schemes.length;
+console.log(failures ? `\n${failures} of ${total} page checks have problems` : `\nAll ${total} page checks are clean (${schemes.join(" and ")})`);
 process.exit(failures ? 1 : 0);

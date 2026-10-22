@@ -1,6 +1,6 @@
 import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
 import { sep } from "node:path";
-import { isColor } from "./color.mjs";
+import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
 import { GROUPS, libraryBuildInfo, listComponents } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
 import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
@@ -58,7 +58,7 @@ function vitepressInLayer() {
 export default defineConfig({
   title: "EOS",
   titleTemplate: ":title · EOS",
-  description: "A component library for Vue. Calm, high contrast and rebrandable with a few lines.",
+  description: "A component library for Vue. High contrast by default, rebrandable with a few lines.",
   sitemap: { hostname: SITE },
   lang: "en-US",
   cleanUrls: true,
@@ -133,12 +133,31 @@ export default defineConfig({
         if (!tokens[idx]!.attrGet("class")?.includes("header-anchor")) tokens[idx]!.attrJoin("class", "e-link");
         return linkOpen(tokens, idx, options, env, self);
       };
-      // Inline code is the library's EHighlight. A literal colour in it, such as `#2c95b4`, gets the library's own swatch beside it.
+      // A hex colour gets the library's own swatch beside it wherever it is written: in plain text, in inline code and in code blocks.
+      md.core.ruler.push("colour_swatches", (state) => {
+        for (const block of state.tokens) {
+          if (block.type !== "inline" || !block.children) continue;
+          const out: typeof block.children = [];
+          for (const token of block.children) {
+            const parts = token.type === "text" ? withSwatches(md.utils.escapeHtml(token.content)).replace(/[{}]/g, (c) => (c === "{" ? "&#123;" : "&#125;")) : "";
+            if (!parts.includes("e-highlight-swatch")) {
+              out.push(token);
+              continue;
+            }
+            const html = new state.Token("html_inline", "", 0);
+            html.content = parts;
+            out.push(html);
+          }
+          block.children = out;
+        }
+      });
+      // Inline code is the library's EHighlight. A literal colour in it, such as `#2c95b4`, gets the swatch to its right; a colour among other text gets it right after the colour.
       md.renderer.rules.code_inline = (tokens, idx) => {
         const content = tokens[idx]!.content;
-        const text = md.utils.escapeHtml(content).replace(/[{}]/g, (c) => (c === "{" ? "&#123;" : "&#125;"));
-        const swatch = isColor(content) ? ` swatch="${md.utils.escapeHtml(content.trim())}"` : "";
-        return `<EHighlight code${swatch}>${text}</EHighlight>`;
+        const escaped = md.utils.escapeHtml(content);
+        const braces = (s: string) => s.replace(/[{}]/g, (c) => (c === "{" ? "&#123;" : "&#125;"));
+        if (isColor(content)) return `<EHighlight code swatch="${escaped.trim()}">${braces(escaped)}</EHighlight>`;
+        return `<EHighlight code>${braces(withSwatches(escaped))}</EHighlight>`;
       };
       const fence = md.renderer.rules.fence!;
       md.renderer.rules.fence = (...args) => {
@@ -148,7 +167,7 @@ export default defineConfig({
         const html = fence(...args);
         const lang = written || (/class="language-([^"\s]+)/.exec(html)?.[1] ?? "");
         const pre = /<pre[\s\S]*<\/pre>/.exec(html)?.[0];
-        return pre ? `<ECodeBlock lang="${lang}">${pre}</ECodeBlock>\n` : html;
+        return pre ? `<ECodeBlock lang="${lang}">${withSwatchesInMarkup(pre)}</ECodeBlock>\n` : html;
       };
     },
   },
@@ -170,7 +189,6 @@ export default defineConfig({
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],
     search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions }, _render: renderForSearch } },
     outline: { level: [2, 3], label: "On this page" },
-    notFound: { title: "That page is not here", quote: "It may have moved, or the component has not been written yet.", linkText: "Back to the home page" },
   },
   vite: {
     plugins: [vitepressInLayer()],

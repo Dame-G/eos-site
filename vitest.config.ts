@@ -1,12 +1,15 @@
 import { defineConfig } from "vitest/config";
 import vue from "@vitejs/plugin-vue";
 import { playwright } from "@vitest/browser-playwright";
-import { listComponents } from "./docs/.vitepress/eos-source.mjs";
+import { firstParagraph, listComponents, readReadme, summaryOf } from "./docs/.vitepress/eos-source.mjs";
 
 export default defineConfig({
   plugins: [vue()],
   resolve: { dedupe: ["vue"] },
-  define: { __COMPONENTS__: JSON.stringify(listComponents()) },
+  define: {
+    __COMPONENTS__: JSON.stringify(listComponents()),
+    __TEXTS__: JSON.stringify(listComponents().flatMap((name) => [firstParagraph(readReadme(name)), summaryOf(readReadme(name))].map((text) => ({ name, text })))),
+  },
   server: { fs: { allow: ["..", "."] } },
   optimizeDeps: { include: ["vue", "vitest-browser-vue", "axe-core"] },
   test: {

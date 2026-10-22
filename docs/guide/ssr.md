@@ -10,7 +10,7 @@ Eos components render on the server with `renderToString`:
 - Components render with and without the plugin. Generated ids are stable between server and client, so hydration has no id mismatches.
 - `createEos()` does not touch `document` or `window`. The locale reaches the server HTML.
 - Dialogs draw nothing on the server and appear after hydration.
-- Menus, option lists and tooltips teleport to `portalTarget`; their closed state renders on the server, so `<ClientOnly>` is not needed.
+- Menus, option lists and tooltips teleport to `portalTarget`. Their closed state renders on the server, so `<ClientOnly>` is not needed.
 - Nothing is needed in `ssr.noExternal` or `build.transpile`. If you link the library from another folder, set `resolve.dedupe: ["vue"]`.
 
 ## Theme without a flash

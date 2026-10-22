@@ -21,8 +21,8 @@ Pin a minor version while Eos is pre-1.0 (`~0.x.y`). Read the release notes befo
 | --- | --- |
 | Vue | `^3.5` |
 | Browsers | Current evergreen releases of Chrome, Edge, Firefox and Safari |
-| Server rendering | `renderToString`; see [Nuxt and SSR](/guide/ssr) |
-| Accessibility | WCAG 2.2 AA; see [Accessibility](/guide/accessibility) |
+| Server rendering | `renderToString`, see [Nuxt and SSR](/guide/ssr) |
+| Accessibility | WCAG 2.2 AA, see [Accessibility](/guide/accessibility) |
 
 ## Changelog
 

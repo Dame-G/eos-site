@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       eos_ref:
-        description: "Library ref to build against: a branch, a tag such as @eos-ui/vue@0.7.0, or a commit. Empty uses the EOS_REF variable, then main."
+        description: "Library ref to build against: a branch, a tag such as @eos-ui/vue@0.7.0, or a commit. Empty uses the EOS_REF variable, then the latest released @eos-ui/vue tag."
         required: false
         default: ""
 
@@ -21,50 +21,18 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
-      # The build and tests always run; the deploy step runs only once both Cloudflare secrets exist.
+      # Every gate always runs; the deploy step runs only once both Cloudflare secrets exist.
       HAS_CLOUDFLARE: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
     steps:
       - uses: actions/checkout@v7
         with:
           path: eos-site
-      - uses: actions/checkout@v7
+      # The same gates as CI. Production shows the latest released library unless a ref is given by hand or in EOS_REF, so it never documents unreleased code.
+      - uses: ./eos-site/.github/actions/verify
         with:
-          repository: Dame-G/eos
-          ref: ${{ inputs.eos_ref || vars.EOS_REF || 'main' }}
-          path: eos
-          fetch-depth: 0
-          fetch-tags: true
-      - run: corepack enable
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: pnpm
-          cache-dependency-path: |
-            eos-site/pnpm-lock.yaml
-            eos/pnpm-lock.yaml
-
-      - name: Install and build the library
-        working-directory: eos
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm -r --workspace-concurrency=1 build
-
-      - name: Install the site
-        working-directory: eos-site
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm exec playwright install --with-deps chromium
-
-      - name: Build the docs
-        working-directory: eos-site
-        run: pnpm docs:build
-
-      - name: Test
-        working-directory: eos-site
-        run: pnpm test
-        env:
-          CI: "true"
+          eos-ref: ${{ inputs.eos_ref || vars.EOS_REF || 'latest-release' }}
 
       - name: Warn when Cloudflare secrets are missing
         if: env.HAS_CLOUDFLARE != 'true'

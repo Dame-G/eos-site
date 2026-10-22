@@ -3,12 +3,13 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { GROUP_OF } from "./groups.mjs";
+import { plainText } from "./plain-text.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const siteRoot = resolve(here, "../..");
 const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
 /** The published version of the library the site is built against. */
-export const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
+const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
 /** Runs git in the library checkout; null when it is not a git checkout or the command fails. */
 function git(...args) {
   try {
@@ -90,7 +91,7 @@ export function splitReadme(markdown) {
 export function firstParagraph(markdown) {
   const body = markdown.replace(/^# .*\n+/, "");
   const para = body.split(/\n\s*\n/).find((p) => p.trim() && !p.startsWith("```") && !p.startsWith("|") && !p.startsWith("#"));
-  return (para ?? "").replace(/\s+/g, " ").replace(/`/g, "").trim();
+  return plainText(para ?? "");
 }
 
 /** The first sentence of the description paragraph. */
