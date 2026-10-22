@@ -198,7 +198,8 @@ export function outline(field: Field, shape: Shape, pen: Pen) {
   pen.closePath();
 }
 
-// Every line as the data of an SVG path, at `time` seconds.
+// Every line as the data of an SVG path, at `time` seconds. The share image (scripts/gen-brand.mjs) loads it by a computed path that knip can't follow, hence @public.
+/** @public */
 export function draw(field: Field, time: number): string[] {
   const f = (v: number) => v.toFixed(1);
   return shapes(field, time).map((shape) => {
