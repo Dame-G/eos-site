@@ -45,6 +45,10 @@ function libraryBuild() {
 }
 export const libraryBuildInfo = libraryBuild();
 
+/** The library changelog, published as the /changelog page. */
+/** The built library package, where llms-full.txt lands after a library build. */
+export const libraryDist = join(eosRoot, "packages/vue/dist");
+export const changelogFile = join(eosRoot, "packages/vue/CHANGELOG.md");
 export const componentsDir = join(eosRoot, "packages/vue/src/components");
 
 /** The groups, in the order the sidebar shows them. */

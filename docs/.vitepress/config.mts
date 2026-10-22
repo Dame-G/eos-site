@@ -24,7 +24,9 @@ function componentSidebar(): DefaultTheme.SidebarItem[] {
   return [{ text: "Overview", link: "/components/" }, ...groups.filter((g) => g.items.length)];
 }
 
-const guide: DefaultTheme.SidebarItem[] = [{ text: "Guide", items: GUIDE.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })) }];
+const guide: DefaultTheme.SidebarItem[] = [
+  { text: "Guide", items: [...GUIDE.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })), { text: "Changelog", link: "/changelog" }] },
+];
 
 const patterns: DefaultTheme.SidebarItem[] = [
   {
@@ -182,6 +184,7 @@ export default defineConfig({
     ],
     sidebar: {
       "/guide/": guide,
+      "/changelog": guide,
       "/components/": componentSidebar(),
       "/patterns/": patterns,
       "/playground": tools,

@@ -80,6 +80,59 @@ midnight.issues; // []
 
 The [playground](/playground) has these three as its Ground colours, with Light, Paper, Dark and Contrast as presets.
 
+## Light and dark
+
+Eos has no dark mode switch. A theme is one set of tokens, and a dark theme is a theme with a dark surface. Build both and swap them. This is how this site does it (`docs/.vitepress/scheme.ts` and `theme/site-theme.ts` in the [repository](https://github.com/Dame-G/eos-site)).
+
+```ts
+const light = defineTheme({ name: "light" });
+const dark = defineTheme({ name: "dark", background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" });
+```
+
+Give the page three choices, "system", "light" and "dark". Save only "light" and "dark", so no saved value means follow the system, and read `prefers-color-scheme` for that case.
+
+To avoid a flash of the wrong theme, set the scheme before the first paint. Put a small script in `<head>` and render the dark tokens under the attribute it sets:
+
+```html
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("my-scheme");
+      var dark = saved === "dark" || (saved !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.scheme = dark ? "dark" : "light";
+      document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    } catch (e) {}
+  })();
+</script>
+<style>
+  /* dark.css({ selector: ':root[data-scheme="dark"]', layer: false }) */
+</style>
+```
+
+`layer: false` writes the tokens outside `@layer e.tokens`, so they win over the library's default tokens wherever the style sits in the head. Without a saved choice or a dark system, the default light tokens apply.
+
+Once the app has mounted, apply the theme that matches and keep it up to date. `apply()` sets every token inline, so one call replaces the other theme completely.
+
+```ts
+function paint(isDark: boolean) {
+  (isDark ? dark : light).apply(document.documentElement);
+  document.documentElement.dataset.scheme = isDark ? "dark" : "light";
+}
+
+const query = matchMedia("(prefers-color-scheme: dark)");
+query.addEventListener("change", (e) => {
+  if (!localStorage.getItem("my-scheme")) paint(e.matches);
+});
+
+function choose(choice: "system" | "light" | "dark") {
+  if (choice === "system") localStorage.removeItem("my-scheme");
+  else localStorage.setItem("my-scheme", choice);
+  paint(choice === "dark" || (choice === "system" && query.matches));
+}
+```
+
+Wrap `localStorage` in `try` as the script does, since storage can be blocked. Both themes should have an empty `issues` list. `defineTheme` switches the action colours for a dark surface, so the pairs still hold.
+
 ## Plain CSS
 
 Library CSS is layered, so your unlayered CSS wins with no extra specificity.
