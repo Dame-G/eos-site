@@ -503,13 +503,16 @@ body:has(.site-body, .home) .site {
   display: grid;
   gap: var(--e-space-1);
   align-content: start;
+  /* The edge is one real border, not a shadow ring with an outline drawn over it on hover. Two rings on the same curve left a pale halo around the corners. The padding gives back what the border takes. */
+  border: var(--e-stroke-edge) solid var(--e-border);
+  box-shadow: none;
+  padding: calc(var(--e-space-3) - var(--e-stroke-edge)) calc(var(--e-space-4) - var(--e-stroke-edge));
 }
 
 .component-card:hover,
 .component-card:has(:focus-visible) {
-  outline: var(--e-stroke-edge) solid var(--e-primary);
-  outline-offset: 0;
-  background: var(--e-surface-hover);
+  border-color: var(--e-primary);
+  background-color: var(--e-surface-hover);
 }
 
 .component-card:has(:focus-visible) {
