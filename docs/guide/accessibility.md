@@ -21,13 +21,13 @@ Filled controls use deep action colours with white text (7.9:1 or better in the 
 
 | Component | Keys |
 | --- | --- |
-| Select | Enter, Space, ArrowDown and ArrowUp open; arrows move; Home and End; letters jump; Escape closes |
-| Combobox (also free text and multiple) | Focus stays in the input; arrows move; Enter chooses; Escape closes |
-| Calendar | Arrows by day and week; Page Up and Page Down by month, with Shift by year; Home and End; Enter chooses |
+| Select | Enter, Space, ArrowDown and ArrowUp open. Arrows move, Home and End jump to the ends, letters jump to a match, Escape closes |
+| Combobox (also free text and multiple) | Focus stays in the input. Arrows move, Enter chooses, Escape closes |
+| Calendar | Arrows move by day and week, Page Up and Page Down by month (with Shift, by year), Home and End jump to the ends, Enter chooses |
 | Tabs | Arrows, Home and End |
-| Menu, Definition | Arrows move between items; Escape closes |
-| Dialog, Drawer | Focus is trapped; Escape closes and focus returns to the opener |
-| Checkbox, Radio, Switch | Native inputs: Space toggles; arrows move between radios |
+| Menu, Definition | Arrows move between items, Escape closes |
+| Dialog, Drawer | Focus is trapped. Escape closes and focus returns to the opener |
+| Checkbox, Radio, Switch | Native inputs. Space toggles, arrows move between radios |
 
 ## Built in
 
@@ -36,5 +36,5 @@ Filled controls use deep action colours with white text (7.9:1 or better in the 
 - Motion stops under `prefers-reduced-motion`.
 - Selected states, borders and checked controls work in forced-colours mode.
 - Required and optional are words, not asterisks. Inputs take `autocomplete`.
-- Components that render a title take `headingLevel`; the headings are yours.
+- Components that render a title take `headingLevel`, so the heading order is yours.
 - Set `lang` and `dir` on `<html>`. See [Words and language](/guide/language).

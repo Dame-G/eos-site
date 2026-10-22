@@ -1,6 +1,6 @@
 const COMPONENT_TITLE = /^E([A-Z][A-Za-z0-9]*)$/;
 
-export function componentWords(title: string): string {
+function componentWords(title: string): string {
   const match = COMPONENT_TITLE.exec(title.trim());
   if (!match) return "";
   const name = match[1]!;

@@ -5,7 +5,7 @@ description: "Use the built-in icons, or bring Lucide, Tabler, Heroicons, Phosph
 
 # Icons
 
-Eos ships a built-in set (Phosphor, MIT), so everything works with no setup. Components draw icons by name; an `icon` prop also takes an icon component.
+Eos ships a built-in set (Phosphor, MIT), so everything works with no setup. Components draw icons by name, and an `icon` prop also takes an icon component.
 
 ```vue
 <EButton icon="lock">Pay $162.40</EButton>

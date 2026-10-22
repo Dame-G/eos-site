@@ -27,14 +27,14 @@ app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be
 | Input | Derives |
 | --- | --- |
 | `brand`, `accent` | `primary`, `secondary`, their tints and `surface-tint` |
-| `danger`, `warning` | `danger`, `on-danger`, `danger-soft`; `warning-strong`, `warning-soft` |
-| `background`, `surface`, `foreground` | the grounds, `ink`, `muted`, `border`, `border-strong`; a dark surface lifts the action colours |
-| `fonts`, `radius` | `font-sans`, `font-mono`; `radius-sm` to `radius-lg` |
-| `textScale`, `spaceScale` | `text-xs` to `text-4xl`; `space-1` to `space-8` (1 is the default) |
-| `strokes` `{ hair, focus, edge, card }` | `stroke-hair`, `stroke-card`, `stroke-edge`, `stroke-focus`, `focus-gap` (`focus-gap-field` follows `stroke-edge`). `edge` and `card` set their token outright; without them `edge` is 1.5 times `hair` and `card` is `hair` (2px on a bold elevation) |
-| `contrast` `"standard" | "high"` | `high`: `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey, `scrim` is darker |
+| `danger`, `warning` | `danger`, `on-danger`, `danger-soft`, `warning-strong`, `warning-soft` |
+| `background`, `surface`, `foreground` | the grounds, `ink`, `muted`, `border` and `border-strong`. A dark surface lifts the action colours |
+| `fonts`, `radius` | `font-sans`, `font-mono`, and `radius-sm` to `radius-lg` |
+| `textScale`, `spaceScale` | `text-xs` to `text-4xl`, and `space-1` to `space-8` (1 is the default) |
+| `strokes` `{ hair, focus, edge, card }` | `stroke-hair`, `stroke-card`, `stroke-edge`, `stroke-focus`, `focus-gap` (`focus-gap-field` follows `stroke-edge`). `edge` and `card` set their token outright. Without them `edge` is 1.5 times `hair` and `card` is `hair` (2px on a bold elevation) |
+| `contrast` `"standard" \| "high"` | With `high`, `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey and `scrim` is darker |
 | `motion` `"default" \| "snappy" \| "gentle" \| "none"` | `duration-tap`, `duration-move`, `easing-out` |
-| `elevation` `"outline" \| "lifted" \| "bold"` | `edge`, `well`, `float`; shadow tint follows `background` |
+| `elevation` `"outline" \| "lifted" \| "bold"` | `edge`, `well` and `float`. The shadow tint follows `background` |
 | `controlHeight` | `control-height`, `chip-height` |
 
 Three more options are not inputs. `name` is the value of `data-e-theme` when the theme is applied to an element. `tokens` sets any token by name, wins over derived values and is not contrast-corrected. `strict` throws on a contrast failure instead of listing it in `issues`. The [token reference](/guide/tokens) lists each token with the input it follows.
@@ -51,7 +51,7 @@ defineTheme({ motion: "snappy" }); // motion
 defineTheme({ tokens: { "radius-md": "12px", "z-modal": "60" } }); // any other token
 ```
 
-`theme.issues` lists each failing pair: `{ role, pair, ratio, min }`. `createEos` also logs them outside production; `warnOnContrast: false` turns that off. The pairs are under [Accessibility](/guide/accessibility#contrast).
+`theme.issues` lists each failing pair: `{ role, pair, ratio, min }`. `createEos` also logs them outside production, and `warnOnContrast: false` turns that off. The pairs are under [Accessibility](/guide/accessibility#contrast).
 
 ## Background, surface and foreground
 
