@@ -24,7 +24,7 @@ createApp(App)
   .mount("#app");
 ```
 
-The plugin holds your language, currency, words, icons and theme. Components also work without it, in English and US dollars. Set `<html lang>` yourself; Eos never does.
+The plugin holds your language, currency, words, icons and theme. Components also work without it, in English and US dollars. Set `<html lang>` yourself. Eos never does.
 
 ```vue
 <script setup lang="ts">

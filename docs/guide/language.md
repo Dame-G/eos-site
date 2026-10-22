@@ -1,6 +1,6 @@
 ---
 title: Words and language
-description: "Replace every word a component says; money, dates and direction follow the locale."
+description: "Replace every word a component says. Money, dates and direction follow the locale."
 ---
 
 # Words and language

@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { GROUP_OF } from "./groups.mjs";
+import { plainText } from "./plain-text.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const siteRoot = resolve(here, "../..");
@@ -90,7 +91,7 @@ export function splitReadme(markdown) {
 export function firstParagraph(markdown) {
   const body = markdown.replace(/^# .*\n+/, "");
   const para = body.split(/\n\s*\n/).find((p) => p.trim() && !p.startsWith("```") && !p.startsWith("|") && !p.startsWith("#"));
-  return (para ?? "").replace(/\s+/g, " ").replace(/`/g, "").trim();
+  return plainText(para ?? "");
 }
 
 /** The first sentence of the description paragraph. */

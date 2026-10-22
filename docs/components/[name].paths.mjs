@@ -16,6 +16,8 @@ export default {
         const path = new URL(target, `https://x/packages/vue/src/components/${self}/`).pathname.slice(1);
         return `](https://github.com/Dame-G/eos/blob/main/${path})`;
       });
+    // The library writes an em dash for "no default" in its props tables: the site says "None".
+    const noDefault = (md) => md.replace(/^\|.*$/gm, (row) => row.replace(/\|\s*—\s*(?=\|)/g, "| None "));
     const link = (md, self) =>
       fixRelative(md, self).replace(/(^|[^`\[])`(E[A-Z][A-Za-z]+)`/g, (m, pre, tag) => {
         const folder = tag.slice(1);
@@ -40,7 +42,7 @@ export default {
         ...(hasDemo ? ["<EDisclosure title=\"Source\">", "", `<<< @/components/demos/${name}.vue`, "", "</EDisclosure>", ""] : []),
       ].join("\n");
       const noReadme = readme ? "" : `\n\n::: warning\nThe library has no README.md for E${name} yet, so this page only has the demo.\n:::\n`;
-      const content = [link(head, name), noReadme, demo, link(rest, name)].join("\n\n");
+      const content = [link(head, name), noReadme, demo, noDefault(link(rest, name))].join("\n\n");
       return {
         params: { name, group, description: firstParagraph(readme) },
         content,
