@@ -1,15 +1,15 @@
 ---
 title: Recipes
-description: "Small compositions of Eos components that replace single-purpose components: toggle button, button group, link card, back link and panel."
+description: "Small compositions of EOS components that replace single-purpose components: toggle button, button group, link card, back link and panel."
 ---
 
 # Recipes
 
-Some things are a few lines of the pieces Eos already has. They are recipes, not components, so there is less to learn and nothing extra to maintain. Copy one and change the words.
+Some things are a few lines of the pieces EOS already has. They are recipes, not components, so there is less to learn and nothing extra to maintain. Copy one and change the words.
 
 ## Toggle button
 
-A button with two states, for a filter or a view option. Use an outline [`EButton`](/components/Button) with `aria-pressed`: Eos draws `aria-pressed="true"` as selected (a tinted fill and a primary edge, and `Highlight` in forced colours). Keep the label the same in both states. Use [`ESwitch`](/components/Switch) for a setting that saves.
+A button with two states, for a filter or a view option. Use an outline [`EButton`](/components/Button) with `aria-pressed`: EOS draws `aria-pressed="true"` as selected (a tinted fill and a primary edge, and `Highlight` in forced colours). Keep the label the same in both states. Use [`ESwitch`](/components/Switch) for a setting that saves.
 
 ```vue
 <script setup lang="ts">

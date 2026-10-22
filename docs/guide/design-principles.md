@@ -1,6 +1,6 @@
 ---
 title: Design principles
-description: "The layout rules that make every Eos theme feel like the same system."
+description: "The layout rules that make every EOS theme feel like the same system."
 ---
 
 # Design principles

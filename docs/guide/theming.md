@@ -1,6 +1,6 @@
 ---
 title: Theming
-description: "Rebrand Eos with defineTheme, plain CSS variables or a scoped theme."
+description: "Rebrand EOS with defineTheme, plain CSS variables or a scoped theme."
 ---
 
 # Theming
@@ -82,7 +82,7 @@ The [playground](/playground) has these three as its Ground colours, with Light,
 
 ## Light and dark
 
-Eos has no dark mode switch. A theme is one set of tokens, and a dark theme is a theme with a dark surface. Build both and swap them. This is how this site does it (`docs/.vitepress/scheme.ts` and `theme/site-theme.ts` in the [repository](https://github.com/Dame-G/eos-site)).
+EOS has no dark mode switch. A theme is one set of tokens, and a dark theme is a theme with a dark surface. Build both and swap them. This is how this site does it (`docs/.vitepress/scheme.ts` and `theme/site-theme.ts` in the [repository](https://github.com/Dame-G/eos-site)).
 
 ```ts
 const light = defineTheme({ name: "light" });

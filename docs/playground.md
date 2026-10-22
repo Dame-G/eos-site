@@ -2,7 +2,7 @@
 layout: page
 sidebar: false
 title: Theme playground
-description: "Edit the inputs of an Eos theme, see real components follow, and copy the defineTheme code."
+description: "Edit the inputs of an EOS theme, see real components follow, and copy the defineTheme code."
 ---
 
 # Theme playground
