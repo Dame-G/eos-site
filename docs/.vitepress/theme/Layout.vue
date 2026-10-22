@@ -9,7 +9,7 @@ import SiteSearch from "./SiteSearch.vue";
 import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
 import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
 import BubbleTitle from "./BubbleTitle.vue";
-import { GithubIcon, NpmxIcon, ScaleIcon } from "./BrandIcons";
+import { GithubIcon, NpmxIcon } from "./BrandIcons";
 import { followScheme, schemeChoice, setChoice } from "./site-theme";
 
 const ORDER = ["system", "light", "dark"] as const;
@@ -198,7 +198,7 @@ watch(
       <EText small muted class="site-footer-license">
         EOS is released under the
         <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
-          <template #trigger><ScaleIcon class="site-footer-mark" />MIT license</template>
+          <template #trigger>MIT license</template>
           <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
         </EDefinition>.
       </EText>
