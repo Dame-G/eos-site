@@ -614,6 +614,7 @@ body:has(.site-body, .home) .site {
 /* The term sits in the sentence at the sentence's size, with the scales in place of the definition's own info icon. */
 .site-footer-term {
   min-height: 0;
+  align-items: baseline;
   font: inherit;
   vertical-align: baseline;
 }
