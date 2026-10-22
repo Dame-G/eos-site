@@ -58,7 +58,7 @@ function vitepressInLayer() {
 export default defineConfig({
   title: "EOS",
   titleTemplate: ":title · EOS",
-  description: "A component library for Vue. Calm, high contrast and rebrandable with a few lines.",
+  description: "A component library for Vue. High contrast by default, rebrandable with a few lines.",
   sitemap: { hostname: SITE },
   lang: "en-US",
   cleanUrls: true,
@@ -170,7 +170,6 @@ export default defineConfig({
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],
     search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions }, _render: renderForSearch } },
     outline: { level: [2, 3], label: "On this page" },
-    notFound: { title: "That page is not here", quote: "It may have moved, or the component has not been written yet.", linkText: "Back to the home page" },
   },
   vite: {
     plugins: [vitepressInLayer()],

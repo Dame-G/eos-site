@@ -1,6 +1,6 @@
 ---
 title: Patterns
-description: "Six whole pages built only from Eos components."
+description: "Five whole pages built only from Eos components."
 ---
 
 # Patterns
