@@ -1,0 +1,98 @@
+name: Build and verify the docs
+description: Checks out and builds the library, then builds the site and runs every gate (knip, tests, page checks in both schemes, server rendering). Used by CI and Deploy so they cannot drift apart. The site must already be checked out at ./eos-site.
+
+inputs:
+  eos-ref:
+    description: "Library ref to build against: a branch, a tag or a commit. The word latest-release means the highest released @eos-ui/vue@x.y.z tag."
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve the library ref
+      id: ref
+      shell: bash
+      env:
+        REQUESTED: ${{ inputs.eos-ref }}
+      run: |
+        if [ "$REQUESTED" != "latest-release" ]; then
+          echo "ref=$REQUESTED" >> "$GITHUB_OUTPUT"
+          echo "Building against the requested library ref: $REQUESTED"
+          exit 0
+        fi
+        tag=$(git ls-remote --tags --refs https://github.com/Dame-G/eos.git '@eos-ui/vue@*' \
+          | sed 's|.*refs/tags/||' \
+          | grep -E '^@eos-ui/vue@[0-9]+\.[0-9]+\.[0-9]+$' \
+          | sort -t@ -k3 -V \
+          | tail -n 1)
+        if [ -z "$tag" ]; then
+          echo "::error::Could not find a released @eos-ui/vue@x.y.z tag in Dame-G/eos. Not falling back to main. Run the workflow by hand with eos_ref, or set the EOS_REF variable."
+          exit 1
+        fi
+        echo "ref=refs/tags/$tag" >> "$GITHUB_OUTPUT"
+        echo "Building against the latest released library: $tag"
+
+    # The site documents the public library, so both are checked out side by side.
+    - uses: actions/checkout@v7
+      with:
+        repository: Dame-G/eos
+        ref: ${{ steps.ref.outputs.ref }}
+        path: eos
+        fetch-depth: 0
+        fetch-tags: true
+
+    - run: corepack enable
+      shell: bash
+
+    # Node 22 is the lowest version both repositories allow (engines >=22) and the one this site has always been checked on.
+    - uses: actions/setup-node@v7
+      with:
+        node-version: 22
+        cache: pnpm
+        cache-dependency-path: |
+          eos-site/pnpm-lock.yaml
+          eos/pnpm-lock.yaml
+
+    - name: Install and build the library
+      shell: bash
+      working-directory: eos
+      run: |
+        pnpm install --frozen-lockfile
+        pnpm -r --workspace-concurrency=1 build
+
+    - name: Install the site
+      shell: bash
+      working-directory: eos-site
+      run: |
+        pnpm install --frozen-lockfile
+        pnpm exec playwright install --with-deps chromium
+
+    - name: Find unused files, exports and dependencies
+      shell: bash
+      working-directory: eos-site
+      run: pnpm knip
+
+    - name: Build the docs
+      shell: bash
+      working-directory: eos-site
+      run: pnpm docs:build
+
+    - name: Test
+      shell: bash
+      working-directory: eos-site
+      run: pnpm test
+      env:
+        CI: "true"
+
+    - name: Check pages (light and dark) and server rendering
+      shell: bash
+      working-directory: eos-site
+      run: |
+        pnpm docs:preview --host 127.0.0.1 --port 4173 &
+        preview=$!
+        trap 'kill $preview' EXIT
+        for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+        pnpm pages:check http://127.0.0.1:4173
+        pnpm ssr:check
+      env:
+        CI: "true"
