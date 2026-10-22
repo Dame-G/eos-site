@@ -10,7 +10,7 @@ const HEX_IN_TEXT = /(?<![w&#])#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})(?![w-]
 const hasLetter = (hex) => /[a-f]/i.test(hex) || hex.length > 5;
 
 /** The library's swatch square for a colour. @param {string} color */
-export const swatchHtml = (color) => `<span class="e-highlight-swatch" style="--e-swatch:${color}" aria-hidden="true"></span>`;
+const swatchHtml = (color) => `<span class="e-highlight-swatch" style="--e-swatch:${color}" aria-hidden="true"></span>`;
 
 /** Adds a swatch after every hex colour in already-escaped text or markup text. @param {string} text */
 export const withSwatches = (text) => text.replace(HEX_IN_TEXT, (hex) => (hasLetter(hex) ? hex + swatchHtml(hex) : hex));

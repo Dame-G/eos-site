@@ -13,61 +13,12 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      # The site documents the public library, so both are checked out side by side.
       - uses: actions/checkout@v7
         with:
           path: eos-site
-      - uses: actions/checkout@v7
+      # Pull requests build against the library's main branch, so changes that need unreleased library code are caught early.
+      - uses: ./eos-site/.github/actions/verify
         with:
-          repository: Dame-G/eos
-          ref: ${{ vars.EOS_REF || 'main' }}
-          path: eos
-          fetch-depth: 0
-          fetch-tags: true
-      - run: corepack enable
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: pnpm
-          cache-dependency-path: |
-            eos-site/pnpm-lock.yaml
-            eos/pnpm-lock.yaml
-
-      - name: Install and build the library
-        working-directory: eos
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm -r --workspace-concurrency=1 build
-
-      - name: Install the site
-        working-directory: eos-site
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm exec playwright install --with-deps chromium
-
-      - name: Find unused files, exports and dependencies
-        working-directory: eos-site
-        run: pnpm knip
-
-      - name: Build the docs
-        working-directory: eos-site
-        run: pnpm docs:build
-
-      - name: Test
-        working-directory: eos-site
-        run: pnpm test
-        env:
-          CI: "true"
-
-      - name: Check pages and server rendering
-        working-directory: eos-site
-        run: |
-          pnpm docs:preview --host 127.0.0.1 --port 4173 &
-          preview=$!
-          trap 'kill $preview' EXIT
-          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
-          pnpm pages:check http://127.0.0.1:4173
-          pnpm ssr:check
-        env:
-          CI: "true"
+          eos-ref: ${{ vars.EOS_REF || 'main' }}
