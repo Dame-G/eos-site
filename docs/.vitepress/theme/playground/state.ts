@@ -1,4 +1,4 @@
-import { constants, contrast, defaults, defineTheme, derivedFrom, groups, inputTokens, type Theme, type ThemeInput } from "@eos-ui/tokens";
+import { constants, contrast, defaults, defineTheme, derivedFrom, groups, inputTokens, type ContrastIssue, type Theme, type ThemeInput } from "@eos-ui/tokens";
 
 type Scheme = "light" | "paper" | "dark" | "contrast" | "custom";
 type RadiusStyle = "sharp" | "default" | "round";
@@ -734,6 +734,17 @@ export function themeCode(b: Built): string {
     lines.push("},");
   }
   return `import { createEos, defineTheme } from "@eos-ui/vue";\n\nconst theme = defineTheme({\n${lines.map((l) => "  " + l).join("\n")}\n});\n\napp.use(createEos({ theme }));`;
+}
+
+/** One failing pair as a line of text: the role, the two tokens, the ratio reached and the ratio needed. */
+export function describeIssue(i: ContrastIssue): string {
+  return `${i.role}: ${i.pair[0]} on ${i.pair[1]} is ${i.ratio}:1, needs ${i.min}:1`;
+}
+
+/** The status line for a theme: whether every contrast pair holds, or how many fail. */
+export function contrastSummary(issues: ContrastIssue[]): string {
+  if (!issues.length) return "All contrast pairs hold";
+  return `${issues.length} contrast ${issues.length === 1 ? "pair fails" : "pairs fail"}`;
 }
 
 export function cssChanges(b: Built): string {
