@@ -590,6 +590,11 @@ body:has(.site-body, .home) .site {
   background-color: color-mix(in srgb, var(--e-secondary) 12%, transparent);
 }
 
+/* Inside a link the highlight gives way to the link, so it has no tint there. */
+.vp-doc a > code.e-highlight {
+  background-color: transparent;
+}
+
 .site-footer-links {
   display: flex;
   flex-wrap: wrap;
