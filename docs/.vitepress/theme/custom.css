@@ -611,6 +611,26 @@ body:has(.site-body, .home) .site {
   gap: var(--e-space-2);
 }
 
+/* The term sits in the sentence at the sentence's size, without the definition's own info icon. */
+.site-footer-term {
+  min-height: 0;
+  align-items: baseline;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.site-footer-term > .e-icon:first-child {
+  display: none;
+}
+
+.site-license {
+  display: block;
+}
+
+.site-license + .site-license {
+  margin-top: var(--e-space-2);
+}
+
 .site-footer-mark {
   flex: none;
   width: 1.1em;

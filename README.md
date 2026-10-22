@@ -11,11 +11,7 @@ The library sits beside this repo (`../eos`) and is built. Set `EOS_DIR` to use 
 
 ### Which library version the site shows
 
-The site documents whatever commit of the library is checked out, and the line under the install command on the home page says which one:
-
-- a release tag (`@eos-ui/vue@0.7.0`) shows `v0.7.0`;
-- a branch shows its name (`detached` for a bare commit), with ` + changes` when tracked files are modified, so a development build never claims to be a release;
-- `EOS_LABEL="text"` replaces the text.
+The site documents whatever commit of the library is checked out. The install command on the home page pins the `version` in that checkout's `package.json`.
 
 To see another version locally, check it out in the library (`git checkout @eos-ui/vue@0.5.3`, or a branch) and restart `docs:dev`, or point `EOS_DIR` at a `git worktree` of it.
 

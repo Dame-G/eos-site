@@ -1,4 +1,3 @@
-import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,40 +9,10 @@ export const siteRoot = resolve(here, "../..");
 const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
 /** The published version of the library the site is built against. */
 const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
-/** Runs git in the library checkout; null when it is not a git checkout or the command fails. */
-function git(...args) {
-  try {
-    return execFileSync("git", args, { cwd: eosRoot, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
-  } catch {
-    return null;
-  }
-}
-
-/**
- * What the site is built against, for the line under the install command. The library is whatever is checked out at EOS_DIR (or beside this repo),
- * so this says which commit that is:
- *   - a release tag (`@eos-ui/vue@0.7.0`): "v0.7.0"
- *   - anything else, a branch or a work in progress: the branch name, with " + changes" when files are modified
- * The version in package.json is not used on its own: it stays at the last release while a branch adds to it.
- * Set EOS_LABEL to override the text.
- */
-function libraryBuild() {
-  if (process.env.EOS_LABEL) return { label: process.env.EOS_LABEL, version: libraryVersion, release: false };
-  const tag = git("describe", "--tags", "--exact-match", "--match", "@eos-ui/vue@*", "HEAD");
-  const sha = git("rev-parse", "--short", "HEAD");
-  if (tag && !git("status", "--porcelain", "--untracked-files=no")) {
-    const version = tag.slice("@eos-ui/vue@".length);
-    return { label: `v${version}`, version, release: true };
-  }
-  if (!sha) return { label: `v${libraryVersion}`, version: libraryVersion, release: false };
-  const branch = git("rev-parse", "--abbrev-ref", "HEAD");
-  // A long branch name is shortened so the line fits the install block.
-  const full = branch && branch !== "HEAD" ? branch : "detached";
-  const name = full.length > 20 ? `${full.slice(0, 19)}…` : full;
-  const dirty = git("status", "--porcelain", "--untracked-files=no") ? " + changes" : "";
-  return { label: `${name}${dirty}`, version: libraryVersion, release: false };
-}
-export const libraryBuildInfo = libraryBuild();
+/** The library version, which the home page pins the install command to. */
+/** The library licence, shown in the footer. */
+export const licenseText = readFileSync(join(eosRoot, "LICENSE"), "utf8").replace(/\r\n/g, "\n").trim();
+export const libraryBuildInfo = { version: libraryVersion };
 
 /** The library changelog, published as the /changelog page. */
 /** The built library package, where llms-full.txt lands after a library build. */
