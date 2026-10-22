@@ -8,7 +8,7 @@ const choice = ref<Choice>("system");
 const systemDark = ref(false);
 
 /** What the page is showing: the saved choice, or the system's when the choice is "system". */
-export const scheme = computed<"light" | "dark">(() => (choice.value === "system" ? (systemDark.value ? "dark" : "light") : choice.value));
+const scheme = computed<"light" | "dark">(() => (choice.value === "system" ? (systemDark.value ? "dark" : "light") : choice.value));
 export const schemeChoice = computed(() => choice.value);
 
 function paint() {

@@ -8,7 +8,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 export const siteRoot = resolve(here, "../..");
 const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
 /** The published version of the library the site is built against. */
-export const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
+const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
 /** Runs git in the library checkout; null when it is not a git checkout or the command fails. */
 function git(...args) {
   try {

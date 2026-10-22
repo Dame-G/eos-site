@@ -46,6 +46,10 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm exec playwright install --with-deps chromium
 
+      - name: Find unused files, exports and dependencies
+        working-directory: eos-site
+        run: pnpm knip
+
       - name: Build the docs
         working-directory: eos-site
         run: pnpm docs:build
