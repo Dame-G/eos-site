@@ -1,7 +1,7 @@
 import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
 import { sep } from "node:path";
 import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
-import { GROUPS, libraryBuildInfo, listComponents } from "./eos-source.mjs";
+import { GROUPS, libraryBuildInfo, licenseText, listComponents } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
 import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
 import { renderForSearch, searchBuildOptions, searchOptions } from "./search";
@@ -195,7 +195,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [vitepressInLayer()],
-    define: { __EOS_BUILD__: JSON.stringify(libraryBuildInfo) },
+    define: { __EOS_BUILD__: JSON.stringify(libraryBuildInfo), __EOS_LICENSE__: JSON.stringify(licenseText) },
     resolve: {
       dedupe: ["vue"],
     },

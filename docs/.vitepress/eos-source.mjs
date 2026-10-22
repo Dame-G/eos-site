@@ -10,6 +10,8 @@ const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
 /** The published version of the library the site is built against. */
 const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
 /** The library version, which the home page pins the install command to. */
+/** The library licence, shown in the footer. */
+export const licenseText = readFileSync(join(eosRoot, "LICENSE"), "utf8").replace(/\r\n/g, "\n").trim();
 export const libraryBuildInfo = { version: libraryVersion };
 
 /** The library changelog, published as the /changelog page. */

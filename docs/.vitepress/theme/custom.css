@@ -612,6 +612,14 @@ body:has(.site-body, .home) .site {
   gap: var(--e-space-2);
 }
 
+.site-license {
+  display: block;
+}
+
+.site-license + .site-license {
+  margin-top: var(--e-space-2);
+}
+
 .site-footer-mark {
   flex: none;
   width: 1.1em;

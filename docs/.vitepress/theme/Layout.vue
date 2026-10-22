@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EAppFooter, EAppHeader, EButton, EDrawer, EIconButton, EKbd, ELink, ENavList, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
@@ -13,6 +13,9 @@ import { GithubIcon, NpmxIcon, ScaleIcon } from "./BrandIcons";
 import { followScheme, schemeChoice, setChoice } from "./site-theme";
 
 const ORDER = ["system", "light", "dark"] as const;
+declare const __EOS_LICENSE__: string;
+// The licence file hard-wraps its lines: each paragraph is joined into one. The first paragraph is its title, which the panel shows itself.
+const license = __EOS_LICENSE__.split(/\n\n/).slice(1).map((p) => p.replace(/\n/g, " "));
 const SCHEME_ICON = { system: MonitorIcon, light: SunIcon, dark: MoonIcon };
 const nextChoice = computed(() => ORDER[(ORDER.indexOf(schemeChoice.value) + 1) % ORDER.length]!);
 const schemeLabel = computed(() => `Colour scheme: ${schemeChoice.value}. Switch to ${nextChoice.value}`);
@@ -192,7 +195,16 @@ watch(
     </div>
 
     <EAppFooter>
-      <EText small muted class="site-footer-license"><ScaleIcon class="site-footer-mark" />EOS is released under the MIT license.</EText>
+      <EText small muted class="site-footer-license">
+        <ScaleIcon class="site-footer-mark" />
+        <span>
+          EOS is released under the
+          <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
+            <template #trigger>MIT license</template>
+            <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
+          </EDefinition>.
+        </span>
+      </EText>
       <nav class="site-footer-links" aria-label="Project">
         <ELink v-if="githubUrl" :href="githubUrl" external><GithubIcon class="site-footer-mark" />GitHub</ELink>
         <ELink href="https://npmx.dev/package/@eos-ui/vue" external><NpmxIcon class="site-footer-mark" />npmx</ELink>
