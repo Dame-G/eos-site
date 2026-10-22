@@ -4,3 +4,16 @@ const FUNCTION = /^(?:rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch)\([\d\s.,%/a-z-]
 
 /** @param {string} value */
 export const isColor = (value) => HEX.test(value.trim()) || FUNCTION.test(value.trim());
+
+// A hex colour anywhere in text, with `#`, three to eight digits, and not part of a longer word or an entity such as &#123; . Three or four digits with no letter (#123) are more likely a number than a colour.
+const HEX_IN_TEXT = /(?<![w&#])#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})(?![w-])/gi;
+const hasLetter = (hex) => /[a-f]/i.test(hex) || hex.length > 5;
+
+/** The library's swatch square for a colour. @param {string} color */
+export const swatchHtml = (color) => `<span class="e-highlight-swatch" style="--e-swatch:${color}" aria-hidden="true"></span>`;
+
+/** Adds a swatch after every hex colour in already-escaped text or markup text. @param {string} text */
+export const withSwatches = (text) => text.replace(HEX_IN_TEXT, (hex) => (hasLetter(hex) ? hex + swatchHtml(hex) : hex));
+
+/** Adds a swatch after every hex colour in the text nodes of highlighted code, leaving tags and attributes alone. @param {string} html */
+export const withSwatchesInMarkup = (html) => html.replace(/>([^<>]+)</g, (_m, text) => `>${withSwatches(text)}<`);
