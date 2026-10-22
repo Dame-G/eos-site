@@ -17,7 +17,7 @@ createEos({
 - `locale` sets month and weekday names, first day of the week, date order and number formats.
 - `currency` is an ISO 4217 code: $162.40 in en-US, 162,40 $ in fr-CA.
 - `dir` mirrors layout and flips arrows. It sets the `dir` attribute on the theme target (`<html>` by default). With `dir: null` it follows the document.
-- Eos never sets `lang`. Set it on `<html>` yourself.
+- EOS never sets `lang`. Set it on `<html>` yourself.
 
 ## Messages
 

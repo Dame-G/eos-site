@@ -1,6 +1,6 @@
 ---
 title: Getting started
-description: "Install Eos, add the plugin and draw your first component."
+description: "Install EOS, add the plugin and draw your first component."
 ---
 
 # Getting started
@@ -24,7 +24,7 @@ createApp(App)
   .mount("#app");
 ```
 
-The plugin holds your language, currency, words, icons and theme. Components also work without it, in English and US dollars. Set `<html lang>` yourself. Eos never does.
+The plugin holds your language, currency, words, icons and theme. Components also work without it, in English and US dollars. Set `<html lang>` yourself. EOS never does.
 
 ```vue
 <script setup lang="ts">
@@ -70,7 +70,7 @@ createApp(App).use(
 );
 ```
 
-`fonts.sans` and `fonts.mono` are full CSS `font-family` stacks and set `--e-font-sans` and `--e-font-mono`. They work with any font you load, so the same option brings in a different family. Eos never bundles fonts. Without any font loaded, the stack falls back to `system-ui`.
+`fonts.sans` and `fonts.mono` are full CSS `font-family` stacks and set `--e-font-sans` and `--e-font-mono`. They work with any font you load, so the same option brings in a different family. EOS never bundles fonts. Without any font loaded, the stack falls back to `system-ui`.
 
 ## Auto-import
 
@@ -88,7 +88,7 @@ export default {
 
 ## TypeScript
 
-Eos ships its own types, so there is nothing to install. Props, events and slots are typed in templates when you use Volar. unplugin-vue-components writes the global `components.d.ts` for auto-imported components (its `dts` option, on by default when TypeScript is installed), so commit it or add it to your `tsconfig` includes.
+EOS ships its own types, so there is nothing to install. Props, events and slots are typed in templates when you use Volar. unplugin-vue-components writes the global `components.d.ts` for auto-imported components (its `dts` option, on by default when TypeScript is installed), so commit it or add it to your `tsconfig` includes.
 
 ## Using an AI assistant
 

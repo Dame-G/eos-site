@@ -1,11 +1,11 @@
 ---
 title: Patterns
-description: "Five whole pages built only from Eos components."
+description: "Five whole pages built only from EOS components."
 ---
 
 # Patterns
 
-Whole tasks built only from Eos components, with source. If a pattern needs a custom box, the library is missing a building block.
+Whole tasks built only from EOS components, with source. If a pattern needs a custom box, the library is missing a building block.
 
 - [Pay a bill](/patterns/pay-a-bill)
 - [Sign in](/patterns/sign-in)
