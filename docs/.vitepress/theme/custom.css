@@ -623,6 +623,10 @@ body:has(.site-body, .home) .site {
   display: none;
 }
 
+.site-footer-term > .site-footer-mark {
+  align-self: center;
+}
+
 .site-license {
   display: block;
 }
