@@ -605,11 +605,21 @@ body:has(.site-body, .home) .site {
   font-size: var(--e-text-sm);
 }
 
-.site-footer-license,
 .site-footer-links a {
   display: inline-flex;
   align-items: center;
   gap: var(--e-space-2);
+}
+
+/* The term sits in the sentence at the sentence's size, with the scales in place of the definition's own info icon. */
+.site-footer-term {
+  min-height: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.site-footer-term > .e-icon:first-child {
+  display: none;
 }
 
 .site-license {

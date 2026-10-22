@@ -196,14 +196,11 @@ watch(
 
     <EAppFooter>
       <EText small muted class="site-footer-license">
-        <ScaleIcon class="site-footer-mark" />
-        <span>
-          EOS is released under the
-          <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
-            <template #trigger>MIT license</template>
-            <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
-          </EDefinition>.
-        </span>
+        EOS is released under the
+        <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
+          <template #trigger><ScaleIcon class="site-footer-mark" />MIT license</template>
+          <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
+        </EDefinition>.
       </EText>
       <nav class="site-footer-links" aria-label="Project">
         <ELink v-if="githubUrl" :href="githubUrl" external><GithubIcon class="site-footer-mark" />GitHub</ELink>
