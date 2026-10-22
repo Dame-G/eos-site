@@ -9,11 +9,11 @@ const props = defineProps<{ code: string; lang: string; copyLabel?: string; note
 const html = ref("");
 let latest = 0;
 watch(
-  () => [props.code, props.lang, props.note] as const,
-  async ([code, lang, note]) => {
+  () => [props.code, props.lang] as const,
+  async ([code, lang]) => {
     const run = ++latest;
     html.value = "";
-    const out = await highlight(note ? `${code}  # ${note}` : code, lang);
+    const out = await highlight(code, lang);
     if (run === latest) html.value = out;
   },
   { immediate: true },

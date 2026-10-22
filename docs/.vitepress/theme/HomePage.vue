@@ -4,8 +4,7 @@ import BubbleTitle from "./BubbleTitle.vue";
 import FlowField from "./FlowField.vue";
 import HighlightedCode from "./HighlightedCode.vue";
 
-// What the library is: "v0.7.0" for a release, or the branch name when the site is pointed at something else.
-declare const __EOS_BUILD__: { label: string };
+declare const __EOS_BUILD__: { version: string };
 const build = __EOS_BUILD__;
 </script>
 
@@ -20,7 +19,7 @@ const build = __EOS_BUILD__;
     <section class="home-hero" aria-labelledby="home-title">
       <EStack :gap="3">
         <div class="eos-live home-install">
-          <HighlightedCode lang="bash" code="npm install @eos-ui/vue" :note="build.label" copy-label="Copy install command" />
+          <HighlightedCode lang="bash" :code="`npm install @eos-ui/vue@${build.version}`" copy-label="Copy install command" />
         </div>
         <EActions>
           <EButton href="/guide/getting-started">Get started</EButton>
