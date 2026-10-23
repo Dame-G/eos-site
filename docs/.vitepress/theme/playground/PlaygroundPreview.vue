@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import ThemedScope from "./ThemedScope.vue";
+import type { Theme } from "@eos-ui/tokens";
 import {
   EButton,
+  EConfigProvider,
   ECalendar,
   ECheckbox,
   EDataGrid,
@@ -37,7 +38,7 @@ import {
 import { variantProps } from "./build";
 import { DEFAULT_VARIANTS, type Variants } from "./model";
 
-const props = withDefaults(defineProps<{ tokens: Record<string, string>; locale: string; currency: string; variants?: Variants }>(), { variants: () => ({ ...DEFAULT_VARIANTS }) });
+const props = withDefaults(defineProps<{ theme: Theme; locale: string; currency: string; variants?: Variants }>(), { variants: () => ({ ...DEFAULT_VARIANTS }) });
 
 const vp = computed(() => variantProps(props.variants));
 
@@ -110,7 +111,7 @@ const scene = ref("overview");
 <template>
   <div class="pv">
   <ESelect v-model="scene" class="pv-scene" bare label="Scene" :options="SCENES" />
-  <ThemedScope :tokens="tokens" :locale="locale" :currency="currency">
+  <EConfigProvider :theme="theme" :locale="locale" :currency="currency">
     <div class="pv-wrap">
           <template v-if="scene === 'overview'">
             <EStack :gap="vp.gap">
@@ -324,7 +325,7 @@ const scene = ref("overview");
             </EStack>
           </template>
     </div>
-  </ThemedScope>
+  </EConfigProvider>
   </div>
 </template>
 

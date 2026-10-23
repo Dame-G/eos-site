@@ -328,7 +328,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
       <section class="stage" aria-labelledby="playground-result">
         <EVisuallyHidden as="h2" id="playground-result">Preview</EVisuallyHidden>
-        <PlaygroundPreview :tokens="cssVars" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
+        <PlaygroundPreview :theme="built.theme" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
       </section>
     </div>
 
