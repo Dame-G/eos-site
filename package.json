@@ -1,6 +1,7 @@
 {
   "name": "eos-site",
   "private": true,
+  "license": "MIT",
   "version": "0.0.0",
   "description": "Documentation and live previews for the Eos component library, published at https://eos.dame.gg.",
   "type": "module",

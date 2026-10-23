@@ -1,6 +1,6 @@
 # eos-site
 
-Private source of https://eos.dame.gg, the documentation and live-preview site for the public [EOS](https://github.com/Dame-G/eos) library.
+Source of https://eos.dame.gg, the documentation and live-preview site for the public [EOS](https://github.com/Dame-G/eos) library. It is released under the [MIT license](LICENSE).
 
 The site is built with [VitePress](https://vitepress.dev) and uses the library it documents. The page frame (header, navigation, search, footer), the home page, the tokens page and the playground are EOS components. Only the markdown prose and code blocks use VitePress styles, and those read the library's tokens.
 
