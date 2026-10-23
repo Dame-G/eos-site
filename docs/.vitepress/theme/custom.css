@@ -209,6 +209,27 @@ body {
   }
 }
 
+/* The side lists are plain rows: no rule between them, and on a desktop pointer the rows are short enough to show a whole group. Touch keeps the full tap target. */
+.site-side .e-nav li + li::before,
+.site-outline .e-nav li + li::before {
+  content: none;
+}
+
+@media (pointer: fine) {
+  .site-side .e-nav,
+  .site-outline .e-nav {
+    --e-control-height: 2rem;
+  }
+}
+
+/* Only the sidebar draws the current page as a raised row. The header's current section and the outline's current heading are marked by colour and weight alone, so one place on screen says where you are. */
+.site-topnav .e-nav-item[aria-current="page"],
+.site-outline .e-nav-item[aria-current="page"] {
+  --_slab: transparent;
+  --_lift: 0px;
+  background-color: transparent;
+}
+
 .site-main {
   min-width: 0;
   max-width: var(--site-prose);
@@ -220,6 +241,11 @@ body {
 
 .site-body--wide .site-main {
   max-width: none;
+}
+
+/* A page with no side lists starts its content on the header's gutter, under the logo. */
+.site-body--wide {
+  padding-inline: var(--e-gutter);
 }
 
 .site-outline-title {
@@ -622,11 +648,23 @@ body {
   background: var(--e-surface-tint);
 }
 
+/* One row at every width: two short toggles and the text size as a compact select, all at the small text size. */
 .demo-tools {
+  --e-text-md: var(--e-text-sm);
+  --e-pad-control: var(--e-space-2);
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--e-space-2);
+  min-width: 0;
+}
+
+.demo-tools .e-seg-text {
+  min-width: 0;
+}
+
+.demo-size {
+  flex: none;
+  width: 5.5rem;
 }
 
 /* The Source panel closes the demo's section. The heading that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
