@@ -19,12 +19,12 @@ export function inlineScripts(html) {
 }
 
 /**
- * The policy. Scripts are the site's own files, the Shiki WebAssembly, and the inline scripts listed by hash, so an
- * injected script does not run. Styles keep `'unsafe-inline'` for the style attributes Vue and the playground set.
+ * The policy. Scripts are the site's own files and the inline scripts listed by hash, so an injected script does not
+ * run. Styles keep `'unsafe-inline'` for the style attributes Vue and the playground set.
  * There is no report-only copy of a stricter policy: nothing collects violation reports, so it would only add noise.
  */
 function policy(hashes) {
-  const script = ["'self'", "'wasm-unsafe-eval'", ...hashes].join(" ");
+  const script = ["'self'", ...hashes].join(" ");
   return `default-src 'self'; script-src ${script}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`;
 }
 
