@@ -3,7 +3,6 @@ import { EActions, EButton, EStack } from "@eos-ui/vue";
 import BubbleTitle from "./BubbleTitle.vue";
 import FlowField from "./FlowField.vue";
 import HighlightedCode from "./HighlightedCode.vue";
-import HomeShowcase from "./HomeShowcase.vue";
 
 declare const __EOS_BUILD__: { version: string };
 const build = __EOS_BUILD__;
@@ -32,6 +31,5 @@ const build = __EOS_BUILD__;
     </section>
     </div>
 
-    <div class="home-more eos-live"><HomeShowcase /></div>
   </main>
 </template>

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { build } from "../docs/.vitepress/theme/playground/build";
 import { decode, encode } from "../docs/.vitepress/theme/playground/codec";
-import { checkPairs, contrastSummary, resolve } from "../docs/.vitepress/theme/playground/contrast";
+import { checkPairs, resolve } from "../docs/.vitepress/theme/playground/contrast";
 import { initialState } from "../docs/.vitepress/theme/playground/model";
 import { PRESETS, applyPreset } from "../docs/.vitepress/theme/playground/presets";
 import { applyRandom } from "../docs/.vitepress/theme/playground/random";
@@ -57,7 +57,7 @@ describe("contrast", () => {
     const s = initialState();
     s.t = { ink: "#cccccc" };
     expect(checkPairs(build(s).theme.tokens).some((r) => !r.pass)).toBe(true);
-    expect(contrastSummary(build(s).theme.issues)).toMatch(/fail/);
+    expect(build(s).theme.issues.length).toBeGreaterThan(0);
   });
 });
 

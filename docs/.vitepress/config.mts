@@ -188,7 +188,6 @@ export default defineConfig({
       { text: "Components", link: "/components/", activeMatch: "/components/" },
       { text: "Patterns", link: "/patterns/", activeMatch: "/patterns/" },
       { text: "Playground", link: "/playground" },
-      { text: "Changelog", link: "/changelog" },
     ],
     sidebar: {
       "/guide/": guide,

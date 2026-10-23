@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EHighlight, EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESegmented, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESegmented, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
@@ -10,15 +10,11 @@ import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
 import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
 import BubbleTitle from "./BubbleTitle.vue";
 import { GithubIcon, NpmxIcon } from "./BrandIcons";
-import PageStrip from "./PageStrip.vue";
-import { areaOf } from "../search";
 import type { Choice } from "../scheme";
 import { followScheme, schemeChoice, setChoice } from "./site-theme";
 
 const ORDER = ["system", "light", "dark"] as const;
 declare const __EOS_LICENSE__: string;
-declare const __EOS_BUILD__: { version: string };
-const libraryVersion = __EOS_BUILD__.version;
 // The licence file hard-wraps its lines: each paragraph is joined into one. The first paragraph is its title, which the panel shows itself.
 const license = __EOS_LICENSE__.split(/\n\n/).slice(1).map((p) => p.replace(/\n/g, " "));
 const SCHEME_ICON = { system: MonitorIcon, light: SunIcon, dark: MoonIcon };
@@ -49,12 +45,6 @@ const githubUrl = computed(() => {
   return github?.link;
 });
 
-const editUrl = computed(() => (typeof page.value.params?.editUrl === "string" ? (page.value.params.editUrl as string) : ""));
-const stripLabel = computed(() => {
-  const group = page.value.params?.group;
-  return typeof group === "string" && group ? `Components · ${group}` : areaOf(cleanPath(route.path));
-});
-const hasStrip = computed(() => !isHome.value && !page.value.isNotFound && frontmatter.value.strip !== false);
 
 const sections = computed(() => toSections(sidebarFor(theme.value.sidebar, route.path), route.path));
 const hasSidebar = computed(() => !isHome.value && !page.value.isNotFound && frontmatter.value.sidebar !== false && sections.value.length > 0);
@@ -204,9 +194,7 @@ watch(
       <main id="main" class="site-main" tabindex="-1">
         <NotFoundPage v-if="page.isNotFound" @search="searching = true" />
         <template v-else>
-          <PageStrip v-if="hasStrip" :label="stripLabel" />
           <article class="site-article vp-doc"><Content /></article>
-          <p v-if="editUrl" class="site-edit"><ELink :href="editUrl" icon="edit" external>Edit this page on GitHub</ELink></p>
           <nav v-if="pager.prev || pager.next" class="site-pager" aria-label="Previous and next page">
             <EButton v-if="pager.prev" variant="outline" icon="arrow-left" :href="pager.prev.href">{{ pager.prev.label }}</EButton>
             <EButton v-if="pager.next" variant="outline" :href="pager.next.href" class="site-pager-next">{{ pager.next.label }}</EButton>
@@ -223,7 +211,6 @@ watch(
 
     <EAppFooter>
       <div class="site-footer-about">
-        <BubbleTitle decorative class="site-footer-word" />
         <EText small muted class="site-footer-license">
           EOS is released under the
           <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
@@ -231,7 +218,6 @@ watch(
             <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
           </EDefinition>.
         </EText>
-        <EText small muted class="site-footer-version">Documents <EHighlight code>@eos-ui/vue {{ libraryVersion }}</EHighlight></EText>
       </div>
       <nav class="site-footer-links" aria-label="Project">
         <ELink href="/changelog">Changelog</ELink>

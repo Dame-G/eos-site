@@ -11,10 +11,12 @@ const base = ref<SVGSVGElement | null>(null);
 let cleanup: Array<() => void> = [];
 
 onMounted(() => {
-  let field = fieldFor(innerWidth, innerHeight);
+  // The lines cover the page, which can be taller or wider than the window.
+  const area = () => fieldFor(Math.max(innerWidth, root.value?.clientWidth ?? 0), Math.max(innerHeight, root.value?.clientHeight ?? 0));
+  let field = area();
   let paths: SVGPathElement[] = [];
   const layout = async () => {
-    field = fieldFor(innerWidth, innerHeight);
+    field = area();
     const shapes = draw(field, performance.now() / 1000);
     LINES.value = field.rows.map((i, n) => ({ i, d: shapes[n]! }));
     await nextTick();

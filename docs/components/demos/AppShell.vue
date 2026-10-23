@@ -31,7 +31,8 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
 <style scoped>
 .frame {
   --frame-height: 28rem;
-  --e-shell-rail: transparent;
+  /* A column narrower than the frame, so the full-width header and footer and the rails beside the content are all visible. */
+  --e-shell-width: 32rem;
   height: var(--frame-height);
   overflow: auto;
   border: var(--e-stroke-card) solid var(--e-border);

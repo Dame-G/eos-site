@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { defineTheme } from "@eos-ui/tokens";
-import { ECopyButton, EHighlight, EKicker, ESegmented } from "@eos-ui/vue";
+import { EHighlight, ESegmented } from "@eos-ui/vue";
 import { DARK_INPUT } from "../scheme";
 import ThemedScope from "./playground/ThemedScope.vue";
 import { activeScheme } from "./site-theme";
 
 const demos = import.meta.glob("../../components/demos/*.vue");
-const sources = import.meta.glob("../../components/demos/*.vue", { query: "?raw", import: "default" });
 
 const props = defineProps<{ name: string }>();
 const loader = demos[`../../components/demos/${props.name}.vue`];
 const Demo = loader ? defineAsyncComponent(loader as () => Promise<{ default: object }>) : null;
 
-// The frame is the same for every demo: a Preview label, options that try the demo in the other scheme, direction and text size, and a button that copies its source.
+// The frame is the same for every demo: options that try the demo in the other scheme, direction and text size.
 const scheme = ref<"light" | "dark" | "">("");
 const dir = ref<"ltr" | "rtl">("ltr");
 const size = ref("100");
@@ -26,19 +25,12 @@ const tokens = computed<Record<string, string>>(() => {
   const theme = defineTheme({ ...(shown.value === "dark" ? DARK_INPUT : { name: "light" }), ...(scale === 1 ? {} : { textScale: scale }) });
   return { colorScheme: shown.value, ...Object.fromEntries(Object.entries(theme.tokens).map(([k, v]) => [`--e-${k}`, v])) };
 });
-
-const source = ref("");
-onMounted(async () => {
-  const load = sources[`../../components/demos/${props.name}.vue`];
-  if (load) source.value = String(await load());
-});
 </script>
 
 <template>
   <div class="demo">
     <div v-if="Demo" class="demo-frame">
       <div class="demo-bar">
-        <EKicker class="demo-kicker">Preview</EKicker>
         <div class="demo-tools" role="group" aria-label="Preview options">
           <ESegmented
             label="Preview colour scheme"
@@ -52,7 +44,6 @@ onMounted(async () => {
             label="Preview text size"
             :options="[{ value: '100', label: '100%' }, { value: '125', label: '125%' }, { value: '150', label: '150%' }]"
           />
-          <ECopyButton :text="() => source" label="Copy demo code" :disabled="!source" />
         </div>
       </div>
       <ThemedScope class="demo-stage" :tokens="tokens" locale="en-US" currency="USD" :dir="dir"><component :is="Demo" /></ThemedScope>

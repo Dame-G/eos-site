@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { EButton, EInline, EPageHeader, ESearchBar, ESearchResults, ESegmented, ESelect, EStack, EText } from "@eos-ui/vue";
+import { EButton, EInline, EKicker, EPageHeader, ESearchBar, ESearchResults, ESegmented, ESelect, EStack, EText } from "@eos-ui/vue";
 import type { SearchResultItem } from "@eos-ui/vue";
 
 interface Doc extends SearchResultItem {
@@ -52,7 +52,10 @@ function clear() {
       <EPageHeader :heading-level="2" title="Find a document" description="Statements, receipts and forms." />
       <ESearchBar v-model="typed" placeholder="Search by title or number" @submit="search" />
       <EInline align="start">
-        <ESegmented v-model="kind" label="Type" :options="['All', 'Statement', 'Receipt', 'Form']" />
+        <EStack :gap="2">
+          <EKicker as="span" aria-hidden="true">Type</EKicker>
+          <ESegmented v-model="kind" label="Type" :options="['All', 'Statement', 'Receipt', 'Form']" />
+        </EStack>
         <ESelect v-model="year" label="Year" :options="['Any year', '2026', '2025']" />
       </EInline>
       <EInline justify="between">

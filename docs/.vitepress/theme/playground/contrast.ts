@@ -62,13 +62,3 @@ export function checkPairs(tokens: Record<string, string>): PairResult[] {
   }
   return out;
 }
-
-export function describeIssue(i: ContrastIssue): string {
-  return `${i.role}: ${i.pair[0]} on ${i.pair[1]} is ${i.ratio}:1, needs ${i.min}:1`;
-}
-
-/** The status line for a theme: whether every contrast pair holds, or how many fail. */
-export function contrastSummary(issues: ContrastIssue[]): string {
-  if (!issues.length) return "All contrast pairs hold";
-  return `${issues.length} contrast ${issues.length === 1 ? "pair fails" : "pairs fail"}`;
-}

@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join, sep } from "node:path";
-import { GROUPS, componentsDir, firstParagraph, listComponents, readReadme, readmeEditUrl, siteRoot, splitReadme } from "../.vitepress/eos-source.mjs";
+import { GROUPS, componentsDir, firstParagraph, listComponents, readReadme, siteRoot, splitReadme } from "../.vitepress/eos-source.mjs";
 import { GROUP_OF } from "../.vitepress/groups.mjs";
 
 const EXPECTED_SECTIONS = ["Keyboard", "Related"];
@@ -47,7 +47,7 @@ export default {
       const noReadme = readme ? "" : `\n\n::: warning\nThe library has no README.md for E${name} yet, so this page only has the demo.\n:::\n`;
       const content = [link(head, name), noReadme, demo, noDefault(link(rest, name))].join("\n\n");
       return {
-        params: { name, group, description: firstParagraph(readme), editUrl: readmeEditUrl(name) },
+        params: { name, group, description: firstParagraph(readme) },
         content,
       };
     });

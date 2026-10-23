@@ -49,7 +49,7 @@ describe("site chrome", () => {
   it("opens search with / and with Ctrl+K, finds a component by another library's word, and opens it with Enter", async () => {
     await mount(Layout);
     await userEvent.keyboard("/");
-    const box = page.getByRole("textbox", { name: "Search the docs" });
+    const box = page.getByRole("combobox", { name: "Search the docs" });
     await expect.element(box).toBeVisible();
     expect(document.activeElement).toBe(box.element());
     await userEvent.keyboard("dropdown");
@@ -61,7 +61,7 @@ describe("site chrome", () => {
     expect(go).toHaveBeenCalledWith("/components/Select");
 
     await userEvent.keyboard("{Control>}k{/Control}");
-    await expect.element(page.getByRole("textbox", { name: "Search the docs" })).toBeVisible();
+    await expect.element(page.getByRole("combobox", { name: "Search the docs" })).toBeVisible();
   });
 
   it("labels a page hit with its area when it has no headings above it", async () => {
@@ -72,14 +72,22 @@ describe("site chrome", () => {
     await expect.element(page.getByText("Guide", { exact: true }).first()).toBeVisible();
   });
 
+  it("says so when nothing matches", async () => {
+    await mount(Layout);
+    await userEvent.keyboard("/");
+    await userEvent.keyboard("zzqxjvv");
+    await settle(150);
+    await expect.element(page.getByText("Nothing found", { exact: false })).toBeVisible();
+  });
+
   it("Escape closes search and puts focus back on the button that opened it", async () => {
     await mount(Layout);
     const opener = page.getByRole("button", { name: /^Search/ });
     await opener.click();
-    await expect.element(page.getByRole("textbox", { name: "Search the docs" })).toBeVisible();
+    await expect.element(page.getByRole("combobox", { name: "Search the docs" })).toBeVisible();
     await userEvent.keyboard("{Escape}");
     await settle(500);
-    expect(document.querySelector("dialog[open]")).toBeNull();
+    expect(document.querySelector("[role=dialog]")).toBeNull();
     expect(document.activeElement).toBe(opener.element());
   });
 

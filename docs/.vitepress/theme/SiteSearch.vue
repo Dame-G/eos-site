@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import localSearchIndex from "@localSearchIndex";
 import MiniSearch from "minisearch";
-import { computed, nextTick, ref, shallowRef, watch } from "vue";
+import { computed, shallowRef, watch } from "vue";
 import { useRouter } from "vitepress";
-import { EDialog, EKbd, ESearchBar, ESearchResults, EVisuallyHidden } from "@eos-ui/vue";
-import type { SearchResultItem } from "@eos-ui/vue";
-import { breadcrumb, componentDocs, componentSearchOptions, searchBuildOptions, searchOptions, titleRank, type ComponentGroup } from "../search";
+import { ECommandPalette } from "@eos-ui/vue";
+import type { CommandItem } from "@eos-ui/vue";
+import {
+  areaOf,
+  breadcrumb,
+  componentDocs,
+  componentSearchOptions,
+  searchBuildOptions,
+  searchOptions,
+  titleRank,
+  type ComponentGroup,
+} from "../search";
 // @ts-expect-error a build-time data loader (docs/data/components.data.js)
 import { data as componentGroups } from "../../data/components.data.js";
 import { cleanPath } from "./nav";
@@ -18,111 +27,103 @@ interface Hit {
   titles: string[];
 }
 
+interface Loaded {
+  index: MiniSearch<Hit>;
+  components: MiniSearch<Hit>;
+}
+
+/** Shown before anything is typed, so the palette is never an empty box. */
+const SUGGESTED = ["/guide/getting-started", "/components", "/patterns", "/playground", "/guide/theming"];
+
 const router = useRouter();
-const query = ref("");
-const hits = shallowRef<Hit[]>([]);
-const results = ref<{ focusFirst: () => void } | null>(null);
-const field = ref<{ focus: () => void } | null>(null);
-let index: MiniSearch<Hit> | null = null;
-let componentIndex: MiniSearch<Hit> | null = null;
+const loaded = shallowRef<Loaded | null>(null);
+const docs = shallowRef<CommandItem[]>([]);
+let loading: Promise<void> | null = null;
 
-async function load() {
-  if (index) return;
-  const mod = await (localSearchIndex as Record<string, () => Promise<{ default: string }>>)["root"]!();
-  index = MiniSearch.loadJSON<Hit>(mod.default, { ...searchBuildOptions, searchOptions });
-  componentIndex = new MiniSearch<Hit>(componentSearchOptions);
-  componentIndex.addAll(componentDocs(componentGroups as ComponentGroup[]) as unknown as Hit[]);
+const hrefOf = (id: string) => id.replace(/\.html(?=#|$)/, "");
+
+function toItem(h: Hit): CommandItem {
+  const href = hrefOf(h.id);
+  return { id: href, label: h.title, description: breadcrumb(h.id, h.title, h.titles), group: areaOf(h.id) };
 }
 
-async function run() {
-  await load();
-  const q = query.value.trim();
-  hits.value =
-    index && componentIndex && q
-      ? [...componentIndex.search(q, componentSearchOptions.searchOptions), ...index.search(q).slice(0, 40)]
-          .map((r) => r as unknown as Hit)
-          .map((h, at) => ({ h, at, rank: titleRank(h.title, q) }))
-          .sort((a, b) => a.rank - b.rank || a.at - b.at)
-          .slice(0, 12)
-          .map((x) => x.h)
-      : [];
+/** The index is fetched on first use, then every indexed page and heading becomes a command the palette can score. */
+function load(): Promise<void> {
+  loading ??= (async () => {
+    const mod = await (localSearchIndex as Record<string, () => Promise<{ default: string }>>)["root"]!();
+    const index = MiniSearch.loadJSON<Hit>(mod.default, { ...searchBuildOptions, searchOptions });
+    const components = new MiniSearch<Hit>(componentSearchOptions);
+    const own = componentDocs(componentGroups as ComponentGroup[]) as unknown as Hit[];
+    components.addAll(own);
+    const raw = JSON.parse(mod.default) as {
+      documentIds: Record<string, string>;
+      storedFields: Record<string, { title: string; titles: string[] }>;
+    };
+    const all = new Map<string, CommandItem>();
+    for (const h of own) all.set(hrefOf(h.id), toItem(h));
+    for (const [short, id] of Object.entries(raw.documentIds)) {
+      const stored = raw.storedFields[short];
+      if (stored && !all.has(hrefOf(id))) all.set(hrefOf(id), toItem({ id, ...stored }));
+    }
+    docs.value = [...all.values()];
+    loaded.value = { index, components };
+  })();
+  return loading;
 }
 
-watch(query, run);
-watch(open, async (isOpen) => {
-  if (!isOpen) return;
-  await load();
-  await run();
-  await nextTick();
-  field.value?.focus();
-});
-
-const status = computed(() => {
-  if (!query.value.trim()) return "";
-  const n = hits.value.length;
-  return n ? `${n} ${n === 1 ? "result" : "results"}` : "No results";
-});
-
-const items = computed<SearchResultItem[]>(() =>
-  hits.value.map((h) => ({
-    label: h.title,
-    description: breadcrumb(h.id, h.title, h.titles),
-    href: h.id.replace(/\.html(?=#|$)/, ""),
-  })),
+watch(
+  open,
+  (isOpen) => {
+    if (isOpen) void load();
+  },
+  { immediate: true },
 );
-const emptyText = computed(() => (query.value.trim() ? `Nothing found for "${query.value}".` : undefined));
 
-function go(href: string) {
-  open.value = false;
-  query.value = "";
-  const [path, hash] = href.split("#");
+// The palette asks for a score per command, once per command per query. MiniSearch ranks the whole query once, so the
+// ranking is computed when the query changes and each command only looks its own position up.
+let rankedFor = "";
+let ranked = new Map<string, number>();
+
+function rankFor(q: string) {
+  if (q === rankedFor || !loaded.value) return;
+  rankedFor = q;
+  const { index, components } = loaded.value;
+  const order = [...components.search(q, componentSearchOptions.searchOptions), ...index.search(q).slice(0, 40)]
+    .map((r) => r as unknown as Hit)
+    .map((h, at) => ({ id: hrefOf(h.id), at, rank: titleRank(h.title, q) }))
+    .sort((a, b) => a.rank - b.rank || a.at - b.at);
+  ranked = new Map();
+  for (const hit of order) if (!ranked.has(hit.id) && ranked.size < 12) ranked.set(hit.id, 1000 - ranked.size);
+}
+
+function score(item: CommandItem, query: string): number {
+  // A page's own entry is the one whose line is only its area.
+  if (!query) return !item.description?.includes("›") && SUGGESTED.includes(item.id.replace(/[#?].*$/, "").replace(/\/(index)?$/, "")) ? 1 : 0;
+  rankFor(query);
+  return ranked.get(item.id) ?? 0;
+}
+
+// A new index means the same query ranks differently.
+watch(loaded, () => (rankedFor = ""));
+
+const items = computed(() => (loaded.value ? docs.value : []));
+
+function onSelect(item: CommandItem) {
+  const [path, hash] = item.id.split("#");
   void router.go(cleanPath(path ?? "/") + (hash ? `#${hash}` : ""));
-}
-
-function onFieldKeydown(e: KeyboardEvent) {
-  if (e.key === "ArrowDown" && items.value.length) {
-    e.preventDefault();
-    results.value?.focusFirst();
-  }
-}
-
-function openFirst() {
-  const first = items.value[0]?.href;
-  if (first) go(first);
-}
-
-function onSelect(item: SearchResultItem, e: MouseEvent) {
-  e.preventDefault();
-  go(item.href ?? "/");
 }
 </script>
 
 <template>
-  <EDialog v-model:open="open" title="Search" class="site-search">
-    <div class="site-search-body">
-      <ESearchBar
-        ref="field"
-        v-model="query"
-        label="Search the docs"
-        placeholder="Search the docs"
-        hide-action
-        autocomplete="off"
-        @keydown="onFieldKeydown"
-        @submit="openFirst"
-      />
-      <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ status }}</EVisuallyHidden>
-      <ESearchResults
-        ref="results"
-        label="Search results"
-        :items="items"
-        :query="query"
-        :empty-text="emptyText"
-        @select="onSelect"
-        @edge="field?.focus()"
-      />
-    </div>
-    <template #actions>
-      <p class="site-search-hint"><EKbd small>Esc</EKbd> to close</p>
-    </template>
-  </EDialog>
+  <ECommandPalette
+    v-model:open="open"
+    label="Search the docs"
+    placeholder="Search the docs"
+    :shortcut="false"
+    :items="items"
+    :score="score"
+    :loading="!loaded"
+    empty-text="Nothing found. Try another word."
+    @select="onSelect"
+  />
 </template>

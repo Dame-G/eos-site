@@ -102,7 +102,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           <div class="meta">
             <p class="name">
               <TokenName :name="c.name" /> <span class="hex"
-                ><template v-if="c.source.startsWith('{')">= {{ c.value }}</template><ColorValue v-else :value="shownHex(c)"
+                ><template v-if="c.source.startsWith('{')">= </template><ColorValue :value="shownHex(c)"
               /></span>
             </p>
             <EText small muted class="usage">{{ c.usage }}</EText>
