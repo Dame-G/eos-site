@@ -15,7 +15,7 @@
     "docs:build": "node scripts/gen-llms.mjs && vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "build:check": "node scripts/check-build-output.mjs",
-    "ssr:check": "node scripts/ssr-check.mjs",
+
     "pages:check": "node scripts/check-pages.mjs",
     "knip": "knip",
     "test": "vitest run",

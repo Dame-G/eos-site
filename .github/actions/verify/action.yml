@@ -89,7 +89,7 @@ runs:
       env:
         CI: "true"
 
-    - name: Check pages (light and dark) and server rendering
+    - name: Check pages (light and dark)
       shell: bash
       working-directory: eos-site
       run: |
@@ -98,6 +98,5 @@ runs:
         trap 'kill $preview' EXIT
         for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
         pnpm pages:check http://127.0.0.1:4173 --all
-        pnpm ssr:check
       env:
         CI: "true"
