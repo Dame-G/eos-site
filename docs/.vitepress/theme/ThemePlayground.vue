@@ -437,6 +437,10 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
     min-height: 0;
     overflow-y: auto;
 
+    /* Scrolling clips sideways too, so a focused field's outline (which reaches outside it) would be cut where the field meets the panel. Room for it on the sides and below, taken back with the margin so the fields still line up with the column. */
+    padding-inline: calc(2 * var(--e-stroke-focus));
+    padding-block-end: calc(2 * var(--e-stroke-focus));
+    margin-inline: calc(-2 * var(--e-stroke-focus));
   }
 }
 </style>
