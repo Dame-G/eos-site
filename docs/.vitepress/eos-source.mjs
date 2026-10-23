@@ -23,12 +23,18 @@ export const componentsDir = join(eosRoot, "packages/vue/src/components");
 
 /** The groups, in the order the sidebar shows them. */
 export const GROUPS = [
-  { id: "primitives", title: "Primitives" },
-  { id: "blocks", title: "Blocks" },
-  { id: "controls", title: "Form controls" },
-  { id: "composites", title: "Composite controls" },
-  { id: "containers", title: "Containers and feedback" },
-  { id: "page", title: "Page" },
+  { id: "actions", title: "Actions" },
+  { id: "content", title: "Text and content" },
+  { id: "layout", title: "Layout" },
+  { id: "form", title: "Form structure" },
+  { id: "text", title: "Text inputs" },
+  { id: "choices", title: "Choices" },
+  { id: "pickers", title: "Dates, files and signatures" },
+  { id: "data", title: "Data display" },
+  { id: "feedback", title: "Feedback and status" },
+  { id: "overlays", title: "Overlays and disclosure" },
+  { id: "navigation", title: "Navigation" },
+  { id: "page", title: "Page frame" },
 ];
 
 /** Folder names of every component in the library, sorted. Adding a folder to the library adds a page here. */

@@ -1,20 +1,17 @@
-export const GROUP_OF = {
-  Avatar: "primitives", AvatarGroup: "primitives", Tag: "primitives", Metric: "primitives", CopyButton: "primitives", Button: "primitives", Divider: "primitives", Heading: "primitives",
-  Highlight: "primitives", Icon: "primitives", IconButton: "primitives", Kbd: "primitives", Kicker: "primitives", Link: "primitives",
-  Progress: "primitives", Skeleton: "primitives", Spinner: "primitives", Stamp: "primitives", Text: "primitives",
-  VisuallyHidden: "primitives",
-  Actions: "blocks", CodeBlock: "blocks", DescriptionList: "blocks", Grid: "blocks", Inline: "blocks",
-  Container: "blocks", Stack: "blocks", Surface: "blocks", Table: "blocks",
-  Form: "controls", Slider: "controls", Checkbox: "controls", CheckboxGroup: "controls", Combobox: "controls", Field: "controls", Fieldset: "controls",
-  NumberField: "controls", OtpField: "controls", RadioGroup: "controls", SearchBar: "controls",
-  SearchResults: "controls", Segmented: "controls", Select: "controls", Switch: "controls", TextField: "controls",
-  Textarea: "controls", Upload: "controls",
-  Calendar: "composites", ColorField: "composites", CurrencyField: "composites",
-  DatePicker: "composites", Pagination: "composites", PasswordField: "composites",
-  PhoneField: "composites", RangePicker: "composites", SignatureField: "composites", SignaturePad: "composites",
-  CommandPalette: "containers", DataGrid: "containers", Dialog: "containers", Disclosure: "containers", Drawer: "containers", ExpandableRow: "containers",
-  EmptyState: "containers", Menu: "containers", Notice: "containers",
-  Definition: "containers", Tabs: "containers", Toast: "containers", ToastProvider: "containers", Tooltip: "containers",
-  AppFooter: "page", AppHeader: "page", AppShell: "page", Breadcrumb: "page", NavList: "page",
-  PageHeader: "page", SkipLink: "page", Stepper: "page",
+/** Which sidebar group each component sits in. The groups follow what you are trying to do, not the library's cascade layers. */
+const MEMBERS = {
+  actions: ["Button", "IconButton", "CopyButton", "Link", "Actions"],
+  content: ["Heading", "Text", "Kicker", "Highlight", "Kbd", "CodeBlock", "Icon", "Avatar", "AvatarGroup", "VisuallyHidden"],
+  layout: ["Stack", "Inline", "Grid", "Container", "Surface", "Divider"],
+  form: ["Form", "Field", "Fieldset"],
+  text: ["TextField", "Textarea", "PasswordField", "NumberField", "CurrencyField", "PhoneField", "OtpField", "ColorField", "SearchBar", "SearchResults"],
+  choices: ["Checkbox", "CheckboxGroup", "RadioGroup", "Switch", "Segmented", "Select", "Combobox", "Slider"],
+  pickers: ["Calendar", "DatePicker", "RangePicker", "Upload", "SignatureField", "SignaturePad"],
+  data: ["Table", "DataGrid", "DescriptionList", "Definition", "Metric", "Tag", "Stamp", "ExpandableRow"],
+  feedback: ["Notice", "Toast", "ToastProvider", "Progress", "Spinner", "Skeleton", "EmptyState"],
+  overlays: ["Dialog", "Drawer", "Menu", "Tooltip", "CommandPalette", "Disclosure"],
+  navigation: ["Tabs", "Breadcrumb", "NavList", "Pagination", "Stepper", "SkipLink"],
+  page: ["AppShell", "AppHeader", "AppFooter", "PageHeader"],
 };
+
+export const GROUP_OF = Object.fromEntries(Object.entries(MEMBERS).flatMap(([group, names]) => names.map((name) => [name, group])));

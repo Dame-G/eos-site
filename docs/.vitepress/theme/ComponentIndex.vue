@@ -10,13 +10,19 @@ interface Group {
 }
 const props = defineProps<{ groups: Group[] }>();
 
-/** What each layer is for, in a few words. */
+/** What each group is for, in a few words. */
 const ROLE: Record<string, string> = {
-  primitives: "The smallest pieces. Each stands alone.",
-  blocks: "Layout and containers for content.",
-  controls: "One field or choice each.",
-  composites: "Controls assembled from the controls before them.",
-  containers: "Overlays, panels and feedback.",
+  actions: "Buttons and links: things you press to do something.",
+  content: "Headings, text, code, icons and avatars.",
+  layout: "Spacing, grids and surfaces that arrange content.",
+  form: "The form, its fields and field groups.",
+  text: "Inputs you type into.",
+  choices: "Pick one or several from a set.",
+  pickers: "Dates, files and signatures.",
+  data: "Tables, lists of facts, tags and status marks.",
+  feedback: "Messages, progress and empty states.",
+  overlays: "Dialogs, menus, tooltips and things that open and close.",
+  navigation: "Moving between pages and within a page.",
   page: "The frame of a whole page or app.",
 };
 
