@@ -31,8 +31,6 @@ function followShadows(base: Record<string, string>, next: Record<string, string
   return out;
 }
 
-/** Overrides of tokens that have a typed input: lifted out of `t` so the export says `strokes: { edge: 2 }` rather than a raw token. */
-const TYPED_STROKES = { "stroke-edge": "edge", "stroke-card": "card" } as const;
 
 export function build(s: State, name = "my-theme"): Built {
   const input: ThemeInput = { name };
@@ -74,14 +72,8 @@ export function build(s: State, name = "my-theme"): Built {
   const strokes: NonNullable<ThemeInput["strokes"]> = {};
   if (s.hair !== NEUTRAL.hair) strokes.hair = s.hair;
   if (s.focus !== NEUTRAL.focus) strokes.focus = s.focus;
+  // `strokes` takes only hair and focus: its edge and card fields are deprecated, so a stroke-edge or stroke-card override stays a token.
   const t = { ...s.t };
-  for (const [token, field] of Object.entries(TYPED_STROKES)) {
-    const m = /^(\d+(?:\.\d+)?)px$/.exec(t[token] ?? "");
-    if (m && +m[1]! > 0) {
-      strokes[field] = +m[1]!;
-      delete t[token];
-    }
-  }
   if (Object.keys(strokes).length) input.strokes = strokes;
   if (s.motion !== "default") input.motion = s.motion;
   if (s.elevation !== "outline" || input.surface || input.foreground) input.elevation = s.elevation;

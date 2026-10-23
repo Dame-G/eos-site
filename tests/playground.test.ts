@@ -21,13 +21,13 @@ describe("playground export", () => {
     });
   }
 
-  it("lifts stroke-edge and stroke-card overrides into strokes", () => {
+  it("keeps stroke-edge and stroke-card overrides as tokens, since strokes.edge and strokes.card are deprecated", () => {
     const s = initialState();
     s.t = { "stroke-edge": "2px", "stroke-card": "3px" };
     const b = build(s);
-    expect(b.input.strokes).toEqual({ edge: 2, card: 3 });
-    expect(b.extra).toEqual({});
-    expect(themeCode(b)).toContain("strokes: { edge: 2, card: 3 }");
+    expect(b.input.strokes).toBeUndefined();
+    expect(b.input.tokens).toEqual({ "stroke-edge": "2px", "stroke-card": "3px" });
+    expect(themeCode(b)).toContain('"stroke-edge": "2px"');
   });
 
   it("writes the page and text colours when they differ from what the surface would give", () => {
