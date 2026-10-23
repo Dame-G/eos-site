@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { ESearchBar, ESearchResults, EStack, EVisuallyHidden, EText } from "@eos-ui/vue";
+import { ESearchBar, ESearchResults, ESkeleton, EStack, EVisuallyHidden, EText } from "@eos-ui/vue";
 import type { SearchResultItem } from "@eos-ui/vue";
 
 const all: SearchResultItem[] = [
@@ -44,6 +44,13 @@ function onKeydown(e: KeyboardEvent) {
       @select="onSelect"
       @edge="field?.focus()"
     />
+    <EText small muted>While results load</EText>
+    <EStack :gap="2" aria-busy="true">
+      <ESkeleton :height="56" />
+      <ESkeleton :height="56" />
+    </EStack>
+    <EText small muted>No results</EText>
+    <ESearchResults label="Empty results" :items="[]" query="tax" empty-text="Nothing found for &quot;tax&quot;. Try a shorter word." />
     <EText small muted>{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
   </EStack>
 </template>

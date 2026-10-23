@@ -135,7 +135,7 @@ Wrap `localStorage` in `try` as the script does, since storage can be blocked. B
 
 ## Plain CSS
 
-Library CSS is layered, so your unlayered CSS wins with no extra specificity.
+Library CSS is layered, so your unlayered CSS wins with no extra specificity. For Tailwind and other frameworks, see [Tailwind and CSS](/guide/tailwind-and-css).
 
 ```css
 :root {

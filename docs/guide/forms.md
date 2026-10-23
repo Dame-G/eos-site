@@ -13,7 +13,17 @@ Every field takes:
 - `hint`: help under the control.
 - `error`: replaces the hint, turns the edge red and is announced. Say how to fix it: "Enter a mobile number with 10 digits".
 - `required` or `optional`: shows the word. Flag whichever is rarer.
-- `hideLabel`: hides the label visually and keeps it for assistive technology.
+- `hideLabel`: see [Labels](#labels).
+
+## Labels
+
+A visible label is the default and the better choice: it stays on screen while the person types, and it is the biggest click target. Use `hideLabel` only when something nearby already names the field, such as a search box beside a heading or an amount next to "Another amount". The label is kept for screen readers.
+
+```vue
+<ETextField v-model="amount" label="Amount" prefix="$" hide-label />
+```
+
+A table cell uses `bare` on a checkbox in the same way. More on labels and keys: [Accessibility](/guide/accessibility).
 
 ## Your own control
 
@@ -51,3 +61,5 @@ const firstError = computed(() => (submitted.value && !first.value.trim() ? "Ent
 See [Register](/patterns/register) and [Sign in](/patterns/sign-in) end to end.
 
 Controls with a `name` submit with the form, including Select, which carries its value in a hidden input.
+
+For choosing between controls, see [Which component should I use?](/guide/choosing). For a whole settings form with a toast, see [Settings page](/patterns/settings).

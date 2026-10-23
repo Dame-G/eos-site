@@ -15,7 +15,7 @@ const showClosable = ref(true);
     </ENotice>
     <ENotice tone="danger" title="Card declined">Check the card number or use another card.</ENotice>
 
-    <ENotice v-if="showClosable" title="Reminders are on" @close="showClosable = false">
+    <ENotice v-if="showClosable" closable title="Reminders are on" @close="showClosable = false">
       We message you two days before each visit.
     </ENotice>
   </EStack>

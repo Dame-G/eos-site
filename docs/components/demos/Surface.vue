@@ -4,15 +4,15 @@ import { EButton, EGrid, EHeading, ESurface, EText } from "@eos-ui/vue";
 
 <template>
   <EGrid min="12rem" :gap="3">
-    <ESurface as="article" pad="md">
+    <ESurface as="article">
       <EHeading :level="3">Default</EHeading>
       <EText>Flat and outlined, with medium padding.</EText>
     </ESurface>
-    <ESurface as="article" pad="md" raised>
+    <ESurface as="article" raised>
       <EHeading :level="3">Raised</EHeading>
       <EText>The lifted shadow of a toast.</EText>
     </ESurface>
-    <ESurface as="article" pad="md">
+    <ESurface as="article">
       <EHeading :level="3">October statement</EHeading>
       <EText>$162.40, due Oct 31, 2026.</EText>
       <template #actions>

@@ -6,6 +6,11 @@ import SignIn from "../docs/patterns/SignIn.vue";
 import Register from "../docs/patterns/Register.vue";
 import SignForm from "../docs/patterns/SignForm.vue";
 import Statements from "../docs/patterns/Statements.vue";
+import Dashboard from "../docs/patterns/Dashboard.vue";
+import Settings from "../docs/patterns/Settings.vue";
+import SearchFilters from "../docs/patterns/SearchFilters.vue";
+import DataTable from "../docs/patterns/DataTable.vue";
+import EmptyError from "../docs/patterns/EmptyError.vue";
 
 const console_ = watchConsole();
 
@@ -85,6 +90,92 @@ describe("Statements", () => {
     await page.getByRole("textbox", { name: "Search" }).fill("Lab");
     await userEvent.keyboard("{Enter}");
     await expect.element(page.getByText("1 statement", { exact: true })).toBeVisible();
+    await expectNoViolations(document.body);
+    console_.expectQuiet();
+  });
+});
+
+describe("Dashboard overview", () => {
+  it("shows the notice, the figures and the recent statements", async () => {
+    await mount(Dashboard);
+    await settle();
+    await expect.element(page.getByText("One statement is due")).toBeVisible();
+    await expect.element(page.getByText("Balance due")).toBeVisible();
+    await expect.element(page.getByRole("table")).toBeVisible();
+    await expectNoViolations(document.body);
+    console_.expectQuiet();
+  });
+});
+
+describe("Settings page", () => {
+  it("shows field errors for an empty name and confirms a save with a toast", async () => {
+    await mount(Settings);
+    await settle();
+    await expectNoViolations(document.body);
+
+    await page.getByRole("textbox", { name: /Name/ }).fill("");
+    await page.getByRole("button", { name: "Save changes" }).click();
+    await expect.element(page.getByText("Enter your name").first()).toBeVisible();
+
+    await page.getByRole("textbox", { name: /Name/ }).fill("Ana Ruiz");
+    await page.getByRole("button", { name: "Save changes" }).click();
+    await expect.element(page.getByText("Settings saved")).toBeVisible();
+    await expectNoViolations(document.body);
+    console_.expectQuiet();
+  });
+});
+
+describe("Search with filters", () => {
+  it("narrows by type, searches, and clears the filters", async () => {
+    await mount(SearchFilters);
+    await settle();
+    await expect.element(page.getByText("6 documents")).toBeVisible();
+    await expectNoViolations(document.body);
+
+    await page.getByRole("radio", { name: "Receipt" }).click();
+    await expect.element(page.getByText("2 documents")).toBeVisible();
+
+    await page.getByRole("textbox", { name: "Search" }).fill("zzz");
+    await userEvent.keyboard("{Enter}");
+    await expect.element(page.getByText("0 documents")).toBeVisible();
+    await expect.element(page.getByText(/Nothing found for/)).toBeVisible();
+    await expectNoViolations(document.body);
+
+    await page.getByRole("button", { name: "Clear filters" }).click();
+    await expect.element(page.getByText("6 documents")).toBeVisible();
+    console_.expectQuiet();
+  });
+});
+
+describe("Data table with bulk actions", () => {
+  it("offers bulk actions once rows are selected", async () => {
+    await mount(DataTable);
+    await settle();
+    await expect.element(page.getByRole("table")).toBeVisible();
+    await expectNoViolations(document.body);
+
+    await page.getByRole("checkbox").nth(1).click();
+    await expect.element(page.getByRole("button", { name: "Download receipts" })).toBeVisible();
+    await page.getByRole("button", { name: "Remove" }).click();
+    await expect.element(page.getByText("This cannot be undone.")).toBeVisible();
+    await expectNoViolations(document.body);
+    console_.expectQuiet();
+  });
+});
+
+describe("Empty and error states", () => {
+  it("starts on the error, retries through loading to the list, and previews the empty state", async () => {
+    await mount(EmptyError);
+    await settle();
+    await expect.element(page.getByText("Statements did not load")).toBeVisible();
+    await expectNoViolations(document.body);
+
+    await page.getByRole("button", { name: "Try again" }).click();
+    await expect.element(page.getByText("Annual check-up")).toBeVisible();
+
+    await page.getByRole("radio", { name: "Empty" }).click();
+    await expect.element(page.getByText("No statements yet")).toBeVisible();
+    await settle(400); // the chosen segment finishes its colour transition
     await expectNoViolations(document.body);
     console_.expectQuiet();
   });

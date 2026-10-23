@@ -1,8 +1,11 @@
-import { defineTheme } from "@eos-ui/tokens";
+import { defineTheme, type ThemeInput } from "@eos-ui/tokens";
+
+/** The inputs of the dark scheme, shared with the demos' own dark toggle. */
+export const DARK_INPUT = { name: "dark", background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" } satisfies ThemeInput;
 
 /** The site's two themes. Kept free of Vue so the config can render the dark one into the document head. */
 export const lightTheme = defineTheme({ name: "light" });
-export const darkTheme = defineTheme({ name: "dark", background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" });
+export const darkTheme = defineTheme(DARK_INPUT);
 
 export type Choice = "system" | "light" | "dark";
 export const STORAGE_KEY = "eos-scheme";
@@ -15,3 +18,6 @@ export const BOOT_SCRIPT = `(function(){try{var c=localStorage.getItem("${STORAG
 
 /** The dark tokens under the attribute the boot script sets. Unlayered, so it wins over the default tokens until the client applies the theme inline. */
 export const darkCss = darkTheme.css({ selector: ':root[data-scheme="dark"]', layer: false });
+
+/** The browser chrome colour of each scheme: the header's own surface, so the address bar and the page are one colour. */
+export const THEME_COLOR = { light: lightTheme.tokens["surface"] as string, dark: darkTheme.tokens["surface"] as string };

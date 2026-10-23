@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { contrast } from "@eos-ui/tokens";
 import ColorValue from "./ColorValue.vue";
+import TokenName from "./TokenName.vue";
+import { activeScheme } from "./site-theme";
 import { EStamp, EDataGrid, EGrid, EHeading, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
@@ -17,6 +21,39 @@ function tone(level: string) {
   if (level.startsWith("3:1")) return "info";
   if (level.startsWith("Large")) return "warning";
   return "danger";
+}
+// The ratios are read from the colours the page is showing now, so they follow the colour scheme and not only the light values written at build time.
+const live = ref<Record<string, string>>({});
+function resolveColour(name: string, depth = 0): string {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(`--e-${name}`).trim();
+  const m = /^var(--e-([a-z0-9-]+))$/.exec(raw);
+  return m && depth < 6 ? resolveColour(m[1]!, depth + 1) : raw;
+}
+function readLive() {
+  const next: Record<string, string> = {};
+  for (const c of data.colours as { name: string; partners: Partner[] }[]) {
+    next[c.name] = resolveColour(c.name);
+    for (const p of c.partners) next[p.name] = resolveColour(p.name);
+  }
+  live.value = next;
+}
+onMounted(readLive);
+watch(activeScheme, () => requestAnimationFrame(readLive));
+onBeforeUnmount(() => (live.value = {}));
+const HEX = /^#[0-9a-f]{6}$/i;
+function ratioOf(a: string, p: Partner): number {
+  const x = live.value[a];
+  const y = live.value[p.name];
+  return x && y && HEX.test(x) && HEX.test(y) ? Math.round(contrast(x, y) * 100) / 100 : p.ratio;
+}
+const shownHex = (c: { name: string; value: string }) => (HEX.test(live.value[c.name] ?? "") ? live.value[c.name]! : c.value);
+function levelOf(a: string, p: Partner): string {
+  const r = ratioOf(a, p);
+  if (/non-text/.test(p.role)) return r >= 3 ? "3:1 or more (non-text)" : "Fails 3:1";
+  if (r >= 7) return "AAA";
+  if (r >= 4.5) return "AA";
+  if (r >= 3) return "Large text only";
+  return p.level;
 }
 const isText = (p: Partner) => !/non-text|Decoration/.test(p.role);
 
@@ -53,10 +90,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
     <template v-else-if="section === 'colour'">
       <EGrid as="ul" min="22rem" :gap="4" class="swatches">
-        <ESurface v-for="c in data.colours" :id="`color-${c.name}`" :key="c.name" as="li" pad="sm" class="swatch">
+        <ESurface v-for="c in data.colours" :id="`color-${c.name}`" :key="c.name" as="li" small class="swatch">
           <div
             class="chip"
-            :style="{ background: c.value, color: c.partners[0]?.value ?? 'inherit' }"
+            :style="{ background: `var(--e-${c.name})`, color: c.partners[0] ? `var(--e-${c.partners[0].name})` : 'inherit' }"
             role="img"
             :aria-label="`${c.name} is ${c.value}`"
           >
@@ -64,16 +101,16 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           </div>
           <div class="meta">
             <p class="name">
-              <EHighlight code>--e-{{ c.name }}</EHighlight> <span class="hex"
-                ><template v-if="c.source.startsWith('{')">= {{ c.value }}</template><ColorValue v-else :value="c.value"
+              <TokenName :name="c.name" /> <span class="hex"
+                ><template v-if="c.source.startsWith('{')">= {{ c.value }}</template><ColorValue v-else :value="shownHex(c)"
               /></span>
             </p>
             <EText small muted class="usage">{{ c.usage }}</EText>
             <EText small muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
             <ul v-if="c.partners.length" class="pairs">
               <li v-for="p in c.partners" :key="p.name">
-                <strong>{{ p.ratio }}:1</strong> with <EHighlight code>{{ p.name }}</EHighlight>
-                <EStamp :tone="tone(p.level)" size="sm">{{ p.level }}</EStamp>
+                <strong>{{ ratioOf(c.name, p) }}:1</strong> with <EHighlight code>{{ p.name }}</EHighlight>
+                <EStamp :tone="tone(levelOf(c.name, p))" size="sm">{{ levelOf(c.name, p) }}</EStamp>
                 <span class="role">{{ p.role }}</span>
               </li>
             </ul>
@@ -98,7 +135,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           ]"
         >
           <template #cell-name="{ row }"
-            ><EHighlight code>--e-{{ row.name }}</EHighlight></template
+            ><TokenName :name="row.name as string" /></template
           >
           <template #cell-sample="{ row }"
             ><span :style="{ fontFamily: `var(--e-${row.name})` }">{{ row.sample }}</span></template
@@ -144,7 +181,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       :rows="withFrom(data.spacing as Token[])"
     >
       <template #cell-name="{ row }"
-        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
+        ><TokenName :name="row.name as string" /></template
       >
       <template #cell-size="{ row }"><span class="bar" :style="{ width: row.value as string }" /></template>
     </EDataGrid>
@@ -157,7 +194,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       :rows="withFrom(data.radius as Token[])"
     >
       <template #cell-name="{ row }"
-        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
+        ><TokenName :name="row.name as string" /></template
       >
       <template #cell-shape="{ row }"><span class="box" :style="{ borderRadius: row.value as string }" /></template>
     </EDataGrid>
@@ -170,7 +207,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       :rows="withFrom(data.shadow as Token[])"
     >
       <template #cell-name="{ row }"
-        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
+        ><TokenName :name="row.name as string" /></template
       >
       <template #cell-look="{ row }"><span class="box wide" :style="{ boxShadow: `var(--e-${row.name})`, border: 'none' }" /></template>
     </EDataGrid>
@@ -183,7 +220,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       :rows="withFrom(data.fontSize as Token[])"
     >
       <template #cell-name="{ row }"
-        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
+        ><TokenName :name="row.name as string" /></template
       >
       <template #cell-sample="{ row }"
         ><span :style="{ fontSize: row.value as string, lineHeight: 1.2 }">Aa</span></template
@@ -198,7 +235,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       :rows="withFrom((section === 'motion' ? [...data.duration, ...data.easing] : data[section]) as Token[])"
     >
       <template #cell-name="{ row }"
-        ><EHighlight code>--e-{{ row.name }}</EHighlight></template
+        ><TokenName :name="row.name as string" /></template
       >
     </EDataGrid>
   </div>

@@ -84,8 +84,9 @@ body:has(.site-body, .home) .site {
   background: var(--site-ground);
 }
 
+/* The ground around the sheet is the text colour thinned into the surface, so it follows any theme and stays a step darker than the page. */
 .site {
-  --site-ground: #e6e6e6;
+  --site-ground: color-mix(in srgb, var(--e-ink) 10%, var(--e-surface));
 }
 
 :root[data-scheme="dark"] .site {
@@ -277,7 +278,7 @@ body:has(.site-body, .home) .site {
   display: grid;
   flex: 1;
   grid-template-columns: minmax(0, 1fr);
-  align-content: center;
+  align-content: start;
   gap: 0;
   width: 100%;
   max-width: var(--site-wide);
@@ -302,7 +303,8 @@ body:has(.site-body, .home) .site {
 /* Faint flowing lines behind the home content. It is an SVG pattern the browser rasterises once; the pointer's light is a masked copy slid about by transforms alone, so the page never repaints for them. */
 .flow-field {
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  height: calc(100svh - var(--site-header));
   overflow: hidden;
   container-type: size;
   pointer-events: none;
@@ -462,6 +464,8 @@ body:has(.site-body, .home) .site {
 }
 
 .demo-stage {
+  padding: var(--e-space-4);
+  background: var(--e-surface);
   font-family: var(--e-font-sans);
   font-size: var(--e-text-md);
   line-height: 1.5;
@@ -657,4 +661,252 @@ body:has(.site-body, .home) .site {
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
   color: var(--e-ink);
+}
+
+/* The frame every demo shares: a bar with the Preview label and the preview options, then the stage. */
+.demo-frame {
+  border: var(--e-stroke-edge) solid var(--e-border);
+  border-radius: var(--e-radius-md);
+  overflow: clip;
+  background: var(--e-surface);
+}
+
+.demo-bar {
+  --e-control-height: 2.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-2) var(--e-space-4);
+  padding: var(--e-space-2) var(--e-space-3);
+  border-bottom: var(--e-stroke-hair) solid var(--e-border);
+  background: var(--e-surface-tint);
+}
+
+.demo-kicker {
+  margin: 0;
+}
+
+.demo-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-2);
+  margin-inline-start: auto;
+}
+
+@media (max-width: 40rem) {
+  .demo-tools {
+    margin-inline-start: 0;
+  }
+}
+
+/* The Source panel closes the demo's section. The heading that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
+.site-article .e-details:has(+ h2) {
+  margin-bottom: calc(-1 * var(--e-space-6));
+}
+
+/* A thin band above an inner page: still contour lines and the area's name. */
+.page-strip {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 4.5rem;
+  margin-bottom: var(--e-space-4);
+  padding-bottom: var(--e-space-2);
+  overflow: hidden;
+  border-bottom: var(--e-stroke-hair) solid var(--e-border);
+}
+
+.page-strip-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--e-ink);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+:root[data-scheme="dark"] .page-strip-lines {
+  opacity: 0.03;
+}
+
+.page-strip-label {
+  position: relative;
+  margin: 0;
+}
+
+/* Numbered steps: a list written straight into a page counts its items in the mono face, like the kickers. */
+.site-article.vp-doc > div > ol {
+  padding-inline-start: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.site-article.vp-doc > div > ol > li {
+  position: relative;
+  counter-increment: step;
+  padding-inline-start: var(--e-space-8);
+}
+
+.site-article.vp-doc > div > ol > li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.15em;
+  font: 600 var(--e-text-sm) / 1.5 var(--e-font-mono);
+  letter-spacing: 0.08em;
+  color: var(--e-primary);
+}
+
+.site-edit {
+  margin: var(--e-space-6) 0 0;
+  font-size: var(--e-text-sm);
+}
+
+/* The footer: the wordmark, the licence and version, then the links. */
+.site-footer-about {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-1) var(--e-space-4);
+}
+
+.site-footer-word {
+  color: var(--e-primary);
+  font-size: var(--e-text-3xl);
+}
+
+.site-drawer-scheme {
+  margin-bottom: var(--e-space-3);
+}
+
+.not-found {
+  display: grid;
+  gap: var(--e-space-6);
+}
+
+.not-found-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-space-2) var(--e-space-6);
+  margin: var(--e-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The components index. */
+.component-index {
+  display: grid;
+  gap: var(--e-space-4);
+}
+
+.component-popular-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-space-2) var(--e-space-4);
+  margin: var(--e-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.component-group-kicker {
+  margin-top: var(--e-space-4);
+}
+
+/* The home page below the first screen. */
+.home-top {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-height: calc(100svh - var(--site-header) - var(--site-footer) - var(--e-space-8) * 2);
+}
+
+.home-more {
+  position: relative;
+  display: grid;
+  gap: var(--e-space-8);
+  margin-top: var(--e-space-6);
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.showcase-head {
+  display: grid;
+  justify-items: start;
+  gap: var(--e-space-3);
+  margin-bottom: var(--e-space-4);
+}
+
+.showcase-title {
+  margin: 0;
+  font: 500 var(--e-text-3xl) / 1.15 var(--e-font-sans);
+}
+
+.showcase-stage {
+  padding: var(--e-space-4);
+  border: var(--e-stroke-edge) solid var(--e-border);
+  border-radius: var(--e-radius-md);
+  background: var(--e-background);
+  transition: background-color var(--e-duration-base, 0.2s) ease;
+}
+
+.showcase-grid {
+  display: grid;
+  gap: var(--e-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  align-items: start;
+}
+
+.values-list {
+  display: grid;
+  gap: var(--e-space-4) var(--e-space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.values-list li {
+  display: grid;
+  gap: var(--e-space-1);
+  align-content: start;
+  padding-top: var(--e-space-3);
+  border-top: var(--e-stroke-card) solid var(--e-ink);
+}
+
+/* On a phone the hero buttons stack at full width, so none sits alone on a second row. */
+@media (max-width: 32rem) {
+  .home-actions > .e-btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* A restrained entrance for the title and the hero: a short rise and fade, once. */
+@media (prefers-reduced-motion: no-preference) {
+  .home-top .home-heading,
+  .home-top .home-hero {
+    animation: home-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .home-top .home-hero {
+    animation-delay: 0.12s;
+  }
+
+  @keyframes home-rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+  }
+}
+
+/* The lines stop with the first screen: the surface fades back in beneath the hero. */
+.home-top::after {
+  content: "";
+  position: absolute;
+  inset: auto -1rem 0;
+  height: 6rem;
+  background: linear-gradient(transparent, var(--e-surface));
+  pointer-events: none;
 }

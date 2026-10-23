@@ -43,4 +43,6 @@ const { formatDate, parseDate, formatMoney } = useLocale();
 formatDate(new Date(2026, 9, 22)); // "10/22/2026" in en-US
 ```
 
+The full list of helpers is in the [API reference](/guide/api#uselocale). Dates in a [data grid](/guide/data-tables#formatting) and the [date picker](/components/DatePicker) follow the same locale.
+
 With `vue-i18n`, build `messages` from it and set `locale` from `useI18n().locale`.

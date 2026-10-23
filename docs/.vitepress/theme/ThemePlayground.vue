@@ -23,28 +23,11 @@ import ControlsDock from "./playground/ControlsDock.vue";
 import PlaygroundPreview from "./playground/PlaygroundPreview.vue";
 import PresetPicker from "./playground/PresetPicker.vue";
 import TokenOverrides from "./playground/TokenOverrides.vue";
-import {
-  CURRENCIES,
-  LOCALES,
-  MONO,
-  NEUTRAL,
-  SAFE,
-  SANS,
-  applyPreset,
-  applyRandom,
-  build,
-  cssChanges,
-  cssFull,
-  decode,
-  derivedTokens,
-  encode,
-  groundOf,
-  initialState,
-  themeCode,
-  variantCode,
-  type State,
-  type VariantKey,
-} from "./playground/state";
+import { build, cssChanges, cssFull, derivedTokens, themeCode, variantCode } from "./playground/build";
+import { decode, encode } from "./playground/codec";
+import { CURRENCIES, LOCALES, MONO, NEUTRAL, SAFE, SANS, groundOf, initialState, type State, type VariantKey } from "./playground/model";
+import { applyPreset } from "./playground/presets";
+import { applyRandom } from "./playground/random";
 
 const s = reactive<State>(initialState());
 const built = computed(() => build(s));
@@ -186,7 +169,7 @@ function setRadius(v: string) {
 }
 function setElevation(v: string) {
   s.elevation = v as State["elevation"];
-  for (const k of ["edge", "well", "float"]) delete s.t[k];
+  for (const k of ["frame", "well", "float"]) delete s.t[k];
 }
 function setMotion(v: string) {
   s.motion = v as State["motion"];
@@ -250,7 +233,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
           <ESwitch v-model="wholePage" label="Apply to the whole page" />
           <div class="bar-buttons">
             <EButton variant="outline" @click="usePreset('eos')">Reset</EButton>
-            <EButton variant="outline" icon="link" @click="copyLink">Copy link</EButton>
+            <EButton variant="outline" @click="copyLink">Copy link</EButton>
           </div>
         </div>
       </div>
@@ -261,7 +244,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
         <EButton variant="quiet" icon="arrow-down" @click="jumpTo(stageEl)">Jump to preview</EButton>
       </div>
       <ControlsDock ref="dockRef">
-        <ETabs v-model="controlTab" :items="controlItems" fill framed class="groups">
+        <ETabs v-model="controlTab" :items="controlItems" fill class="groups">
           <template #colour>
             <EStack :gap="4">
               <ESegmented :model-value="s.scheme" label="Scheme" :options="schemeOptions" @update:model-value="setScheme" />
@@ -457,5 +440,14 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
     overflow-y: auto;
 
   }
+}
+
+/* The preview tabs scroll sideways on a narrow screen. The edge shadows show that there is more: each appears only on a side that has content scrolled out of view, drawn by the scroll position alone. */
+.stage-tabs :deep(.e-tablist) {
+  background:
+    linear-gradient(to right, var(--e-surface) 30%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--e-surface) 30%, transparent) right / 2rem 100% no-repeat local,
+    linear-gradient(to right, var(--e-border-strong), transparent) left / 0.75rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--e-border-strong), transparent) right / 0.75rem 100% no-repeat scroll;
 }
 </style>

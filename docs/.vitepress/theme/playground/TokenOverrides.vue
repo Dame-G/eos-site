@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { EButton, EColorField, EDisclosure, EStack, EText, ETextField } from "@eos-ui/vue";
-import { resolve, type DerivedToken } from "./state";
+import type { DerivedToken } from "./build";
+import { resolve } from "./contrast";
 
 const props = defineProps<{
   title: string;

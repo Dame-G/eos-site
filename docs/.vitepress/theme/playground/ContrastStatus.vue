@@ -2,7 +2,7 @@
 import type { ContrastIssue } from "@eos-ui/tokens";
 import { EDisclosure, EIcon, EInline, EText } from "@eos-ui/vue";
 import { computed } from "vue";
-import { contrastSummary, describeIssue } from "./state";
+import { contrastSummary, describeIssue } from "./contrast";
 
 const props = defineProps<{
   issues: ContrastIssue[];

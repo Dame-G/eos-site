@@ -84,3 +84,8 @@ export function propsTable(markdown) {
     .filter((c) => c.length >= 2)
     .map(([prop, type, def, notes]) => ({ prop: prop.replace(/`/g, ""), type: (type ?? "").replace(/`/g, ""), def: (def ?? "").replace(/[`*]/g, ""), notes: (notes ?? "").replace(/`/g, "") }));
 }
+
+/** Where a component's README lives on GitHub, for the "Edit this page" link. */
+export function readmeEditUrl(name) {
+  return `https://github.com/Dame-G/eos/edit/main/packages/vue/src/components/${name}/README.md`;
+}

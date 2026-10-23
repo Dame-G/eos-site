@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 import vue from "@vitejs/plugin-vue";
 import { playwright } from "@vitest/browser-playwright";
@@ -5,8 +6,17 @@ import { firstParagraph, listComponents, readReadme, summaryOf } from "./docs/.v
 
 export default defineConfig({
   plugins: [vue()],
-  resolve: { dedupe: ["vue"] },
+  resolve: {
+    dedupe: ["vue"],
+    alias: [
+      // VitePress-only modules, replaced so the chrome can be mounted without VitePress running.
+      { find: "@localSearchIndex", replacement: fileURLToPath(new URL("./tests/stubs/search-index.ts", import.meta.url)) },
+      { find: /^.*\/data\/components\.data\.js$/, replacement: fileURLToPath(new URL("./tests/stubs/components-data.ts", import.meta.url)) },
+    ],
+  },
   define: {
+    __EOS_LICENSE__: JSON.stringify("MIT License\n\nPermission is hereby granted."),
+    __EOS_BUILD__: JSON.stringify({ version: "0.0.0" }),
     __COMPONENTS__: JSON.stringify(listComponents()),
     __TEXTS__: JSON.stringify(listComponents().flatMap((name) => [firstParagraph(readReadme(name)), summaryOf(readReadme(name))].map((text) => ({ name, text })))),
   },

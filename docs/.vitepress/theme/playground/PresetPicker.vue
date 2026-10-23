@@ -2,7 +2,9 @@
 import { computed, h, onBeforeUnmount, ref, type FunctionalComponent } from "vue";
 import { EButton, ESelect, EVisuallyHidden } from "@eos-ui/vue";
 import PresetSwatch from "./PresetSwatch.vue";
-import { PRESETS, applyPreset, build, initialState } from "./state";
+import { build } from "./build";
+import { initialState } from "./model";
+import { PRESETS, applyPreset } from "./presets";
 
 const props = defineProps<{
   modelValue: string;

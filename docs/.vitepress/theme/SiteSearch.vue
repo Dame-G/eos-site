@@ -5,7 +5,7 @@ import { computed, nextTick, ref, shallowRef, watch } from "vue";
 import { useRouter } from "vitepress";
 import { EDialog, EKbd, ESearchBar, ESearchResults, EVisuallyHidden } from "@eos-ui/vue";
 import type { SearchResultItem } from "@eos-ui/vue";
-import { componentDocs, componentSearchOptions, searchBuildOptions, searchOptions, titleRank, type ComponentGroup } from "../search";
+import { breadcrumb, componentDocs, componentSearchOptions, searchBuildOptions, searchOptions, titleRank, type ComponentGroup } from "../search";
 // @ts-expect-error a build-time data loader (docs/data/components.data.js)
 import { data as componentGroups } from "../../data/components.data.js";
 import { cleanPath } from "./nav";
@@ -66,7 +66,7 @@ const status = computed(() => {
 const items = computed<SearchResultItem[]>(() =>
   hits.value.map((h) => ({
     label: h.title,
-    description: h.titles.join(" › "),
+    description: breadcrumb(h.id, h.title, h.titles),
     href: h.id.replace(/\.html(?=#|$)/, ""),
   })),
 );

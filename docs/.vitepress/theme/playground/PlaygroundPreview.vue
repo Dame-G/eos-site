@@ -33,7 +33,8 @@ import {
   ETextField,
   ETooltip,
 } from "@eos-ui/vue";
-import { DEFAULT_VARIANTS, variantProps, type Variants } from "./state";
+import { variantProps } from "./build";
+import { DEFAULT_VARIANTS, type Variants } from "./model";
 
 const props = withDefaults(defineProps<{ tokens: Record<string, string>; locale: string; currency: string; variants?: Variants }>(), { variants: () => ({ ...DEFAULT_VARIANTS }) });
 
@@ -118,7 +119,7 @@ onBeforeUnmount(() => watcher?.disconnect());
 <template>
   <ThemedScope :tokens="tokens" :locale="locale" :currency="currency">
     <div ref="wrap" class="pv-wrap">
-      <ETabs v-model="scene" :items="sceneItems" framed :orientation="narrow ? 'horizontal' : 'vertical'" side="start" class="pv">
+      <ETabs v-model="scene" :items="sceneItems" :orientation="narrow ? 'horizontal' : 'vertical'" side="start" class="pv">
           <template #overview>
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="A bill, the way a page would use it">Overview</EHeading>
@@ -308,7 +309,7 @@ onBeforeUnmount(() => watcher?.disconnect());
                     <EButton variant="outline" @click="dialogOpen = false">Keep it</EButton>
                   </template>
                 </EDialog>
-                <ESurface raised pad="sm"><EText small>A floating surface: menus, lists and toasts.</EText></ESurface>
+                <ESurface raised small><EText small>A floating surface: menus, lists and toasts.</EText></ESurface>
                 <EInline :gap="vp.inlineGap">
                   <EMenu label="More" :items="menuItems" />
                   <ETooltip label="Help"><EIconButton icon="info" label="Help" /></ETooltip>
@@ -342,5 +343,10 @@ onBeforeUnmount(() => watcher?.disconnect());
 <style scoped>
 .pv-wrap {
   min-width: 0;
+  padding: var(--e-space-4);
+  border: var(--e-stroke-card) solid var(--e-border);
+  border-radius: var(--e-radius-md);
+  background: var(--e-surface);
+  color: var(--e-ink);
 }
 </style>

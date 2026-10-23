@@ -14,7 +14,7 @@ import { EActions, EButton, EStack, ESurface, EText } from "@eos-ui/vue";
       <EButton variant="outline" aria-pressed="false">Needs payment</EButton>
       <EButton variant="outline" aria-pressed="false">Paid</EButton>
     </EActions>
-    <ESurface as="article" pad="md" aria-label="October statement">
+    <ESurface as="article" aria-label="October statement">
       <EText>October statement, due Oct 31, 2026.</EText>
       <template #actions>
         <EButton>Pay</EButton>

@@ -14,7 +14,7 @@ const view = ref("list");
       v-model="view"
       label="View"
       :options="[
-        { value: 'list', label: 'List', icon: 'list' },
+        { value: 'list', label: 'List', icon: 'menu' },
         { value: 'grid', label: 'Grid' },
         { value: 'cal', label: 'Calendar', disabled: true },
       ]"

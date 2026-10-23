@@ -17,7 +17,7 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
           ]"
         />
       </template>
-      <EPageHeader title="Statements" description="Your bills for 2026.">
+      <EPageHeader :heading-level="3" title="Statements" description="Your bills for 2026.">
         <template #breadcrumb>
           <EBreadcrumb :items="[{ label: 'Home', href: '#home' }, { label: 'Statements' }]" />
         </template>

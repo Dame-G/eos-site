@@ -1,7 +1,9 @@
 import { existsSync } from "node:fs";
 import { join, sep } from "node:path";
-import { GROUPS, componentsDir, firstParagraph, listComponents, readReadme, siteRoot, splitReadme } from "../.vitepress/eos-source.mjs";
+import { GROUPS, componentsDir, firstParagraph, listComponents, readReadme, readmeEditUrl, siteRoot, splitReadme } from "../.vitepress/eos-source.mjs";
 import { GROUP_OF } from "../.vitepress/groups.mjs";
+
+const EXPECTED_SECTIONS = ["Keyboard", "Related"];
 
 export default {
   watch: [join(componentsDir, "*/README.md").split(sep).join("/"), join(siteRoot, "docs/components/demos/*.vue").split(sep).join("/")],
@@ -24,11 +26,12 @@ export default {
         return known.has(folder) && folder !== self ? `${pre}[\`${tag}\`](/components/${folder})` : m;
       });
 
-    return names.map((name) => {
+    const missing = [];
+    const pages = names.map((name) => {
       const readme = readReadme(name);
       if (readme) {
-        for (const heading of ["Accessibility"]) {
-          if (!new RegExp(`^## ${heading}\\s*$`, "m").test(readme)) console.warn(`[eos-site] E${name} README.md has no "## ${heading}" section.`);
+        for (const heading of ["Accessibility", ...EXPECTED_SECTIONS]) {
+          if (!new RegExp(`^## ${heading}\\s*$`, "m").test(readme)) missing.push({ name, heading });
         }
       }
       const hasDemo = existsSync(join(siteRoot, "docs/components/demos", `${name}.vue`));
@@ -44,9 +47,17 @@ export default {
       const noReadme = readme ? "" : `\n\n::: warning\nThe library has no README.md for E${name} yet, so this page only has the demo.\n:::\n`;
       const content = [link(head, name), noReadme, demo, noDefault(link(rest, name))].join("\n\n");
       return {
-        params: { name, group, description: firstParagraph(readme) },
+        params: { name, group, description: firstParagraph(readme), editUrl: readmeEditUrl(name) },
         content,
       };
     });
+    // Accessibility has always been required. Keyboard and Related are being added to the library READMEs, so they warn only
+    // until EOS_STRICT_SECTIONS is set, which turns every missing section into a build failure.
+    for (const heading of ["Accessibility", ...EXPECTED_SECTIONS]) {
+      const lacking = missing.filter((m) => m.heading === heading).map((m) => `E${m.name}`);
+      if (lacking.length) console.warn(`[eos-site] ${lacking.length} README.md file(s) have no "## ${heading}" section: ${lacking.join(", ")}.`);
+    }
+    if (missing.length && process.env.EOS_STRICT_SECTIONS) throw new Error(`EOS_STRICT_SECTIONS is set and ${missing.length} README section(s) are missing. See the warnings above.`);
+    return pages;
   },
 };

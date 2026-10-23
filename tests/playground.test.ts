@@ -5,7 +5,10 @@ import { defineTheme } from "@eos-ui/tokens";
 import { mount, settle } from "./helpers";
 import ContrastStatus from "../docs/.vitepress/theme/playground/ContrastStatus.vue";
 import ControlsDock from "../docs/.vitepress/theme/playground/ControlsDock.vue";
-import { PRESETS, applyPreset, build, contrastSummary, describeIssue, initialState, themeCode } from "../docs/.vitepress/theme/playground/state";
+import { build, themeCode } from "../docs/.vitepress/theme/playground/build";
+import { contrastSummary, describeIssue } from "../docs/.vitepress/theme/playground/contrast";
+import { initialState } from "../docs/.vitepress/theme/playground/model";
+import { PRESETS, applyPreset } from "../docs/.vitepress/theme/playground/presets";
 
 describe("playground export", () => {
   for (const preset of PRESETS) {

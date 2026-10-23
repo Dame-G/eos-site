@@ -39,7 +39,7 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
 
 <template>
   <EGrid min="20rem" :gap="6" class="pattern-lg">
-    <ESurface pad="lg">
+    <ESurface large>
       <form novalidate @submit.prevent="submitted = true">
         <EStack :gap="4">
           <EHeading :level="2">Sign in</EHeading>
@@ -71,7 +71,7 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
       </form>
     </ESurface>
 
-    <ESurface pad="lg">
+    <ESurface large>
       <EStack :gap="4">
         <ELink href="#sign-in" icon="arrow-left">Back to sign in</ELink>
         <EHeading :level="2">Check your email</EHeading>
@@ -84,7 +84,7 @@ const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message
       </EStack>
     </ESurface>
 
-    <ESurface pad="lg">
+    <ESurface large>
       <EStack :gap="4">
         <EHeading :level="2">Choose a new password</EHeading>
         <EPasswordField v-model="newPassword" label="New password" mode="new" :rules="rules" required />

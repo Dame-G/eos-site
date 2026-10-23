@@ -2,16 +2,18 @@
 import { computed, onBeforeUnmount, onMounted, provide, reactive, ref, watch } from "vue";
 import { CONFIG_KEY, type EosConfig } from "@eos-ui/vue";
 
-const props = defineProps<{ tokens: Record<string, string>; locale: string; currency: string }>();
+// The direction follows the locale (Arabic runs right to left) unless `dir` says otherwise.
+const props = defineProps<{ tokens: Record<string, string>; locale: string; currency: string; dir?: "ltr" | "rtl" }>();
 
-const dir = computed(() => (props.locale.startsWith("ar") ? "rtl" : "ltr"));
-const config = reactive<EosConfig>({ locale: props.locale, currency: props.currency, dir: null, messages: {}, icons: {}, portalTarget: "body" });
+const direction = computed(() => props.dir ?? (props.locale.startsWith("ar") ? "rtl" : "ltr"));
+const config = reactive<EosConfig>({ locale: props.locale, currency: props.currency, dir: props.dir ?? null, messages: {}, icons: {}, portalTarget: "body" });
 provide(CONFIG_KEY, config);
 watch(
-  () => [props.locale, props.currency],
+  () => [props.locale, props.currency, props.dir] as const,
   () => {
     config.locale = props.locale;
     config.currency = props.currency;
+    config.dir = props.dir ?? null;
   },
 );
 const scope = ref<HTMLElement | null>(null);
@@ -20,7 +22,7 @@ onBeforeUnmount(() => (config.portalTarget = "body"));
 </script>
 
 <template>
-  <div ref="scope" class="scope e-root" data-e-theme="preview" :style="tokens" :dir="dir"><slot /></div>
+  <div ref="scope" class="scope e-root" data-e-theme="preview" :style="tokens" :dir="direction"><slot /></div>
 </template>
 
 <style scoped>

@@ -17,7 +17,7 @@ const filter = ref("all");
       hint="You can change it later."
       :options="[
         { value: 'basic', label: 'Basic', description: 'Free, forever', group: 'Personal' },
-        { value: 'pro', label: 'Pro', description: '$12 a month', icon: 'star', group: 'Personal' },
+        { value: 'pro', label: 'Pro', description: '$12 a month', icon: 'check', group: 'Personal' },
         { value: 'team', label: 'Team', description: 'Not available yet', disabled: true, group: 'Business' },
       ]"
     />
