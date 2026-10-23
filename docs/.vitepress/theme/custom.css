@@ -170,6 +170,14 @@ body:has(.site-body, .home) .site {
   padding-block: var(--e-space-6) var(--e-space-8);
 }
 
+/* The page is a sheet on the ground, with a vertical border down each side. The header and footer run full width above and below it, so the borders only run between them. They show only where there is ground beside the sheet. */
+@media (min-width: 90rem) {
+  .site-body,
+  .home {
+    border-inline: var(--e-stroke-hair) solid var(--e-shell-rail, var(--e-border));
+  }
+}
+
 .site-rail {
   display: none;
 }
