@@ -204,7 +204,7 @@ watch(
       <template #brand><BubbleTitle decorative /></template>
       <template #logo>
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
-          Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
+          Search<span class="site-search-key" aria-hidden="true"><EKbd size="sm">/</EKbd></span>
         </EButton>
       </template>
       <template #actions>
@@ -240,7 +240,7 @@ watch(
 
     <EAppFooter>
       <div class="site-footer-about">
-        <EText small muted class="site-footer-license">
+        <EText size="sm" tone="neutral" class="site-footer-license">
           EOS is released under the
           <EDefinition inline label="Full text of the MIT license" title="MIT License">
             <template #trigger>MIT license</template>

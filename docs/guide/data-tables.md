@@ -38,7 +38,7 @@ The default. Give the grid all the rows and it sorts, filters, searches and page
   selectable
 >
   <template #cell-date="{ row }">{{ formatDate(row.date) }}</template>
-  <template #cell-status="{ row }"><EStamp :status="row.status" small /></template>
+  <template #cell-status="{ row }"><EStamp :status="row.status" size="sm" /></template>
   <template #cell-amount="{ row }">{{ formatMoney(row.amount) }}</template>
   <template #bulk-actions><EButton variant="outline" icon="download">Download receipts</EButton></template>
 </EDataGrid>

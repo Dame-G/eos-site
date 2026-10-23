@@ -25,21 +25,21 @@ const recent = [
       <EGrid min="15rem" as="ul" class="pattern-cards">
         <ESurface as="li">
           <EStack :gap="2">
-            <EText small muted>Balance due</EText>
-            <EText large>{{ money(162.4) }}</EText>
-            <EStamp status="due" small detail="Nov 1" />
+            <EText size="sm" tone="neutral">Balance due</EText>
+            <EText size="lg">{{ money(162.4) }}</EText>
+            <EStamp status="due" size="sm" detail="Nov 1" />
           </EStack>
         </ESurface>
         <ESurface as="li">
           <EStack :gap="2">
-            <EText small muted>Paid this year</EText>
-            <EText large>{{ money(1286.75) }}</EText>
-            <EText small muted>Across 9 statements</EText>
+            <EText size="sm" tone="neutral">Paid this year</EText>
+            <EText size="lg">{{ money(1286.75) }}</EText>
+            <EText size="sm" tone="neutral">Across 9 statements</EText>
           </EStack>
         </ESurface>
         <ESurface as="li">
           <EStack :gap="2">
-            <EText small muted>Visits used</EText>
+            <EText size="sm" tone="neutral">Visits used</EText>
             <EProgress label="Visits used" :value="9" :max="12" value-text="9 of 12" />
           </EStack>
         </ESurface>
@@ -63,7 +63,7 @@ const recent = [
             <tr v-for="r in recent" :key="r.id">
               <th scope="row">{{ r.what }}</th>
               <td>{{ r.date }}</td>
-              <td><EStamp :status="r.status" small /></td>
+              <td><EStamp :status="r.status" size="sm" /></td>
               <td class="e-num">{{ money(r.amount) }}</td>
             </tr>
           </tbody>

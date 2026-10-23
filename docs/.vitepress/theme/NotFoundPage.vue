@@ -28,7 +28,7 @@ onMounted(() => {
       The address may have changed, or it was never written. Search for what you wanted, or go back to the home page.
       <template #action>
         <EActions>
-          <EButton icon="search" @click="$emit('search')">Search the docs <EKbd small class="not-found-key">/</EKbd></EButton>
+          <EButton icon="search" @click="$emit('search')">Search the docs <EKbd size="sm" class="not-found-key">/</EKbd></EButton>
           <EButton variant="outline" href="/">Back to the home page</EButton>
         </EActions>
       </template>

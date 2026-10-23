@@ -21,7 +21,7 @@ const hexOf = (name: string) => {
 <template>
   <EDisclosure :title="title">
     <EStack :gap="4">
-      <EText small muted>Each follows the input named under it. Set one by hand and it stops following.</EText>
+      <EText size="sm" tone="neutral">Each follows the input named under it. Set one by hand and it stops following.</EText>
       <div v-for="item in items" :key="item.name" class="row">
         <EColorField
           v-if="colour && hexOf(item.name)"

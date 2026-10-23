@@ -48,7 +48,7 @@ async function submit() {
 
 <template>
   <EGrid min="20rem" :gap="6" class="pattern-lg">
-    <ESurface large>
+    <ESurface size="lg">
       <form novalidate @submit.prevent="submit">
         <EStack :gap="4">
           <EHeading :level="2">Sign in</EHeading>
@@ -87,11 +87,11 @@ async function submit() {
       </form>
     </ESurface>
 
-    <ESurface large>
+    <ESurface size="lg">
       <EStack :gap="4">
         <ELink href="#sign-in" icon="arrow-left">Back to sign in</ELink>
         <EHeading :level="2">Check your email</EHeading>
-        <EText muted>We sent a 6-digit code to m***@example.com. It expires in 10 minutes.</EText>
+        <EText tone="neutral">We sent a 6-digit code to m***@example.com. It expires in 10 minutes.</EText>
         <EOtpField v-model="code" label="Sign-in code" :length="6" :group-size="3" hint="Enter the code from the email." />
         <EActions>
           <EButton :disabled="code.length < 6">Verify and sign in</EButton>
@@ -100,7 +100,7 @@ async function submit() {
       </EStack>
     </ESurface>
 
-    <ESurface large>
+    <ESurface size="lg">
       <EStack :gap="4">
         <EHeading :level="2">Choose a new password</EHeading>
         <EPasswordField v-model="newPassword" label="New password" mode="new" :rules="rules" required />

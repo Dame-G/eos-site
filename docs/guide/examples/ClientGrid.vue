@@ -47,10 +47,10 @@ const sort = ref<{ key: string; dir: "asc" | "desc" } | null>({ key: "date", dir
       selectable
     >
       <template #cell-date="{ row }">{{ formatDate(row.date) }}</template>
-      <template #cell-status="{ row }"><EStamp :status="row.status" small /></template>
+      <template #cell-status="{ row }"><EStamp :status="row.status" size="sm" /></template>
       <template #cell-amount="{ row }">{{ formatMoney(row.amount) }}</template>
       <template #bulk-actions><EButton variant="outline" icon="download">Download receipts</EButton></template>
     </EDataGrid>
-    <EText small muted>Selected: {{ selected.length ? selected.join(", ") : "none" }}</EText>
+    <EText size="sm" tone="neutral">Selected: {{ selected.length ? selected.join(", ") : "none" }}</EText>
   </EStack>
 </template>

@@ -129,7 +129,7 @@ const scene = ref("overview");
                   <EButton icon="lock">Pay {{ money }}</EButton>
                   <EButton variant="outline">Download PDF</EButton>
                 </EInline>
-                <EText small>Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
+                <EText size="sm">Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
               </EStack>
             </EStack>
             </EStack>
@@ -163,7 +163,7 @@ const scene = ref("overview");
                     <template #actions><EButton variant="outline">Set up a plan</EButton></template>
                   </EDefinition>
                 </EInline>
-                <EText small>Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
+                <EText size="sm">Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
               </EStack>
             </EStack>
             </EStack>
@@ -253,7 +253,7 @@ const scene = ref("overview");
                     { id: 'settings', label: 'Settings' },
                   ]"
                 >
-                  <template #panel="{ item }"><EText small muted>{{ item.label }} panel.</EText></template>
+                  <template #panel="{ item }"><EText size="sm" tone="neutral">{{ item.label }} panel.</EText></template>
                 </ETabs>
                 <EStepper :steps="steps" label="Checkout" />
                 <EPagination v-model="page" :page-count="6" aria-label="Visit pages" />
@@ -298,7 +298,7 @@ const scene = ref("overview");
                     <EButton variant="outline" @click="dialogOpen = false">Keep it</EButton>
                   </template>
                 </EDialog>
-                <ESurface raised small><EText small>A floating surface: menus, lists and toasts.</EText></ESurface>
+                <ESurface variant="raised" size="sm"><EText size="sm">A floating surface: menus, lists and toasts.</EText></ESurface>
                 <EInline :gap="vp.inlineGap">
                   <EMenu label="More" :items="menuItems" />
                   <ETooltip label="Help"><EIconButton icon="info" label="Help" /></ETooltip>
@@ -316,9 +316,9 @@ const scene = ref("overview");
                 <EHeading :level="1">Your account</EHeading>
                 <EHeading :level="2">Upcoming visits</EHeading>
                 <EHeading :level="3">Visit on Oct 2</EHeading>
-                <EText large>Your balance is due November 1.</EText>
+                <EText size="lg">Your balance is due November 1.</EText>
                 <EText>Pay online in about a minute. Receipts are emailed the same day.</EText>
-                <EText small muted>Statement 4471, sent Oct 14</EText>
+                <EText size="sm" tone="neutral">Statement 4471, sent Oct 14</EText>
                 <EKicker>History</EKicker>
               </EStack>
             </EStack>

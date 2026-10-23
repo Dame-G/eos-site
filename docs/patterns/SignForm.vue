@@ -40,7 +40,7 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
             <p class="sign-title">{{ f.label }}</p>
             <p class="sign-text">{{ f.text }}</p>
           </div>
-          <EStamp class="sign-stamp" :status="f.status" small />
+          <EStamp class="sign-stamp" :status="f.status" size="sm" />
           <div class="sign-action">
             <EButton v-if="f.status === 'signed'" variant="quiet" icon="download">Download</EButton>
             <EButton v-else variant="outline">Review and sign</EButton>
@@ -49,11 +49,11 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
       </ul>
     </EStack>
 
-    <ESurface large>
+    <ESurface size="lg">
       <EStack :gap="4">
         <ELink href="#forms" icon="arrow-left">Back to forms</ELink>
         <EHeading :level="2">New client form</EHeading>
-        <EText muted>By signing, you confirm the details you gave us are correct and you agree to our payment policy.</EText>
+        <EText tone="neutral">By signing, you confirm the details you gave us are correct and you agree to our payment policy.</EText>
         <ESignatureField v-model="signature" mode="both" :date="new Date(2026, 9, 18, 12)" />
         <EUpload v-model="id" label="Photo ID" optional accept=".jpg,.png,.pdf" hint="A photo of your driver licence or passport." />
         <ENotice v-if="submitted" tone="success" title="Form submitted">Thank you. We have your signed form.</ENotice>

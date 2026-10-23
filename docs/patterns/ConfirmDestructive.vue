@@ -47,7 +47,7 @@ function remove() {
     <EToastProvider>
       <EStack :gap="4">
         <EPageHeader :heading-level="2" title="Payment methods" description="Cards you can pay with." />
-        <EText v-if="!cards.length" muted>No cards saved. Add one when you pay your next bill.</EText>
+        <EText v-if="!cards.length" tone="neutral">No cards saved. Add one when you pay your next bill.</EText>
         <ESurface v-for="card in cards" :key="card.id">
           <EStack :gap="3">
             <EDescriptionList
@@ -56,7 +56,7 @@ function remove() {
                 { label: 'Expires', text: card.expires },
               ]"
             />
-            <EStamp v-if="card.default" tone="info" small>Default</EStamp>
+            <EStamp v-if="card.default" tone="info" size="sm">Default</EStamp>
             <EButton variant="outline" icon="trash" :aria-label="`Remove ${card.brand} ending ${card.last4}`" @click="ask(card)">Remove</EButton>
           </EStack>
         </ESurface>

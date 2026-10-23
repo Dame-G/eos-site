@@ -4,10 +4,10 @@ import { EStack, EText } from "@eos-ui/vue";
 
 <template>
   <EStack>
-    <EText large>You paid $162.40 in full on Sep 3, 2026.</EText>
+    <EText size="lg">You paid $162.40 in full on Sep 3, 2026.</EText>
     <EText>Your October statement covers the visit on Oct 22, 2026. Pay online, by phone or at the front desk.</EText>
-    <EText small>Questions about a charge? Call us on weekdays.</EText>
-    <EText small muted>Receipts are kept for seven years.</EText>
-    <EText as="span" muted>Rendered as a span.</EText>
+    <EText size="sm">Questions about a charge? Call us on weekdays.</EText>
+    <EText size="sm" tone="neutral">Receipts are kept for seven years.</EText>
+    <EText as="span" tone="neutral">Rendered as a span.</EText>
   </EStack>
 </template>

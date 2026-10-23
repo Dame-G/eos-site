@@ -5,9 +5,9 @@ import { EAvatar, EInline, EStack, EText } from "@eos-ui/vue";
 <template>
   <EStack>
     <EInline>
-      <EAvatar name="Ada Lovelace" small />
+      <EAvatar name="Ada Lovelace" size="sm" />
       <EAvatar name="Ada Lovelace" />
-      <EAvatar name="Ada Lovelace" large />
+      <EAvatar name="Ada Lovelace" size="lg" />
     </EInline>
     <EInline>
       <EAvatar name="Grace Hopper" />
@@ -15,13 +15,13 @@ import { EAvatar, EInline, EStack, EText } from "@eos-ui/vue";
       <EAvatar name="Mary Ann Evans" />
     </EInline>
     <EInline>
-      <EAvatar name="Ada Lovelace" as="button" small />
+      <EAvatar name="Ada Lovelace" as="button" size="sm" />
       <EAvatar name="Grace Hopper" as="button" />
-      <EAvatar name="Mary Ann Evans" as="button" large />
+      <EAvatar name="Mary Ann Evans" as="button" size="lg" />
       <EText>Pressable, like the trigger of a menu</EText>
     </EInline>
     <EInline>
-      <EAvatar name="Dr. Priya Shah" src="data:image/gif;base64,AAAA" large />
+      <EAvatar name="Dr. Priya Shah" src="data:image/gif;base64,AAAA" size="lg" />
       <EText>Dr. Priya Shah, your Oct 22, 2026 visit</EText>
     </EInline>
   </EStack>

@@ -41,9 +41,9 @@ Buttons that belong together, side by side, announced as one labelled group. [`E
 A card with a title, a short description and one link, where the whole card is the click target. Put one `a` in an [`ESurface`](/components/Surface), stretch its `::after` over the card, and keep everything else in the card free of links and buttons.
 
 ```vue
-<ESurface as="li" small class="link-card">
+<ESurface as="li" size="sm" class="link-card">
   <a href="/components/Button" class="link-card-link">EButton</a>
-  <EText small muted>A button for an action, or a link that looks like one.</EText>
+  <EText size="sm" tone="neutral">A button for an action, or a link that looks like one.</EText>
 </ESurface>
 ```
 

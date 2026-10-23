@@ -21,9 +21,9 @@ const visits = [
     <EGrid min="14rem" as="ul" class="layout-list">
       <ESurface v-for="v in visits" :key="v.id" as="li">
         <EStack :gap="2">
-          <EStamp :status="v.status" small />
+          <EStamp :status="v.status" size="sm" />
           <EText>{{ v.title }}</EText>
-          <EText small muted>{{ v.when }}</EText>
+          <EText size="sm" tone="neutral">{{ v.when }}</EText>
         </EStack>
       </ESurface>
     </EGrid>
