@@ -61,11 +61,6 @@ html {
   scrollbar-gutter: stable;
 }
 
-/* An open dialog or palette locks the body (overflow hidden) and pads it by the scrollbar width. The gutter already holds that space, so the page would shift left and leave an empty strip on the right. Let the padding do the job while locked. */
-html:has(body[style*="overflow: hidden"]) {
-  scrollbar-gutter: auto;
-}
-
 body {
   margin: 0;
   background: var(--e-surface);
@@ -698,9 +693,4 @@ body {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
-}
-
-/* The page content is no longer its own stacking context, so a selected tab, a focused control or a raised card (z-index 1 to 3) would draw over the sticky header. The header sits just above them and under every dialog, menu and toast. */
-.site .e-appheader--sticky {
-  z-index: calc(var(--e-z-focus) + 1);
 }
