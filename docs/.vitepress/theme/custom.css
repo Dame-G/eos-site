@@ -547,18 +547,6 @@ body {
   gap: var(--e-space-2);
 }
 
-/* The term sits in the sentence at the sentence's size, without the definition's own info icon. */
-.site-footer-term {
-  min-height: 0;
-  align-items: baseline;
-  font: inherit;
-  vertical-align: baseline;
-}
-
-.site-footer-term > .e-icon:first-child {
-  display: none;
-}
-
 .site-license {
   display: block;
 }
@@ -702,7 +690,6 @@ body {
     }
   }
 }
-
 
 /* On a narrow phone the install line is wider than the block. Wrap it rather than scroll sideways behind the copy button. */
 @media (max-width: 24rem) {

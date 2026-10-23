@@ -242,7 +242,7 @@ watch(
       <div class="site-footer-about">
         <EText small muted class="site-footer-license">
           EOS is released under the
-          <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
+          <EDefinition inline label="Full text of the MIT license" title="MIT License">
             <template #trigger>MIT license</template>
             <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
           </EDefinition>.
