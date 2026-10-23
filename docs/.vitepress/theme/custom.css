@@ -161,7 +161,7 @@ body:has(.site-body, .home) .site {
 /* The page (nav lists and content together) is white and the ground outside it is tinted, so it reads as one sheet that the header lines continue down. */
 .site-body {
   position: relative;
-  z-index: 1;
+  /* No z-index: it would make the page a stacking context, and a drawer or dialog opened in a demo would sit under the sticky header. */
   background: var(--e-surface);
   display: grid;
   flex: 1;
