@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { contrast } from "@eos-ui/tokens";
 import ColorValue from "./ColorValue.vue";
 import TokenName from "./TokenName.vue";
@@ -24,22 +24,19 @@ function tone(level: string) {
 }
 // The ratios are read from the colours the page is showing now, so they follow the colour scheme and not only the light values written at build time.
 const live = ref<Record<string, string>>({});
-function resolveColour(name: string, depth = 0): string {
-  const raw = getComputedStyle(document.documentElement).getPropertyValue(`--e-${name}`).trim();
-  const m = /^var(--e-([a-z0-9-]+))$/.exec(raw);
-  return m && depth < 6 ? resolveColour(m[1]!, depth + 1) : raw;
-}
 function readLive() {
+  // getComputedStyle has already substituted any var() a token is written with.
+  const style = getComputedStyle(document.documentElement);
+  const read = (name: string) => style.getPropertyValue(`--e-${name}`).trim();
   const next: Record<string, string> = {};
   for (const c of data.colours as { name: string; partners: Partner[] }[]) {
-    next[c.name] = resolveColour(c.name);
-    for (const p of c.partners) next[p.name] = resolveColour(p.name);
+    next[c.name] = read(c.name);
+    for (const p of c.partners) next[p.name] = read(p.name);
   }
   live.value = next;
 }
 onMounted(readLive);
 watch(activeScheme, () => requestAnimationFrame(readLive));
-onBeforeUnmount(() => (live.value = {}));
 const HEX = /^#[0-9a-f]{6}$/i;
 function ratioOf(a: string, p: Partner): number {
   const x = live.value[a];
