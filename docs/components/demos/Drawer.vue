@@ -29,7 +29,7 @@ const state = ref("Ready");
       </template>
     </EDrawer>
 
-    <EDrawer v-model:open="left" dismissible side="left" title="Filters">Show statements from the last 12 months.</EDrawer>
+    <EDrawer v-model:open="left" dismissible side="start" title="Filters">Show statements from the last 12 months.</EDrawer>
 
     <EDrawer v-model:open="bottom" dismissible side="bottom" title="Pay a bill">
       <EText>Total due Oct 22, 2026: $162.40</EText>

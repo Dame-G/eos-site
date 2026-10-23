@@ -24,7 +24,7 @@ const outline = [
 <template>
   <EStack :gap="6">
     <ENavList label="Account" :items="items" />
-    <ENavList label="Site" orientation="horizontal" :items="header" />
-    <ENavList label="On this page" :items="outline" />
+    <ENavList label="Example site" orientation="horizontal" :items="header" />
+    <ENavList label="Page sections" :items="outline" />
   </EStack>
 </template>

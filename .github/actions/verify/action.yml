@@ -77,6 +77,11 @@ runs:
       working-directory: eos-site
       run: pnpm docs:build
 
+    - name: Check the built pages
+      shell: bash
+      working-directory: eos-site
+      run: pnpm build:check
+
     - name: Test
       shell: bash
       working-directory: eos-site
@@ -92,7 +97,7 @@ runs:
         preview=$!
         trap 'kill $preview' EXIT
         for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
-        pnpm pages:check http://127.0.0.1:4173
+        pnpm pages:check http://127.0.0.1:4173 --all
         pnpm ssr:check
       env:
         CI: "true"

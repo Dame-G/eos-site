@@ -9,6 +9,6 @@ import { data } from "../data/components.data.js";
 
 # Components
 
-EOS is built in six layers, from primitives up to the page frame, and each layer's styles sit in their own cascade layer (`e.primitives`, `e.blocks`, `e.controls`, `e.composites`, `e.containers`, `e.page`, in that order). A component only uses components from its own layer or an earlier one, so a primitive never depends on a dialog, and later layers can safely override earlier ones. The groups below follow that order.
+Every component below is documented with its props, slots, keyboard behaviour and accessibility notes. They are grouped by what you are trying to do. Under the hood EOS is built in layers, from primitives up to the page frame, each in its own cascade layer (see [Tailwind and CSS](/guide/tailwind-and-css)).
 
 <ComponentIndex :groups="data" />

@@ -6,6 +6,9 @@ export type Scheme = "light" | "paper" | "dark" | "contrast" | "custom";
 type RadiusStyle = "sharp" | "default" | "round";
 type ElevationStyle = "outline" | "lifted" | "bold";
 type MotionStyle = "default" | "snappy" | "gentle" | "none";
+type Density = "comfortable" | "compact";
+/** The library's own named look (`defineTheme({ preset })`), or `none` to leave it out. Not the playground preset, which is a whole starting state. */
+type ThemePresetChoice = "none" | "paper" | "ink" | "quiet";
 
 export const VARIANT_VALUES = {
   pad: ["sm", "md", "lg"],
@@ -35,6 +38,14 @@ export interface State {
   /** The ground preset last applied, or `custom` once any of the three ground colours was edited. */
   scheme: Scheme;
   radius: RadiusStyle;
+  /** `compact` tightens the space scale and makes controls the 44px tap target. */
+  density: Density;
+  /** `scheme: "auto"`: follow the visitor's light or dark preference. Exported, and not drawn in the preview, which shows one theme. */
+  autoScheme: boolean;
+  /** `contrast: "auto"`: add the high contrast theme under `prefers-contrast: more`. Exported only. */
+  autoContrast: boolean;
+  /** The library preset the export names, if any. */
+  themePreset: ThemePresetChoice;
   elevation: ElevationStyle;
   motion: MotionStyle;
   /** Percent of the default type scale. */
@@ -143,6 +154,10 @@ export function initialState(): State {
     ...DEFAULT_GROUND,
     scheme: "light",
     radius: "default",
+    density: "comfortable",
+    autoScheme: false,
+    autoContrast: false,
+    themePreset: "none",
     elevation: "outline",
     motion: "default",
     textScale: 100,

@@ -9,7 +9,7 @@ import { EStamp, EDataGrid, EGrid, EHeading, EHighlight, EStack, ESurface, EText
 import { data } from "../../data/tokens.data.js";
 
 defineProps<{
-  section: "inputs" | "colour" | "type" | "spacing" | "radius" | "shadow" | "fontSize" | "size" | "stroke" | "motion" | "zIndex";
+  section: "inputs" | "colour" | "type" | "spacing" | "layout" | "radius" | "shadow" | "fontSize" | "tracking" | "leading" | "size" | "stroke" | "slab" | "motion" | "zIndex";
 }>();
 
 type Partner = { name: string; value: string; role: string; ratio: number; level: string };
@@ -63,6 +63,14 @@ const value = { key: "value", label: "Value" };
 const usage = { key: "usage", label: "Used for" };
 const from = { key: "from", label: "From" };
 const plainColumns = [token, value, from, usage];
+const isSlab = (t: Token) => /^slab(-|$)/.test(t.name);
+/** Rows of a plain scale, so the stroke table and the slab table share one source. */
+function plainRows(section: string): Token[] {
+  if (section === "motion") return [...data.duration, ...data.easing];
+  if (section === "stroke") return (data.stroke as Token[]).filter((t) => !isSlab(t));
+  if (section === "slab") return (data.stroke as Token[]).filter(isSlab);
+  return data[section] ?? [];
+}
 const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r.constant ? "constant" : r.from.join(", ") }));
 </script>
 
@@ -101,9 +109,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           </div>
           <div class="meta">
             <p class="name">
-              <TokenName :name="c.name" /> <span class="hex"
-                ><template v-if="c.source.startsWith('{')">= </template><ColorValue :value="shownHex(c)"
-              /></span>
+              <TokenName :name="c.name" /> <span class="hex"><ColorValue :value="shownHex(c)" /></span>
             </p>
             <EText small muted class="usage">{{ c.usage }}</EText>
             <EText small muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
@@ -187,6 +193,39 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
     </EDataGrid>
 
     <EDataGrid
+      v-else-if="section === 'layout'"
+      bare
+      caption="Layout spacing"
+      :columns="[token, value, from, usage, { key: 'look', label: 'Look' }]"
+      :rows="withFrom(data.layout as Token[])"
+    >
+      <template #cell-name="{ row }"
+        ><TokenName :name="row.name as string" /></template
+      >
+      <template #cell-look="{ row }">
+        <span v-if="(row.name as string).startsWith('gap-')" class="gap-demo" :style="{ gap: `var(--e-${row.name})` }"><i /><i /></span>
+        <span v-else-if="(row.name as string).startsWith('pad-')" class="pad-demo" :style="{ padding: `var(--e-${row.name})` }"><i /></span>
+        <span v-else class="gutter-demo"><i :style="{ width: `var(--e-${row.name})` }" /></span>
+      </template>
+    </EDataGrid>
+
+    <EDataGrid
+      v-else-if="section === 'tracking' || section === 'leading'"
+      bare
+      :caption="section === 'tracking' ? 'Letter spacing' : 'Line height'"
+      :columns="[token, value, from, usage, { key: 'sample', label: 'Sample' }]"
+      :rows="withFrom(data[section] as Token[])"
+    >
+      <template #cell-name="{ row }"
+        ><TokenName :name="row.name as string" /></template
+      >
+      <template #cell-sample="{ row }">
+        <span v-if="section === 'tracking'" :style="{ letterSpacing: `var(--e-${row.name})` }">Amount due</span>
+        <span v-else class="leading-demo" :style="{ lineHeight: `var(--e-${row.name})` }">Two lines of text to show the line height.</span>
+      </template>
+    </EDataGrid>
+
+    <EDataGrid
       v-else-if="section === 'radius'"
       bare
       caption="Corner radius"
@@ -230,13 +269,14 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
     <EDataGrid
       v-else
       bare
-      :caption="section === 'size' ? 'Sizes' : section === 'stroke' ? 'Strokes' : section === 'motion' ? 'Motion' : 'Layers'"
-      :columns="plainColumns"
-      :rows="withFrom((section === 'motion' ? [...data.duration, ...data.easing] : data[section]) as Token[])"
+      :caption="({ size: 'Sizes', stroke: 'Strokes', slab: 'Slabs', motion: 'Motion' } as Record<string, string>)[section] ?? 'Layers'"
+      :columns="section === 'slab' ? [...plainColumns, { key: 'look', label: 'Look' }] : plainColumns"
+      :rows="withFrom(plainRows(section))"
     >
       <template #cell-name="{ row }"
         ><TokenName :name="row.name as string" /></template
       >
+      <template #cell-look="{ row }"><span class="slab-demo" :style="{ borderBottomWidth: `var(--e-${row.name})` }" /></template>
     </EDataGrid>
   </div>
 </template>
@@ -307,6 +347,51 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
   display: block;
   height: var(--e-space-4);
   background: var(--e-primary);
+  border-radius: var(--e-radius-sm);
+}
+.gap-demo,
+.pad-demo {
+  display: inline-flex;
+}
+.gap-demo i {
+  display: block;
+  width: var(--e-space-4);
+  height: var(--e-space-4);
+  background: var(--e-primary);
+  border-radius: var(--e-radius-sm);
+}
+.pad-demo {
+  background: var(--e-surface-tint);
+  border: var(--e-stroke-hair) dashed var(--e-border-strong);
+}
+.pad-demo i {
+  display: block;
+  width: var(--e-space-6);
+  height: var(--e-space-4);
+  background: var(--e-primary);
+  border-radius: var(--e-radius-sm);
+}
+.gutter-demo {
+  display: flex;
+  max-width: 100%;
+}
+.gutter-demo i {
+  display: block;
+  max-width: 100%;
+  height: var(--e-space-4);
+  background: var(--e-primary);
+  border-radius: var(--e-radius-sm);
+}
+.leading-demo {
+  display: block;
+  max-width: 16rem;
+}
+.slab-demo {
+  display: block;
+  width: calc(var(--e-space-8) * 2);
+  height: var(--e-space-6);
+  background: var(--e-primary);
+  border-bottom: solid var(--e-primary-slab);
   border-radius: var(--e-radius-sm);
 }
 .box {

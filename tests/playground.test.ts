@@ -108,3 +108,30 @@ describe("playground preview layout", () => {
     expect(wrap.getBoundingClientRect().width).toBeLessThanOrEqual(343);
   });
 });
+
+describe("playground theme inputs", () => {
+  it("exports density, scheme, contrast and preset, and the export reproduces the theme", () => {
+    const s = initialState();
+    s.density = "compact";
+    s.autoScheme = true;
+    s.autoContrast = true;
+    s.themePreset = "ink";
+    const b = build(s);
+    expect(b.input).toMatchObject({ density: "compact", scheme: "auto", contrast: "auto", preset: "ink" });
+    const code = themeCode(b);
+    for (const line of ['density: "compact"', 'scheme: "auto"', 'contrast: "auto"', 'preset: "ink"']) expect(code).toContain(line);
+    expect(defineTheme(b.input).tokens).toEqual(b.theme.tokens);
+  });
+
+  it("the high contrast scheme wins over contrast auto", () => {
+    const s = initialState();
+    applyPreset(s, "contrast");
+    s.autoContrast = true;
+    expect(build(s).input.contrast).toBe("high");
+  });
+
+  it("writes nothing for the defaults", () => {
+    const { input } = build(initialState());
+    for (const k of ["density", "scheme", "contrast", "preset"]) expect(input).not.toHaveProperty(k);
+  });
+});

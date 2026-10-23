@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESegmented, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESegmented, ESelect, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
-import SiteSearch from "./SiteSearch.vue";
 import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
 import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
 import BubbleTitle from "./BubbleTitle.vue";
@@ -20,9 +19,8 @@ const license = __EOS_LICENSE__.split(/\n\n/).slice(1).map((p) => p.replace(/\n/
 const SCHEME_ICON = { system: MonitorIcon, light: SunIcon, dark: MoonIcon };
 const NAMES: Record<Choice, string> = { system: "System", light: "Light", dark: "Dark" };
 const SCHEME_OPTIONS = ORDER.map((value) => ({ value, label: NAMES[value] }));
-const nextChoice = computed(() => ORDER[(ORDER.indexOf(schemeChoice.value) + 1) % ORDER.length]!);
-// The button keeps one name, "Colour scheme", so a screen reader user always finds it by the same words; the state is its description, and each change is announced.
-const schemeState = computed(() => `Now ${NAMES[schemeChoice.value].toLowerCase()}. Press to switch to ${NAMES[nextChoice.value].toLowerCase()}.`);
+// The header lists the three modes so any one can be picked directly; the drawer has the same choice as a segmented control.
+const SCHEME_SELECT_OPTIONS = ORDER.map((value) => ({ value, label: NAMES[value], icon: SCHEME_ICON[value] }));
 
 const { theme, page, frontmatter } = useData();
 const route = useRoute();
@@ -104,7 +102,14 @@ function showCurrent() {
   side.scrollTop = Math.max(0, here.offsetTop - side.clientHeight / 3);
 }
 
+// The search code and its index load once the browser is idle after mount, or at once when search is opened first, so they are not part of the first load.
+const SiteSearch = defineAsyncComponent(() => import("./SiteSearch.vue"));
 const searching = ref(false);
+const searchLoaded = ref(false);
+let searchIdle = 0;
+watch(searching, (open) => {
+  if (open) searchLoaded.value = true;
+});
 function onShortcut(e: KeyboardEvent) {
   const typing = (e.target as HTMLElement | null)?.closest("input, textarea, select, [contenteditable]");
   if ((e.key === "k" && (e.ctrlKey || e.metaKey)) || (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey)) {
@@ -119,10 +124,15 @@ onMounted(() => {
   showCurrent();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("keydown", onShortcut);
+  const load = () => (searchLoaded.value = true);
+  if ("requestIdleCallback" in window) searchIdle = window.requestIdleCallback(load, { timeout: 3000 });
+  else searchIdle = window.setTimeout(load, 1000);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("keydown", onShortcut);
+  if ("cancelIdleCallback" in window) window.cancelIdleCallback(searchIdle);
+  else clearTimeout(searchIdle);
 });
 onContentUpdated(() =>
   nextTick(() => {
@@ -172,15 +182,14 @@ watch(
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
     <EAppHeader sticky>
       <template #logo>
-        <ELink class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></ELink>
+        <a class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></a>
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
       </template>
       <template #actions>
         <ENavList class="site-topnav" label="Site" orientation="horizontal" :items="topNav" />
-        <EIconButton :icon="SCHEME_ICON[schemeChoice]" label="Colour scheme" aria-describedby="site-scheme-state" @click="chooseScheme(nextChoice)" />
-        <span id="site-scheme-state" hidden>{{ schemeState }}</span>
+        <ESelect class="site-scheme" bare aria-label="Colour scheme" :model-value="schemeChoice" :options="SCHEME_SELECT_OPTIONS" @update:model-value="chooseScheme($event as Choice)" />
         <EIconButton icon="menu" label="Menu" class="site-menu-button" @click="menuOpen = true" />
       </template>
     </EAppHeader>
@@ -226,7 +235,7 @@ watch(
       </nav>
     </EAppFooter>
 
-    <EDrawer v-model:open="menuOpen" side="left" title="Menu">
+    <EDrawer v-model:open="menuOpen" side="start" title="Menu">
       <ESegmented class="site-drawer-scheme" label="Colour scheme" :model-value="schemeChoice" :options="SCHEME_OPTIONS" @update:model-value="chooseScheme($event as Choice)" />
       <ENavList label="Site menu" :items="menuSplit.before" />
       <div v-if="hasSidebar" class="site-drawer-pages">
@@ -234,6 +243,6 @@ watch(
       </div>
       <ENavList v-if="menuSplit.after.length" label="More of the site" :items="menuSplit.after" />
     </EDrawer>
-    <SiteSearch v-model:open="searching" />
+    <SiteSearch v-if="searchLoaded" v-model:open="searching" />
   </div>
 </template>

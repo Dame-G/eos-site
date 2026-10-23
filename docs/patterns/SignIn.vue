@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import {
   EActions,
   EButton,
@@ -7,6 +7,7 @@ import {
   EGrid,
   EHeading,
   ELink,
+  ENotice,
   EOtpField,
   EPasswordField,
   EStack,
@@ -35,14 +36,29 @@ const problems = computed(() => {
   return list;
 });
 const errorOf = (id: string) => problems.value.find((p) => p.id === id)?.message;
+
+const focusField = (id: string) => document.getElementById(id)?.focus();
+
+async function submit() {
+  submitted.value = true;
+  await nextTick();
+  if (problems.value.length) focusField(problems.value[0]!.id);
+}
 </script>
 
 <template>
   <EGrid min="20rem" :gap="6" class="pattern-lg">
     <ESurface large>
-      <form novalidate @submit.prevent="submitted = true">
+      <form novalidate @submit.prevent="submit">
         <EStack :gap="4">
           <EHeading :level="2">Sign in</EHeading>
+          <ENotice v-if="problems.length" tone="danger" :title="problems.length === 1 ? 'Fix 1 thing to sign in' : `Fix ${problems.length} things to sign in`">
+            <EStack as="ul" :gap="1">
+              <li v-for="p in problems" :key="p.id">
+                <ELink :href="`#${p.id}`" @click.prevent="focusField(p.id)">{{ p.field }}: {{ p.message }}</ELink>
+              </li>
+            </EStack>
+          </ENotice>
           <ETextField
             id="si-email"
             v-model="email"

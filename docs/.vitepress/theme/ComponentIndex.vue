@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { EEmptyState, EGrid, EKicker, ELink, ESearchBar, ESurface, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EEmptyState, EGrid, ESearchBar, ESurface, EText, EVisuallyHidden } from "@eos-ui/vue";
 import { SYNONYMS } from "../search";
 
 interface Group {
@@ -10,22 +10,9 @@ interface Group {
 }
 const props = defineProps<{ groups: Group[] }>();
 
-/** What each layer is for, in a few words. */
-const ROLE: Record<string, string> = {
-  primitives: "The smallest pieces. Each stands alone.",
-  blocks: "Layout and containers for content.",
-  controls: "One field or choice each.",
-  composites: "Controls assembled from the controls before them.",
-  containers: "Overlays, panels and feedback.",
-  page: "The frame of a whole page or app.",
-};
-
-/** The components most pages reach for first. A name the library does not have is skipped, so a renamed component never leaves a dead link. */
-const MOST_USED = ["Button", "TextField", "Field", "Select", "Dialog", "Table", "Tabs", "Toast", "Surface", "Notice"];
 
 const query = ref("");
 const known = computed(() => new Map(props.groups.flatMap((g) => g.items.map((c) => [c.name, c] as const))));
-const popular = computed(() => MOST_USED.flatMap((n) => (known.value.has(n) ? [known.value.get(n)!] : [])));
 
 const shown = computed(() => {
   const words = query.value.toLowerCase().split(/\s+/).filter(Boolean);
@@ -48,19 +35,11 @@ const status = computed(() => (query.value.trim() ? (count.value ? `${count.valu
     <ESearchBar v-model="query" label="Filter components" placeholder="Filter by name, such as dropdown or modal" hide-action autocomplete="off" class="component-filter" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ status }}</EVisuallyHidden>
 
-    <section v-if="!query.trim()" class="component-popular" aria-labelledby="most-used">
-      <EKicker id="most-used">Most used</EKicker>
-      <ul class="component-popular-list">
-        <li v-for="c in popular" :key="c.name"><ELink :href="`/components/${c.name}`">E{{ c.name }}</ELink></li>
-      </ul>
-    </section>
-
     <EEmptyState v-if="!shown.length" title="No component matches that" icon="search" :heading-level="2">
       Try a shorter word, or a name you know from another library, such as modal or snackbar.
     </EEmptyState>
 
     <section v-for="g in shown" :key="g.id" :aria-labelledby="g.id" class="component-group">
-      <EKicker v-if="ROLE[g.id]" class="component-group-kicker">{{ ROLE[g.id] }}</EKicker>
       <h2 :id="g.id">{{ g.title }}</h2>
       <EGrid as="ul" min="17rem" :gap="3" class="component-list">
         <ESurface v-for="c in g.items" :key="c.name" as="li" small class="component-card">

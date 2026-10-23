@@ -1,7 +1,17 @@
 import { copyFileSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { groupedComponents, libraryDist, listComponents, propsTable, readReadme, siteRoot, summaryOf } from "../docs/.vitepress/eos-source.mjs";
-import { DESIGN, GUIDE, PATTERNS } from "../docs/.vitepress/pages.mjs";
+import { DESIGN, guideSections } from "../docs/.vitepress/pages.mjs";
+import { patternInfo } from "../docs/.vitepress/patterns.mjs";
+
+/** "name (type, required)" or "name (type, default X)". The README writes **Required** or None in the Default column. */
+function propText({ prop, type, def }) {
+  const parts = [type];
+  if (/^required$/i.test(def)) parts.push("required");
+  else if (def && !/^none$/i.test(def)) parts.push(`default ${def}`);
+  const inner = parts.filter(Boolean).join(", ");
+  return inner ? `${prop} (${inner})` : prop;
+}
 
 const SITE = "https://eos.dame.gg";
 const out = [];
@@ -14,9 +24,14 @@ line();
 
 line("## Guide");
 line();
-for (const { slug, name, note } of GUIDE) line(`- [${name}](${SITE}/guide/${slug}): ${note}`);
-line(`- [Changelog](${SITE}/changelog): Release notes for every version of the library`);
-line();
+const sections = guideSections();
+for (const { title, pages } of sections) {
+  line(`### ${title}`);
+  line();
+  for (const { slug, name, note } of pages) line(`- [${name}](${SITE}/guide/${slug}): ${note}`);
+  if (title === sections.at(-1).title) line(`- [Changelog](${SITE}/changelog): Release notes for every version of the library`);
+  line();
+}
 
 line("## Design");
 line();
@@ -25,7 +40,10 @@ line();
 
 line("## Patterns");
 line();
-for (const { slug, name } of PATTERNS) line(`- [${name}](${SITE}/patterns/${slug})`);
+for (const { slug, name, description, uses } of patternInfo()) {
+  line(`- [${name}](${SITE}/patterns/${slug}): ${description}`);
+  if (uses.length) line(`  Built from: ${uses.map((c) => `E${c}`).join(", ")}`);
+}
 line();
 
 // The library's one-file documentation is published beside this index when the library has been built.
@@ -39,12 +57,18 @@ if (existsSync(fullSource)) {
   line();
 } else {
   rmSync(fullTarget, { force: true });
-  console.warn(`llms-full.txt: not found at ${fullSource}, so it is not published. Build the library to get it.`);
+  const message = `llms-full.txt: not found at ${fullSource}, so it is not published. Build the library to get it.`;
+  // CI sets EOS_REQUIRE_LLMS_FULL when it builds the library first, so a missing file there is a broken build, not a local shortcut.
+  if (process.env.EOS_REQUIRE_LLMS_FULL) {
+    console.error(message);
+    process.exit(1);
+  }
+  console.warn(message);
 }
 
 line("## Components");
 line();
-line("Every component has a page with its README and a live demo. Props are listed as name (type).");
+line("Every component has a page with its README and a live demo. Props are listed as name (type, default or required).");
 line();
 
 for (const g of groupedComponents()) {
@@ -55,7 +79,7 @@ for (const g of groupedComponents()) {
     line(`- [E${name}](${SITE}/components/${name}): ${summaryOf(readme)}`);
     const props = propsTable(readme);
     if (props.length) {
-      line(`  Props: ${props.map((p) => (p.type ? `${p.prop} (${p.type})` : p.prop)).join(", ")}`);
+      line(`  Props: ${props.map(propText).join(", ")}`);
     }
   }
   line();

@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,12 +23,13 @@ export const componentsDir = join(eosRoot, "packages/vue/src/components");
 
 /** The groups, in the order the sidebar shows them. */
 export const GROUPS = [
-  { id: "primitives", title: "Primitives" },
-  { id: "blocks", title: "Blocks" },
-  { id: "controls", title: "Form controls" },
-  { id: "composites", title: "Composite controls" },
-  { id: "containers", title: "Containers and feedback" },
-  { id: "page", title: "Page" },
+  { id: "layout", title: "Layout" },
+  { id: "content", title: "Content" },
+  { id: "actions", title: "Actions" },
+  { id: "forms", title: "Forms" },
+  { id: "navigation", title: "Navigation" },
+  { id: "feedback", title: "Feedback" },
+  { id: "overlays", title: "Overlays" },
 ];
 
 /** Folder names of every component in the library, sorted. Adding a folder to the library adds a page here. */
@@ -44,6 +46,16 @@ export function groupedComponents() {
   return [...GROUPS, { id: "more", title: "More" }]
     .map((g) => ({ ...g, names: names.filter((n) => (GROUP_OF[n] ?? "more") === g.id) }))
     .filter((g) => g.names.length);
+}
+
+/** The date of the last library commit that touched a component, as an ISO string, or undefined when git history is not there. */
+export function componentModified(name) {
+  try {
+    const out = execFileSync("git", ["log", "-1", "--format=%cI", "--", join("packages/vue/src/components", name)], { cwd: eosRoot, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+    return out || undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export function readReadme(name) {

@@ -16,6 +16,9 @@ const PAGE_RULES = [
 ];
 
 export async function expectNoViolations(root: Element, options: { disable?: string[] } = {}): Promise<void> {
+  // Colours sampled halfway through a fade or slide read as low contrast.
+  const finite = document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations !== Infinity);
+  await Promise.all(finite.map((a) => a.finished.catch(() => undefined)));
   const rules = Object.fromEntries([...PAGE_RULES, ...(options.disable ?? [])].map((id) => [id, { enabled: false }]));
   const result = await axe.run(root, { rules, resultTypes: ["violations"] });
   if (result.violations.length) {

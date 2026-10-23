@@ -158,6 +158,7 @@ describe("Data table with bulk actions", () => {
     await expect.element(page.getByRole("button", { name: "Download receipts" })).toBeVisible();
     await page.getByRole("button", { name: "Remove" }).click();
     await expect.element(page.getByText("This cannot be undone.")).toBeVisible();
+    await settle();
     await expectNoViolations(document.body);
     console_.expectQuiet();
   });

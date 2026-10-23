@@ -70,7 +70,7 @@ function search(q: string) {
 
       <EStack v-if="shown.length" :gap="2">
         <EExpandableRow v-for="s in shown" :key="s.id" :title="s.title" :subtitle="s.sub">
-          <template #leading><EStamp :status="s.status" size="sm" /></template>
+          <template #leading><EStamp :status="s.status" small /></template>
           <template #trailing>{{ money(s.amount) }}</template>
           <EDescriptionList :items="[{ label: 'Status', text: s.reason }]" />
           <template #actions>

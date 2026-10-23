@@ -67,6 +67,10 @@ export function build(s: State, name = "my-theme"): Built {
     }
   }
   if (s.scheme === "contrast") input.contrast = "high";
+  else if (s.autoContrast) input.contrast = "auto";
+  if (s.autoScheme) input.scheme = "auto";
+  if (s.density !== "comfortable") input.density = s.density;
+  if (s.themePreset !== "none") input.preset = s.themePreset;
   const strokes: NonNullable<ThemeInput["strokes"]> = {};
   if (s.hair !== NEUTRAL.hair) strokes.hair = s.hair;
   if (s.focus !== NEUTRAL.focus) strokes.focus = s.focus;
@@ -130,6 +134,9 @@ export function themeCode(b: Built): string {
   const i = b.input;
   const lines: string[] = [];
   lines.push(`name: ${q(i.name ?? "my-theme")},`);
+  if (i.preset) lines.push(`preset: ${q(i.preset)},`);
+  if (i.scheme) lines.push(`scheme: ${q(i.scheme)},`);
+  if (i.density) lines.push(`density: ${q(i.density)},`);
   for (const k of ["brand", "accent", "danger", "warning", "background", "surface", "foreground"] as const) if (i[k]) lines.push(`${k}: ${q(i[k])},`);
   if (i.radius) lines.push(`radius: ${q(i.radius as string)},`);
   if (i.elevation) lines.push(`elevation: ${q(i.elevation)},`);

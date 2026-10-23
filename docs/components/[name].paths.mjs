@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { join, sep } from "node:path";
 import { GROUPS, componentsDir, firstParagraph, listComponents, readReadme, siteRoot, splitReadme } from "../.vitepress/eos-source.mjs";
 import { GROUP_OF } from "../.vitepress/groups.mjs";
+import { usedIn } from "../.vitepress/patterns.mjs";
 
 const EXPECTED_SECTIONS = ["Keyboard", "Related"];
 
@@ -26,6 +27,7 @@ export default {
         return known.has(folder) && folder !== self ? `${pre}[\`${tag}\`](/components/${folder})` : m;
       });
 
+    const patterns = usedIn();
     const missing = [];
     const pages = names.map((name) => {
       const readme = readReadme(name);
@@ -45,19 +47,22 @@ export default {
         ...(hasDemo ? ["<EDisclosure title=\"Source\">", "", `<<< @/components/demos/${name}.vue`, "", "</EDisclosure>", ""] : []),
       ].join("\n");
       const noReadme = readme ? "" : `\n\n::: warning\nThe library has no README.md for E${name} yet, so this page only has the demo.\n:::\n`;
-      const content = [link(head, name), noReadme, demo, noDefault(link(rest, name))].join("\n\n");
+      // Derived from each pattern's "Built from:" line, so the list cannot drift from the patterns.
+      const used = patterns.get(name) ?? [];
+      const usedSection = used.length ? ["## Used in", "", ...used.map((p) => `- [${p.name}](/patterns/${p.slug})`)].join("\n") : "";
+      const content = [link(head, name), noReadme, demo, noDefault(link(rest, name)), usedSection].join("\n\n");
       return {
         params: { name, group, description: firstParagraph(readme) },
         content,
       };
     });
-    // Accessibility has always been required. Keyboard and Related are being added to the library READMEs, so they warn only
-    // until EOS_STRICT_SECTIONS is set, which turns every missing section into a build failure.
+    // Every README must have Accessibility, Keyboard and Related, and a missing one fails the build. Set EOS_LENIENT_SECTIONS
+    // to downgrade that to a warning when building against an older library release that predates the sections.
     for (const heading of ["Accessibility", ...EXPECTED_SECTIONS]) {
       const lacking = missing.filter((m) => m.heading === heading).map((m) => `E${m.name}`);
       if (lacking.length) console.warn(`[eos-site] ${lacking.length} README.md file(s) have no "## ${heading}" section: ${lacking.join(", ")}.`);
     }
-    if (missing.length && process.env.EOS_STRICT_SECTIONS) throw new Error(`EOS_STRICT_SECTIONS is set and ${missing.length} README section(s) are missing. See the warnings above.`);
+    if (missing.length && !process.env.EOS_LENIENT_SECTIONS) throw new Error(`${missing.length} component README section(s) are missing. Add them to the library READMEs, or set EOS_LENIENT_SECTIONS to build anyway. See the warnings above.`);
     return pages;
   },
 };
