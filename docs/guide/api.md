@@ -207,20 +207,35 @@ function useToast(): ToastApi;
 
 interface ToastApi {
   show(options: ToastOptions): string; // returns the toast's id
+  update(id: string, patch: Partial<ToastOptions>): void; // changes a toast on screen and restarts its timer
+  promise<T>(promise: Promise<T>, options: ToastPromiseOptions<T>): Promise<T>; // loading, then success or error
   dismiss(id: string): void;
   clear(): void;
 }
 
+type ToastTone = "neutral" | "info" | "success" | "warning" | "danger";
+
 interface ToastOptions {
   title: string;
   message?: string;
-  tone?: "info" | "success" | "warning" | "danger";
+  tone?: ToastTone; // "info" by default
+  icon?: IconProp; // replaces the tone's icon
+  closable?: boolean; // the Dismiss button. true by default, and always shown when duration is 0
+  key?: string; // a toast with the same key updates the one on screen instead of adding another
   action?: VNodeChild | (() => VNodeChild);
-  duration?: number; // ms. 5000 by default, 0 for none, 0 for danger and with an action
+  duration?: number; // ms. 0 stays. 5000, or 0 for danger and for a toast with an action
+}
+
+interface ToastPromiseOptions<T> {
+  loading: string | Omit<ToastOptions, "tone">;
+  success: string | Omit<ToastOptions, "tone"> | ((value: T) => string | Omit<ToastOptions, "tone">);
+  error: string | Omit<ToastOptions, "tone"> | ((reason: unknown) => string | Omit<ToastOptions, "tone">);
 }
 ```
 
-Also exported: `createToasts()` (a `ToastStore`: `items`, `show`, `dismiss`, `clear`, `pause`, `resume`), `TOAST_KEY`, and the types `ToastTone` and `ToastItem`. See [Toasts and notifications](/guide/toasts).
+`update()` with a new `tone` or `action` and no `duration` takes that tone's default again, so a toast turned into `danger` stays. `promise()` returns the promise it was given, so the caller still handles the result; the error toast is `danger`.
+
+Also exported: `createToasts()` (a `ToastStore`: the `ToastApi` plus `items`, `limit`, `pause` and `resume`), `TOAST_KEY`, and the types `ToastItem`, `ToastApi` and `ToastStore`. See [Toasts and notifications](/guide/toasts).
 
 ### `useAnnouncer()`
 

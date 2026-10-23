@@ -11,10 +11,10 @@ import ToastsAndNotices from "./examples/ToastsAndNotices.vue";
 
 ## Toast or Notice
 
-| Compared | [`useToast()`](/components/ToastProvider) | [`ENotice`](/components/Notice) |
+| Compared | [`useToast()`](/guide/api#usetoast) | [`ENotice`](/components/Notice) |
 | --- | --- | --- |
-| Goes away | by itself, after 5 seconds | when the problem is dealt with, or the person closes it |
-| Close button | on by default; `EToast` takes `:closable="false"` to hide it | off by default, `closable` shows it |
+| Goes away | by itself, after 5 seconds (a danger toast or one with an action stays) | when the problem is dealt with, or the person closes it |
+| Dismiss button | on by default; `closable: false` hides it on a toast that goes by itself | off by default, `closable` shows it |
 | Appears | floating, at the edge of the page | in the page, where it applies |
 | For | "Saved", "Payment received", "Statement removed, Undo" | a form error, a deadline, an outage, a failed payment |
 | Announced | politely (an error at once) | politely (an error at once) |
@@ -51,9 +51,29 @@ Without the plugin, the `EToastProvider` makes its own store and `useToast()` wo
 | --- | --- |
 | `title` | Required. What happened, in a few words |
 | `message` | One sentence of detail |
-| `tone` | `info` (default), `success`, `warning` or `danger` |
-| `action` | A button vnode, or a function that returns one. A toast with an action stays until dismissed |
-| `duration` | Milliseconds. `0` stays. 5000 by default, and `0` for `danger` |
+| `tone` | `info` (default), `neutral`, `success`, `warning` or `danger`. `danger` is announced at once |
+| `icon` | Replaces the tone's icon |
+| `closable` | Shows the "Dismiss" button. On by default. A toast that stays (`duration` 0) always shows it, since nothing else would remove it |
+| `key` | Names the toast. Showing another with the same key updates the one on screen and restarts its timer, so a repeated event stays one toast |
+| `action` | A button vnode, or a function that returns one |
+| `duration` | Milliseconds, `0` to stay until dismissed. 5000 by default; `0` for `danger` and for a toast with an action |
+
+The full types are in the [API reference](/guide/api#usetoast).
+
+## Change a toast on screen
+
+`update(id, patch)` changes a toast that is showing, such as its title or tone, and restarts its timer. `promise()` does the common case for you: it shows `loading` until the promise settles, then turns the same toast into `success` or a `danger` `error`, and returns the promise.
+
+```ts
+const id = toast.show({ title: "Uploading statement", duration: 0 });
+toast.update(id, { title: "Statement uploaded", tone: "success" }); // goes after 5 seconds
+
+await toast.promise(saveCard(), {
+  loading: "Saving card",
+  success: "Card saved",
+  error: (e) => ({ title: "Card not saved", message: String(e) }),
+});
+```
 
 ```ts
 import { h } from "vue";
