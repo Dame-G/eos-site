@@ -35,8 +35,12 @@ const letters = ["e", "o", "s"];
   padding: 0.06em 0.08em 0;
   font-family: "Geist Mono", var(--e-font-mono);
   font-weight: 800;
-  letter-spacing: -0.07em;
   text-transform: uppercase;
+}
+
+/* The letters tuck together with a negative margin, not letter-spacing: spacing shortens each box so the glyph spills past its right edge, and Safari clips a filtered, animated layer to its box. That cut the S. */
+.bubble-letter + .bubble-letter {
+  margin-inline-start: -0.07em;
 }
 
 .bubble-letter {
