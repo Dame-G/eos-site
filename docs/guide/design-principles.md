@@ -9,7 +9,7 @@ These rules hold in every theme. A theme changes colours, corners, fonts, scales
 
 - **Compose.** A card is [`ESurface`](/components/Surface), buttons go in [`EActions`](/components/Actions), label and text rows are [`EDescriptionList`](/components/DescriptionList). If you need a custom box or a hand-written flex row, a building block is missing: report it.
 - **The parent owns space.** Children set no outer margin. [`EStack`](/components/Stack), [`EInline`](/components/Inline), [`EGrid`](/components/Grid) and `EActions` space them.
-- **One control height.** Every tappable control has the same height (48px by default), so a button lines up beside an input.
+- **One control height.** Buttons, inputs, selects and pickers share `--e-control-height` (48px by default), so a button lines up beside an input. A small button drops to the 44px tap target, `--e-tap`, and nothing goes below it.
 - **Depth means "click" or "floats".** Buttons and rows have a raised bottom edge (the slab), inputs are wells, popovers and toasts float. Everything else is flat and outlined.
 - **One filled button per page.** Put the main action first, left-aligned under what it acts on. Name it with a verb: "Pay $162.40".
 - **The container decides.** Notices, rows, grids and actions use container queries, so a sidebar behaves like a phone.
@@ -59,24 +59,32 @@ Sizes are in rem, so the visitor's browser font size scales text and the control
 
 ### The slab
 
-A button, a selected tab and the current nav item have a raised bottom edge: the slab. It is a border on all four sides in the slab colour, with the bottom one thicker. Pressing sinks the face over it. Its thickness is one of three tokens: `--e-slab-thin` for a small part (a switch thumb, a key), `--e-slab` for everything else, and `--e-slab-bold` for a side edge that marks a tone, as on a notice or a toast. Each tone has an edge colour, such as `--e-primary-slab`. A slab drawn some other way (a gradient, a pseudo-element bar) will not follow a theme.
+A button, a checked box, the chosen day and the current nav item have a raised bottom edge: the slab. It is a border on all four sides in the slab colour, with the bottom one thicker. Pressing sinks the face over it. Its thickness is `--e-depth`, or `--e-slab-thin` for the two small parts, a key (`EKbd`) and a tag (`ETag`). Each tone has an edge colour, such as `--e-primary-slab`, and a neutral face uses `--e-slab-ink`. A slab drawn some other way (a gradient, a pseudo-element bar, an inset shadow) will not follow a theme.
+
+**One bold tone edge.** A notice, a stamp and a toast mark their tone with one side edge, never a slab: the inline-start border, `--e-stroke-edge` plus `--e-slab-bold` wide, in the tone's colour. It mirrors in right-to-left text.
 
 ### Hover, press and focus
 
-Anything that can be pressed answers the pointer the same way.
+Each family of things that can be pressed answers the pointer one way. A border is recoloured, never thickened, so nothing shifts on hover.
 
-| State | A quiet item (no fill) | A filled control |
+| Family | Hover | Press |
 | --- | --- | --- |
-| Hover | `--e-wash-hover` and `box-shadow: var(--e-ring-hover)` | The tone's `-hover` fill |
-| Press | `--e-wash-press` and `box-shadow: var(--e-ring-press)` | The tone's `-press` fill, and the slab sinks |
-| Change | `transition: var(--e-transition-state)` | The same |
-| Focus | A solid `--e-stroke-focus` outline in `--e-focus-ring`, offset by `--e-stroke-focus` | The same |
+| Text link (`ELink`) | The ink colour. No wash, no ring | The same |
+| Breadcrumb | A wash under the link text | The same |
+| Disclosure summary (`EDisclosure`) | `--e-wash-hover` only: no ring, no underline | `--e-wash-press` |
+| Bordered item: a tab, a segment, a card, a link card | The border turns `--e-wash-ring` | The border turns `--e-ink` |
+| Unbordered row: a menu item, an option, a nav item, a page in a pager, a quiet button | `--e-wash-hover` and `box-shadow: var(--e-ring-hover)` | `--e-wash-press` and `box-shadow: var(--e-ring-press)` |
+| Filled control: a button, a checked box | The tone's `-hover` fill | The tone's `-press` fill, and the slab sinks |
 
-A text input is different on purpose: its focus outline is `--e-focus-field` and lies exactly over its border. Hover styles apply only on devices that can hover. Colour is never the only change: hover, press and disabled also change a ring, a slab or an outline.
+Every family changes over `transition: var(--e-transition-state)`, and hover styles apply only on devices that can hover. The text link is the one family where colour is the whole change: it is already underlined, so the underline carries it.
+
+**Focus** is a solid `--e-stroke-focus` outline in `--e-focus-ring`. It sits outside the element, offset by `--e-stroke-focus`, except on rows that touch their neighbours or sit in a clipped list (a menu, an option list, a scrolling panel), where it is drawn inside the row so the clip never cuts it. A text input is different on purpose: its focus outline is `--e-focus-field` and lies exactly over its border.
+
+**Rows are concentric with their panel.** A row in a menu or list panel is inset from the panel's edge by `--e-gap-tight`, and its corner is the panel's radius less that inset (`--e-radius-row`: 4px in an 8px panel), so the two curves share a centre. Inside a bordered container, take the border off as well. Never give a child the same radius as its parent.
 
 ### Selected
 
-Two voices, and a component uses one. **Value** means a value you set: filled `--e-primary` with `--e-on-primary`, and a primary slab. Toggle buttons, checkboxes, radios, switches, segmented controls, the current page of a pager and the selected day use it. **Place** means where you are: a `--e-surface-hover` face, primary text and a primary slab. Tabs and nav items use it.
+Two voices, and a component uses one. **Value** means a value you set: filled `--e-primary` with `--e-on-primary`, and a primary slab. Toggle buttons, checkboxes, radios, switches, segmented controls, the current page of a pager and the selected day use it. **Place** means where you are: a `--e-wash-hover` face, primary text and a primary edge, drawn two ways. A selected tab sits in a bordered strip beside its neighbours, so it thickens all four of its edges evenly, the bottom one primary. The current nav item stands alone, so it takes a slab under it.
 
 ### Disabled
 
@@ -84,4 +92,14 @@ A control keeps its box, drops its lift, dims to `--e-disabled-ink` and draws a 
 
 ### Motion
 
-`--e-duration-tap` for hover and press, `--e-duration-fade` for things that fade and `--e-duration-move` for things that move. Arriving uses `--e-easing-enter`, leaving `--e-easing-exit`, and every state change `--e-easing-out`. All three durations collapse under `prefers-reduced-motion`.
+`--e-duration-tap` for hover and press, `--e-duration-fade` for things that fade (a dialog's scrim) and `--e-duration-move` for things that move. Something entering, such as a dialog, a drawer or the command palette, uses `--e-easing-enter`; leaving uses `--e-easing-exit`; every state change uses `--e-easing-out`. All three durations collapse under `prefers-reduced-motion`.
+
+## Tone, variant and status
+
+Three props that are easy to mix up. Each means one thing across the library.
+
+| Word | Means | Values | Where |
+| --- | --- | --- | --- |
+| `tone` | Meaning in a colour. Never a look | `neutral`, `info`, `success`, `warning`, `danger` | `ENotice`, `EToast`, `EStamp`, `ETag`, `EText` |
+| `variant` | Visual weight: how loudly something speaks, or what it is drawn as | `primary`, `secondary`, `outline`, `danger`, `quiet` on a button; `paper`, `raised`, `outline`, `tinted` on a surface | `EButton`, `EMenu`, `ESurface` |
+| `status` | A preset word that sets the tone and the text together | `paid`, `due`, `overdue`, `scheduled` and more | `EStamp`, and `stamp` on `EDescriptionList` items |
