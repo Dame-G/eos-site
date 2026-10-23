@@ -75,6 +75,12 @@ body {
   min-height: 100vh;
 }
 
+/* The EOS mark in the header's brand link, at its own size: the link's colours are the library's. */
+.site-mark {
+  font-size: var(--e-text-3xl);
+  line-height: 1;
+}
+
 .site-topnav {
   display: none;
 }
