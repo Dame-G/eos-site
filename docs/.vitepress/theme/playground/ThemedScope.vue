@@ -27,8 +27,8 @@ onBeforeUnmount(() => (config.portalTarget = "body"));
 
 <style scoped>
 .scope {
-  display: grid;
-  gap: var(--e-space-4);
+  /* Block flow, not a grid with a gap: every popover portals in here and leaves an empty wrapper behind, and each one would add a gap row. */
+  display: flow-root;
   min-width: 0;
   color: var(--e-ink);
   font-family: var(--e-font-sans);

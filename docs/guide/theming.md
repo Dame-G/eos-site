@@ -161,6 +161,8 @@ const eos = createEos({ theme: clinic, themeTarget: el });
 eos.config.portalTarget = el; // or a selector such as "#portal"
 ```
 
+Every menu, option list and tooltip leaves an empty wrapper in the portal target after it opens. Do not make that element a grid or flex container with a `gap`, or each wrapper adds a gap and the container grows a little every time something opens. Plain block flow (or `display: flow-root`) is safe.
+
 ## Cascade layers
 
 From lowest: `e.reset, e.tokens, e.base, e.primitives, e.blocks, e.controls, e.composites, e.containers, e.page`. With another layered framework, declare the order once and early: `@layer framework, e.reset, e.tokens, ...`.
