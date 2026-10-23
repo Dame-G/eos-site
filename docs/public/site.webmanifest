@@ -3,9 +3,9 @@
   "short_name": "EOS",
   "description": "A component library for Vue.",
   "start_url": "/",
-  "display": "browser",
-  "background_color": "#0a0e11",
-  "theme_color": "#17586d",
+  "display": "minimal-ui",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }

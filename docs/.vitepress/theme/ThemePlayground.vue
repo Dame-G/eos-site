@@ -241,6 +241,11 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
           <template #colour>
             <EStack :gap="4">
               <ESegmented :model-value="s.scheme" label="Scheme" :options="schemeOptions" @update:model-value="setScheme" />
+              <EStack :gap="2">
+                <ESwitch v-model="s.autoScheme" label="Follow light and dark" />
+                <ESwitch v-model="s.autoContrast" label="Follow high contrast" :disabled="s.scheme === 'contrast'" />
+                <EText small muted>Sets scheme and contrast to auto in the export. The preview shows the one theme.</EText>
+              </EStack>
               <EKicker>Ground</EKicker>
               <EGrid min="9rem" :gap="3">
                 <EColorField v-for="[k, label, hint] in GROUND" :key="k" :label="label" :hint="hint" :model-value="s[k]" @update:model-value="setGround(k, $event)" />
@@ -257,6 +262,12 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
             <EStack :gap="4">
               <ESegmented :model-value="s.radius" label="Corners" :options="[{ value: 'sharp', label: 'Sharp' }, { value: 'default', label: 'Default' }, { value: 'round', label: 'Round' }]" @update:model-value="setRadius" />
               <ESegmented :model-value="s.elevation" label="Elevation" :options="[{ value: 'outline', label: 'Outline' }, { value: 'lifted', label: 'Lifted' }, { value: 'bold', label: 'Bold' }]" hint="Edges are rings of the card edge colour." @update:model-value="setElevation" />
+              <ESelect
+                v-model="s.themePreset"
+                label="Theme preset"
+                :options="[{ value: 'none', label: 'None' }, { value: 'paper', label: 'Paper' }, { value: 'ink', label: 'Ink' }, { value: 'quiet', label: 'Quiet' }]"
+                hint="Sets elevation, strokes, radius and motion together. Corners, elevation and motion you change here win over it."
+              />
               <EKicker>Strokes</EKicker>
               <EGrid min="8rem" :gap="3">
                 <ENumberField label="Hairline" hint="Dividers, edges" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.hair" @update:model-value="setField('hair', $event)" />
@@ -289,6 +300,13 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
           <template #space>
             <EStack :gap="4">
+              <ESegmented
+                :model-value="s.density"
+                label="Density"
+                :options="[{ value: 'comfortable', label: 'Comfortable' }, { value: 'compact', label: 'Compact' }]"
+                hint="Compact tightens the space scale and makes controls the 44px tap target."
+                @update:model-value="s.density = $event as State['density']"
+              />
               <EGrid min="8rem" :gap="3">
                 <ENumberField label="Spacing" hint="Percent of the default scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.spaceScale" @update:model-value="setField('spaceScale', $event)" />
                 <ENumberField label="Control height" hint="Buttons, inputs" suffix="px" :min="32" :max="72" :model-value="s.controlHeight" @update:model-value="setField('controlHeight', $event)" />

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { EActions, EButton, EStack } from "@eos-ui/vue";
+import { EActions, EButton, ECodeBlock, EStack } from "@eos-ui/vue";
 import BubbleTitle from "./BubbleTitle.vue";
 import FlowField from "./FlowField.vue";
-import HighlightedCode from "./HighlightedCode.vue";
 
 declare const __EOS_BUILD__: { version: string };
-const build = __EOS_BUILD__;
+declare const __EOS_INSTALL_HTML__: string;
+const install = `npm install @eos-ui/vue@${__EOS_BUILD__.version}`;
+const installHtml = __EOS_INSTALL_HTML__;
 </script>
 
 <template>
@@ -20,7 +21,7 @@ const build = __EOS_BUILD__;
     <section class="home-hero" aria-labelledby="home-title">
       <EStack :gap="3">
         <div class="eos-live home-install">
-          <HighlightedCode lang="bash" :code="`npm install @eos-ui/vue@${build.version}`" copy-label="Copy install command" />
+          <ECodeBlock lang="bash" :code="install" copy-label="Copy install command"><div v-html="installHtml" /></ECodeBlock>
         </div>
         <EActions class="home-actions">
           <EButton href="/guide/getting-started">Get started</EButton>

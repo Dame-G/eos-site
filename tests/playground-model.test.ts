@@ -71,3 +71,20 @@ describe("random", () => {
     }
   });
 });
+
+describe("share link, theme inputs", () => {
+  it("round-trips density, auto scheme, auto contrast and the library preset", () => {
+    const s = initialState();
+    s.density = "compact";
+    s.autoScheme = true;
+    s.autoContrast = true;
+    s.themePreset = "quiet";
+    const back = decode(encode(s))!;
+    expect(back).toMatchObject({ density: "compact", autoScheme: true, autoContrast: true, themePreset: "quiet" });
+  });
+
+  it("drops an unknown density or preset", () => {
+    const s = decode(btoa(JSON.stringify({ density: "huge", themePreset: "loud", autoScheme: "yes" })))!;
+    expect(s).toMatchObject({ density: "comfortable", themePreset: "none", autoScheme: false });
+  });
+});

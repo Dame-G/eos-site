@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -44,6 +45,16 @@ export function groupedComponents() {
   return [...GROUPS, { id: "more", title: "More" }]
     .map((g) => ({ ...g, names: names.filter((n) => (GROUP_OF[n] ?? "more") === g.id) }))
     .filter((g) => g.names.length);
+}
+
+/** The date of the last library commit that touched a component, as an ISO string, or undefined when git history is not there. */
+export function componentModified(name) {
+  try {
+    const out = execFileSync("git", ["log", "-1", "--format=%cI", "--", join("packages/vue/src/components", name)], { cwd: eosRoot, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+    return out || undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export function readReadme(name) {

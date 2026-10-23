@@ -21,22 +21,21 @@ export function inlineScripts(html) {
 /**
  * The policy. Scripts are the site's own files, the Shiki WebAssembly, and the inline scripts listed by hash, so an
  * injected script does not run. Styles keep `'unsafe-inline'` for the style attributes Vue and the playground set.
- * The report-only copy also drops that, to show what is left to tighten.
+ * There is no report-only copy of a stricter policy: nothing collects violation reports, so it would only add noise.
  */
-function policy(hashes, { styleInline }) {
+function policy(hashes) {
   const script = ["'self'", "'wasm-unsafe-eval'", ...hashes].join(" ");
-  const style = styleInline ? "'self' 'unsafe-inline'" : "'self'";
-  return `default-src 'self'; script-src ${script}; style-src ${style}; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`;
+  return `default-src 'self'; script-src ${script}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`;
 }
 
 /** The Cloudflare `_headers` file, generated at build so the hashes always match the pages written beside it. */
 export function headersFile(hashes) {
   return `/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
-  Content-Security-Policy: ${policy(hashes, { styleInline: true })}
-  Content-Security-Policy-Report-Only: ${policy(hashes, { styleInline: false })}
+  Content-Security-Policy: ${policy(hashes)}
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

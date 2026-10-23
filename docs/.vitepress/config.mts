@@ -1,12 +1,13 @@
+import { codeToHtml } from "shiki";
 import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
-import { writeFileSync } from "node:fs";
+import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
 import { collectScriptHashes, headersFile, redirectsFile } from "./csp.mjs";
-import { GROUPS, libraryBuildInfo, licenseText, listComponents } from "./eos-source.mjs";
+import { GROUPS, libraryBuildInfo, licenseText, listComponents, componentModified } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
-import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
-import { renderForSearch, searchBuildOptions, searchOptions } from "./search";
+import { DESIGN, PATTERNS, guideSections } from "./pages.mjs";
+import { areaOf, renderForSearch, searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
 import { BOOT_SCRIPT, THEME_COLOR, darkCss } from "./scheme";
 import { vitepressInLayer } from "./vitepress-layer";
@@ -19,6 +20,8 @@ const IMAGE_SIZE = { width: "1200", height: "630" };
 let warnedFont = false;
 
 const components = listComponents();
+/** The home page's install line, coloured here so the browser does not fetch a highlighter for one line. */
+const installHtml = await codeToHtml(`npm install @eos-ui/vue@${libraryBuildInfo.version}`, { lang: "bash", theme: SHIKI_THEME });
 
 function componentSidebar(): DefaultTheme.SidebarItem[] {
   const groups = GROUPS.map((g) => ({
@@ -33,9 +36,10 @@ function componentSidebar(): DefaultTheme.SidebarItem[] {
   return [{ text: "Overview", link: "/components/" }, ...groups.filter((g) => g.items.length)];
 }
 
-const guide: DefaultTheme.SidebarItem[] = [
-  { text: "Guide", items: [...GUIDE.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })), { text: "Changelog", link: "/changelog" }] },
-];
+const guide: DefaultTheme.SidebarItem[] = guideSections().map((s) => ({
+  text: s.title,
+  items: [...s.pages.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })), ...(s.title === "Reference" ? [{ text: "Changelog", link: "/changelog" }] : [])],
+}));
 
 const patterns: DefaultTheme.SidebarItem[] = [
   {
@@ -50,7 +54,16 @@ export default defineConfig({
   title: "EOS",
   titleTemplate: ":title · EOS",
   description: "A component library for Vue. High contrast by default, rebrandable with a few lines.",
-  sitemap: { hostname: SITE },
+  sitemap: {
+    hostname: SITE,
+    transformItems(items) {
+      return items.map((item) => {
+        const name = /^components\/([^/]+?)(?:\.html)?$/.exec(item.url)?.[1];
+        const lastmod = name && components.includes(name) ? componentModified(name) : undefined;
+        return lastmod ? { ...item, lastmod: Date.parse(lastmod) } : item;
+      });
+    },
+  },
   lang: "en-US",
   cleanUrls: true,
   appearance: false,
@@ -60,6 +73,14 @@ export default defineConfig({
     // _headers is generated, not copied from public/, because the script hashes depend on what the built pages contain.
     writeFileSync(join(siteConfig.outDir, "_headers"), headersFile(collectScriptHashes(siteConfig.outDir)));
     writeFileSync(join(siteConfig.outDir, "_redirects"), redirectsFile(components));
+    // The icon stylesheet VitePress generates for its own theme is empty here, because the site draws its icons itself.
+    rmSync(join(siteConfig.outDir, "vp-icons.css"), { force: true });
+    // The manifest takes its colours from the same tokens as the pages, so they cannot drift apart.
+    const manifest = JSON.parse(readFileSync(join(siteConfig.srcDir, "public/site.webmanifest"), "utf8"));
+    writeFileSync(join(siteConfig.outDir, "site.webmanifest"), JSON.stringify({ ...manifest, theme_color: THEME_COLOR.light, background_color: THEME_COLOR.light }, null, 2) + "\n");
+  },
+  transformHtml(code) {
+    return code.replace(/<link\b[^>]*\bvp-icons\.css[^>]*>\s*/g, "");
   },
   transformPageData(pageData) {
     const description = pageData.params?.description;
@@ -92,6 +113,23 @@ export default defineConfig({
     else if (!warnedFont) {
       warnedFont = true;
       console.warn("[eos-site] No Bricolage Grotesque latin woff2 among the page assets, so the font preload was skipped. Check the file name in docs/.vitepress/theme/fonts.css against the pattern in config.mts.");
+    }
+    const component = /^components\/([^/]+)\.md$/.exec(pageData.relativePath)?.[1];
+    if (component) {
+      const trail = [
+        { name: "Home", url: SITE + "/" },
+        { name: areaOf(`/${path}`), url: SITE + "/components/" },
+        { name: pageData.title, url },
+      ];
+      head.push([
+        "script",
+        { type: "application/ld+json" },
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: trail.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.name, item: t.url })),
+        }),
+      ]);
     }
     if (pageData.relativePath === "index.md") {
       head.push([
@@ -202,12 +240,12 @@ export default defineConfig({
   },
   vite: {
     plugins: [vitepressInLayer()],
-    define: { __EOS_BUILD__: JSON.stringify(libraryBuildInfo), __EOS_LICENSE__: JSON.stringify(licenseText) },
+    define: { __EOS_BUILD__: JSON.stringify(libraryBuildInfo), __EOS_INSTALL_HTML__: JSON.stringify(installHtml), __EOS_LICENSE__: JSON.stringify(licenseText) },
     resolve: {
       dedupe: ["vue"],
     },
     ssr: { noExternal: ["@eos-ui/vue", "@eos-ui/tokens", "reka-ui", "@vueuse/core", "@vueuse/shared", "@internationalized/date", "@floating-ui/vue"] },
     server: { fs: { allow: ["../.."] } },
-    build: { chunkSizeWarningLimit: 900 },
+    build: { chunkSizeWarningLimit: 650 },
   },
 });

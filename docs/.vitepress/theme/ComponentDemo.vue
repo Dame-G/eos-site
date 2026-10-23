@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from "vue";
+import { computed, defineAsyncComponent, hydrateOnVisible, ref } from "vue";
 import { defineTheme } from "@eos-ui/tokens";
 import { EHighlight, ESegmented } from "@eos-ui/vue";
 import { DARK_INPUT } from "../scheme";
@@ -10,7 +10,8 @@ const demos = import.meta.glob("../../components/demos/*.vue");
 
 const props = defineProps<{ name: string }>();
 const loader = demos[`../../components/demos/${props.name}.vue`];
-const Demo = loader ? defineAsyncComponent(loader as () => Promise<{ default: object }>) : null;
+// The demo's markup is in the page, but it only becomes interactive once it scrolls into view, so a page with several demos does not hydrate them all at load.
+const Demo = loader ? defineAsyncComponent({ loader: loader as () => Promise<{ default: object }>, hydrate: hydrateOnVisible() }) : null;
 
 // The frame is the same for every demo: options that try the demo in the other scheme, direction and text size.
 const scheme = ref<"light" | "dark" | "">("");

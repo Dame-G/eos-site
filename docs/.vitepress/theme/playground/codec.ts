@@ -26,6 +26,8 @@ export function encode(s: State): string {
 const ENUMS: Partial<Record<keyof State, readonly string[]>> = {
   scheme: ["light", "paper", "dark", "contrast", "custom"],
   radius: ["sharp", "default", "round"],
+  density: ["comfortable", "compact"],
+  themePreset: ["none", "paper", "ink", "quiet"],
   elevation: ["outline", "lifted", "bold"],
   motion: ["default", "snappy", "gentle", "none"],
   sans: Object.keys(SANS),

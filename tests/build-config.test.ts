@@ -49,11 +49,10 @@ describe("headers and redirects", () => {
     expect(file).toContain("/assets/*");
   });
 
-  it("keeps the report-only policy the same except for the styles it still wants to tighten", () => {
+  it("sends HSTS and no report-only policy, since nothing collects reports", () => {
     const file = headersFile(hashes);
-    const enforced = /Content-Security-Policy: (.*)/.exec(file)![1]!;
-    const report = /Content-Security-Policy-Report-Only: (.*)/.exec(file)![1]!;
-    expect(report.replace("style-src 'self'", "style-src 'self' 'unsafe-inline'")).toBe(enforced);
+    expect(file).toContain("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+    expect(file).not.toContain("Report-Only");
   });
 
   it("hashes only scripts the browser runs", () => {

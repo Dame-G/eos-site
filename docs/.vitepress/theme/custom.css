@@ -133,7 +133,7 @@ body:has(.site-body, .home) .site {
 }
 
 .e-appheader-logo {
-  gap: var(--e-space-4);
+  gap: var(--e-gap-loose);
 }
 
 .site-menu-button {
@@ -146,15 +146,23 @@ body:has(.site-body, .home) .site {
   }
 }
 
+.site-scheme {
+  display: none;
+}
+
 @media (min-width: 64rem) {
   .site-menu-button {
     display: none;
+  }
+
+  .site-scheme {
+    display: block;
   }
 }
 
 @media (max-width: 30rem) {
   .site-search-button {
-    padding-inline: var(--e-space-3);
+    padding-inline: var(--e-pad-control-sm);
   }
 }
 
@@ -170,11 +178,11 @@ body:has(.site-body, .home) .site {
   width: 100%;
   max-width: var(--site-wide);
   margin-inline: auto;
-  padding-inline: var(--e-space-4);
+  padding-inline: var(--e-gutter-min);
 }
 
 .site-body > * {
-  padding-block: var(--e-space-6) var(--e-space-8);
+  padding-block: var(--e-pad-panel) var(--e-space-8);
 }
 
 /* The page is a sheet on the ground, with a vertical border down each side. The header and footer run full width above and below it, so the borders only run between them. They show only where there is ground beside the sheet. */
@@ -289,7 +297,7 @@ body:has(.site-body, .home) .site {
   width: 100%;
   max-width: var(--site-wide);
   margin-inline: auto;
-  padding: var(--e-space-8) var(--e-space-4);
+  padding: var(--e-space-8) var(--e-gutter-min);
   position: relative;
   z-index: 1;
   background: var(--e-surface);
@@ -372,7 +380,7 @@ body:has(.site-body, .home) .site {
 
 /* The margins make the space above the line (from the title's slab to the top of the capitals) match the space below it (from the baseline to the install block), measured on the letters rather than the boxes. */
 .home-tagline {
-  margin: -4px 0 10px;
+  margin: calc(-1 * var(--e-space-1)) 0 10px;
   text-align: center;
   color: var(--e-ink);
   font-size: var(--e-text-xl);
@@ -527,7 +535,7 @@ body:has(.site-body, .home) .site {
   color: var(--e-primary);
   font: 500 var(--e-text-md) / 1.3 var(--e-font-sans);
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: var(--e-space-1);
 }
 
 .component-card-link::after {
@@ -563,9 +571,9 @@ body:has(.site-body, .home) .site {
   margin: var(--e-space-4) 0;
 }
 
-/* Stacked code blocks keep the seam the component draws: this rule is unlayered, so it would otherwise out-rank the component and open a gap. */
+/* Stacked code blocks sit flush: the component overlaps their rings into one seam. The rule above is unlayered, so it would otherwise open a gap. */
 .vp-doc .e-code + .e-code {
-  margin-top: max(var(--e-stroke-card), 1px);
+  margin-top: 0;
 }
 
 .vp-doc .e-code:has(+ .e-code) {
@@ -593,6 +601,8 @@ body:has(.site-body, .home) .site {
 .site-footer-links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  min-height: var(--site-tap);
   gap: var(--e-space-2) var(--e-space-4);
   font-size: var(--e-text-sm);
 }

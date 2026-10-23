@@ -91,19 +91,20 @@ describe("site chrome", () => {
     expect(document.activeElement).toBe(opener.element());
   });
 
-  it("the colour scheme button keeps one name, announces the change and remembers it", async () => {
+  it("the colour scheme select lists the three modes, announces the change and remembers it", async () => {
     await mount(Layout);
-    const button = page.getByRole("button", { name: "Colour scheme" });
-    await button.click();
+    const pick = async (name: string) => {
+      await page.getByRole("combobox", { name: "Colour scheme" }).click();
+      await page.getByRole("option", { name }).click();
+    };
+    await pick("Light");
     expect(localStorage.getItem(STORAGE_KEY)).toBe("light");
     expect(document.documentElement.dataset.scheme).toBe("light");
     await expect.element(page.getByText("Colour scheme: light", { exact: true })).toBeInTheDocument();
-    await button.click();
+    await pick("Dark");
     expect(localStorage.getItem(STORAGE_KEY)).toBe("dark");
     expect(document.documentElement.dataset.scheme).toBe("dark");
-    // The name never changes; the state is its description.
-    await expect.element(page.getByRole("button", { name: "Colour scheme" })).toHaveAccessibleDescription(/Now dark/);
-    await button.click();
+    await pick("System");
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 

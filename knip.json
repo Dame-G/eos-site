@@ -17,7 +17,6 @@
     "docs/.vitepress/color.d.mts"
   ],
   "ignoreDependencies": [
-    "@fontsource/fredoka",
     "@fontsource-variable/bricolage-grotesque",
     "@fontsource-variable/geist-mono",
     "@localSearchIndex"
