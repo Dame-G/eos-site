@@ -40,8 +40,9 @@ describe("defineTheme documentation", () => {
     expect(documented, "docs/data/theme-inputs.js against ThemeInput").toEqual([...inputKeys].sort());
   });
 
-  it("lists every ThemeInput key in the API reference table, and nothing else", () => {
-    expect(tableKeys(api, "| Input | Type |").sort()).toEqual([...inputKeys].sort());
+  it("lists every ThemeInput key in the one inputs table, in the theming guide, and nothing else", () => {
+    expect(tableKeys(theming, "| Input | Type |").sort()).toEqual([...inputKeys].sort());
+    expect(tableKeys(api, "| Input | Type |"), "the API reference links to the table instead of repeating it").toEqual([]);
   });
 
   it("names every ThemeInput key in the theming guide", () => {

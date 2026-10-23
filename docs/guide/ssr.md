@@ -24,7 +24,7 @@ const css = themeCss({ brand: "#8a2be2" });
 const head = `<style>${css}</style>`;
 ```
 
-`themeCss(theme, selector?)` needs no `document`. It returns the tokens inside `@layer e.tokens`. Pass a selector to theme a subtree only. Inline it before first paint. The client then applies the same tokens, which changes nothing visible.
+`themeCss(theme, selector?)` needs no `document`. It returns the tokens inside `@layer e.tokens`. Pass a selector to theme a subtree only. Inline it before first paint. The client then applies the same tokens, which changes nothing visible. If the page ships the theme as CSS and switches it itself, for example a dark variant under an attribute, pass `createEos({ applyTheme: false })` so the client sets no inline tokens over it. This site does that.
 
 ## Nuxt
 

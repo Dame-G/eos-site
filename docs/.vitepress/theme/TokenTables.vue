@@ -77,7 +77,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
     <PlainTable
       v-if="section === 'inputs'"
       caption="Theme inputs"
-      :columns="[{ key: 'name', label: 'Input' }, { key: 'controls', label: 'Controls' }, { key: 'derives', label: 'Derives' }, { key: 'neutral', label: 'Neutral' }]"
+      :columns="[{ key: 'name', label: 'Input' }, { key: 'derives', label: 'Derives' }, { key: 'neutral', label: 'Left out' }]"
       :rows="withId(data.inputs as Input[])"
     >
       <template #cell-name="{ row }"

@@ -7,7 +7,7 @@ description: "Every EOS design token with its usage note and contrast, generated
 
 Every EOS component is styled with CSS variables named `--e-<name>`, so a theme is a set of variables and nothing else. Use the same variables in your own CSS and your screens will follow the theme, including dark surfaces and high contrast, without a line of extra code.
 
-This page has three parts: the tokens you will use most, the inputs that generate all the rest, and the full reference. The values come from `@eos-ui/tokens`. To change them, see [Theming](/guide/theming) or try values in the [playground](/playground).
+This page has three parts: the tokens you will use most, what each theme input derives, and the full reference. The values come from `@eos-ui/tokens`. To change them, see [Theming](/guide/theming) or try values in the [playground](/playground).
 
 ## Start here
 
@@ -54,9 +54,9 @@ A custom card built only from those:
 
 Two rules keep a custom screen accessible. Put `ink` and `muted` only on `surface`, `surface-tint` or `background`, since those pairs are checked. Never use `brand` or `brand-accent` for text: they are for decoration, and `primary` and `secondary` are the text-safe versions.
 
-## The inputs
+## What each input derives
 
-`defineTheme()` takes the inputs below and derives every token from them, so you set a brand colour and a surface and the rest follows with its contrast checked. The **Derives** column lists what each input drives. Constants, such as `depth`, never change. Any token can still be set by name in `tokens`, and a token set that way wins over a derived value.
+`defineTheme()` derives every token from a few inputs, so you set a brand colour and a surface and the rest follows with its contrast checked. The inputs and their types are listed under [The inputs](/guide/theming#the-inputs) in Theming. This table is read from the tokens package: the tokens each input drives, and its value when you leave it out. Constants, such as `depth`, never change. Any token can still be set by name in `tokens`, and wins over a derived value.
 
 <TokenTables section="inputs" />
 

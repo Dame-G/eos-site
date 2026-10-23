@@ -6,18 +6,18 @@
  * `neutral` is what the input does when left out: a literal, or `{ token }` for the default value of a token.
  */
 export const INPUT_NOTES = {
-  brand: { controls: "The brand colour: action colour, tinted ground, input focus edge.", neutral: { token: "brand-blue" } },
-  accent: { controls: "A second brand colour for positive actions and the success tint.", neutral: { token: "brand-green" } },
+  brand: { controls: "The brand colour: action colour, tinted ground, input focus edge.", neutral: { token: "brand" } },
+  accent: { controls: "A second brand colour for positive actions and the success tint.", neutral: { token: "brand-accent" } },
   danger: { controls: "The destructive action colour, its text and tint.", neutral: { token: "danger" } },
   warning: { controls: "The caution colour: warning text and tint.", neutral: { token: "warning-strong" } },
   background: { controls: "The page ground: the colour behind everything.", neutral: { token: "background" } },
   surface: { controls: "Cards, fields, popovers and panels. A dark surface lifts the action colours.", neutral: { token: "surface" } },
   foreground: { controls: "Text and lines: secondary text, edges, the focus outline.", neutral: { token: "ink" } },
   fonts: { controls: "Font stacks, { sans, mono, script }. Never bundled.", neutral: "Bricolage Grotesque, Geist Mono" },
-  radius: { controls: "Corner style: sharp, default or round, or { sm, md, lg }.", neutral: "default" },
+  radius: { controls: "Corner style: sharp, default or round, a base radius in px, or { sm, md, lg }.", neutral: "default" },
   preset: { controls: "A named look that sets elevation, strokes, radius and motion together: paper, ink or quiet. Your own entries win.", neutral: "paper" },
   elevation: { controls: "How depth is drawn: outline, lifted or bold.", neutral: "outline" },
-  strokes: { controls: "Line weights in px, { hair, focus, edge, card }. edge and card default to 1.5 times hair and hair.", neutral: "{ hair: 1, focus: 2 }" },
+  strokes: { controls: "Line weights in px, { hair, focus }. The edge and card strokes follow hair; strokes.edge and strokes.card are deprecated.", neutral: "{ hair: 1, focus: 2 }" },
   contrast: { controls: "high draws borders in the foreground colour, muted text at 15:1, a neutral tint and a darker scrim. auto switches to high under prefers-contrast: more.", neutral: "standard" },
   scheme: { controls: "auto keeps the theme light and applies the dark input when the visitor prefers a dark page.", neutral: "fixed" },
   dark: { controls: "The inputs that change on a dark page when scheme is auto, usually surface and foreground.", neutral: "a dark surface" },
@@ -25,7 +25,7 @@ export const INPUT_NOTES = {
   textScale: { controls: "Multiplier for the type scale.", neutral: "1" },
   spaceScale: { controls: "Multiplier for the spacing scale.", neutral: "1" },
   controlHeight: { controls: "Height in px of every tappable control; chips follow at half.", neutral: "48" },
-  motion: { controls: "How state changes feel: default, snappy, gentle or none.", neutral: "default" },
+  motion: { controls: "How state changes feel: default, snappy or gentle. none is deprecated.", neutral: "default" },
 };
 
 /** Members of ThemeInput that are options, not inputs that derive tokens. */

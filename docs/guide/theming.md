@@ -22,25 +22,31 @@ clinic.issues; // [] when every contrast pair holds
 app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be2" } })
 ```
 
-`defineTheme()` takes the inputs below and emits every token. Any token can also be set by name in `tokens`, which wins over everything derived.
+## The inputs
 
-| Input | Derives |
-| --- | --- |
-| `brand`, `accent` | `primary`, `secondary`, their tints and `surface-tint` |
-| `danger`, `warning` | `danger`, `on-danger`, `danger-soft`, `warning-strong`, `warning-soft` |
-| `background`, `surface`, `foreground` | the grounds, `ink`, `muted`, `border` and `border-strong`. A dark surface lifts the action colours |
-| `fonts`, `radius` | `font-sans`, `font-mono`, `font-script` (signatures), and `radius-sm` to `radius-lg` |
-| `textScale`, `spaceScale` | `text-xs` to `text-4xl` plus the icon, checkbox and avatar boxes (`textScale`, on top of the visitor's own browser font size, since these tokens are in rem), and `space-1` to `space-16` with the `gap-*`, `pad-*` and `gutter` tokens that reference them (`spaceScale`). 1 is the default |
-| `strokes` `{ hair, focus, edge, card }` | `stroke-hair`, `stroke-card`, `stroke-edge`, `stroke-focus` (the width of the focus outline and its gap), `focus-gap-field` (follows `stroke-edge`). `edge` and `card` set their token outright. Without them `edge` is 1.5 times `hair` and `card` is `hair` (2px on a bold elevation) |
-| `contrast` `"standard" \| "high" \| "auto"` | With `high`, `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey and `scrim` is darker. `auto` stays standard and switches to `high` under `prefers-contrast: more` |
-| `scheme` `"light" \| "dark" \| "auto"`, `dark` | `auto` keeps the theme light and applies `dark` (a dark surface of `#10151a` unless you give one) when the visitor prefers a dark page. See [Light and dark](#light-and-dark) |
-| `density` `"comfortable" \| "compact"` | `compact` scales the space scale by 0.75 (the `gap-*`, `pad-*` and `gutter` tokens follow) and makes controls exactly the 44px tap target. A smaller `controlHeight` is raised to 44 and reported in `warnings` |
-| `preset` `"paper" \| "ink" \| "quiet"` | `elevation`, `strokes`, `radius` and `motion` together. Your own entries win. See [Presets](#presets) |
-| `motion` `"default" \| "snappy" \| "gentle" \| "none"` | `duration-tap`, `duration-fade`, `duration-move`, `easing-out` |
-| `elevation` `"outline" \| "lifted" \| "bold"` | `frame`, `well`, `float` and `paper`. The shadow tint follows `background` |
-| `controlHeight` | `control-height`, `chip-height` |
+`defineTheme()` takes the inputs below and emits every token. This is the one list of them: the [API reference](/guide/api#definetheme-input) and the [token reference](/guide/tokens#what-each-input-derives) link here.
 
-Three more options are not inputs. `name` is the value of `data-e-theme` when the theme is applied to an element. `tokens` sets any token by name, wins over derived values and is not contrast-corrected. `strict` throws on a contrast failure instead of listing it in `issues`. The [token reference](/guide/tokens) lists each token with the input it follows.
+| Input | Type | Derives |
+| --- | --- | --- |
+| `brand`, `accent` | colour | `primary`, `secondary`, their tints and `surface-tint`. `brand` and `brand-accent` keep the colours as given, for decoration |
+| `danger`, `warning` | colour | `danger`, `on-danger`, `danger-soft`, `warning-strong`, `warning-soft` |
+| `background`, `surface`, `foreground` | colour | The grounds, `ink`, `muted`, `border` and `border-strong`. A dark surface lifts the action colours |
+| `fonts` | `{ sans?, mono?, script? }` | `font-sans`, `font-mono`, `font-script` (signatures). Full `font-family` stacks; nothing is bundled |
+| `radius` | `"sharp" | "default" | "round" | number | { sm?, md?, lg? }` | `radius-sm` to `radius-lg` and `radius-row`. A number is `radius-md` in px, with `sm` half of it and `lg` double |
+| `textScale`, `spaceScale` | `number` | `text-xs` to `text-4xl` plus the icon, checkbox and avatar boxes (`textScale`, on top of the visitor's own browser font size, since these tokens are in rem), and `space-1` to `space-16` with the `gap-*`, `pad-*` and `gutter` tokens that reference them (`spaceScale`). 1 is the default |
+| `strokes` | `{ hair?, focus? }` | `stroke-hair`, `stroke-focus` (the width of the focus outline and its gap), and from them `stroke-edge` (1.5 times `hair`), `stroke-card` (`hair`, 2px on a bold elevation) and `focus-gap-field`. `edge` and `card` still work and are deprecated: set `stroke-edge` or `stroke-card` in `tokens` |
+| `contrast` | `"standard" | "high" | "auto"` | With `high`, `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey and `scrim` is darker. `auto` stays standard and switches to `high` under `prefers-contrast: more` |
+| `scheme`, `dark` | `"light" | "dark" | "auto"`, `ThemeVariant` | `auto` keeps the theme light and applies `dark` (a dark surface of `#10151a` unless you give one) when the visitor prefers a dark page. The grounds are never inherited. See [Light and dark](#light-and-dark) |
+| `density` | `"comfortable" | "compact"` | `compact` scales the space scale by 0.75 (the `gap-*`, `pad-*` and `gutter` tokens follow) and makes controls exactly the 44px tap target. A smaller `controlHeight` is raised to 44 and reported in `warnings` |
+| `preset` | `"paper" | "ink" | "quiet"` | `elevation`, `strokes`, `radius` and `motion` together. Your own entries win. See [Presets](#presets) |
+| `motion` | `"default" | "snappy" | "gentle"` | `duration-tap`, `duration-fade`, `duration-move`, `easing-out`. `"none"` still works and is deprecated: every theme already stops moving under `prefers-reduced-motion` |
+| `elevation` | `"outline" | "lifted" | "bold"` | `frame`, `well`, `float` and `paper`. The shadow tint follows `background` |
+| `controlHeight` | `number` | `control-height` (the number is px) and `chip-height` |
+| `name` | `string` | Not a token: the value of `data-e-theme` when the theme is applied to an element |
+| `tokens` | `Record<string, string>` | Any token by name. Wins over everything derived and is not contrast-corrected. Setting a [deprecated token](/guide/tokens#deprecated-tokens) adds a warning |
+| `strict` | `boolean` | Throws on a contrast failure instead of listing it in `issues` |
+
+The [token reference](/guide/tokens) lists each token with the input it follows.
 
 ## Presets
 
@@ -62,7 +68,7 @@ defineTheme({ preset: "quiet", radius: "default" }); // quiet, but with the defa
 ```ts
 defineTheme({ brand: "#8a2be2", accent: "#2e7d32", danger: "#b3261e" }); // colour
 defineTheme({ radius: "round", elevation: "lifted", strokes: { hair: 1, focus: 3 } }); // shape
-defineTheme({ contrast: "high", elevation: "bold", strokes: { hair: 2, edge: 2 } }); // high contrast
+defineTheme({ contrast: "high", elevation: "bold", strokes: { hair: 2 }, tokens: { "stroke-edge": "2px" } }); // high contrast
 defineTheme({ fonts: { sans: "Inter, system-ui, sans-serif" }, textScale: 1.1 }); // type
 defineTheme({ spaceScale: 1.25, controlHeight: 56 }); // space
 defineTheme({ density: "compact" }); // tighter space, 44px controls
@@ -200,7 +206,15 @@ To use the default tokens without JavaScript, import `@eos-ui/tokens/tokens.css`
 
 ## Scoped themes
 
-Apply a theme to one element with `clinic.apply(el)`, or set variables on any wrapper:
+For one part of a page, such as a preview in another theme or a dark panel on a light page, wrap it in [`EConfigProvider`](/components/ConfigProvider). It sets the theme's tokens on its element, in the server-rendered HTML too, renders the menus, dialogs and tooltips opened inside into itself, and inherits everything else (words, icons, locale) from the plugin.
+
+```vue
+<EConfigProvider :theme="clinic" scheme="dark">
+  <ESurface>...</ESurface>
+</EConfigProvider>
+```
+
+Without a component, apply a theme to one element with `clinic.apply(el)`, or set variables on any wrapper:
 
 ```html
 <section data-e-theme="clinic" class="e-root" style="--e-primary: #8a2be2">...</section>
@@ -218,4 +232,4 @@ Every menu, option list and tooltip leaves an empty wrapper in the portal target
 
 ## Cascade layers
 
-From lowest: `e.reset, e.tokens, e.base, e.primitives, e.blocks, e.controls, e.composites, e.containers, e.page`. With another layered framework, declare the order once and early: `@layer framework, e.reset, e.tokens, ...`.
+EOS puts its CSS in cascade layers, so your own unlayered CSS wins without `!important`. The order, and how to place another layered framework such as Tailwind around it, is under [Tailwind and CSS](/guide/tailwind-and-css#layer-order).
