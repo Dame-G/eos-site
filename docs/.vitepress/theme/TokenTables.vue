@@ -4,12 +4,13 @@ import { contrast } from "@eos-ui/tokens";
 import ColorValue from "./ColorValue.vue";
 import TokenName from "./TokenName.vue";
 import { activeScheme } from "./site-theme";
-import { EStamp, EDataGrid, EGrid, EHeading, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
+import { EStamp, EGrid, EHeading, EHighlight, EStack, ESurface, EText } from "@eos-ui/vue";
+import PlainTable from "./PlainTable.vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
 
 defineProps<{
-  section: "inputs" | "colour" | "type" | "spacing" | "layout" | "radius" | "shadow" | "fontSize" | "tracking" | "leading" | "size" | "stroke" | "slab" | "motion" | "zIndex";
+  section: "inputs" | "colour" | "type" | "spacing" | "layout" | "radius" | "shadow" | "fontSize" | "tracking" | "leading" | "size" | "stroke" | "slab" | "motion" | "zIndex" | "deprecated";
 }>();
 
 type Partner = { name: string; value: string; role: string; ratio: number; level: string };
@@ -73,9 +74,8 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
 <template>
   <div class="eos-live">
-    <EDataGrid
+    <PlainTable
       v-if="section === 'inputs'"
-      bare
       caption="Theme inputs"
       :columns="[{ key: 'name', label: 'Input' }, { key: 'controls', label: 'Controls' }, { key: 'derives', label: 'Derives' }, { key: 'neutral', label: 'Neutral' }]"
       :rows="withId(data.inputs as Input[])"
@@ -91,11 +91,26 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       <template #cell-neutral="{ row }"
         ><ColorValue :value="row.neutral as string"
       /></template>
-    </EDataGrid>
+    </PlainTable>
+
+    <PlainTable
+      v-else-if="section === 'deprecated'"
+      caption="Deprecated tokens"
+      :columns="[token, { key: 'note', label: 'Instead' }]"
+      :rows="withId(data.deprecated as { name: string; note: string }[])"
+    >
+      <template #cell-name="{ row }"><TokenName :name="row.name as string" /></template>
+      <template #cell-note="{ row }"
+        ><template v-for="(part, i) in (row.note as string).split('`')" :key="i"
+          ><EHighlight v-if="i % 2" code>{{ part }}</EHighlight
+          ><template v-else>{{ part }}</template></template
+        ></template
+      >
+    </PlainTable>
 
     <template v-else-if="section === 'colour'">
       <EGrid as="ul" min="22rem" :gap="4" class="swatches">
-        <ESurface v-for="c in data.colours" :id="`color-${c.name}`" :key="c.name" as="li" small class="swatch">
+        <ESurface v-for="c in data.colours" :id="`color-${c.name}`" :key="c.name" as="li" size="sm" class="swatch">
           <div
             class="chip"
             :style="{ background: `var(--e-${c.name})`, color: c.partners[0] ? `var(--e-${c.partners[0].name})` : 'inherit' }"
@@ -108,8 +123,8 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
             <p class="name">
               <TokenName :name="c.name" /> <span class="hex"><ColorValue :value="shownHex(c)" /></span>
             </p>
-            <EText small muted class="usage">{{ c.usage }}</EText>
-            <EText small muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
+            <EText size="sm" tone="neutral" class="usage">{{ c.usage }}</EText>
+            <EText size="sm" tone="neutral" class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
             <ul v-if="c.partners.length" class="pairs">
               <li v-for="p in c.partners" :key="p.name">
                 <strong>{{ ratioOf(c.name, p) }}:1</strong> with <EHighlight code>{{ p.name }}</EHighlight>
@@ -128,8 +143,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           Two families. <strong>Sans</strong> for reading, <strong>mono</strong> for kickers, chips, stamps and every amount, number and date. Fonts are
           never bundled: load them yourself or import <EHighlight code>@eos-ui/vue/fonts.css</EHighlight>.
         </EText>
-        <EDataGrid
-          bare
+        <PlainTable
           caption="Font families"
           :columns="[token, { key: 'from', label: 'From' }, { key: 'stack', label: 'Stack' }, { key: 'sample', label: 'Sample' }]"
           :rows="[
@@ -143,11 +157,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           <template #cell-sample="{ row }"
             ><span :style="{ fontFamily: `var(--e-${row.name})` }">{{ row.sample }}</span></template
           >
-        </EDataGrid>
+        </PlainTable>
         <template v-for="g in data.typeGroups" :key="g.name">
           <EHeading :id="`type-${g.name.toLowerCase().replace(/ /g, '-')}`" :level="3">{{ g.name }}</EHeading>
-          <EDataGrid
-            bare
+          <PlainTable
             :caption="g.name"
             :columns="[
               { key: 'name', label: 'Style' },
@@ -171,14 +184,13 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
                 >{{ row.sample }}</span
               >
             </template>
-          </EDataGrid>
+          </PlainTable>
         </template>
       </EStack>
     </template>
 
-    <EDataGrid
+    <PlainTable
       v-else-if="section === 'spacing'"
-      bare
       caption="Spacing"
       :columns="[token, value, from, usage, { key: 'size', label: 'Size' }]"
       :rows="withFrom(data.spacing as Token[])"
@@ -187,11 +199,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         ><TokenName :name="row.name as string" /></template
       >
       <template #cell-size="{ row }"><span class="bar" :style="{ width: row.value as string }" /></template>
-    </EDataGrid>
+    </PlainTable>
 
-    <EDataGrid
+    <PlainTable
       v-else-if="section === 'layout'"
-      bare
       caption="Layout spacing"
       :columns="[token, value, from, usage, { key: 'look', label: 'Look' }]"
       :rows="withFrom(data.layout as Token[])"
@@ -204,11 +215,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         <span v-else-if="(row.name as string).startsWith('pad-')" class="pad-demo" :style="{ padding: `var(--e-${row.name})` }"><i /></span>
         <span v-else class="gutter-demo"><i :style="{ width: `var(--e-${row.name})` }" /></span>
       </template>
-    </EDataGrid>
+    </PlainTable>
 
-    <EDataGrid
+    <PlainTable
       v-else-if="section === 'tracking' || section === 'leading'"
-      bare
       :caption="section === 'tracking' ? 'Letter spacing' : 'Line height'"
       :columns="[token, value, from, usage, { key: 'sample', label: 'Sample' }]"
       :rows="withFrom(data[section] as Token[])"
@@ -220,11 +230,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         <span v-if="section === 'tracking'" :style="{ letterSpacing: `var(--e-${row.name})` }">Amount due</span>
         <span v-else class="leading-demo" :style="{ lineHeight: `var(--e-${row.name})` }">Two lines of text to show the line height.</span>
       </template>
-    </EDataGrid>
+    </PlainTable>
 
-    <EDataGrid
+    <PlainTable
       v-else-if="section === 'radius'"
-      bare
       caption="Corner radius"
       :columns="[token, value, from, usage, { key: 'shape', label: 'Shape' }]"
       :rows="withFrom(data.radius as Token[])"
@@ -233,11 +242,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         ><TokenName :name="row.name as string" /></template
       >
       <template #cell-shape="{ row }"><span class="box" :style="{ borderRadius: row.value as string }" /></template>
-    </EDataGrid>
+    </PlainTable>
 
-    <EDataGrid
+    <PlainTable
       v-else-if="section === 'shadow'"
-      bare
       caption="Shadows"
       :columns="[token, from, usage, { key: 'look', label: 'Look' }]"
       :rows="withFrom(data.shadow as Token[])"
@@ -246,11 +254,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         ><TokenName :name="row.name as string" /></template
       >
       <template #cell-look="{ row }"><span class="box wide" :style="{ boxShadow: `var(--e-${row.name})`, border: 'none' }" /></template>
-    </EDataGrid>
+    </PlainTable>
 
-    <EDataGrid
+    <PlainTable
       v-else-if="section === 'fontSize'"
-      bare
       caption="Font sizes"
       :columns="[token, value, from, usage, { key: 'sample', label: 'Sample' }]"
       :rows="withFrom(data.fontSize as Token[])"
@@ -261,11 +268,10 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       <template #cell-sample="{ row }"
         ><span :style="{ fontSize: row.value as string, lineHeight: 1.2 }">Aa</span></template
       >
-    </EDataGrid>
+    </PlainTable>
 
-    <EDataGrid
+    <PlainTable
       v-else
-      bare
       :caption="({ size: 'Sizes', stroke: 'Strokes', slab: 'Slabs', motion: 'Motion' } as Record<string, string>)[section] ?? 'Layers'"
       :columns="section === 'slab' ? [...plainColumns, { key: 'look', label: 'Look' }] : plainColumns"
       :rows="withFrom(plainRows(section))"
@@ -274,7 +280,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         ><TokenName :name="row.name as string" /></template
       >
       <template #cell-look="{ row }"><span class="slab-demo" :style="{ borderBottomWidth: `var(--e-${row.name})` }" /></template>
-    </EDataGrid>
+    </PlainTable>
   </div>
 </template>
 

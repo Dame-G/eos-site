@@ -70,8 +70,8 @@ export interface State {
   t: Record<string, string>;
 }
 
-export const DEFAULT_BRAND = defaults["brand-blue"];
-export const DEFAULT_ACCENT = defaults["brand-green"];
+export const DEFAULT_BRAND = defaults["brand"];
+export const DEFAULT_ACCENT = defaults["brand-accent"];
 export const DEFAULT_DANGER = defaults["danger"];
 export const DEFAULT_WARNING = defaults["warning-strong"];
 export const NEUTRAL = { hair: 1, focus: 2, controlHeight: 48 } as const;

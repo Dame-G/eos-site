@@ -20,7 +20,7 @@ You will almost never need more than these. Pick by the job, not by the colour.
 | Page | `--e-background` | The ground behind everything. |
 | Cards and fields | `--e-surface` | Anything that sits on the page: cards, inputs, popovers, dialogs. |
 | Quiet fill | `--e-surface-tint` | Wells, table headers, footers and empty slots. |
-| Hover and selected | `--e-surface-hover` | The fill of a hovered row or item, and the selected item in a list. |
+| Hover and selected | `--e-wash-hover`, `--e-wash-press` | The wash over a hovered or pressed row or item, and the selected item in a list. |
 | Lines | `--e-border`, `--e-border-strong` | Hairlines and card outlines, then the edge of a control. |
 | Action | `--e-primary`, `--e-on-primary` | The main button and every selected state, then the text on it. |
 | Status | `--e-danger`, `--e-warning-strong`, `--e-secondary` | Errors, cautions and success, each with a `-soft` tint for backgrounds. |
@@ -43,7 +43,7 @@ A custom card built only from those:
 }
 
 .balance:hover {
-  background: var(--e-surface-hover);
+  background: var(--e-wash-hover);
 }
 
 .balance small {
@@ -52,7 +52,7 @@ A custom card built only from those:
 }
 ```
 
-Two rules keep a custom screen accessible. Put `ink` and `muted` only on `surface`, `surface-tint` or `background`, since those pairs are checked. Never use `brand-blue` or `brand-green` for text: they are for decoration, and `primary` and `secondary` are the text-safe versions.
+Two rules keep a custom screen accessible. Put `ink` and `muted` only on `surface`, `surface-tint` or `background`, since those pairs are checked. Never use `brand` or `brand-accent` for text: they are for decoration, and `primary` and `secondary` are the text-safe versions.
 
 ## The inputs
 
@@ -137,3 +137,9 @@ Short durations and one easing. Components switch their motion off for people wh
 A short, named stack, so layers never need a number you make up.
 
 <TokenTables section="zIndex" />
+
+## Deprecated tokens
+
+Still emitted, so CSS that reads them keeps working, and removed in a later major version. `defineTheme` warns when you set one in `tokens`, and `theme.explain()` and the design-tokens export (`$deprecated`) name them. The tables above leave them out.
+
+<TokenTables section="deprecated" />
