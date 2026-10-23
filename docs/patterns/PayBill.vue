@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import {
   EActions,
-  EKicker,
+  EMetric,
   ECurrencyField,
   EHeading,
   ELink,
@@ -10,7 +10,6 @@ import {
   ERadioGroup,
   ESelect,
   EStack,
-  EText,
   ESurface,
   EButton,
   useLocale,
@@ -37,11 +36,7 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
           <ELink href="#statements" icon="arrow-left">Back to statements</ELink>
           <EStack :gap="3">
             <EHeading :level="2" kicker="Statement 4471">Pay your balance</EHeading>
-            <EStack :gap="1">
-            <EKicker>You owe</EKicker>
-            <p class="site-figure">{{ formatMoney(BALANCE) }}</p>
-            <EText small muted>Due Nov 1</EText>
-          </EStack>
+            <EMetric label="You owe" :value="formatMoney(BALANCE)" help="Due Nov 1" />
           </EStack>
         </EStack>
 

@@ -15,6 +15,7 @@ import {
   EKicker,
   ELink,
   EMenu,
+  EMetric,
   ENavList,
   ENotice,
   ENumberField,
@@ -129,11 +130,7 @@ onBeforeUnmount(() => watcher?.disconnect());
                   <EHeading :level="2" kicker="Oct 1 to Oct 31">October statement</EHeading>
                   <EStamp status="due" detail="Oct 22" />
                 </EInline>
-                <EStack :gap="1">
-                  <EKicker>You owe</EKicker>
-                  <p class="site-figure">{{ formatMoney(162.4) }}</p>
-                  <EText small muted>Insurance paid {{ formatMoney(80) }}</EText>
-                </EStack>
+                <EMetric label="You owe" :value="formatMoney(162.4)" :help="`Insurance paid ${formatMoney(80)}`" />
                 <ENotice tone="info" title="Your visit is Thursday">Main office, 9:30 am.</ENotice>
                 <ESelect v-model="plan" label="Pay with" :options="planOptions" />
                 <EInline :gap="vp.inlineGap">

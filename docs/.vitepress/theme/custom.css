@@ -608,15 +608,6 @@ body {
   padding-inline: var(--e-space-2);
 }
 
-/* A money figure in mono tabular numerals, for the demo screens. */
-.site-figure {
-  margin: 0;
-  font: 500 var(--e-text-3xl) / 1 var(--e-font-mono);
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  color: var(--e-ink);
-}
-
 /* The frame every demo shares: a bar with the preview options, then the stage. */
 .demo-frame {
   border: var(--e-stroke-edge) solid var(--e-border);
