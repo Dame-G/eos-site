@@ -222,6 +222,14 @@ body {
   }
 }
 
+/* A heading too long for the rail wraps onto a second line inside its row. */
+.site-outline .e-nav-item {
+  height: auto;
+  min-height: var(--e-control-height);
+  padding-block: var(--e-space-1);
+  line-height: 1.3;
+}
+
 /* Only the sidebar draws the current page as a raised row. The header's current section and the outline's current heading are marked by colour and weight alone, so one place on screen says where you are. */
 .site-topnav .e-nav-item[aria-current="page"],
 .site-outline .e-nav-item[aria-current="page"] {
