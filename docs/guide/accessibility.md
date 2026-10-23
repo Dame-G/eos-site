@@ -19,15 +19,22 @@ Filled controls use deep action colours with white text (7.9:1 or better in the 
 
 ## Keyboard
 
+Every component page has a Keyboard section with its keys. The common ones:
+
 | Component | Keys |
 | --- | --- |
-| Select | Enter, Space, ArrowDown and ArrowUp open. Arrows move, Home and End jump to the ends, letters jump to a match, Escape closes |
-| Combobox (also free text and multiple) | Focus stays in the input. Arrows move, Enter chooses, Escape closes |
-| Calendar | Arrows move by day and week, Page Up and Page Down by month (with Shift, by year), Home and End jump to the ends, Enter chooses |
-| Tabs | Arrows, Home and End |
-| Menu, Definition | Arrows move between items, Escape closes |
-| Dialog, Drawer | Focus is trapped. Escape closes and focus returns to the opener |
-| Checkbox, Radio, Switch | Native inputs. Space toggles, arrows move between radios |
+| [Select](/components/Select) | Enter, Space, ArrowDown and ArrowUp open. Arrows move, Home and End jump to the ends, letters jump to a match, Escape closes |
+| [Combobox](/components/Combobox) (also free text and multiple) | Focus stays in the input. Arrows move, Enter chooses, Escape closes |
+| [Calendar](/components/Calendar), [DatePicker](/components/DatePicker) | Arrows move by day and week, Page Up and Page Down by month (with Shift, by year), Home and End jump to the ends, Enter chooses |
+| [Tabs](/components/Tabs) | Arrows, Home and End |
+| [Menu](/components/Menu), [Definition](/components/Definition) | Arrows move between items, Escape closes |
+| [Dialog](/components/Dialog), [Drawer](/components/Drawer) | Focus is trapped. Escape closes and focus returns to the opener |
+| [CommandPalette](/components/CommandPalette) | Opens with Ctrl or Cmd and K by default. Arrows move, Enter runs, Escape closes |
+| [DataGrid](/components/DataGrid) | Sort buttons and filters are in the tab order. Arrow keys resize a column edge |
+| [Checkbox](/components/Checkbox), [RadioGroup](/components/RadioGroup), [Switch](/components/Switch) | Space toggles, arrows move between radios |
+| [Toast](/components/ToastProvider) | Timers pause while focus is on a toast, and it can be dismissed from the keyboard |
+
+Add your own shortcuts with [`useShortcuts()`](/guide/composables#useshortcuts-map-options). Keys that type a character are ignored while a text field has focus.
 
 ## Built in
 
@@ -37,4 +44,7 @@ Filled controls use deep action colours with white text (7.9:1 or better in the 
 - Selected states, borders and checked controls work in forced-colours mode.
 - Required and optional are words, not asterisks. Inputs take `autocomplete`.
 - Components that render a title take `headingLevel`, so the heading order is yours.
-- Set `lang` and `dir` on `<html>`. See [Words and language](/guide/language).
+- Every field has a visible `label`. `hideLabel` keeps it for assistive technology only. See [Forms and validation](/guide/forms#labels).
+- Changes nobody can see are announced with [`useAnnouncer()`](/guide/composables#useannouncer), and confirmations with [toasts](/guide/toasts).
+- Set `lang` and `dir` on `<html>`. Words, dates and direction follow the locale: see [Words and language](/guide/language).
+- Dark themes are checked for contrast like any other: see [Light and dark](/guide/theming#light-and-dark).

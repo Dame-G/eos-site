@@ -15,7 +15,9 @@ onMounted(() => {
   const ctx = cv?.getContext("2d");
   if (!el || !cv || !ctx) return;
 
-  let field: Field = fieldFor(innerWidth, innerHeight);
+  // The lines cover the page, which can be taller or wider than the window.
+  const area = (w: number, h: number): Field => fieldFor(Math.max(w, el.clientWidth), Math.max(h, el.clientHeight));
+  let field: Field = area(innerWidth, innerHeight);
   let ink = "";
   const readInk = () => (ink = getComputedStyle(cv).color);
   readInk();
@@ -44,7 +46,7 @@ onMounted(() => {
   const resized = () => {
     if (innerWidth > size.w || innerHeight > size.h) {
       size = { w: Math.max(size.w, innerWidth), h: Math.max(size.h, innerHeight) };
-      field = fieldFor(size.w, size.h);
+      field = area(size.w, size.h);
     }
     fit();
     paint(performance.now() / 1000);

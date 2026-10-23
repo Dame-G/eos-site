@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ESurface, EStack, ETable } from "@eos-ui/vue";
+import { EEmptyState, ESurface, EStack, ETable } from "@eos-ui/vue";
 </script>
 
 <template>
@@ -44,6 +44,29 @@ import { ESurface, EStack, ETable } from "@eos-ui/vue";
       </tbody>
     </ETable>
 
-    <ESurface pad="md">Inside a card, a table keeps its own outline and scrolls on its own.</ESurface>
+    <ETable caption="Plans with long descriptions">
+      <thead>
+        <tr><th scope="col">Plan</th><th scope="col">What it includes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Whole-family cover</th>
+          <td>Twenty-four visits a year across every member of the household, lab work, imaging referrals, vaccinations, and a yearly review with your family doctor that we book for you.</td>
+        </tr>
+      </tbody>
+    </ETable>
+
+    <ETable caption="Receipts">
+      <thead>
+        <tr><th scope="col">Receipt</th><th scope="col" class="e-num">Amount</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="2"><EEmptyState bare icon="receipt" title="No receipts yet">They appear here after your first payment.</EEmptyState></td>
+        </tr>
+      </tbody>
+    </ETable>
+
+    <ESurface>Inside a card, a table keeps its own outline and scrolls on its own.</ESurface>
   </EStack>
 </template>

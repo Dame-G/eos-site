@@ -10,7 +10,7 @@ import Pattern from "./SignForm.vue";
 
 # Sign a form
 
-Built from: [`EStamp`](/components/Stamp), [`EIcon`](/components/Icon), [`ENotice`](/components/Notice), [`EHeading`](/components/Heading), [`EText`](/components/Text), [`ESurface`](/components/Surface), [`EStack`](/components/Stack), [`EGrid`](/components/Grid), [`ELink`](/components/Link), [`ESignatureField`](/components/SignatureField), [`EUpload`](/components/Upload), [`EActions`](/components/Actions), [`EButton`](/components/Button).
+Built from: [`ESignatureField`](/components/SignatureField), [`EUpload`](/components/Upload), [`EStamp`](/components/Stamp), [`ENotice`](/components/Notice), and the layout and text components.
 
 <div class="pattern-stage">
   <Pattern />

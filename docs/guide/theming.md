@@ -135,7 +135,7 @@ Wrap `localStorage` in `try` as the script does, since storage can be blocked. B
 
 ## Plain CSS
 
-Library CSS is layered, so your unlayered CSS wins with no extra specificity.
+Library CSS is layered, so your unlayered CSS wins with no extra specificity. For Tailwind and other frameworks, see [Tailwind and CSS](/guide/tailwind-and-css).
 
 ```css
 :root {
@@ -160,6 +160,8 @@ Menus, dialogs, tooltips and toasts render in `body`, outside the wrapper. Point
 const eos = createEos({ theme: clinic, themeTarget: el });
 eos.config.portalTarget = el; // or a selector such as "#portal"
 ```
+
+Every menu, option list and tooltip leaves an empty wrapper in the portal target after it opens. Do not make that element a grid or flex container with a `gap`, or each wrapper adds a gap and the container grows a little every time something opens. Plain block flow (or `display: flow-root`) is safe.
 
 ## Cascade layers
 

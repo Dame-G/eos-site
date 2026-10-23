@@ -1,5 +1,5 @@
 import { computed, ref } from "vue";
-import { darkTheme, lightTheme, STORAGE_KEY, type Choice } from "../scheme";
+import { THEME_COLOR, darkTheme, lightTheme, STORAGE_KEY, type Choice } from "../scheme";
 
 /** The theme the site starts with. `startScheme` swaps it for the dark one when the visitor's choice or system asks. The playground previews other themes without touching it. */
 export const siteTheme = lightTheme;
@@ -10,12 +10,20 @@ const systemDark = ref(false);
 /** What the page is showing: the saved choice, or the system's when the choice is "system". */
 const scheme = computed<"light" | "dark">(() => (choice.value === "system" ? (systemDark.value ? "dark" : "light") : choice.value));
 export const schemeChoice = computed(() => choice.value);
+/** The scheme on screen, which the demos' own light and dark toggle starts from. */
+export const activeScheme = scheme;
+
+/** The two `theme-color` metas follow the system by media query; a choice that differs from the system has to override both. */
+function paintChrome(value: "light" | "dark") {
+  for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')) meta.content = THEME_COLOR[value];
+}
 
 function paint() {
   const root = document.documentElement;
   (scheme.value === "dark" ? darkTheme : lightTheme).apply(root);
   root.dataset.scheme = scheme.value;
   root.style.colorScheme = scheme.value;
+  paintChrome(scheme.value);
 }
 
 export function setChoice(next: Choice) {

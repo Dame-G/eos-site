@@ -10,7 +10,7 @@ import Pattern from "./PayBill.vue";
 
 # Pay a bill
 
-Built from: [`ESurface`](/components/Surface), [`EStack`](/components/Stack), [`ELink`](/components/Link), [`EHeading`](/components/Heading), [`EKicker`](/components/Kicker), [`ERadioGroup`](/components/RadioGroup), [`ECurrencyField`](/components/CurrencyField), [`ESelect`](/components/Select), [`ENotice`](/components/Notice), [`EActions`](/components/Actions), [`EButton`](/components/Button).
+Built from: [`ERadioGroup`](/components/RadioGroup), [`ECurrencyField`](/components/CurrencyField), [`ESelect`](/components/Select), [`ENotice`](/components/Notice), and the layout and text components.
 
 <div class="pattern-stage">
   <Pattern />

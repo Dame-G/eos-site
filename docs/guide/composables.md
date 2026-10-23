@@ -5,7 +5,7 @@ description: "useAnnouncer, useShortcuts, useCopy and useToast: screen reader an
 
 # Composables
 
-Functions to call inside `setup()`. Each is exported from `@eos-ui/vue`.
+Functions to call inside `setup()`. Each is exported from `@eos-ui/vue`. Signatures for all of them are in the [API reference](/guide/api).
 
 ## `useAnnouncer()`
 
@@ -53,7 +53,7 @@ await copy("npm install @eos-ui/vue"); // true if it reached the clipboard
 
 ## `useToast()`
 
-Shows a toast from anywhere inside an [`EToastProvider`](/components/ToastProvider).
+Shows a toast from anywhere in an app that installed `createEos()`, or from inside an [`EToastProvider`](/components/ToastProvider) without the plugin. The toast appears once an `EToastProvider` is mounted. See [Toasts and notifications](/guide/toasts).
 
 ```ts
 const toast = useToast();

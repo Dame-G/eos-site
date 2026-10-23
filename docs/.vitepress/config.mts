@@ -1,15 +1,22 @@
 import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
-import { sep } from "node:path";
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
+import { collectScriptHashes, headersFile, redirectsFile } from "./csp.mjs";
 import { GROUPS, libraryBuildInfo, licenseText, listComponents } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
 import { DESIGN, GUIDE, PATTERNS } from "./pages.mjs";
 import { renderForSearch, searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
-import { BOOT_SCRIPT, darkCss } from "./scheme";
+import { BOOT_SCRIPT, THEME_COLOR, darkCss } from "./scheme";
+import { vitepressInLayer } from "./vitepress-layer";
 
 const SITE = "https://eos.dame.gg";
 const IMAGE = SITE + "/og.png";
+const IMAGE_ALT = "EOS: a component library for Vue, shown as the word EOS in heavy teal letters.";
+/** The size of docs/public/og.png. */
+const IMAGE_SIZE = { width: "1200", height: "630" };
+let warnedFont = false;
 
 const components = listComponents();
 
@@ -19,6 +26,8 @@ function componentSidebar(): DefaultTheme.SidebarItem[] {
     items: components.filter((c) => GROUP_OF[c as keyof typeof GROUP_OF] === g.id).map((c) => ({ text: "E" + c, link: `/components/${c}` })),
   }));
   const unmapped = components.filter((c) => !(c in GROUP_OF));
+  // In CI a component with no group fails the build, so a library release cannot ship a page filed under "More" by accident.
+  if (unmapped.length && process.env.CI) throw new Error(`[eos-site] No sidebar group for: ${unmapped.map((c) => "E" + c).join(", ")}. Add them to docs/.vitepress/groups.mjs.`);
   if (unmapped.length) console.warn(`[eos-site] No sidebar group for: ${unmapped.map((c) => "E" + c).join(", ")}. Add them to docs/.vitepress/groups.mjs.`);
   if (unmapped.length) groups.push({ text: "More", items: unmapped.map((c) => ({ text: "E" + c, link: `/components/${c}` })) });
   return [{ text: "Overview", link: "/components/" }, ...groups.filter((g) => g.items.length)];
@@ -37,26 +46,6 @@ const patterns: DefaultTheme.SidebarItem[] = [
 
 const tools: DefaultTheme.SidebarItem[] = [{ text: "Design", items: DESIGN.map((d) => ({ text: d.name, link: `/${d.slug}` })) }];
 
-function vitepressInLayer() {
-  const isThemeCss = (id: string) =>
-    id.split(sep).join("/").includes("vitepress/dist/client/theme-default") && (id.endsWith(".css") || id.includes(".css?") || id.includes("type=style"));
-  return {
-    name: "eos-site:vitepress-layer",
-    enforce: "pre" as const,
-    transform(code: string, id: string) {
-      if (!isThemeCss(id)) return null;
-      const imports: string[] = [];
-      const body = code.replace(/^\s*@import\s+([^;]+);[ \t]*$/gm, (_m, spec: string) => {
-        imports.push(`@import ${spec.trim()} layer(e.reset);`);
-        return "";
-      });
-      const scoped = id.split(sep).join("/").includes("styles/components/vp-doc.css");
-      const css = scoped ? `@scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-acc, .e-details) {\n${body.replace(/\.vp-doc\b/g, ":scope")}\n}` : body;
-      return { code: `${imports.join("\n")}\n@layer e.reset {\n${css}\n}\n`, map: null };
-    },
-  };
-}
-
 export default defineConfig({
   title: "EOS",
   titleTemplate: ":title · EOS",
@@ -67,6 +56,11 @@ export default defineConfig({
   appearance: false,
   lastUpdated: false,
   srcExclude: ["**/README.md"],
+  buildEnd(siteConfig) {
+    // _headers is generated, not copied from public/, because the script hashes depend on what the built pages contain.
+    writeFileSync(join(siteConfig.outDir, "_headers"), headersFile(collectScriptHashes(siteConfig.outDir)));
+    writeFileSync(join(siteConfig.outDir, "_redirects"), redirectsFile(components));
+  },
   transformPageData(pageData) {
     const description = pageData.params?.description;
     if (typeof description === "string" && description) pageData.description = description;
@@ -83,10 +77,22 @@ export default defineConfig({
       ["meta", { property: "og:description", content: description }],
       ["meta", { property: "og:url", content: url }],
       ["meta", { property: "og:image", content: IMAGE }],
+      ["meta", { property: "og:image:alt", content: IMAGE_ALT }],
+      ["meta", { property: "og:image:width", content: IMAGE_SIZE.width }],
+      ["meta", { property: "og:image:height", content: IMAGE_SIZE.height }],
       ["meta", { name: "twitter:card", content: "summary_large_image" }],
+      ["meta", { name: "twitter:title", content: title }],
+      ["meta", { name: "twitter:description", content: description }],
+      ["meta", { name: "twitter:image", content: IMAGE }],
+      ["meta", { name: "twitter:image:alt", content: IMAGE_ALT }],
     ];
     const font = assets.find((a) => /\/bricolage-grotesque-latin-wght-normal\.[^/]*\.woff2$/.test(a));
     if (font) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: font, crossorigin: "" }]);
+    // A renamed font file would silently drop the preload and bring the late font swap back, so say so once.
+    else if (!warnedFont) {
+      warnedFont = true;
+      console.warn("[eos-site] No Bricolage Grotesque latin woff2 among the page assets, so the font preload was skipped. Check the file name in docs/.vitepress/theme/fonts.css against the pattern in config.mts.");
+    }
     if (pageData.relativePath === "index.md") {
       head.push([
         "script",
@@ -110,7 +116,8 @@ export default defineConfig({
     ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     ["link", { rel: "apple-touch-icon", href: "/apple-touch-icon.png" }],
     ["link", { rel: "manifest", href: "/site.webmanifest" }],
-    ["meta", { name: "theme-color", content: "#17586d" }],
+    ["meta", { name: "theme-color", content: THEME_COLOR.light, media: "(prefers-color-scheme: light)" }],
+    ["meta", { name: "theme-color", content: THEME_COLOR.dark, media: "(prefers-color-scheme: dark)" }],
     ["script", {}, BOOT_SCRIPT],
     ["style", {}, darkCss],
   ],

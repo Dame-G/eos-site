@@ -3,9 +3,11 @@ import { page } from "vitest/browser";
 import { defineComponent, h, onMounted } from "vue";
 import { defineTheme } from "@eos-ui/tokens";
 import { mount, settle } from "./helpers";
-import ContrastStatus from "../docs/.vitepress/theme/playground/ContrastStatus.vue";
 import ControlsDock from "../docs/.vitepress/theme/playground/ControlsDock.vue";
-import { PRESETS, applyPreset, build, contrastSummary, describeIssue, initialState, themeCode } from "../docs/.vitepress/theme/playground/state";
+import ThemePlayground from "../docs/.vitepress/theme/ThemePlayground.vue";
+import { build, themeCode } from "../docs/.vitepress/theme/playground/build";
+import { initialState } from "../docs/.vitepress/theme/playground/model";
+import { PRESETS, applyPreset } from "../docs/.vitepress/theme/playground/presets";
 
 describe("playground export", () => {
   for (const preset of PRESETS) {
@@ -45,36 +47,13 @@ describe("playground export", () => {
   });
 });
 
-describe("contrast status", () => {
+describe("preset contrast", () => {
   it("every preset holds every contrast pair", () => {
     for (const preset of PRESETS) {
       const s = initialState();
       applyPreset(s, preset.id);
       expect(build(s).theme.issues, preset.label).toEqual([]);
     }
-  });
-
-  it("summarises the issues and writes each pair as a line", () => {
-    const issue = { role: "Body text", pair: ["ink", "surface"] as [string, string], ratio: 1.92, min: 7 };
-    expect(contrastSummary([])).toBe("All contrast pairs hold");
-    expect(contrastSummary([issue])).toBe("1 contrast pair fails");
-    expect(contrastSummary([issue, issue])).toBe("2 contrast pairs fail");
-    expect(describeIssue(issue)).toBe("Body text: ink on surface is 1.92:1, needs 7:1");
-  });
-
-  it("says all pairs hold for a sound theme", async () => {
-    await mount(() => h(ContrastStatus, { issues: [] }));
-    await expect.element(page.getByRole("status")).toHaveTextContent("All contrast pairs hold");
-  });
-
-  it("lists the failing pairs for a theme that fails", async () => {
-    const s = initialState();
-    s.t = { ink: "#bbbbbb" };
-    const issues = build(s).theme.issues;
-    expect(issues.length).toBeGreaterThan(0);
-    await mount(() => h(ContrastStatus, { issues }));
-    expect(page.getByRole("status").element().textContent).toContain(contrastSummary(issues));
-    await expect.element(page.getByText(describeIssue(issues[0]!))).toBeVisible();
   });
 });
 
@@ -104,5 +83,28 @@ describe("controls dock", () => {
     expect(getComputedStyle(dock()).position).toBe("sticky");
     expect(mounts).toEqual([1]);
     await page.viewport(900, 900);
+  });
+});
+
+describe("playground preview layout", () => {
+  it("stays in one layout on a narrow screen instead of flipping the scene tabs back and forth", async () => {
+    const Narrow = defineComponent({ render: () => h("div", { style: "width: 343px" }, [h(ThemePlayground)]) });
+    await mount(Narrow);
+    await settle(300);
+    const wrap = document.querySelector<HTMLElement>(".pv-wrap")!;
+    const seen = new Set<string>();
+    await new Promise<void>((done) => {
+      const end = performance.now() + 1000;
+      const frame = () => {
+        const tabs = wrap.querySelector(".e-tablist")!.getAttribute("aria-orientation");
+        seen.add(`${tabs} ${Math.round(wrap.getBoundingClientRect().width)}`);
+        if (performance.now() < end) requestAnimationFrame(frame);
+        else done();
+      };
+      frame();
+    });
+    // One orientation, one width, and the preview fits the column it was given.
+    expect(seen.size).toBe(1);
+    expect(wrap.getBoundingClientRect().width).toBeLessThanOrEqual(343);
   });
 });

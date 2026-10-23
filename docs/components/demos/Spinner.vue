@@ -6,7 +6,7 @@ import { ESpinner, EStack, ESurface } from "@eos-ui/vue";
   <EStack>
     <ESpinner />
     <ESpinner label="Processing your payment of $162.40" />
-    <ESurface pad="md">
+    <ESurface>
       <ESpinner block label="Checking your statement" />
     </ESurface>
   </EStack>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESegmented, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
@@ -10,6 +10,7 @@ import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
 import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
 import BubbleTitle from "./BubbleTitle.vue";
 import { GithubIcon, NpmxIcon } from "./BrandIcons";
+import type { Choice } from "../scheme";
 import { followScheme, schemeChoice, setChoice } from "./site-theme";
 
 const ORDER = ["system", "light", "dark"] as const;
@@ -17,8 +18,11 @@ declare const __EOS_LICENSE__: string;
 // The licence file hard-wraps its lines: each paragraph is joined into one. The first paragraph is its title, which the panel shows itself.
 const license = __EOS_LICENSE__.split(/\n\n/).slice(1).map((p) => p.replace(/\n/g, " "));
 const SCHEME_ICON = { system: MonitorIcon, light: SunIcon, dark: MoonIcon };
+const NAMES: Record<Choice, string> = { system: "System", light: "Light", dark: "Dark" };
+const SCHEME_OPTIONS = ORDER.map((value) => ({ value, label: NAMES[value] }));
 const nextChoice = computed(() => ORDER[(ORDER.indexOf(schemeChoice.value) + 1) % ORDER.length]!);
-const schemeLabel = computed(() => `Colour scheme: ${schemeChoice.value}. Switch to ${nextChoice.value}`);
+// The button keeps one name, "Colour scheme", so a screen reader user always finds it by the same words; the state is its description, and each change is announced.
+const schemeState = computed(() => `Now ${NAMES[schemeChoice.value].toLowerCase()}. Press to switch to ${NAMES[nextChoice.value].toLowerCase()}.`);
 
 const { theme, page, frontmatter } = useData();
 const route = useRoute();
@@ -40,6 +44,7 @@ const githubUrl = computed(() => {
   const github = (theme.value.socialLinks ?? []).find((s: { icon: unknown }) => s.icon === "github") as { link: string } | undefined;
   return github?.link;
 });
+
 
 const sections = computed(() => toSections(sidebarFor(theme.value.sidebar, route.path), route.path));
 const hasSidebar = computed(() => !isHome.value && !page.value.isNotFound && frontmatter.value.sidebar !== false && sections.value.length > 0);
@@ -133,6 +138,15 @@ watch(
 );
 
 const announcement = ref("");
+async function say(text: string) {
+  announcement.value = "";
+  await nextTick();
+  announcement.value = text;
+}
+function chooseScheme(next: Choice) {
+  setChoice(next);
+  void say(`Colour scheme: ${NAMES[next].toLowerCase()}`);
+}
 watch(
   () => page.value.relativePath,
   async () => {
@@ -158,14 +172,15 @@ watch(
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
     <EAppHeader sticky>
       <template #logo>
-        <a class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></a>
+        <ELink class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></ELink>
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
       </template>
       <template #actions>
         <ENavList class="site-topnav" label="Site" orientation="horizontal" :items="topNav" />
-        <EIconButton :icon="SCHEME_ICON[schemeChoice]" :label="schemeLabel" @click="setChoice(nextChoice)" />
+        <EIconButton :icon="SCHEME_ICON[schemeChoice]" label="Colour scheme" aria-describedby="site-scheme-state" @click="chooseScheme(nextChoice)" />
+        <span id="site-scheme-state" hidden>{{ schemeState }}</span>
         <EIconButton icon="menu" label="Menu" class="site-menu-button" @click="menuOpen = true" />
       </template>
     </EAppHeader>
@@ -177,7 +192,7 @@ watch(
         <ENavList label="Pages" :sections="sections" />
       </div></div>
       <main id="main" class="site-main" tabindex="-1">
-        <NotFoundPage v-if="page.isNotFound" />
+        <NotFoundPage v-if="page.isNotFound" @search="searching = true" />
         <template v-else>
           <article class="site-article vp-doc"><Content /></article>
           <nav v-if="pager.prev || pager.next" class="site-pager" aria-label="Previous and next page">
@@ -195,20 +210,24 @@ watch(
     </div>
 
     <EAppFooter>
-      <EText small muted class="site-footer-license">
-        EOS is released under the
-        <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
-          <template #trigger>MIT license</template>
-          <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
-        </EDefinition>.
-      </EText>
+      <div class="site-footer-about">
+        <EText small muted class="site-footer-license">
+          EOS is released under the
+          <EDefinition label="Full text of the MIT license" title="MIT License" class="site-footer-term">
+            <template #trigger>MIT license</template>
+            <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>
+          </EDefinition>.
+        </EText>
+      </div>
       <nav class="site-footer-links" aria-label="Project">
+        <ELink href="/changelog">Changelog</ELink>
         <ELink v-if="githubUrl" :href="githubUrl" external><GithubIcon class="site-footer-mark" />GitHub</ELink>
         <ELink href="https://npmx.dev/package/@eos-ui/vue" external><NpmxIcon class="site-footer-mark" />npmx</ELink>
       </nav>
     </EAppFooter>
 
     <EDrawer v-model:open="menuOpen" side="left" title="Menu">
+      <ESegmented class="site-drawer-scheme" label="Colour scheme" :model-value="schemeChoice" :options="SCHEME_OPTIONS" @update:model-value="chooseScheme($event as Choice)" />
       <ENavList label="Site menu" :items="menuSplit.before" />
       <div v-if="hasSidebar" class="site-drawer-pages">
         <ENavList label="Pages" :sections="sections" />

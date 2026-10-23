@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EButton, EDataGrid, EStack, EText } from "@eos-ui/vue";
+import { EButton, EDataGrid, ENotice, EStack, EText } from "@eos-ui/vue";
 
 const rows = [
   { id: 1, date: "Oct 22, 2026", service: "Annual check-up", status: "Due", amount: 162.4 },

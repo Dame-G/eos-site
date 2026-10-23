@@ -31,7 +31,7 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
 
 <template>
   <div class="pattern-narrow">
-    <ESurface pad="md">
+    <ESurface>
       <EStack :gap="6">
         <EStack :gap="3">
           <ELink href="#statements" icon="arrow-left">Back to statements</ELink>

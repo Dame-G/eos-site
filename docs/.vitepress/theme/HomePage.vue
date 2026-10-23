@@ -11,6 +11,7 @@ const build = __EOS_BUILD__;
 <template>
   <main class="home" tabindex="-1">
     <FlowField />
+    <div class="home-top">
     <div class="home-heading">
       <h1 id="home-title" class="home-title"><BubbleTitle /></h1>
       <p class="home-tagline">A component library for Vue.</p>
@@ -21,12 +22,14 @@ const build = __EOS_BUILD__;
         <div class="eos-live home-install">
           <HighlightedCode lang="bash" :code="`npm install @eos-ui/vue@${build.version}`" copy-label="Copy install command" />
         </div>
-        <EActions>
+        <EActions class="home-actions">
           <EButton href="/guide/getting-started">Get started</EButton>
           <EButton href="/components/" variant="outline">Components</EButton>
           <EButton href="/playground" variant="outline">Playground</EButton>
         </EActions>
       </EStack>
     </section>
+    </div>
+
   </main>
 </template>

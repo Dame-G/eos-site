@@ -18,33 +18,15 @@ import {
 } from "@eos-ui/vue";
 import { groups } from "@eos-ui/tokens";
 import HighlightedCode from "./HighlightedCode.vue";
-import ContrastStatus from "./playground/ContrastStatus.vue";
 import ControlsDock from "./playground/ControlsDock.vue";
 import PlaygroundPreview from "./playground/PlaygroundPreview.vue";
 import PresetPicker from "./playground/PresetPicker.vue";
 import TokenOverrides from "./playground/TokenOverrides.vue";
-import {
-  CURRENCIES,
-  LOCALES,
-  MONO,
-  NEUTRAL,
-  SAFE,
-  SANS,
-  applyPreset,
-  applyRandom,
-  build,
-  cssChanges,
-  cssFull,
-  decode,
-  derivedTokens,
-  encode,
-  groundOf,
-  initialState,
-  themeCode,
-  variantCode,
-  type State,
-  type VariantKey,
-} from "./playground/state";
+import { build, cssChanges, cssFull, derivedTokens, themeCode, variantCode } from "./playground/build";
+import { decode, encode } from "./playground/codec";
+import { CURRENCIES, LOCALES, MONO, NEUTRAL, SAFE, SANS, groundOf, initialState, type State, type VariantKey } from "./playground/model";
+import { applyPreset } from "./playground/presets";
+import { applyRandom } from "./playground/random";
 
 const s = reactive<State>(initialState());
 const built = computed(() => build(s));
@@ -186,7 +168,7 @@ function setRadius(v: string) {
 }
 function setElevation(v: string) {
   s.elevation = v as State["elevation"];
-  for (const k of ["edge", "well", "float"]) delete s.t[k];
+  for (const k of ["frame", "well", "float"]) delete s.t[k];
 }
 function setMotion(v: string) {
   s.motion = v as State["motion"];
@@ -202,15 +184,6 @@ function setVariant(key: VariantKey, v: string) {
 const variantTags = computed(() => variantCode(s.variants));
 const sansOptions = Object.entries(SANS).map(([value, f]) => ({ value, label: f.label }));
 const monoOptions = Object.entries(MONO).map(([value, f]) => ({ value, label: f.label }));
-
-const stageEl = ref<HTMLElement>();
-const dockRef = ref<{ $el: HTMLElement }>();
-/** On narrow screens the controls and the result are a long scroll apart: move to the other one and put focus there. */
-function jumpTo(el: HTMLElement | undefined) {
-  if (!el) return;
-  el.scrollIntoView({ block: "start" });
-  el.focus({ preventScroll: true });
-}
 
 const controlTab = ref("colour");
 const controlItems = [
@@ -243,25 +216,21 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
       <PresetPicker :model-value="s.preset" name="playground-preset" :tokens="tokens" select @select="usePreset" @random="useRandom" />
       <div class="bar-row">
         <div class="bar-info">
-          <ContrastStatus :issues="built.theme.issues" compact />
           <EText small muted role="status">{{ copied }}</EText>
         </div>
         <div class="bar-actions">
           <ESwitch v-model="wholePage" label="Apply to the whole page" />
           <div class="bar-buttons">
             <EButton variant="outline" @click="usePreset('eos')">Reset</EButton>
-            <EButton variant="outline" icon="link" @click="copyLink">Copy link</EButton>
+            <EButton variant="outline" @click="copyLink">Copy link</EButton>
           </div>
         </div>
       </div>
     </section>
 
     <div class="workbench">
-      <div class="jump">
-        <EButton variant="quiet" icon="arrow-down" @click="jumpTo(stageEl)">Jump to preview</EButton>
-      </div>
-      <ControlsDock ref="dockRef">
-        <ETabs v-model="controlTab" :items="controlItems" fill framed class="groups">
+      <ControlsDock>
+        <ETabs v-model="controlTab" :items="controlItems" fill class="groups">
           <template #colour>
             <EStack :gap="4">
               <ESegmented :model-value="s.scheme" label="Scheme" :options="schemeOptions" @update:model-value="setScheme" />
@@ -331,11 +300,8 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
         </ETabs>
       </ControlsDock>
 
-      <section ref="stageEl" class="stage" aria-labelledby="playground-result" tabindex="-1">
+      <section class="stage" aria-labelledby="playground-result">
         <EVisuallyHidden as="h2" id="playground-result">Result</EVisuallyHidden>
-        <div class="jump">
-          <EButton variant="quiet" icon="arrow-up" @click="jumpTo(dockRef?.$el)">Back to controls</EButton>
-        </div>
         <ETabs v-model="stageTab" :items="stageItems" class="stage-tabs">
           <template #preview>
             <PlaygroundPreview :tokens="cssVars" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
@@ -345,7 +311,6 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
               <EInline>
                 <ESegmented v-model="format" label="Format" :options="[{ value: 'code', label: 'defineTheme' }, { value: 'css', label: 'CSS changes' }, { value: 'full', label: 'Full CSS' }]" />
               </EInline>
-              <ContrastStatus :issues="built.theme.issues" />
               <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
               <template v-if="variantTags">
                 <EText small muted>Spacing is set with component props, not tokens. This look also used:</EText>
@@ -417,20 +382,11 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 }
 .stage {
   display: grid;
+  /* One column that can shrink below its content: an auto column grows to the preview's min-content, which flips with the tab orientation, which is chosen from this width. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--e-space-3);
   min-width: 0;
   scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
-}
-.stage:focus {
-  outline: none;
-}
-.jump {
-  display: flex;
-}
-@media (min-width: 64rem) {
-  .jump {
-    display: none;
-  }
 }
 .stage-tabs > :deep(.e-tabpanel) {
   padding-top: var(--e-space-3);
@@ -457,5 +413,14 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
     overflow-y: auto;
 
   }
+}
+
+/* The preview tabs scroll sideways on a narrow screen. The edge shadows show that there is more: each appears only on a side that has content scrolled out of view, drawn by the scroll position alone. */
+.stage-tabs :deep(.e-tablist) {
+  background:
+    linear-gradient(to right, var(--e-surface) 30%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--e-surface) 30%, transparent) right / 2rem 100% no-repeat local,
+    linear-gradient(to right, var(--e-border-strong), transparent) left / 0.75rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--e-border-strong), transparent) right / 0.75rem 100% no-repeat scroll;
 }
 </style>

@@ -17,7 +17,7 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
           ]"
         />
       </template>
-      <EPageHeader title="Statements" description="Your bills for 2026.">
+      <EPageHeader :heading-level="3" title="Statements" description="Your bills for 2026.">
         <template #breadcrumb>
           <EBreadcrumb :items="[{ label: 'Home', href: '#home' }, { label: 'Statements' }]" />
         </template>
@@ -31,7 +31,8 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
 <style scoped>
 .frame {
   --frame-height: 28rem;
-  --e-shell-rail: transparent;
+  /* A column narrower than the frame, so the full-width header and footer and the rails beside the content are all visible. */
+  --e-shell-width: 32rem;
   height: var(--frame-height);
   overflow: auto;
   border: var(--e-stroke-card) solid var(--e-border);

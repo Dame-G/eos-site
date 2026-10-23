@@ -1,6 +1,6 @@
 # eos-site
 
-Private source of https://eos.dame.gg, the documentation and live-preview site for the public [EOS](https://github.com/Dame-G/eos) library.
+Source of https://eos.dame.gg, the documentation and live-preview site for the public [EOS](https://github.com/Dame-G/eos) library. It is released under the [MIT license](LICENSE).
 
 The site is built with [VitePress](https://vitepress.dev) and uses the library it documents. The page frame (header, navigation, search, footer), the home page, the tokens page and the playground are EOS components. Only the markdown prose and code blocks use VitePress styles, and those read the library's tokens.
 
@@ -56,7 +56,10 @@ The page is the component's `README.md` from the library, read at build time and
 | --- | --- |
 | `docs/.vitepress/config.mts` | Sidebar (from the library folders), search, build settings |
 | `docs/.vitepress/eos-source.mjs` | Reads the library checkout: component list, READMEs, props tables |
-| `docs/.vitepress/groups.mjs` | Component to sidebar group (the library's layers) |
+| `docs/.vitepress/groups.mjs` | Component to sidebar group (the library's layers). A component missing here fails the build when `CI` is set |
+| `docs/.vitepress/csp.mjs`, `csp-policy.mjs` | Generates `_headers` (Content-Security-Policy with script hashes) and `_redirects` at the end of the build |
+| `docs/.vitepress/vitepress-layer.ts` | The Vite plugin that puts VitePress's CSS in `@layer e.reset` |
+| `docs/.vitepress/theme/playground/` | The playground: `model.ts` (state shape), `build.ts` (state to theme and code), `presets.ts`, `random.ts`, `codec.ts` (share link), `contrast.ts` (contrast pairs); all but `model.ts` and `build.ts`' callers are plain TypeScript with unit tests |
 | `docs/.vitepress/theme/` | Installs `createEos`, maps `--e-*` to VitePress variables (`custom.css`), demo and token components, the playground |
 | `docs/components/[name].md`, `[name].paths.mjs` | One page per component folder |
 | `docs/components/demos/` | One hand-written demo per component |
@@ -72,6 +75,10 @@ The page is the component's `README.md` from the library, read at build time and
 - The library is linked from `../eos`, which has its own `node_modules`. `resolve.dedupe: ["vue"]` and `ssr.noExternal` in the config keep one copy of Vue in the dev server, the build and the tests.
 - VitePress ships unlayered CSS, which would beat the library's `@layer e.*` rules inside the demos. A small Vite plugin in the config wraps the VitePress default theme CSS in `@layer e.reset`, the lowest EOS layer. The site's own `custom.css` is unlayered and wins over both.
 
+### Upgrading VitePress
+
+`vitepressInLayer` rewrites the default theme's own CSS files by path (`vitepress/dist/client/theme-default/...`) and by the class name `.vp-doc`. Treat VitePress as pinned: upgrade it on its own, never as part of a wider dependency bump, and run `corepack pnpm test` first. `tests/build-config.test.ts` imports the files the plugin depends on and checks that every rule ends up in `@layer e.reset` with `@import`s hoisted ahead of it, so a moved file or a changed layout fails there before it reaches a page. Then look at a component page and the playground in both schemes, since a CSS-order mistake shows as demos picking up VitePress's styles.
+
 ## Use the published packages
 
 `package.json` links both packages to the checkout beside this repo:
@@ -82,6 +89,12 @@ The page is the component's `README.md` from the library, read at build time and
 ```
 
 To use registry versions, replace the two lines with versions (`"@eos-ui/vue": "^0.1.0"`) and run `corepack pnpm install`. The component pages still read the library's `README.md` files from the checkout of `Dame-G/eos` beside this repo (or `EOS_DIR`).
+
+## Headers and redirects
+
+The build writes `_headers` and `_redirects` into `docs/.vitepress/dist` (there is no `public/_headers`). `_headers` carries the Content-Security-Policy: scripts are limited to the site's own files and to the inline scripts of the built pages, listed by SHA-256 hash, so there is no `'unsafe-inline'` for scripts. The hashes are read from the finished HTML, so a changed boot script or a new VitePress inline script is picked up without edits. JSON-LD blocks are data, not scripts, and need no hash. The report-only copy also drops `'unsafe-inline'` for styles, to show what is left to tighten.
+
+Cloudflare static assets match paths case-sensitively, and component pages are written as `/components/Button`. `_redirects` sends `/components/button` (and every other lower-case spelling) to the real page, and `/guide` to `/guide/getting-started`, which has no index page. The dev server answers every path with the app shell and resolves routes in the browser, so these are production-only problems.
 
 ## Deploy
 

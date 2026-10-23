@@ -71,6 +71,13 @@
 
 html {
   scroll-padding-top: calc(var(--site-header) + var(--e-space-4));
+  /* The home page fits the window and the other pages scroll. Keeping the scrollbar space on every page stops the sheet and its borders shifting sideways between them. */
+  scrollbar-gutter: stable;
+}
+
+/* An open dialog or palette locks the body (overflow hidden) and pads it by the scrollbar width. The gutter already holds that space, so the page would shift left and leave an empty strip on the right. Let the padding do the job while locked. */
+html:has(body[style*="overflow: hidden"]) {
+  scrollbar-gutter: auto;
 }
 
 body {
@@ -84,8 +91,9 @@ body:has(.site-body, .home) .site {
   background: var(--site-ground);
 }
 
+/* The ground around the sheet is the text colour thinned into the surface, so it follows any theme and stays a step darker than the page. */
 .site {
-  --site-ground: #e6e6e6;
+  --site-ground: color-mix(in srgb, var(--e-ink) 10%, var(--e-surface));
 }
 
 :root[data-scheme="dark"] .site {
@@ -167,6 +175,14 @@ body:has(.site-body, .home) .site {
 
 .site-body > * {
   padding-block: var(--e-space-6) var(--e-space-8);
+}
+
+/* The page is a sheet on the ground, with a vertical border down each side. The header and footer run full width above and below it, so the borders only run between them. They show only where there is ground beside the sheet. */
+@media (min-width: 90rem) {
+  .site-body,
+  .home {
+    border-inline: var(--e-stroke-hair) solid var(--e-shell-rail, var(--e-border));
+  }
 }
 
 .site-rail {
@@ -264,20 +280,11 @@ body:has(.site-body, .home) .site {
   border-inline-start: var(--e-stroke-edge) solid var(--e-border);
 }
 
-.site-search {
-  width: min(calc(var(--e-measure) + var(--e-space-8)), calc(100vw - var(--e-space-8)));
-}
-
-.site-search-body {
-  display: grid;
-  gap: var(--e-space-3);
-}
-
 .home {
   display: grid;
   flex: 1;
   grid-template-columns: minmax(0, 1fr);
-  align-content: center;
+  align-content: start;
   gap: 0;
   width: 100%;
   max-width: var(--site-wide);
@@ -302,7 +309,9 @@ body:has(.site-body, .home) .site {
 /* Faint flowing lines behind the home content, painted on a canvas by FlowField.vue. The ink is solid and the faintness is the canvas's opacity, which the compositor applies without repainting anything. */
 .flow-field {
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  /* The lines run the whole height of the page and stop at the footer. They never fade out and start again. */
+  height: 100%;
   overflow: hidden;
   container-type: size;
   pointer-events: none;
@@ -454,6 +463,8 @@ body:has(.site-body, .home) .site {
 }
 
 .demo-stage {
+  padding: var(--e-space-4);
+  background: var(--e-surface);
   font-family: var(--e-font-sans);
   font-size: var(--e-text-md);
   line-height: 1.5;
@@ -561,19 +572,8 @@ body:has(.site-body, .home) .site {
   margin-bottom: 0;
 }
 
-.site-search-hint {
-  margin: 0;
-  margin-inline-end: auto;
-  color: var(--e-muted);
-  font-size: var(--e-text-sm);
-}
-
 @media (max-width: 63.99rem), (pointer: coarse) {
   .site-search-key {
-    display: none;
-  }
-
-  .site-search .e-dialog-foot:has(.site-search-hint) {
     display: none;
   }
 }
@@ -650,3 +650,137 @@ body:has(.site-body, .home) .site {
   font-variant-numeric: tabular-nums;
   color: var(--e-ink);
 }
+
+/* The frame every demo shares: a bar with the preview options, then the stage. */
+.demo-frame {
+  border: var(--e-stroke-edge) solid var(--e-border);
+  border-radius: var(--e-radius-md);
+  overflow: clip;
+  background: var(--e-surface);
+}
+
+.demo-bar {
+  --e-control-height: 2.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-2) var(--e-space-4);
+  padding: var(--e-space-2) var(--e-space-3);
+  border-bottom: var(--e-stroke-hair) solid var(--e-border);
+  background: var(--e-surface-tint);
+}
+
+.demo-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-2);
+}
+
+/* The Source panel closes the demo's section. The heading that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
+.site-article .e-details:has(+ h2) {
+  margin-bottom: calc(-1 * var(--e-space-6));
+}
+
+/* Numbered steps: a list written straight into a page counts its items in the mono face, like the kickers. */
+.site-article.vp-doc > div > ol {
+  padding-inline-start: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.site-article.vp-doc > div > ol > li {
+  position: relative;
+  counter-increment: step;
+  padding-inline-start: var(--e-space-8);
+}
+
+.site-article.vp-doc > div > ol > li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.15em;
+  font: 600 var(--e-text-sm) / 1.5 var(--e-font-mono);
+  letter-spacing: 0.08em;
+  color: var(--e-primary);
+}
+
+/* The footer: the licence, then the links. */
+.site-footer-about {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-1) var(--e-space-4);
+}
+
+.site-drawer-scheme {
+  margin-bottom: var(--e-space-3);
+}
+
+.not-found {
+  display: grid;
+  gap: var(--e-space-6);
+}
+
+.not-found-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-space-2) var(--e-space-6);
+  margin: var(--e-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The components index. */
+.component-index {
+  display: grid;
+  gap: var(--e-space-4);
+}
+
+.component-popular-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-space-2) var(--e-space-4);
+  margin: var(--e-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.component-group-kicker {
+  margin-top: var(--e-space-4);
+}
+
+/* The first screen of the home page. */
+.home-top {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-height: calc(100svh - var(--site-header) - var(--site-footer) - var(--e-space-8) * 2);
+}
+
+/* On a phone the hero buttons stack at full width, so none sits alone on a second row. */
+@media (max-width: 32rem) {
+  .home-actions > .e-btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* A restrained entrance for the title and the hero: a short rise and fade, once. */
+@media (prefers-reduced-motion: no-preference) {
+  .home-top .home-heading,
+  .home-top .home-hero {
+    animation: home-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .home-top .home-hero {
+    animation-delay: 0.12s;
+  }
+
+  @keyframes home-rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+  }
+}
+
