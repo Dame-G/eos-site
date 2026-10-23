@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, ELink, ENavList, ESegmented, ESelect, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, EKicker, ELink, ENavList, ESegmented, ESelect, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
 import type { NavItem } from "@eos-ui/vue";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
@@ -59,38 +59,46 @@ const pager = computed(() => {
   return i < 0 ? { prev: undefined, next: undefined } : { prev: all[i - 1], next: all[i + 1] };
 });
 
-const headings = ref<{ id: string; text: string }[]>([]);
+// The outline is the page's h2s from its page data (markdown.headers), so it is in the server-rendered page. Only which one is current is worked out in the browser.
+const headings = computed(() => ((page.value.headers ?? []) as { title: string; slug: string }[]).map((h) => ({ id: h.slug, text: h.title.replace(/​/g, "").trim() })));
 const activeId = ref("");
 const showOutline = computed(() => !isHome.value && !isWide.value && frontmatter.value.aside !== false && headings.value.length > 1);
-const outline = computed<NavItem[]>(() => headings.value.map((h) => ({ label: h.text, href: `#${h.id}`, current: h.id === activeId.value })));
+const outline = computed<NavItem[]>(() => headings.value.map((h, i) => ({ label: h.text, href: `#${h.id}`, current: activeId.value ? h.id === activeId.value : i === 0 })));
 
-function readHeadings() {
-  headings.value = [...document.querySelectorAll<HTMLElement>(".site-article h2[id]")].map((h) => ({
-    id: h.id,
-    text: (h.textContent ?? "").replace(/^#\s*/, "").replace(/​/g, "").trim(),
-  }));
-  onScroll();
-}
-
-function onScroll() {
-  const list = headings.value;
-  if (!list.length) {
-    activeId.value = "";
-    return;
+// The current heading is the last one above a line 35% down the window, or the last heading once the page is scrolled to its end.
+let spies: IntersectionObserver[] = [];
+function spy() {
+  for (const o of spies) o.disconnect();
+  spies = [];
+  activeId.value = "";
+  if (!showOutline.value) return;
+  const above = new Map<string, boolean>();
+  let atEnd = false;
+  const pick = () => {
+    const ids = headings.value.map((h) => h.id);
+    activeId.value = (atEnd ? ids.at(-1) : ids.filter((id) => above.get(id)).at(-1)) ?? ids[0] ?? "";
+  };
+  const lines = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) above.set(e.target.id, e.boundingClientRect.top < (e.rootBounds?.bottom ?? 0));
+      pick();
+    },
+    { rootMargin: "0px 0px -65% 0px" },
+  );
+  const end = new IntersectionObserver(
+    ([e]) => {
+      atEnd = !!e?.isIntersecting && window.scrollY > 4;
+      pick();
+    },
+    { threshold: 1 },
+  );
+  for (const h of headings.value) {
+    const el = document.getElementById(h.id);
+    if (el) lines.observe(el);
   }
-  const root = document.documentElement;
-  const scrolled = window.scrollY > 4;
-  const atEnd = scrolled && window.scrollY + window.innerHeight >= root.scrollHeight - 4;
-  let current = list[0]!.id;
-  if (atEnd) current = list[list.length - 1]!.id;
-  else {
-    const line = window.innerHeight * 0.35;
-    for (const h of list) {
-      const el = document.getElementById(h.id);
-      if (el && el.getBoundingClientRect().top <= line) current = h.id;
-    }
-  }
-  activeId.value = current;
+  const footer = document.querySelector(".site > .e-appfooter");
+  if (footer) end.observe(footer);
+  spies = [lines, end];
 }
 
 function showCurrent() {
@@ -120,23 +128,22 @@ function onShortcut(e: KeyboardEvent) {
 
 onMounted(() => {
   followScheme();
-  readHeadings();
+  spy();
   showCurrent();
-  window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("keydown", onShortcut);
   const load = () => (searchLoaded.value = true);
   if ("requestIdleCallback" in window) searchIdle = window.requestIdleCallback(load, { timeout: 3000 });
   else searchIdle = window.setTimeout(load, 1000);
 });
 onBeforeUnmount(() => {
-  window.removeEventListener("scroll", onScroll);
+  for (const o of spies) o.disconnect();
   window.removeEventListener("keydown", onShortcut);
   if ("cancelIdleCallback" in window) window.cancelIdleCallback(searchIdle);
   else clearTimeout(searchIdle);
 });
 onContentUpdated(() =>
   nextTick(() => {
-    readHeadings();
+    spy();
     showCurrent();
   }),
 );
@@ -211,10 +218,10 @@ watch(
         </template>
       </main>
       <div v-if="showOutline" class="site-rail site-rail--outline">
-        <aside class="site-outline" aria-labelledby="site-outline-title">
-          <p id="site-outline-title" class="site-outline-title">On this page</p>
+        <div class="site-outline">
+          <EKicker class="site-outline-title" aria-hidden="true">On this page</EKicker>
           <ENavList label="On this page" :items="outline" />
-        </aside>
+        </div>
       </div>
     </div>
 

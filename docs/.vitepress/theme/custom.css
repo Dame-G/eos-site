@@ -224,11 +224,6 @@ body {
 
 .site-outline-title {
   margin: 0 0 var(--e-space-3);
-  padding-inline: 0;
-  font: 600 var(--e-text-sm) / 1.2 var(--e-font-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--e-ink);
 }
 
 .site-pager {

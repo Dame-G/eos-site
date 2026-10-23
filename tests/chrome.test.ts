@@ -16,7 +16,7 @@ vi.mock("vitepress", async () => {
         sidebar: { "/guide/": [{ text: "Guide", items: [{ text: "Theming", link: "/guide/theming" }] }] },
         socialLinks: [],
       }),
-      page: ref({ relativePath: "guide/theming.md", title: "Theming", isNotFound: false, params: {} }),
+      page: ref({ relativePath: "guide/theming.md", title: "Theming", isNotFound: false, params: {}, headers: [{ level: 2, title: "First", slug: "a" }, { level: 2, title: "Second", slug: "b" }] }),
       frontmatter: ref({}),
     }),
     useRoute: () => route,
@@ -78,6 +78,15 @@ describe("site chrome", () => {
     await userEvent.keyboard("zzqxjvv");
     await settle(150);
     await expect.element(page.getByText("Nothing found", { exact: false })).toBeVisible();
+  });
+
+  it("builds the outline from the page headers, with one landmark and the first heading current", async () => {
+    await mount(Layout);
+    const outline = page.getByRole("navigation", { name: "On this page" });
+    await expect.element(outline.getByRole("link", { name: "First" })).toHaveAttribute("href", "#a");
+    await expect.element(outline.getByRole("link", { name: "Second" })).toHaveAttribute("href", "#b");
+    await expect.element(outline.getByRole("link", { name: "First" })).toHaveAttribute("aria-current", "page");
+    expect(document.querySelectorAll("aside")).toHaveLength(0);
   });
 
   it("Escape closes search and puts focus back on the button that opened it", async () => {
