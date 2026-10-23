@@ -12,18 +12,13 @@ const props = defineProps<{ groups: Group[] }>();
 
 /** What each group is for, in a few words. */
 const ROLE: Record<string, string> = {
-  actions: "Buttons and links: things you press to do something.",
-  content: "Headings, text, code, icons and avatars.",
-  layout: "Spacing, grids and surfaces that arrange content.",
-  form: "The form, its fields and field groups.",
-  text: "Inputs you type into.",
-  choices: "Pick one or several from a set.",
-  pickers: "Dates, files and signatures.",
-  data: "Tables, lists of facts, tags and status marks.",
-  feedback: "Messages, progress and empty states.",
-  overlays: "Dialogs, menus, tooltips and things that open and close.",
-  navigation: "Moving between pages and within a page.",
-  page: "The frame of a whole page or app.",
+  layout: "Arrange things on the page: spacing, grids, surfaces and the page frame.",
+  content: "Show information: text, code, avatars, tables and status marks.",
+  actions: "Things you press to do something.",
+  forms: "Collect input: fields, choices, dates, files and signatures.",
+  navigation: "Move around: tabs, breadcrumbs, steppers and pages.",
+  feedback: "Tell people what is happening: messages, progress and empty states.",
+  overlays: "Open on top of the page: dialogs, drawers, menus and tooltips.",
 };
 
 /** The components most pages reach for first. A name the library does not have is skipped, so a renamed component never leaves a dead link. */
