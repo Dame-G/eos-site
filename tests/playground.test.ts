@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { page } from "vitest/browser";
+import { page, userEvent } from "vitest/browser";
 import { defineComponent, h, onMounted } from "vue";
 import { defineTheme } from "@eos-ui/tokens";
 import { mount, settle } from "./helpers";
@@ -86,26 +86,29 @@ describe("controls dock", () => {
   });
 });
 
-describe("playground preview layout", () => {
-  it("stays in one layout on a narrow screen instead of flipping the scene tabs back and forth", async () => {
+describe("playground page", () => {
+  it("fits a narrow column, picks a scene from a select, and leaves the address alone until something changes", async () => {
+    const start = location.href;
     const Narrow = defineComponent({ render: () => h("div", { style: "width: 343px" }, [h(ThemePlayground)]) });
     await mount(Narrow);
     await settle(300);
+    expect(location.href).toBe(start);
     const wrap = document.querySelector<HTMLElement>(".pv-wrap")!;
-    const seen = new Set<string>();
-    await new Promise<void>((done) => {
-      const end = performance.now() + 1000;
-      const frame = () => {
-        const tabs = wrap.querySelector(".e-tablist")!.getAttribute("aria-orientation");
-        seen.add(`${tabs} ${Math.round(wrap.getBoundingClientRect().width)}`);
-        if (performance.now() < end) requestAnimationFrame(frame);
-        else done();
-      };
-      frame();
-    });
-    // One orientation, one width, and the preview fits the column it was given.
-    expect(seen.size).toBe(1);
     expect(wrap.getBoundingClientRect().width).toBeLessThanOrEqual(343);
+    expect(document.querySelector(".e-tablist[aria-orientation=vertical]")).toBeNull();
+
+    await userEvent.click(page.getByRole("combobox", { name: "Scene" }));
+    await userEvent.click(page.getByRole("option", { name: "Data" }));
+    await expect.element(page.getByRole("heading", { name: "Data" })).toBeVisible();
+    expect(location.href).toBe(start);
+  });
+
+  it("opens the export in a drawer", async () => {
+    await mount(ThemePlayground);
+    await userEvent.click(page.getByRole("button", { name: "Export" }));
+    const drawer = page.getByRole("dialog", { name: "Export the theme" });
+    await expect.element(drawer).toBeVisible();
+    await expect.element(drawer.getByText("defineTheme", { exact: false }).first()).toBeVisible();
   });
 });
 

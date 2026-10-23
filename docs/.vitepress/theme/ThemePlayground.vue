@@ -3,8 +3,8 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import {
   EButton,
   EColorField,
+  EDrawer,
   EGrid,
-  EInline,
   EKicker,
   ENumberField,
   ESegmented,
@@ -73,7 +73,7 @@ watch(link, (code) => {
 const copied = ref("");
 async function copyLink() {
   try {
-    await navigator.clipboard.writeText(location.href);
+    await navigator.clipboard.writeText(location.origin + location.pathname + (link.value ? HASH + link.value : ""));
     copied.value = "Link copied";
   } catch {
     copied.value = "Copy the address bar";
@@ -208,11 +208,7 @@ const controlItems = [
   { id: "space", label: "Space" },
   { id: "motion", label: "Motion" },
 ];
-const stageTab = ref("preview");
-const stageItems = [
-  { id: "preview", label: "Preview" },
-  { id: "export", label: "Export" },
-];
+const exporting = ref(false);
 
 const format = ref("code");
 const code = computed(() => {
@@ -228,18 +224,15 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 <template>
   <div class="playground eos-live">
     <section class="bar" aria-label="Presets">
-      <PresetPicker :model-value="s.preset" :tokens="tokens" @select="usePreset" @random="useRandom" />
-      <div class="bar-row">
-        <div class="bar-info">
-          <EText small muted role="status">{{ copied }}</EText>
+      <PresetPicker class="bar-presets" :model-value="s.preset" :tokens="tokens" @select="usePreset" @random="useRandom" />
+      <div class="bar-actions">
+        <ESwitch v-model="wholePage" label="Apply to the whole page" />
+        <div class="bar-buttons">
+          <EButton variant="outline" @click="usePreset('eos')">Reset</EButton>
+          <EButton variant="outline" @click="copyLink">Copy link</EButton>
+          <EButton @click="exporting = true">Export</EButton>
         </div>
-        <div class="bar-actions">
-          <ESwitch v-model="wholePage" label="Apply to the whole page" />
-          <div class="bar-buttons">
-            <EButton variant="outline" @click="usePreset('eos')">Reset</EButton>
-            <EButton variant="outline" @click="copyLink">Copy link</EButton>
-          </div>
-        </div>
+        <EText small muted role="status">{{ copied }}</EText>
       </div>
     </section>
 
@@ -334,27 +327,22 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
       </ControlsDock>
 
       <section class="stage" aria-labelledby="playground-result">
-        <EVisuallyHidden as="h2" id="playground-result">Result</EVisuallyHidden>
-        <ETabs v-model="stageTab" :items="stageItems" class="stage-tabs">
-          <template #preview>
-            <PlaygroundPreview :tokens="cssVars" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
-          </template>
-          <template #export>
-            <EStack :gap="3">
-              <EInline>
-                <ESegmented v-model="format" label="Format" :options="[{ value: 'code', label: 'defineTheme' }, { value: 'css', label: 'CSS changes' }, { value: 'full', label: 'Full CSS' }]" />
-              </EInline>
-              <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
-              <template v-if="variantTags">
-                <EText small muted>Spacing is set with component props, not tokens. This look also used:</EText>
-                <HighlightedCode lang="vue" copy-label="Copy spacing props" :code="variantTags" />
-              </template>
-              <EText small muted>{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. The link in the address bar holds this theme.</EText>
-            </EStack>
-          </template>
-        </ETabs>
+        <EVisuallyHidden as="h2" id="playground-result">Preview</EVisuallyHidden>
+        <PlaygroundPreview :tokens="cssVars" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
       </section>
     </div>
+
+    <EDrawer v-model:open="exporting" title="Export the theme" size="lg">
+      <EStack :gap="3">
+        <ESegmented v-model="format" label="Format" :options="[{ value: 'code', label: 'defineTheme' }, { value: 'css', label: 'CSS changes' }, { value: 'full', label: 'Full CSS' }]" />
+        <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
+        <template v-if="variantTags">
+          <EText small muted>Spacing is set with component props, not tokens. This look also used:</EText>
+          <HighlightedCode lang="vue" copy-label="Copy spacing props" :code="variantTags" />
+        </template>
+        <EText small muted>{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. Copy link shares this theme.</EText>
+      </EStack>
+    </EDrawer>
   </div>
 </template>
 
@@ -366,45 +354,29 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
   min-width: 0;
 }
 .bar {
-  display: grid;
-  gap: var(--e-space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--e-space-3) var(--e-space-5);
   padding-block-end: var(--e-space-6);
   border-bottom: var(--e-stroke-hair) solid var(--e-border);
   min-width: 0;
 }
-.bar-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--e-space-3) var(--e-space-5);
-}
-.bar-info {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  flex: 1 1 18rem;
-  gap: var(--e-space-1) var(--e-space-3);
-  min-width: 0;
+.bar-presets {
+  flex: 1 1 22rem;
+  max-width: 32rem;
 }
 .bar-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--e-space-3) var(--e-space-4);
+  gap: var(--e-space-2) var(--e-space-3);
+  min-height: var(--e-control-height);
   min-width: 0;
 }
 .bar-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
   gap: var(--e-space-2);
-  width: 100%;
-}
-@media (min-width: 30rem) {
-  .bar-buttons {
-    display: flex;
-    width: auto;
-  }
 }
 .workbench {
   display: grid;
@@ -415,15 +387,11 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 }
 .stage {
   display: grid;
-  /* One column that can shrink below its content: an auto column grows to the preview's min-content, which flips with the tab orientation, which is chosen from this width. */
+  /* One column that can shrink below its content: an auto column would grow to the preview's min-content. */
   grid-template-columns: minmax(0, 1fr);
   gap: var(--e-space-3);
   min-width: 0;
   scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
-}
-.stage-tabs > :deep(.e-tabpanel) {
-  padding-top: var(--e-space-3);
-  min-width: 0;
 }
 .groups :deep(.e-seg-text) {
   min-width: 0;

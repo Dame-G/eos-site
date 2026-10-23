@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import ThemedScope from "./ThemedScope.vue";
 import {
   EButton,
@@ -94,34 +94,25 @@ const navItems = [
 const tone = { paid: "success", due: "info", overdue: "danger" } as const;
 const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "currency", currency: props.currency }).format(Number(n));
 
-const sceneItems = [
-  { id: "overview", label: "Overview" },
-  { id: "actions", label: "Actions" },
-  { id: "forms", label: "Forms" },
-  { id: "feedback", label: "Feedback" },
-  { id: "navigation", label: "Navigation" },
-  { id: "data", label: "Data" },
-  { id: "overlays", label: "Overlays" },
-  { id: "type", label: "Type" },
+const SCENES = [
+  { value: "overview", label: "Overview" },
+  { value: "actions", label: "Actions" },
+  { value: "forms", label: "Forms" },
+  { value: "feedback", label: "Feedback" },
+  { value: "navigation", label: "Navigation" },
+  { value: "data", label: "Data" },
+  { value: "overlays", label: "Overlays" },
+  { value: "type", label: "Type" },
 ];
 const scene = ref("overview");
-
-/** The scene list sits beside the scene, on its right, when there is room, above it when there is not. */
-const wrap = ref<HTMLElement | null>(null);
-const narrow = ref(false);
-let watcher: ResizeObserver | undefined;
-onMounted(() => {
-  watcher = new ResizeObserver(([entry]) => (narrow.value = entry!.contentRect.width < 576));
-  if (wrap.value) watcher.observe(wrap.value);
-});
-onBeforeUnmount(() => watcher?.disconnect());
 </script>
 
 <template>
+  <div class="pv">
+  <ESelect v-model="scene" class="pv-scene" bare label="Scene" :options="SCENES" />
   <ThemedScope :tokens="tokens" :locale="locale" :currency="currency">
-    <div ref="wrap" class="pv-wrap">
-      <ETabs v-model="scene" :items="sceneItems" :orientation="narrow ? 'horizontal' : 'vertical'" side="start" class="pv">
-          <template #overview>
+    <div class="pv-wrap">
+          <template v-if="scene === 'overview'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="A bill, the way a page would use it">Overview</EHeading>
             <EStack :gap="vp.gap">
@@ -143,7 +134,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #actions>
+          <template v-if="scene === 'actions'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Buttons, menus and links">Actions</EHeading>
             <EStack :gap="vp.gap">
@@ -177,7 +168,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #forms>
+          <template v-if="scene === 'forms'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Fields and choices">Forms</EHeading>
             <EStack :gap="vp.gap">
@@ -205,7 +196,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #feedback>
+          <template v-if="scene === 'feedback'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Status, notices and progress">Feedback</EHeading>
             <EStack :gap="vp.gap">
@@ -247,7 +238,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #navigation>
+          <template v-if="scene === 'navigation'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Moving around">Navigation</EHeading>
             <EStack :gap="vp.gap">
@@ -276,7 +267,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #data>
+          <template v-if="scene === 'data'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Tables and dates">Data</EHeading>
             <EStack :gap="vp.gap">
@@ -293,7 +284,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #overlays>
+          <template v-if="scene === 'overlays'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Dialogs and floating layers">Overlays</EHeading>
             <EStack :gap="vp.gap">
@@ -316,7 +307,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #type>
+          <template v-if="scene === 'type'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Headings and text">Type</EHeading>
             <EStack :gap="vp.gap">
@@ -332,12 +323,21 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
             </EStack>
           </template>
-      </ETabs>
     </div>
   </ThemedScope>
+  </div>
 </template>
 
 <style scoped>
+.pv {
+  display: grid;
+  gap: var(--e-space-3);
+  min-width: 0;
+}
+.pv-scene {
+  justify-self: start;
+  min-width: 12rem;
+}
 .pv-wrap {
   min-width: 0;
   padding: var(--e-space-4);

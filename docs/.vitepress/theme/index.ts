@@ -14,6 +14,7 @@ import "./custom.css";
 import Layout from "./Layout.vue";
 import ComponentDemo from "./ComponentDemo.vue";
 import ComponentIndex from "./ComponentIndex.vue";
+import PlaygroundSkeleton from "./playground/PlaygroundSkeleton.vue";
 import { siteTheme, startScheme } from "./site-theme";
 
 export default {
@@ -28,6 +29,6 @@ export default {
     app.component("ComponentIndex", ComponentIndex);
     app.component("ContrastTable", defineAsyncComponent(() => import("./ContrastTable.vue")));
     app.component("TokenTables", defineAsyncComponent(() => import("./TokenTables.vue")));
-    app.component("ThemePlayground", defineAsyncComponent(() => import("./ThemePlayground.vue")));
+    app.component("ThemePlayground", defineAsyncComponent({ loader: () => import("./ThemePlayground.vue"), loadingComponent: PlaygroundSkeleton, delay: 0 }));
   },
 } satisfies Theme;
