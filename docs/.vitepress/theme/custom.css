@@ -718,7 +718,7 @@ body {
 /* The components index. */
 .component-index {
   display: grid;
-  gap: var(--e-space-4);
+  gap: var(--e-gap-section);
 }
 
 /* The first screen of the home page. */
