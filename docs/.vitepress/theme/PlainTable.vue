@@ -21,3 +21,10 @@ defineProps<{ caption: string; columns: { key: string; label: string }[]; rows: 
     </tbody>
   </ETable>
 </template>
+
+<style scoped>
+/* The first column is a token or input name: kept on one line, so a name never breaks at its hyphens. */
+td:first-child {
+  white-space: nowrap;
+}
+</style>
