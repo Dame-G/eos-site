@@ -23,8 +23,8 @@ import PlaygroundSkeleton from "./playground/PlaygroundSkeleton.vue";
 export default {
   Layout,
   enhanceApp({ app }) {
-    app.use(createEos({ locale: "en-US", currency: "USD", theme: siteTheme }));
-    if (typeof document !== "undefined") startScheme();
+    // The page ships both themes as CSS: the default tokens in style.css and the dark ones under [data-scheme="dark"], which the boot script sets before the first paint. Inline tokens would override that.
+    app.use(createEos({ locale: "en-US", currency: "USD", applyTheme: false }));
     app.component("ECodeBlock", ECodeBlock);
     app.component("EDisclosure", EDisclosure);
     app.component("EHighlight", EHighlight);

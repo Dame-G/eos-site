@@ -1,8 +1,5 @@
 import { computed, ref } from "vue";
-import { THEME_COLOR, darkTheme, lightTheme, STORAGE_KEY, type Choice } from "../scheme";
-
-/** The theme the site starts with. `startScheme` swaps it for the dark one when the visitor's choice or system asks. The playground previews other themes without touching it. */
-export const siteTheme = lightTheme;
+import { THEME_COLOR, STORAGE_KEY, type Choice } from "../scheme";
 
 const choice = ref<Choice>("system");
 const systemDark = ref(false);
@@ -18,9 +15,9 @@ function paintChrome(value: "light" | "dark") {
   for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')) meta.content = THEME_COLOR[value];
 }
 
+/** The tokens are CSS (`darkCss` in the head for the dark scheme), so switching is the attribute the boot script also sets. */
 function paint() {
   const root = document.documentElement;
-  (scheme.value === "dark" ? darkTheme : lightTheme).apply(root);
   root.dataset.scheme = scheme.value;
   root.style.colorScheme = scheme.value;
   paintChrome(scheme.value);
@@ -45,12 +42,6 @@ function saved(): Choice {
     /* Treated as "system". */
   }
   return "system";
-}
-
-/** Applies the right theme straight away, before the app mounts, without touching reactive state so the server and client markup agree. Browser only. */
-export function startScheme() {
-  const dark = saved() === "dark" || (saved() === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
-  (dark ? darkTheme : lightTheme).apply(document.documentElement);
 }
 
 /** Loads the saved choice into state and follows the system afterwards. Call it once the page has mounted. */
