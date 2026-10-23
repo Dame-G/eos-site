@@ -515,16 +515,10 @@ body {
   }
 }
 
-/* VitePress pads, rounds and tints every inline code element. EHighlight brings its own faint tint and no padding, so VitePress's own padding and tint are replaced, and commas sit right against it. */
+/* VitePress pads and rounds every inline code element. EHighlight's own tint (and its plain look inside a link) win over VitePress's layer, but it declares no padding, so commas sit right against it only once these are reset. */
 .vp-doc :not(pre) > code.e-highlight {
   padding: 0;
   border-radius: 0;
-  background-color: color-mix(in srgb, var(--e-secondary) 12%, transparent);
-}
-
-/* Inside a link the highlight gives way to the link, so it has no tint there. */
-.vp-doc a > code.e-highlight {
-  background-color: transparent;
 }
 
 .site-footer-links {
