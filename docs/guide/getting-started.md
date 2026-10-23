@@ -32,12 +32,10 @@ createApp(App).mount("#app");
 
 ## 3. Add the plugin and render a component
 
+In the same `main.ts`, install the plugin before mounting:
+
 ```ts
-// main.ts
-import { createApp } from "vue";
 import { createEos } from "@eos-ui/vue";
-import "@eos-ui/vue/style.css";
-import App from "./App.vue";
 
 createApp(App).use(createEos()).mount("#app");
 ```
@@ -81,9 +79,7 @@ Put it together: a form that checks its field, shows an error beside it, and con
 
 ## Next
 
-### Language, currency and theme
-
-Options of `createEos()`:
+Language, currency and theme are options of `createEos()`:
 
 ```ts
 createApp(App)
@@ -91,67 +87,6 @@ createApp(App)
   .mount("#app");
 ```
 
-See [Theming](/guide/theming), [Words and language](/guide/language) and the [API reference](/guide/api) for every option.
+See [Theming](/guide/theming), [Words and language](/guide/language) and the [API reference](/guide/api) for every option. [Install options](/guide/install) covers self-hosted fonts, auto-import, TypeScript, Nuxt and `llms.txt`.
 
-### Nuxt or a script tag
-
-- Nuxt: add `css: ["@eos-ui/vue/style.css"]` and install the plugin in `plugins/eos.ts`. See [Nuxt and SSR](/guide/ssr).
-- Script tag or CDN: there is no global build. EOS ships ES modules only, so use a bundler, or an import map that resolves `vue` and `@eos-ui/vue` to ES module URLs you host.
-
-### Fonts
-
-`@eos-ui/vue/fonts.css` is one `@import` of Bricolage Grotesque and Geist Mono from `fonts.googleapis.com`. It is optional. Importing it makes your visitors' browsers contact Google, and the font files come from Google's servers too.
-
-```ts
-import "@eos-ui/vue/fonts.css";
-```
-
-To serve the fonts yourself, skip `fonts.css` and install them from [Fontsource](https://fontsource.org). Their variable fonts register the families as "Bricolage Grotesque Variable" and "Geist Mono Variable", so pass those names to the theme:
-
-```bash
-npm install @fontsource-variable/bricolage-grotesque @fontsource-variable/geist-mono
-```
-
-```ts
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource-variable/geist-mono";
-
-createApp(App).use(
-  createEos({
-    theme: {
-      fonts: {
-        sans: '"Bricolage Grotesque Variable", "Avenir Next", system-ui, sans-serif',
-        mono: '"Geist Mono Variable", ui-monospace, Menlo, Consolas, monospace',
-      },
-    },
-  }),
-);
-```
-
-`fonts.sans` and `fonts.mono` are full CSS `font-family` stacks and set `--e-font-sans` and `--e-font-mono`. They work with any font you load. EOS never bundles fonts. Without any font loaded, the stack falls back to `system-ui`.
-
-### Auto-import
-
-With [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components):
-
-```ts
-// vite.config.ts
-import Components from "unplugin-vue-components/vite";
-import { EosResolver } from "@eos-ui/vue/resolver";
-
-export default {
-  plugins: [Components({ resolvers: [EosResolver()] })],
-};
-```
-
-### TypeScript
-
-EOS ships its own types, so there is nothing to install. Props, events and slots are typed in templates when you use Volar. unplugin-vue-components writes the global `components.d.ts` for auto-imported components (its `dts` option, on by default when TypeScript is installed), so commit it or add it to your `tsconfig` includes.
-
-### Using an AI assistant
-
-The site publishes [`/llms.txt`](/llms.txt), an index of every component. The complete documentation in one file ships in the package as `@eos-ui/vue/llms-full.txt` (and `@eos-ui/vue/llms.txt`), and the site serves it at `/llms-full.txt` when it is built against a library build that includes it. Hand either to an AI coding assistant so it writes correct props and slots.
-
-### Where to go from here
-
-[Which component should I use?](/guide/choosing), [Composing layouts](/guide/layouts), [Forms and validation](/guide/forms), [Components](/components/), [Patterns](/patterns/).
+Then: [Which component?](/guide/choosing), [Composing layouts](/guide/layouts), [Forms and validation](/guide/forms), [Components](/components/), [Patterns](/patterns/).

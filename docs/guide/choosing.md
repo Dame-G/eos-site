@@ -1,5 +1,5 @@
 ---
-title: Which component should I use?
+title: Which component?
 description: "Pairs of components that look alike, with the rule that picks between them."
 ---
 
@@ -7,7 +7,7 @@ description: "Pairs of components that look alike, with the rule that picks betw
 import Choosing from "./examples/Choosing.vue";
 </script>
 
-# Which component should I use?
+# Which component?
 
 Every component page says what it is for in its first line. This page collects the pairs people mix up.
 
@@ -38,6 +38,7 @@ Every component page says what it is for in its first line. This page collects t
 | A list row that opens to more | [`EExpandableRow`](/components/ExpandableRow) |
 | Switching views of the same record | [`ETabs`](/components/Tabs) |
 | Links to other pages | [`ENavList`](/components/NavList) |
+| A card that is one link, in an index of pages | [`ELinkCard`](/components/LinkCard) |
 | A few actions with no room for buttons | [`EMenu`](/components/Menu) |
 | A name for an icon-only button | [`ETooltip`](/components/Tooltip) |
 | An explanation of a term | [`EDefinition`](/components/Definition) |
@@ -60,7 +61,7 @@ Every component page says what it is for in its first line. This page collects t
 | Run a command from the keyboard | [`ECommandPalette`](/components/CommandPalette) |
 | Pick a value in a form | [`ECombobox`](/components/Combobox) |
 | A table to read | [`ETable`](/components/Table) |
-| A table to work in | [`EDataGrid`](/guide/data-tables) |
+| A table to work in | [`EDataGrid`](/components/DataGrid). See [Data tables](/guide/data-tables) |
 | Many pages of a list | [`EPagination`](/components/Pagination) |
 
 ## Dates and numbers

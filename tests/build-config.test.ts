@@ -69,6 +69,7 @@ describe("headers and redirects", () => {
   it("redirects /guide and each lower-case component address, which static assets match case-sensitively", () => {
     const file = redirectsFile(["Button", "TextField", "ab"]);
     expect(file).toContain("/guide/ /guide/getting-started 302");
+    expect(file).toContain("/guide/recipes /patterns/recipes 301");
     expect(file).toContain("/components/button /components/Button 301");
     expect(file).toContain("/components/textfield /components/TextField 301");
     expect(file).not.toContain("/components/ab ");

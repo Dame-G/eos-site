@@ -6,7 +6,7 @@ import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
 import { collectScriptHashes, headersFile, redirectsFile } from "./csp.mjs";
 import { GROUPS, groupedComponents, libraryBuildInfo, licenseText, listComponents, componentModified } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
-import { DESIGN, PATTERNS, guideSections } from "./pages.mjs";
+import { PATTERN_EXTRAS, guideSections, patternSections } from "./pages.mjs";
 import { areaOf, renderForSearch, searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
 import { BOOT_SCRIPT, THEME_COLOR, darkCss } from "./scheme";
@@ -41,14 +41,12 @@ const guide: DefaultTheme.SidebarItem[] = guideSections().map((s) => ({
   items: [...s.pages.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })), ...(s.title === "Reference" ? [{ text: "Changelog", link: "/changelog" }] : [])],
 }));
 
+// Grouped as the overview groups them, then the pages that are not whole patterns.
 const patterns: DefaultTheme.SidebarItem[] = [
-  {
-    text: "Patterns",
-    items: [{ text: "Overview", link: "/patterns/" }, ...PATTERNS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` }))],
-  },
+  { text: "Patterns", items: [{ text: "Overview", link: "/patterns/" }] },
+  ...patternSections().map((s) => ({ text: s.title, items: s.pages.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) })),
+  { text: "More", items: PATTERN_EXTRAS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) },
 ];
-
-const tools: DefaultTheme.SidebarItem[] = [{ text: "Design", items: DESIGN.map((d) => ({ text: d.name, link: `/${d.slug}` })) }];
 
 export default defineConfig({
   title: "EOS",
@@ -234,7 +232,6 @@ export default defineConfig({
       "/changelog": guide,
       "/components/": componentSidebar(),
       "/patterns/": patterns,
-      "/playground": tools,
     },
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],
     search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions }, _render: renderForSearch } },

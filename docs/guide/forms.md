@@ -84,4 +84,4 @@ On a long form a person may not see the field that failed. After a failed submit
 
 Controls with a `name` submit with the form, including Select, which carries its value in a hidden input.
 
-For choosing between controls, see [Which component should I use?](/guide/choosing). For a whole settings form with a toast, see [Settings page](/patterns/settings).
+For choosing between controls, see [Which component?](/guide/choosing). For a whole settings form with a toast, see [Settings page](/patterns/settings).

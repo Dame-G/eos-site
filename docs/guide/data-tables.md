@@ -1,5 +1,5 @@
 ---
-title: Data tables and DataGrid
+title: Data tables
 description: "Choose between ETable and EDataGrid, then sort, filter, select and format rows in the browser or from a server."
 ---
 
@@ -8,7 +8,7 @@ import ClientGrid from "./examples/ClientGrid.vue";
 import ServerGrid from "./examples/ServerGrid.vue";
 </script>
 
-# Data tables and DataGrid
+# Data tables
 
 ## Which one
 
