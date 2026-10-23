@@ -32,15 +32,19 @@ const letters = ["e", "o", "s"];
 
 .bubble-letters {
   display: inline-flex;
-  padding: 0.06em 0.08em 0;
+  padding: 0.06em 0.08em 0 0.041em;
   font-family: "Geist Mono", var(--e-font-mono);
   font-weight: 800;
   text-transform: uppercase;
 }
 
-/* The letters tuck together with a negative margin, not letter-spacing: spacing shortens each box so the glyph spills past its right edge, and Safari clips a filtered, animated layer to its box. That cut the S. */
-.bubble-letter + .bubble-letter {
-  margin-inline-start: -0.07em;
+/* The gaps are measured, not guessed: with these margins the nearest ink of E and O and of O and S is the same 0.027em apart. One shared spacing left E and O 0.044em apart and O and S almost touching, because the letters have different side bearings. The letters tuck together with a negative margin, not letter-spacing: spacing shortens each box so the glyph spills past its right edge, and Safari clips a filtered, animated layer to its box. That cut the S. */
+.bubble-letter:nth-child(2) {
+  margin-inline-start: -0.0867em;
+}
+
+.bubble-letter:nth-child(3) {
+  margin-inline-start: -0.0535em;
 }
 
 .bubble-letter {
