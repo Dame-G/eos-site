@@ -50,7 +50,7 @@ function clear() {
   <div class="pattern-md">
     <EStack :gap="4">
       <EPageHeader :heading-level="2" title="Find a document" description="Statements, receipts and forms." />
-      <ESearchBar v-model="typed" placeholder="Search by title or number" @submit="search" />
+      <ESearchBar clearable v-model="typed" placeholder="Search by title or number" @submit="search" />
       <EInline align="start">
         <EStack :gap="2">
           <EKicker as="span" aria-hidden="true">Type</EKicker>

@@ -34,7 +34,7 @@ const status = computed(() => (query.value.trim() ? (count.value ? `${count.valu
 
 <template>
   <div class="eos-live component-index">
-    <ESearchBar v-model="query" label="Filter components" placeholder="Filter by name, such as dropdown or modal" hide-action autocomplete="off" class="component-filter" />
+    <ESearchBar clearable v-model="query" label="Filter components" placeholder="Filter by name, such as dropdown or modal" hide-action autocomplete="off" class="component-filter" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ status }}</EVisuallyHidden>
 
     <EEmptyState v-if="!shown.length" title="No component matches that" icon="search" :heading-level="2">

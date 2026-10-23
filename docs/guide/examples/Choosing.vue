@@ -21,6 +21,6 @@ const clinic = ref("");
       :options="[{ value: 'all', label: 'All' }, { value: 'due', label: 'Needs payment' }, { value: 'paid', label: 'Paid' }]"
     />
     <ESelect v-model="select" label="Branch" :options="['Downtown', 'Harbour', 'Northside', 'Online', 'Uptown', 'Westend']" />
-    <ECombobox v-model="clinic" label="Clinic" placeholder="Type to search" :options="['Downtown Clinic', 'Harbour Clinic', 'Northside Clinic']" />
+    <ECombobox clearable v-model="clinic" label="Clinic" placeholder="Type to search" :options="['Downtown Clinic', 'Harbour Clinic', 'Northside Clinic']" />
   </EStack>
 </template>

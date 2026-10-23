@@ -33,7 +33,7 @@ function onKeydown(e: KeyboardEvent) {
 
 <template>
   <EStack>
-    <ESearchBar ref="field" v-model="query" label="Search the docs" placeholder="Search the docs" hide-action autocomplete="off" @keydown="onKeydown" />
+    <ESearchBar clearable ref="field" v-model="query" label="Search the docs" placeholder="Search the docs" hide-action autocomplete="off" @keydown="onKeydown" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ items.length }} results</EVisuallyHidden>
     <ESearchResults
       ref="results"

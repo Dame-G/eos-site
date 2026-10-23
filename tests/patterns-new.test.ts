@@ -99,6 +99,8 @@ describe("Command palette", () => {
     await userEvent.keyboard("{Enter}");
     await expect.element(page.getByText("October statement paid")).toBeVisible();
     await expect.element(page.getByText("Paid", { exact: true })).toBeVisible();
+    // The palette leaves on easing-exit and keeps the page aria-hidden until it has gone, while focus is already back on the button. Check once it has left.
+    await settle(1000);
     await expectNoViolations(document.body);
     console_.expectQuiet();
   });

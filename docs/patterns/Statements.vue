@@ -57,7 +57,7 @@ function search(q: string) {
   <div class="pattern-md">
     <EStack :gap="4">
       <EPageHeader :heading-level="2" title="Statements and receipts" description="Everything you have been billed, newest first." />
-      <ESearchBar v-model="typed" placeholder="Search by visit or statement number" @submit="search" />
+      <ESearchBar clearable v-model="typed" placeholder="Search by visit or statement number" @submit="search" />
 
       <EInline justify="between">
         <EActions label="Show">
