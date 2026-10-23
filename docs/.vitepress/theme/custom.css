@@ -87,23 +87,6 @@ body {
   font-family: var(--e-font-sans);
 }
 
-body:has(.site-body, .home) .site {
-  background: var(--site-ground);
-}
-
-/* The ground around the sheet is the text colour thinned into the surface, so it follows any theme and stays a step darker than the page. */
-.site {
-  --site-ground: color-mix(in srgb, var(--e-ink) 10%, var(--e-surface));
-}
-
-:root[data-scheme="dark"] .site {
-  --site-ground: var(--e-background);
-}
-
-.site .e-appfooter {
-  background: var(--e-surface);
-}
-
 .site {
   display: flex;
   flex-direction: column;
