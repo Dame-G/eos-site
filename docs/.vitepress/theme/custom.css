@@ -80,22 +80,8 @@ body {
   min-height: 100vh;
 }
 
-.site-brand {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--site-tap);
-  color: var(--e-primary);
-  font-size: var(--e-text-3xl);
-  line-height: 1;
-  text-decoration: none;
-}
-
 .site-topnav {
   display: none;
-}
-
-.e-appheader-logo {
-  gap: var(--e-gap-loose);
 }
 
 .site-menu-button {

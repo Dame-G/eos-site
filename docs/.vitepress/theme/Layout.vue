@@ -200,9 +200,9 @@ watch(
   <div class="site e-root e-shell">
     <ESkipLink href="#main" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
-    <EAppHeader sticky>
+    <EAppHeader sticky brand-label="EOS, home">
+      <template #brand><BubbleTitle decorative /></template>
       <template #logo>
-        <a class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></a>
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
