@@ -24,7 +24,7 @@ import PresetPicker from "./playground/PresetPicker.vue";
 import TokenOverrides from "./playground/TokenOverrides.vue";
 import { build, cssChanges, cssFull, derivedTokens, themeCode, variantCode } from "./playground/build";
 import { decode, encode } from "./playground/codec";
-import { CURRENCIES, LOCALES, MONO, NEUTRAL, SAFE, SANS, groundOf, initialState, type State, type VariantKey } from "./playground/model";
+import { CURRENCIES, LOCALES, MONO, NEUTRAL, SAFE, SANS, groundOf, initialState, withGround, type State, type VariantKey } from "./playground/model";
 import { applyPreset } from "./playground/presets";
 import { applyRandom } from "./playground/random";
 
@@ -95,7 +95,14 @@ function loadHash() {
     snapshot = sig();
   }
 }
+/** With no state in the address, start on the scheme the site is showing, so a visitor in dark mode gets a dark preview. A shared link keeps its own scheme. */
+function followSite() {
+  if (/^#t=/.test(location.hash) || document.documentElement.dataset["scheme"] !== "dark") return;
+  Object.assign(s, withGround("dark"));
+  snapshot = sig();
+}
 onMounted(() => {
+  followSite();
   loadHash();
   window.addEventListener("hashchange", loadHash);
 });
