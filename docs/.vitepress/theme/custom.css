@@ -721,10 +721,6 @@ body {
   gap: var(--e-space-4);
 }
 
-.component-group-kicker {
-  margin-top: var(--e-space-4);
-}
-
 /* The first screen of the home page. */
 .home-top {
   position: relative;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { EEmptyState, EGrid, EKicker, ESearchBar, ESurface, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EEmptyState, EGrid, ESearchBar, ESurface, EText, EVisuallyHidden } from "@eos-ui/vue";
 import { SYNONYMS } from "../search";
 
 interface Group {
@@ -9,17 +9,6 @@ interface Group {
   items: { name: string; summary: string }[];
 }
 const props = defineProps<{ groups: Group[] }>();
-
-/** What each group is for, in a few words. */
-const ROLE: Record<string, string> = {
-  layout: "Arrange things on the page: spacing, grids, surfaces and the page frame.",
-  content: "Show information: text, code, avatars, tables and status marks.",
-  actions: "Things you press to do something.",
-  forms: "Collect input: fields, choices, dates, files and signatures.",
-  navigation: "Move around: tabs, breadcrumbs, steppers and pages.",
-  feedback: "Tell people what is happening: messages, progress and empty states.",
-  overlays: "Open on top of the page: dialogs, drawers, menus and tooltips.",
-};
 
 
 const query = ref("");
@@ -51,7 +40,6 @@ const status = computed(() => (query.value.trim() ? (count.value ? `${count.valu
     </EEmptyState>
 
     <section v-for="g in shown" :key="g.id" :aria-labelledby="g.id" class="component-group">
-      <EKicker v-if="ROLE[g.id]" class="component-group-kicker">{{ ROLE[g.id] }}</EKicker>
       <h2 :id="g.id">{{ g.title }}</h2>
       <EGrid as="ul" min="17rem" :gap="3" class="component-list">
         <ESurface v-for="c in g.items" :key="c.name" as="li" small class="component-card">
