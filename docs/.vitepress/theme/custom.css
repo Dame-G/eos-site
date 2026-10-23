@@ -715,28 +715,10 @@ body {
   gap: var(--e-space-6);
 }
 
-.not-found-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-space-2) var(--e-space-6);
-  margin: var(--e-space-2) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
 /* The components index. */
 .component-index {
   display: grid;
   gap: var(--e-space-4);
-}
-
-.component-popular-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-space-2) var(--e-space-4);
-  margin: var(--e-space-2) 0 0;
-  padding: 0;
-  list-style: none;
 }
 
 .component-group-kicker {

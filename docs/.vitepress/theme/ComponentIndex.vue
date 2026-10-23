@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { EEmptyState, EGrid, EKicker, ELink, ESearchBar, ESurface, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EEmptyState, EGrid, EKicker, ESearchBar, ESurface, EText, EVisuallyHidden } from "@eos-ui/vue";
 import { SYNONYMS } from "../search";
 
 interface Group {
@@ -21,12 +21,9 @@ const ROLE: Record<string, string> = {
   overlays: "Open on top of the page: dialogs, drawers, menus and tooltips.",
 };
 
-/** The components most pages reach for first. A name the library does not have is skipped, so a renamed component never leaves a dead link. */
-const MOST_USED = ["Button", "TextField", "Field", "Select", "Dialog", "Table", "Tabs", "Toast", "Surface", "Notice"];
 
 const query = ref("");
 const known = computed(() => new Map(props.groups.flatMap((g) => g.items.map((c) => [c.name, c] as const))));
-const popular = computed(() => MOST_USED.flatMap((n) => (known.value.has(n) ? [known.value.get(n)!] : [])));
 
 const shown = computed(() => {
   const words = query.value.toLowerCase().split(/\s+/).filter(Boolean);
@@ -48,13 +45,6 @@ const status = computed(() => (query.value.trim() ? (count.value ? `${count.valu
   <div class="eos-live component-index">
     <ESearchBar v-model="query" label="Filter components" placeholder="Filter by name, such as dropdown or modal" hide-action autocomplete="off" class="component-filter" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ status }}</EVisuallyHidden>
-
-    <section v-if="!query.trim()" class="component-popular" aria-labelledby="most-used">
-      <EKicker id="most-used">Most used</EKicker>
-      <ul class="component-popular-list">
-        <li v-for="c in popular" :key="c.name"><ELink :href="`/components/${c.name}`">E{{ c.name }}</ELink></li>
-      </ul>
-    </section>
 
     <EEmptyState v-if="!shown.length" title="No component matches that" icon="search" :heading-level="2">
       Try a shorter word, or a name you know from another library, such as modal or snackbar.
