@@ -4,7 +4,8 @@ import vpDocCss from "vitepress/dist/client/theme-default/styles/components/vp-d
 import varsCss from "vitepress/dist/client/theme-default/styles/vars.css?raw";
 import { headersFile, inlineScripts, redirectsFile } from "../docs/.vitepress/csp-policy.mjs";
 import { SYNONYMS, areaOf, breadcrumb, componentDocs } from "../docs/.vitepress/search";
-import { THEME_CSS_MARK, isThemeCss, wrapInLayer } from "../docs/.vitepress/vitepress-layer";
+import customCss from "../docs/.vitepress/theme/custom.css?raw";
+import { DOC_SCOPE_LIMIT, THEME_CSS_MARK, isThemeCss, wrapInLayer } from "../docs/.vitepress/vitepress-layer";
 
 describe("vitepressInLayer", () => {
   const id = ["C:", "x", "node_modules", "vitepress", "dist", "client", "theme-default", "styles", "components", "vp-doc.css"].join(String.fromCharCode(92));
@@ -27,7 +28,9 @@ describe("vitepressInLayer", () => {
 
   it("scopes the doc styles so they stop at the demos and the library's own markup", () => {
     const out = wrapInLayer(".vp-doc h1 { margin: 0 }", id);
-    expect(out).toContain("@scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-acc, .e-details)");
+    expect(out).toContain("@scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-details)");
+    // The site's own doc rules stop at the same places.
+    expect(customCss).toContain(`@scope (.vp-doc) to (${DOC_SCOPE_LIMIT})`);
     expect(out).toContain(":scope h1");
   });
 
