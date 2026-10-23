@@ -1,7 +1,11 @@
 ---
 title: Getting started
-description: "Install EOS, import the stylesheet and draw your first component in three steps."
+description: "Install EOS, import the stylesheet, add the plugin and build a working form in three steps."
 ---
+
+<script setup>
+import FirstForm from "./examples/FirstForm.vue";
+</script>
 
 # Getting started
 
@@ -26,7 +30,19 @@ createApp(App).mount("#app");
 
 `@eos-ui/vue/style.css` is required. It holds every component's styles and the default theme, so a component without it renders unstyled. This is true with or without the plugin.
 
-## 3. Render a component
+## 3. Add the plugin and render a component
+
+```ts
+// main.ts
+import { createApp } from "vue";
+import { createEos } from "@eos-ui/vue";
+import "@eos-ui/vue/style.css";
+import App from "./App.vue";
+
+createApp(App).use(createEos()).mount("#app");
+```
+
+`createEos()` holds your language, currency, words, icons and theme. Toasts (`useToast()`), the locale of dates and amounts, and your theme all need it, so install it in every app. A single component draws without it, in English and US dollars with the default theme.
 
 ```vue
 <script setup lang="ts">
@@ -46,17 +62,30 @@ const email = ref("");
 - Every field needs a `label`, and takes `hint` and `error`.
 - Native attributes (`name`, `autocomplete`, `aria-*`) land on the real input. `class` and `style` land on the wrapper.
 
-That is a working setup. Components render in English and US dollars until you tell them otherwise. Set `<html lang>` yourself. EOS never does.
+Set `<html lang>` yourself on the server. In the browser `createEos({ locale })` sets `lang` and `dir` for you.
+
+## A working form
+
+Put it together: a form that checks its field, shows an error beside it, and confirms with a toast. Try it with the field empty, then with a real address.
+
+<div class="pattern-stage">
+  <FirstForm />
+</div>
+
+<<< @/guide/examples/FirstForm.vue
+
+- `@submit.prevent` stops the page reload, and `novalidate` lets your messages show in place of the browser's.
+- `error` replaces the hint, turns the edge red and is announced. It stays `undefined` until the first submit.
+- `EToastProvider` is where toasts appear, and `useToast()` works because step 3 installed `createEos()`.
+- More: [Forms and validation](/guide/forms) for errors, labels and your own controls, and [Settings page](/patterns/settings) for a whole form.
 
 ## Next
 
-### Add the plugin
+### Language, currency and theme
 
-`createEos()` holds your language, currency, words, icons and theme. It is also what makes `useToast()` work anywhere in the app.
+Options of `createEos()`:
 
 ```ts
-import { createEos } from "@eos-ui/vue";
-
 createApp(App)
   .use(createEos({ locale: "en-CA", currency: "CAD", theme: { brand: "#2c95b4" } }))
   .mount("#app");

@@ -1,11 +1,20 @@
 ---
 title: Composables
-description: "useAnnouncer, useShortcuts, useCopy and useToast: screen reader announcements, keyboard shortcuts, copying text and toasts."
+description: "useAnnouncer, useShortcuts, useCopy, useToast and the smaller helpers: when to reach for each one."
 ---
 
 # Composables
 
-Functions to call inside `setup()`. Each is exported from `@eos-ui/vue`. Signatures for all of them are in the [API reference](/guide/api).
+Functions to call inside `setup()`. Each is exported from `@eos-ui/vue`. This page says what each one is for. The types and signatures are in the [API reference](/guide/api#composables).
+
+| I want to | Use |
+| --- | --- |
+| Tell a screen reader something that is not on screen | [`useAnnouncer`](#useannouncer) |
+| Run code on a key press | [`useShortcuts`](#useshortcuts-map-options) |
+| Copy text and show that it worked | [`useCopy`](#usecopy-options) |
+| Show a message that goes away | [`useToast`](#usetoast) |
+| Format a date or an amount like the components do | [`useLocale`](#smaller-helpers) |
+| Build my own field or popup | [`useUid`, `useFieldAttrs`, `useQuietFocus`](#smaller-helpers) |
 
 ## `useAnnouncer()`
 
@@ -65,3 +74,8 @@ toast.show({ title: "Saved", tone: "success" });
 - `useUid(given?)`: a stable id for wiring a label, hint and error to a control. It matches between server and client. Pass the component's own `id` prop to let the consumer choose: `useUid(() => props.id)`.
 - `useLocale()`: month and weekday names, the first day of the week, date order and separator, and formatting and parsing of dates and money, from the configured locale.
 - `useFieldAttrs()`: for a control built on [`EField`](/components/Field). Keeps `class` and `style` on the wrapper and sends every other attribute to the real input. Use it with `defineOptions({ inheritAttrs: false })`.
+- `focusInside(event)`: a `@click` handler for a boxed input. A click on the padding or the symbol puts the cursor in the input, and buttons and links inside keep their own click. The library's own fields use it. Most apps build fields from [`ETextField`](/components/TextField) or [`EField`](/components/Field) and never need it.
+- `useQuietFocus(open, inside)`: for a popup of your own. A popup that opens or closes from outside (`v-model:open`, or open on first render) should not move focus, but one a person opened with the pointer or keys on its trigger should. Call `intent()` on that pointer or key, and `personOpened()` when the popup opens to ask which it was. `returnsFocus()` says whether focus was inside when it closed. `undoFocusSteal()` hands focus back to the element that had it, for a short window, when a popup library grabs it on mount.
+- `useDir()`: the text direction to use, from `createEos({ dir })` or else the locale. Pass it to a third-party part that assumes left to right.
+- `useConfig()`, `useMessages()`, `usePortalTarget()` and `useIconResolver()` read what `createEos()` provided: locale, words, where floating parts render and where icons come from. They are in the [API reference](/guide/api#config).
+- `useDetails(open, options?)`, `useOverflow(scroller)`, `useSize(props, name)`, `useFieldControl(props)` and `useFormField(entry)` are the helpers the library's own components share, for a component of your own that should behave the same: `<details>` that toggles and groups, a region that is a tab stop only while it scrolls, `size` with the older `small` and `large` flags, the id and ARIA wiring of a text field, and registering a field with [`EForm`](/components/Form). They are [advanced](/guide/api#usedetails-open-options).

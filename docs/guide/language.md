@@ -9,15 +9,15 @@ description: "Replace every word a component says. Money, dates and direction fo
 createEos({
   locale: "fr-CA",
   currency: "CAD",
-  dir: "rtl", // optional; null follows the document
+  dir: "rtl", // optional; by default it follows the locale (ar, he, fa and ur are right to left)
   messages: { required: "Obligatoire", optional: "Facultatif" },
 });
 ```
 
 - `locale` sets month and weekday names, first day of the week, date order and number formats.
 - `currency` is an ISO 4217 code: $162.40 in en-US, 162,40 $ in fr-CA.
-- `dir` mirrors layout and flips arrows. It sets the `dir` attribute on the theme target (`<html>` by default). With `dir: null` it follows the document.
-- EOS never sets `lang`. Set it on `<html>` yourself.
+- `dir` mirrors layout and flips arrows. Left out, it follows the locale: Arabic, Hebrew, Persian and Urdu are right to left. It is set as the `dir` attribute on the theme target (`<html>` by default), so menus and dialogs that render in `body` inherit it. Read the result in your own parts with [`useDir()`](/guide/composables#smaller-helpers).
+- When you pass a `locale`, `createEos()` also sets `lang` on the theme target. Without one it sets neither `lang` nor `dir`, and you set them on `<html>` yourself. On the server, always set both yourself: `createEos()` only touches the document in a browser.
 
 ## Messages
 

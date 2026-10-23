@@ -19,6 +19,13 @@ Built from: [`ESearchBar`](/components/SearchBar), [`EActions`](/components/Acti
 - Search narrows the list, the toggles filter it, and the count is announced.
 - "Needs payment" includes overdue statements.
 
+## Decisions
+
+- **`EExpandableRow`, not a table.** Each statement has a few facts and an action. Use `ETable` or `EDataGrid` when people compare values across rows.
+- **`ESearchBar` plus toggle buttons in `EActions`.** Search and a two-way filter are cheap to learn. Swap the toggles for `ESegmented` when the options are exclusive.
+- **`EPagination` only when there is more than one page.** Six rows need none. It shows how paging sits under the list.
+- **`EEmptyState` when filters match nothing.** It says why and offers a way out, which is better than an empty list.
+
 <EDisclosure title="Statements.vue">
 
 <<< @/patterns/Statements.vue

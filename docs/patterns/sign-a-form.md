@@ -19,6 +19,13 @@ Built from: [`ESignatureField`](/components/SignatureField), [`EUpload`](/compon
 - A signature can be typed or drawn.
 - Submit waits until the person has agreed and signed.
 
+## Decisions
+
+- **`ESignatureField`, not a checkbox.** A typed or drawn signature is evidence of who agreed, and it carries the agreement. A checkbox is enough when the law or policy only needs a yes.
+- **`EUpload` for attachments.** It lists files with Remove buttons and applies size and type limits.
+- **`EStamp` for status.** A word in a row says "Signed" or "Due" without colour alone. Swap to `ENotice` for a status that needs an action.
+- **Submit disabled until signed.** The notice above says what is missing. A disabled button does not explain itself, so always say why somewhere near it.
+
 <EDisclosure title="SignForm.vue">
 
 <<< @/patterns/SignForm.vue

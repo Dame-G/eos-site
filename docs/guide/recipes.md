@@ -61,7 +61,7 @@ A card with a title, a short description and one link, where the whole card is t
 
 .link-card:has(:focus-visible) {
   outline: var(--e-stroke-focus) solid var(--e-focus-ring);
-  outline-offset: var(--e-focus-gap);
+  outline-offset: var(--e-stroke-focus);
 }
 
 .link-card-link {

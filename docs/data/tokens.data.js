@@ -1,6 +1,10 @@
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { constants, contrast, defaults, defineTheme, derivedFrom } from "@eos-ui/tokens";
+
+import { INPUT_NOTES, NOT_INPUTS } from "./theme-inputs.js";
+import { firstSentence, interfaceMembers } from "./theme-source.js";
 
 const require = createRequire(import.meta.url);
 const file = require.resolve("@eos-ui/tokens/tokens.json");
@@ -61,24 +65,18 @@ function level(ratio, nonText) {
   return "Fails";
 }
 
-const INPUTS = [
-  ["brand", "The brand colour: action colour, tinted ground, input focus edge.", defaults["brand-blue"]],
-  ["accent", "A second brand colour for positive actions and the success tint.", defaults["brand-green"]],
-  ["danger", "The destructive action colour, its text and tint.", defaults["danger"]],
-  ["warning", "The caution colour: warning text and tint.", defaults["warning-strong"]],
-  ["background", "The page ground: the colour behind everything.", defaults["background"]],
-  ["surface", "Cards, fields, popovers and panels. A dark surface lifts the action colours.", defaults["surface"]],
-  ["foreground", "Text and lines: secondary text, edges, the focus outline.", defaults["ink"]],
-  ["fonts", "Font stacks, { sans, mono }. Never bundled.", "Bricolage Grotesque, Geist Mono"],
-  ["radius", "Corner style: sharp, default or round, or { sm, md, lg }.", "default"],
-  ["elevation", "How depth is drawn: outline, lifted or bold.", "outline"],
-  ["strokes", "Line weights in px, { hair, focus, edge, card }. edge and card default to 1.5 times hair and hair.", "{ hair: 1, focus: 2 }"],
-  ["contrast", "high draws borders in the foreground colour, muted text at 15:1, a neutral tint and a darker scrim.", "standard"],
-  ["textScale", "Multiplier for the type scale.", "1"],
-  ["spaceScale", "Multiplier for the spacing scale.", "1"],
-  ["controlHeight", "Height in px of every tappable control; chips follow at half.", "48"],
-  ["motion", "How state changes feel: default, snappy, gentle or none.", "default"],
-];
+/** The inputs come from ThemeInput in the tokens package, so a new input appears here without an edit. */
+function themeInputs() {
+  const source = readFileSync(join(dirname(file), "theme.ts"), "utf8");
+  return interfaceMembers(source, "ThemeInput")
+    .filter((m) => !NOT_INPUTS.includes(m.name))
+    .map((m) => {
+      const note = INPUT_NOTES[m.name];
+      const neutral = note?.neutral;
+      return [m.name, note?.controls ?? firstSentence(m.doc), typeof neutral === "object" ? defaults[neutral.token] : (neutral ?? "")];
+    });
+}
+
 
 const round = (n) => Math.round(n * 10) / 10;
 
@@ -131,7 +129,7 @@ export default {
 
     const theme = defineTheme({ name: "light" });
     const scale = (key) => json[key].tokens.map((t) => ({ name: t.name, value: t.value, usage: t.usage, ...provenance(t) }));
-    const inputs = INPUTS.map(([name, controls, neutral]) => ({
+    const inputs = themeInputs().map(([name, controls, neutral]) => ({
       name,
       controls,
       neutral,
@@ -151,6 +149,10 @@ export default {
       fontSize: scale("fontSize"),
       size: scale("size"),
       stroke: scale("stroke"),
+      // Newer token groups: the semantic spacing roles (gap, pad, gutter) and the type rhythm. Empty against an older tokens package.
+      layout: json.layout ? scale("layout") : [],
+      tracking: json.tracking ? scale("tracking") : [],
+      leading: json.leading ? scale("leading") : [],
       duration: scale("duration"),
       easing: scale("easing"),
       zIndex: scale("zIndex"),

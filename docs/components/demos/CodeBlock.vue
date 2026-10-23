@@ -21,7 +21,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <EStack>
+  <EStack gap="0">
     <ECodeBlock v-for="b in blocks" :key="b.id" :lang="b.lang" :code="b.code" :copy-label="b.copyLabel">
       <div v-if="html[b.id]" v-html="html[b.id]" />
     </ECodeBlock>

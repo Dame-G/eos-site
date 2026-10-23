@@ -14,6 +14,7 @@ import ToastsAndNotices from "./examples/ToastsAndNotices.vue";
 | Compared | [`useToast()`](/components/ToastProvider) | [`ENotice`](/components/Notice) |
 | --- | --- | --- |
 | Goes away | by itself, after 5 seconds | when the problem is dealt with, or the person closes it |
+| Close button | on by default; `EToast` takes `:closable="false"` to hide it | off by default, `closable` shows it |
 | Appears | floating, at the edge of the page | in the page, where it applies |
 | For | "Saved", "Payment received", "Statement removed, Undo" | a form error, a deadline, an outage, a failed payment |
 | Announced | politely (an error at once) | politely (an error at once) |

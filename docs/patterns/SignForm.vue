@@ -40,7 +40,7 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
             <p class="sign-title">{{ f.label }}</p>
             <p class="sign-text">{{ f.text }}</p>
           </div>
-          <EStamp class="sign-stamp" :status="f.status" size="sm" />
+          <EStamp class="sign-stamp" :status="f.status" small />
           <div class="sign-action">
             <EButton v-if="f.status === 'signed'" variant="quiet" icon="download">Download</EButton>
             <EButton v-else variant="outline">Review and sign</EButton>

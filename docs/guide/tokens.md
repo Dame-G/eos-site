@@ -24,10 +24,11 @@ You will almost never need more than these. Pick by the job, not by the colour.
 | Lines | `--e-border`, `--e-border-strong` | Hairlines and card outlines, then the edge of a control. |
 | Action | `--e-primary`, `--e-on-primary` | The main button and every selected state, then the text on it. |
 | Status | `--e-danger`, `--e-warning-strong`, `--e-secondary` | Errors, cautions and success, each with a `-soft` tint for backgrounds. |
-| Spacing | `--e-space-1` to `--e-space-8` | Every gap and padding, from 4px to 32px. |
+| Spacing | `--e-space-1` to `--e-space-8` | Every gap and padding, from 4px to 32px. Larger steps run to `--e-space-16`. |
+| Spacing, by job | `--e-gap-snug`, `--e-gap-base`, `--e-pad-card` | Named gaps and paddings that follow `spaceScale` and `density`. [Which one when](/guide/design-principles#spacing-and-layout-conventions). |
 | Corners | `--e-radius-sm`, `-md`, `-lg`, `-pill` | Match the component you sit beside. |
 | Lines, thick | `--e-stroke-hair`, `--e-stroke-edge`, `--e-stroke-focus` | The width of a hairline, of a control edge and of a focus ring. |
-| Focus | `--e-focus-ring`, `--e-focus-gap` | The colour of the keyboard focus outline and its distance from the element. |
+| Focus | `--e-focus-ring`, `--e-stroke-focus` | The colour of the keyboard focus outline, then its width, which is also its distance from the element. |
 | Type | `--e-font-sans`, `--e-font-mono`, `--e-text-xs` to `--e-text-4xl` | Mono is for numbers, dates and kickers. |
 
 A custom card built only from those:
@@ -55,7 +56,7 @@ Two rules keep a custom screen accessible. Put `ink` and `muted` only on `surfac
 
 ## The inputs
 
-`defineTheme()` takes 16 inputs and derives every token below from them, so you set a brand colour and a surface and the rest follows with its contrast checked. The **Derives** column lists what each input drives. Constants, such as `depth`, never change. Any token can still be set by name in `tokens`, and a token set that way wins over a derived value.
+`defineTheme()` takes the inputs below and derives every token from them, so you set a brand colour and a surface and the rest follows with its contrast checked. The **Derives** column lists what each input drives. Constants, such as `depth`, never change. Any token can still be set by name in `tokens`, and a token set that way wins over a derived value.
 
 <TokenTables section="inputs" />
 
@@ -81,11 +82,25 @@ The raw size scale the styles above use.
 
 <TokenTables section="fontSize" />
 
+### Letter spacing
+
+<TokenTables section="tracking" />
+
+### Line height
+
+<TokenTables section="leading" />
+
 ## Spacing
 
-A 4px scale from `space-1` (4px) to `space-8` (32px). Use the small steps between related things, the middle steps between groups, and `space-8` between sections.
+A 4px scale from `space-1` (4px) to `space-8` (32px), then `space-10`, `-12` and `-16` for page-sized gaps, and `space-5` and `-7` between the steps. Use the small steps between related things, the middle steps between groups, and `space-8` between sections.
 
 <TokenTables section="spacing" />
+
+### Layout spacing
+
+The gaps, paddings and gutter that components and layouts use, named by role. Each one is a step of the scale above.
+
+<TokenTables section="layout" />
 
 ## Radius
 
@@ -104,6 +119,12 @@ Control height (48px), the minimum tap size (44px) and the reading measure.
 ## Strokes and focus
 
 <TokenTables section="stroke" />
+
+### Slabs
+
+The raised edge under a fill.
+
+<TokenTables section="slab" />
 
 ## Motion
 
