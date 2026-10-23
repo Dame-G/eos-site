@@ -182,7 +182,7 @@ watch(
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
     <EAppHeader sticky>
       <template #logo>
-        <ELink class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></ELink>
+        <a class="site-brand" href="/" aria-label="EOS, home"><BubbleTitle decorative /></a>
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd small>/</EKbd></span>
         </EButton>
