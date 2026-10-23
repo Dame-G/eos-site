@@ -10,9 +10,7 @@ interface Group {
 }
 const props = defineProps<{ groups: Group[] }>();
 
-
 const query = ref("");
-const known = computed(() => new Map(props.groups.flatMap((g) => g.items.map((c) => [c.name, c] as const))));
 
 const shown = computed(() => {
   const words = query.value.toLowerCase().split(/\s+/).filter(Boolean);

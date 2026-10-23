@@ -220,7 +220,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 <template>
   <div class="playground eos-live">
     <section class="bar" aria-label="Presets">
-      <PresetPicker :model-value="s.preset" name="playground-preset" :tokens="tokens" select @select="usePreset" @random="useRandom" />
+      <PresetPicker :model-value="s.preset" :tokens="tokens" @select="usePreset" @random="useRandom" />
       <div class="bar-row">
         <div class="bar-info">
           <EText small muted role="status">{{ copied }}</EText>

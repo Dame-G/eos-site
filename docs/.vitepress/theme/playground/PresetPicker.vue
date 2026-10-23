@@ -8,9 +8,7 @@ import { PRESETS, applyPreset } from "./presets";
 
 const props = defineProps<{
   modelValue: string;
-  name?: string;
   tokens?: Record<string, string>;
-  select?: boolean;
 }>();
 const emit = defineEmits<{ select: [id: string]; random: [] }>();
 
