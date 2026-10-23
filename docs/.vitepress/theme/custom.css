@@ -784,3 +784,12 @@ body:has(.site-body, .home) .site {
   }
 }
 
+
+/* On a narrow phone the install line is wider than the block. Wrap it rather than scroll sideways behind the copy button. */
+@media (max-width: 24rem) {
+  .home-install pre,
+  .home-install code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
