@@ -18,7 +18,6 @@ export const GUIDE = [
   { group: "Platform", slug: "ssr", name: "Nuxt and SSR", note: "What was verified about server rendering" },
   { group: "Platform", slug: "accessibility", name: "Accessibility", note: "Contrast table, keyboard, forced colours, what is tested" },
   { group: "Platform", slug: "versioning", name: "Versioning and support", note: "Pre-1.0 stability, semver, supported Vue and browsers" },
-  { group: "Platform", slug: "upgrading", name: "Upgrading", note: "Before and after for every breaking change since 0.x" },
   { group: "Reference", slug: "api", name: "API reference", note: "createEos options, config, themes, messages, icons and the signature of every composable" },
   { group: "Reference", slug: "composables", name: "Composables", note: "useAnnouncer, useShortcuts, useCopy, useToast and the smaller helpers: when to reach for each one" },
 ];

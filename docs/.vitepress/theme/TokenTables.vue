@@ -109,9 +109,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           </div>
           <div class="meta">
             <p class="name">
-              <TokenName :name="c.name" /> <span class="hex"
-                ><template v-if="c.source.startsWith('{')">= </template><ColorValue :value="shownHex(c)"
-              /></span>
+              <TokenName :name="c.name" /> <span class="hex"><ColorValue :value="shownHex(c)" /></span>
             </p>
             <EText small muted class="usage">{{ c.usage }}</EText>
             <EText small muted class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
