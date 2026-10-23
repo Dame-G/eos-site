@@ -33,35 +33,43 @@ const built = computed(() => build(s));
 const tokens = computed(() => built.value.theme.tokens);
 const cssVars = computed(() => Object.fromEntries(Object.entries(tokens.value).map(([k, v]) => [`--e-${k}`, v])));
 
-const sig = () => JSON.stringify({ ...s, preset: "" });
-let snapshot = sig();
+// The state is serialised once per change. The same string says whether anything was edited since the last preset (then the preset reads "custom") and is what the address holds.
+const link = computed(() => encode(s));
+let snapshot = link.value;
+// What the address stands for. On load it is the state the page started on, so loading writes nothing.
+let shown = link.value;
+/** After a preset, or after loading, the state as it now stands is the starting point again. */
+function settle(loaded = false) {
+  snapshot = link.value;
+  if (loaded) shown = link.value;
+}
 function usePreset(id: string) {
   if (id === "random" || id === "custom") return;
   applyPreset(s, id);
-  snapshot = sig();
+  settle();
 }
 function useRandom() {
   applyRandom(s);
-  snapshot = sig();
+  settle();
 }
-watch(sig, (v) => {
-  if (v !== snapshot && s.preset !== "custom") s.preset = "custom";
-});
 
 let timer: ReturnType<typeof setTimeout> | undefined;
 const HASH = "#t=";
-watch(
-  () => encode(s),
-  (code) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      try {
-        history.replaceState(null, "", code ? `${HASH}${code}` : location.pathname + location.search);
-      } catch {
-      }
-    }, 200);
-  },
-);
+watch(link, (code) => {
+  if (code !== snapshot && s.preset !== "custom") {
+    s.preset = "custom";
+    return;
+  }
+  if (code === shown) return;
+  shown = code;
+  clearTimeout(timer);
+  // The address follows each edit in place, so the edits do not fill the history.
+  timer = setTimeout(() => {
+    try {
+      history.replaceState(history.state, "", code ? `${HASH}${code}` : location.pathname + location.search);
+    } catch {}
+  }, 200);
+});
 const copied = ref("");
 async function copyLink() {
   try {
@@ -92,14 +100,14 @@ function loadHash() {
   const loaded = m ? decode(m[1]!) : null;
   if (loaded && encode(loaded) !== encode(s)) {
     Object.assign(s, loaded);
-    snapshot = sig();
+    settle(true);
   }
 }
 /** With no state in the address, start on the scheme the site is showing, so a visitor in dark mode gets a dark preview. A shared link keeps its own scheme. */
 function followSite() {
   if (/^#t=/.test(location.hash) || document.documentElement.dataset["scheme"] !== "dark") return;
   Object.assign(s, withGround("dark"));
-  snapshot = sig();
+  settle(true);
 }
 onMounted(() => {
   followSite();
