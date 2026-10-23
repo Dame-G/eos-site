@@ -793,3 +793,8 @@ body:has(.site-body, .home) .site {
     overflow-wrap: anywhere;
   }
 }
+
+/* The page content is no longer its own stacking context, so a selected tab, a focused control or a raised card (z-index 1 to 3) would draw over the sticky header. The header sits just above them and under every dialog, menu and toast. */
+.site .e-appheader--sticky {
+  z-index: calc(var(--e-z-focus) + 1);
+}
