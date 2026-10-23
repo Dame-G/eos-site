@@ -71,6 +71,8 @@
 
 html {
   scroll-padding-top: calc(var(--site-header) + var(--e-space-4));
+  /* The home page fits the window and the other pages scroll. Keeping the scrollbar space on every page stops the sheet and its borders shifting sideways between them. */
+  scrollbar-gutter: stable;
 }
 
 body {
