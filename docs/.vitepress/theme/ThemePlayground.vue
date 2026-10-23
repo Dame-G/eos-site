@@ -414,13 +414,4 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
   }
 }
-
-/* The preview tabs scroll sideways on a narrow screen. The edge shadows show that there is more: each appears only on a side that has content scrolled out of view, drawn by the scroll position alone. */
-.stage-tabs :deep(.e-tablist) {
-  background:
-    linear-gradient(to right, var(--e-surface) 30%, transparent) left / 2rem 100% no-repeat local,
-    linear-gradient(to left, var(--e-surface) 30%, transparent) right / 2rem 100% no-repeat local,
-    linear-gradient(to right, var(--e-border-strong), transparent) left / 0.75rem 100% no-repeat scroll,
-    linear-gradient(to left, var(--e-border-strong), transparent) right / 0.75rem 100% no-repeat scroll;
-}
-</style>
+</style>
