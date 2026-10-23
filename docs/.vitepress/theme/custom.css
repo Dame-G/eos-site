@@ -299,7 +299,7 @@ body:has(.site-body, .home) .site {
   user-select: text;
 }
 
-/* Faint flowing lines behind the home content. It is an SVG pattern the browser rasterises once; the pointer's light is a masked copy slid about by transforms alone, so the page never repaints for them. */
+/* Faint flowing lines behind the home content, painted on a canvas by FlowField.vue. The ink is solid and the faintness is the canvas's opacity, which the compositor applies without repainting anything. */
 .flow-field {
   position: absolute;
   inset: 0;
@@ -316,21 +316,13 @@ body:has(.site-body, .home) .site {
   height: 100%;
 }
 
-.fl {
-  fill: currentColor;
-}
-
-/* The opacity sits on the whole group, so where one tile overlaps the next the line is not darker. */
 .flow-base {
   color: var(--e-ink);
-}
-
-.flow-lines {
   opacity: 0.019;
 }
 
 /* Dark ink on a light page needs more to be seen at all. */
-:root[data-scheme="light"] .flow-lines {
+:root[data-scheme="light"] .flow-base {
   opacity: 0.14;
 }
 
