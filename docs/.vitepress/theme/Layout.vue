@@ -1,7 +1,21 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { EAppFooter, EAppHeader, EButton, EDefinition, EDrawer, EIconButton, EKbd, EKicker, ELink, ENavList, ESegmented, ESelect, ESkipLink, EText, EVisuallyHidden } from "@eos-ui/vue";
+import { EAppFooter } from "@eos-ui/vue/components/EAppFooter";
+import { EAppHeader } from "@eos-ui/vue/components/EAppHeader";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { EDefinition } from "@eos-ui/vue/components/EDefinition";
+import { EDrawer } from "@eos-ui/vue/components/EDrawer";
+import { EIconButton } from "@eos-ui/vue/components/EIconButton";
+import { EKbd } from "@eos-ui/vue/components/EKbd";
+import { EKicker } from "@eos-ui/vue/components/EKicker";
+import { ELink } from "@eos-ui/vue/components/ELink";
+import { ENavList } from "@eos-ui/vue/components/ENavList";
+import { ESegmented } from "@eos-ui/vue/components/ESegmented";
+import { ESelect } from "@eos-ui/vue/components/ESelect";
+import { ESkipLink } from "@eos-ui/vue/components/ESkipLink";
+import { EText } from "@eos-ui/vue/components/EText";
+import { EVisuallyHidden } from "@eos-ui/vue/components/EVisuallyHidden";
 import type { NavItem } from "@eos-ui/vue";
 import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
@@ -42,7 +56,6 @@ const githubUrl = computed(() => {
   const github = (theme.value.socialLinks ?? []).find((s: { icon: unknown }) => s.icon === "github") as { link: string } | undefined;
   return github?.link;
 });
-
 
 const sections = computed(() => toSections(sidebarFor(theme.value.sidebar, route.path), route.path));
 const hasSidebar = computed(() => !isHome.value && !page.value.isNotFound && frontmatter.value.sidebar !== false && sections.value.length > 0);

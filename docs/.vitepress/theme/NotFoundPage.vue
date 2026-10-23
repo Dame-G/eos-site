@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useData, useRouter } from "vitepress";
-import { EActions, EButton, EEmptyState, EKbd } from "@eos-ui/vue";
+import { EActions } from "@eos-ui/vue/components/EActions";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { EEmptyState } from "@eos-ui/vue/components/EEmptyState";
+import { EKbd } from "@eos-ui/vue/components/EKbd";
 import { pageByCase } from "./nav";
 
 defineEmits<{ search: [] }>();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ESkeleton } from "@eos-ui/vue";
+import { ESkeleton } from "@eos-ui/vue/components/ESkeleton";
 </script>
 
 <template>
