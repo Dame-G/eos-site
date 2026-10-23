@@ -11,12 +11,13 @@ import { PRESETS, applyPreset } from "../docs/.vitepress/theme/playground/preset
 
 describe("playground export", () => {
   for (const preset of PRESETS) {
-    it(`${preset.label} is reproduced by defineTheme(input) with no raw token overrides`, () => {
+    // The edge and card strokes have no input of their own now that strokes.edge and strokes.card are deprecated, so they are the only raw tokens a preset may set.
+    it(`${preset.label} is reproduced by defineTheme(input) with no raw token overrides but the strokes`, () => {
       const s = initialState();
       applyPreset(s, preset.id);
       const b = build(s);
-      expect(b.extra).toEqual({});
-      expect(b.input.tokens).toBeUndefined();
+      const raw = Object.keys(b.input.tokens ?? {}).filter((k) => k !== "stroke-edge" && k !== "stroke-card");
+      expect(raw).toEqual([]);
       expect(defineTheme(b.input).tokens).toEqual(b.theme.tokens);
     });
   }
