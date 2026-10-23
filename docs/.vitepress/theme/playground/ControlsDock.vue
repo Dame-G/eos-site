@@ -10,9 +10,12 @@ import { EVisuallyHidden } from "@eos-ui/vue";
 </template>
 
 <style scoped>
+/* The dock clips what overflows sideways. The panel inside reaches a little past the column so a focused field's outline is not cut, so the dock has that much room on its sides too, taken back with the margin so it still lines up with the page. */
 .dock {
   min-width: 0;
   overflow-x: clip;
+  padding-inline: calc(2 * var(--e-stroke-focus));
+  margin-inline: calc(-2 * var(--e-stroke-focus));
 }
 .dock:focus {
   outline: none;
