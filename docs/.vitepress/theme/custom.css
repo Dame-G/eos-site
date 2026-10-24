@@ -83,9 +83,11 @@ body {
   margin-inline-end: var(--e-gap-tight);
 }
 
+/* Lowercase letters have no ascenders, so their ink sits low in the line box. Lifted by that much, the word's x-height is centred on the tile. */
 .site-mark {
   font-size: var(--e-text-3xl);
   line-height: 1;
+  transform: translateY(-0.15em);
 }
 
 .site-topnav {
