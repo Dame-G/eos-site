@@ -209,6 +209,13 @@ body {
   --e-control-height: 2rem;
 }
 
+/* With no rule between them, a small gap keeps the rows from touching. */
+.site-side .e-nav ul,
+.site-outline .e-nav ul,
+.site-drawer .e-nav ul {
+  gap: var(--e-space-1);
+}
+
 @media (pointer: coarse) {
   .site-side .e-nav,
   .site-outline .e-nav,
@@ -225,8 +232,7 @@ body {
   line-height: 1.3;
 }
 
-/* Only the sidebar draws the current page as a raised row. The header's current section and the outline's current heading are marked by colour and weight alone, so one place on screen says where you are. */
-.site-topnav .e-nav-item[aria-current="page"],
+/* The header's current section and the sidebar's current page both take the library's raised row: you are in Components and on EAppHeader. The outline's current heading is marked by colour and weight alone, because it moves as you scroll. */
 .site-outline .e-nav-item[aria-current="page"] {
   --_slab: transparent;
   --_lift: 0px;
