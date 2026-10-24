@@ -604,10 +604,20 @@ body {
 
 /* The frame every demo shares: a bar with the preview options, then the stage. */
 .demo-frame {
-  border: var(--e-stroke-edge) solid var(--e-border);
+  position: relative;
   border-radius: var(--e-radius-md);
   overflow: clip;
   background: var(--e-surface);
+}
+
+/* The edge is drawn over the content, not around it: the bar's tint and the stage run to the frame's outer curve, and the line sits on top. With a border of its own, the clip's soft edge let a sliver of the frame's background through between the tint and the border at the top corners. */
+.demo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--e-stroke-edge) solid var(--e-border);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .demo-bar {
