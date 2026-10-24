@@ -641,6 +641,11 @@ body {
   margin-bottom: calc(-1 * var(--e-space-6));
 }
 
+/* An open disclosure clips its content at the top edge, and a code block's border is a 1px ring drawn outside its box, so the ring was cut off wherever the browser ignores the clip margin. A little padding keeps the ring inside the clip. */
+.site-article .e-details-body {
+  padding-block-start: var(--e-space-1);
+}
+
 /* Numbered steps: a list written straight into a page counts its items in the mono face, like the kickers. */
 .site-article.vp-doc > div > ol {
   padding-inline-start: 0;
