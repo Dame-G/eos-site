@@ -86,7 +86,7 @@ export interface Ground {
 const SCHEMES: Record<Exclude<Scheme, "custom">, Ground> = {
   light: { ...DEFAULT_GROUND },
   paper: { background: "#f7f0e3", surface: "#fffdf7", foreground: "#1f1a14" },
-  dark: { background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" },
+  dark: { background: "#0d0a12", surface: "#14111a", foreground: "#ffffff" },
   contrast: { ...DEFAULT_GROUND },
 };
 
