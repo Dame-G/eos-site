@@ -73,18 +73,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* The ground outside the sheet is a neutral grey, not the theme's lavender tint. */
-  --site-ground: #f4f4f5;
-  background: var(--site-ground);
-}
-
-:root[data-scheme="dark"] .site {
-  --site-ground: #1e1e22;
-}
-
-/* The playground's "apply to the whole page" puts its theme on the root: the ground outside the sheet follows it too. */
-:root[data-page-theme] .site {
-  --site-ground: var(--e-background);
 }
 
 /* The brand link already sits a gap before the search button; the library's extra end margin doubled it. */

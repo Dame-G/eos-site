@@ -87,8 +87,6 @@ function syncPage() {
   const root = document.documentElement;
   for (const k of pageKeys) root.style.removeProperty(k);
   pageKeys = [];
-  // The grey ground outside the sheet is the site's own; while a theme is on the page it follows the theme's background (custom.css).
-  root.toggleAttribute("data-page-theme", wholePage.value);
   if (!wholePage.value) return;
   for (const [k, v] of Object.entries(cssVars.value)) {
     root.style.setProperty(k, v);
