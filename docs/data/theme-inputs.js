@@ -17,7 +17,7 @@ export const INPUT_NOTES = {
   radius: { controls: "Corner style: sharp, default or round, a base radius in px, or { sm, md, lg }.", neutral: "default" },
   preset: { controls: "A named look that sets elevation, strokes, radius and motion together: paper, ink or quiet. Your own entries win.", neutral: "paper" },
   elevation: { controls: "How depth is drawn: outline, lifted or bold.", neutral: "outline" },
-  strokes: { controls: "Line weights in px, { hair, focus }. The edge and card strokes follow hair; strokes.edge and strokes.card are deprecated.", neutral: "{ hair: 1, focus: 2 }" },
+  strokes: { controls: "Line weights in px, { hair, focus }. The edge and card strokes follow hair; pin one with stroke-edge or stroke-card in tokens.", neutral: "{ hair: 1, focus: 2 }" },
   contrast: { controls: "high draws borders in the foreground colour, muted text at 15:1, a neutral tint and a darker scrim. auto switches to high under prefers-contrast: more.", neutral: "standard" },
   scheme: { controls: "auto keeps the theme light and applies the dark input when the visitor prefers a dark page.", neutral: "fixed" },
   dark: { controls: "The inputs that change on a dark page when scheme is auto, usually surface and foreground.", neutral: "a dark surface" },
@@ -25,7 +25,7 @@ export const INPUT_NOTES = {
   textScale: { controls: "Multiplier for the type scale.", neutral: "1" },
   spaceScale: { controls: "Multiplier for the spacing scale.", neutral: "1" },
   controlHeight: { controls: "Height in px of every tappable control; chips follow at half.", neutral: "48" },
-  motion: { controls: "How state changes feel: default, snappy or gentle. none is deprecated.", neutral: "default" },
+  motion: { controls: "How state changes feel: default, snappy or gentle.", neutral: "default" },
 };
 
 /** Members of ThemeInput that are options, not inputs that derive tokens. */

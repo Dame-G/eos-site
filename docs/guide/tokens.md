@@ -92,7 +92,7 @@ The raw size scale the styles above use.
 
 ## Spacing
 
-A 4px scale from `space-1` (4px) to `space-8` (32px), then `space-10`, `-12` and `-16` for page-sized gaps, and `space-5` and `-7` between the steps. Use the small steps between related things, the middle steps between groups, and `space-8` between sections.
+A 4px scale from `space-1` (4px) to `space-8` (32px), then `space-10`, `-12` and `-16` for page-sized gaps, and `space-5` between the steps. Use the small steps between related things, the middle steps between groups, and `space-8` between sections.
 
 <TokenTables section="spacing" />
 
@@ -137,9 +137,3 @@ Short durations and one easing. Components switch their motion off for people wh
 A short, named stack, so layers never need a number you make up.
 
 <TokenTables section="zIndex" />
-
-## Deprecated tokens
-
-Still emitted, so CSS that reads them keeps working, and removed in a later major version. `defineTheme` warns when you set one in `tokens`, and `theme.explain()` and the design-tokens export (`$deprecated`) name them. The tables above leave them out.
-
-<TokenTables section="deprecated" />

@@ -10,7 +10,7 @@ import PlainTable from "./PlainTable.vue";
 import { data } from "../../data/tokens.data.js";
 
 defineProps<{
-  section: "inputs" | "colour" | "type" | "spacing" | "layout" | "radius" | "shadow" | "fontSize" | "tracking" | "leading" | "size" | "stroke" | "slab" | "motion" | "zIndex" | "deprecated";
+  section: "inputs" | "colour" | "type" | "spacing" | "layout" | "radius" | "shadow" | "fontSize" | "tracking" | "leading" | "size" | "stroke" | "slab" | "motion" | "zIndex";
 }>();
 
 type Partner = { name: string; value: string; role: string; ratio: number; level: string };
@@ -91,21 +91,6 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       <template #cell-neutral="{ row }"
         ><ColorValue :value="row.neutral as string"
       /></template>
-    </PlainTable>
-
-    <PlainTable
-      v-else-if="section === 'deprecated'"
-      caption="Deprecated tokens"
-      :columns="[token, { key: 'note', label: 'Instead' }]"
-      :rows="withId(data.deprecated as { name: string; note: string }[])"
-    >
-      <template #cell-name="{ row }"><TokenName :name="row.name as string" /></template>
-      <template #cell-note="{ row }"
-        ><template v-for="(part, i) in (row.note as string).split('`')" :key="i"
-          ><EHighlight v-if="i % 2" code>{{ part }}</EHighlight
-          ><template v-else>{{ part }}</template></template
-        ></template
-      >
     </PlainTable>
 
     <template v-else-if="section === 'colour'">

@@ -103,7 +103,7 @@ The direction to use: `dir` from `createEos()` when set, otherwise the one the l
 
 ```ts
 function useLogicalSide(side: () => LogicalSide): ComputedRef<"top" | "bottom" | "left" | "right">;
-type LogicalSide = "top" | "bottom" | "start" | "end" | "left" | "right";
+type LogicalSide = "top" | "bottom" | "start" | "end";
 ```
 
 The physical side for a floating part of your own: `start` and `end` become `left` and `right` in a left-to-right page, and the other way round in a right-to-left one.
@@ -154,7 +154,7 @@ function defineTheme(input: ThemeInput): Theme;
 
 Re-exported from `@eos-ui/tokens`. Derives every token from a few colours and checks the contrast of each pair the system promises.
 
-The inputs, with their types and what each one derives, are listed once, under [The inputs](/guide/theming#the-inputs) in Theming. `@eos-ui/tokens` also exports `deprecated`, the names of the [deprecated tokens](/guide/tokens#deprecated-tokens).
+The inputs, with their types and what each one derives, are listed once, under [The inputs](/guide/theming#the-inputs) in Theming.
 
 A `Theme` has:
 

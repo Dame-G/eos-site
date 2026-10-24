@@ -15,7 +15,7 @@ import ServerGrid from "./examples/ServerGrid.vue";
 - [`ETable`](/components/Table) is a plain table for facts that are read: prices, specifications, comparisons. You write the `thead` and `tbody`.
 - [`EDataGrid`](/components/DataGrid) is for rows people work with: sort, filter, search, select, page. You give it `columns` and `rows`.
 
-A short static list in a grid, with no toolbar, is `bare`.
+A short static list with no toolbar is an `ETable`. Every grid has its foot.
 
 ## Client mode
 
