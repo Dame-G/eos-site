@@ -82,6 +82,11 @@ body {
   --site-ground: #1e1e22;
 }
 
+/* The playground's "apply to the whole page" puts its theme on the root: the ground outside the sheet follows it too. */
+:root[data-page-theme] .site {
+  --site-ground: var(--e-background);
+}
+
 /* The brand link already sits a gap before the search button; the library's extra end margin doubled it. */
 .site .e-appheader-brand:not(:last-child) {
   margin-inline-end: 0;
@@ -353,7 +358,7 @@ body {
 
 /* Dark ink on a light page needs more to be seen at all. */
 :root[data-scheme="light"] .flow-base {
-  opacity: 0.16;
+  opacity: 0.3;
 }
 
 @keyframes flow-in {

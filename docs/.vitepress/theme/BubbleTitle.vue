@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// The eos wordmark: lowercase Outfit SemiBold, the face of the logo, in a single colour. On the home page the letters float together, barely; the decorative copy in the header does not move at all, and stands on a slab of its colour darkened.
+// The eos wordmark: lowercase Outfit SemiBold, the face of the logo, in a single colour. On the home page the letters float together, barely; the decorative copy in the header does not move at all.
 // It sizes with the text around it and takes its colour from `color`. Screen readers get the word, not the letters.
 defineProps<{ decorative?: boolean }>();
 const letters = ["e", "o", "s"];
@@ -61,15 +61,9 @@ const letters = ["e", "o", "s"];
   }
 }
 
-/* The small one in the header stays still and stands on its slab; the home page's title is flat. */
+/* The small one in the header stays still. */
 .bubble--still .bubble-letter {
-  filter: drop-shadow(0 0.028em 0 color-mix(in srgb, currentColor var(--slab, 86%), black));
   animation: none;
-}
-
-/* On the dark page the slab has to be a good deal darker than the letters to read as depth. */
-:root[data-scheme="dark"] .bubble-letter {
-  --slab: 58%;
 }
 
 @media (prefers-reduced-motion: reduce) {
