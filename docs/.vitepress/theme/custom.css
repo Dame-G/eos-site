@@ -196,16 +196,24 @@ body {
   }
 }
 
-/* The side lists are plain rows: no rule between them, and on a desktop pointer the rows are short enough to show a whole group. Touch keeps the full tap target. */
+/* The side lists, and the same lists in the phone menu, are plain rows: no rule between them, and short enough to show a whole group. A touch screen gets a little more height per row so a finger still lands on one. */
 .site-side .e-nav li + li::before,
-.site-outline .e-nav li + li::before {
+.site-outline .e-nav li + li::before,
+.site-drawer .e-nav li + li::before {
   content: none;
 }
 
-@media (pointer: fine) {
+.site-side .e-nav,
+.site-outline .e-nav,
+.site-drawer .e-nav {
+  --e-control-height: 2rem;
+}
+
+@media (pointer: coarse) {
   .site-side .e-nav,
-  .site-outline .e-nav {
-    --e-control-height: 2rem;
+  .site-outline .e-nav,
+  .site-drawer .e-nav {
+    --e-control-height: 2.5rem;
   }
 }
 

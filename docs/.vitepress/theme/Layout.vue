@@ -255,7 +255,7 @@ watch(
       </nav>
     </EAppFooter>
 
-    <EDrawer v-model:open="menuOpen" side="start" title="Menu">
+    <EDrawer v-model:open="menuOpen" side="start" title="Menu" class="site-drawer">
       <ESegmented class="site-drawer-scheme" label="Colour scheme" :model-value="schemeChoice" :options="SCHEME_OPTIONS" @update:model-value="chooseScheme($event as Choice)" />
       <ENavList label="Site menu" :items="menuSplit.before" />
       <div v-if="hasSidebar" class="site-drawer-pages">
