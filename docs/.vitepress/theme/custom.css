@@ -70,6 +70,7 @@ body {
 
 .site {
   --e-shell-width: var(--site-wide);
+  --site-logo: 2rem;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -80,17 +81,17 @@ body {
   margin-inline-end: 0;
 }
 
-/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it, at their own size. The word takes the link's colours, which are the library's. */
+/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it. The word takes the link's colours, which are the library's. The word is sized from the tile, in the proportion of the library's own lockup (brand/logo.svg, which the share image uses as it is): there its letters are 31.43 of the tile's 64 units tall, and Outfit's are 0.51 of the font size, so the font size is 0.963 of the tile. */
 .site-logo {
   display: block;
-  width: 2rem;
-  height: 2rem;
+  width: var(--site-logo);
+  height: var(--site-logo);
   margin-inline-end: var(--e-gap-tight);
 }
 
 /* Lowercase letters have no ascenders, so their ink sits low in the line box. Lifted by that much, the word's x-height is centred on the tile. */
 .site-mark {
-  font-size: var(--e-text-3xl);
+  font-size: calc(var(--site-logo) * 0.963);
   line-height: 1;
   transform: translateY(-0.15em);
 }
