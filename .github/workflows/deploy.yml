@@ -29,10 +29,11 @@ jobs:
       - uses: actions/checkout@v7
         with:
           path: eos-site
-      # The same gates as CI. Production shows the latest released library unless a ref is given by hand or in EOS_REF, so it never documents unreleased code.
+      # The build and a sample of pages; the pull request ran every gate. Production shows the latest released library unless a ref is given by hand or in EOS_REF, so it never documents unreleased code.
       - uses: ./eos-site/.github/actions/verify
         with:
           eos-ref: ${{ inputs.eos_ref || vars.EOS_REF || 'latest-release' }}
+          full: false
 
       - name: Warn when Cloudflare secrets are missing
         if: env.HAS_CLOUDFLARE != 'true'

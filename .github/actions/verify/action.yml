@@ -1,10 +1,13 @@
 name: Build and verify the docs
-description: Checks out and builds the library, then builds the site and runs every gate (knip, tests, page checks in both schemes, server rendering). Used by CI and Deploy so they cannot drift apart. The site must already be checked out at ./eos-site.
+description: Checks out and builds the library, then builds the site and checks it. Used by CI (every gate, every page) and Deploy (the build and a sample of pages, since the pull request already ran the rest). The site must already be checked out at ./eos-site.
 
 inputs:
   eos-ref:
     description: "Library ref to build against: a branch, a tag or a commit. The word latest-release means the highest released @eos-ui/vue@x.y.z tag."
     required: true
+  full:
+    description: "true runs knip, the tests and the page checks on every page. false builds and checks a sample of pages."
+    default: "true"
 
 runs:
   using: composite
@@ -32,19 +35,22 @@ runs:
         echo "ref=refs/tags/$tag" >> "$GITHUB_OUTPUT"
         echo "Building against the latest released library: $tag"
 
-    # The site documents the public library, so both are checked out side by side.
+    # The site documents the public library, so both are checked out side by side. Full history, because each component
+    # page shows when its folder last changed (git log); file contents are fetched only for the checked-out commit.
     - uses: actions/checkout@v7
       with:
         repository: Dame-G/eos
         ref: ${{ steps.ref.outputs.ref }}
         path: eos
         fetch-depth: 0
-        fetch-tags: true
+        filter: blob:none
+        persist-credentials: false
 
-    - run: corepack enable
-      shell: bash
+    - uses: pnpm/action-setup@v6
+      with:
+        package_json_file: eos-site/package.json
 
-    # Node 22 is the lowest version both repositories allow (engines >=22) and the one this site has always been checked on.
+    # Node 22 is the lowest version both repositories allow (engines >=22).
     - uses: actions/setup-node@v7
       with:
         node-version: 22
@@ -58,7 +64,7 @@ runs:
       working-directory: eos
       run: |
         pnpm install --frozen-lockfile
-        pnpm -r --workspace-concurrency=1 build
+        pnpm build
 
     - name: Install the site
       shell: bash
@@ -68,6 +74,7 @@ runs:
         pnpm exec playwright install --with-deps chromium
 
     - name: Find unused files, exports and dependencies
+      if: inputs.full == 'true'
       shell: bash
       working-directory: eos-site
       run: pnpm knip
@@ -83,12 +90,14 @@ runs:
       run: pnpm build:check
 
     - name: Test
+      if: inputs.full == 'true'
       shell: bash
       working-directory: eos-site
       run: pnpm test
       env:
         CI: "true"
 
+    # Every page with --all; otherwise the static pages and a few components.
     - name: Check pages (light and dark)
       shell: bash
       working-directory: eos-site
@@ -97,6 +106,6 @@ runs:
         preview=$!
         trap 'kill $preview' EXIT
         for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
-        pnpm pages:check http://127.0.0.1:4173 --all
+        pnpm pages:check http://127.0.0.1:4173 ${{ inputs.full == 'true' && '--all' || '' }}
       env:
         CI: "true"
