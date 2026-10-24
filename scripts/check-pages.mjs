@@ -13,8 +13,9 @@ const shots = args.includes("--shots") ? args[args.indexOf("--shots") + 1] : nul
 const only = args.includes("--scheme") ? args[args.indexOf("--scheme") + 1] : null;
 const schemes = only ? [only] : ["light", "dark"];
 // Pages are checked this many at a time.
-const jobs = args.includes("--jobs") ? Number(args[args.indexOf("--jobs") + 1]) : 4;
-// Each scheme is checked on a desktop and on a phone. The phone pass only looks for errors and sideways scrolling.
+const jobs = args.includes("--jobs") ? Number(args[args.indexOf("--jobs") + 1]) : 8;
+// Each scheme is checked on a desktop. The phone pass only looks for errors and sideways scrolling, which do not depend
+// on the scheme, so it runs in the first scheme only.
 const viewports = [
   { name: "desktop", width: 1280, height: 900, axe: true },
   { name: "phone", width: 375, height: 800, axe: false },
@@ -72,7 +73,7 @@ async function check(context, viewport, scheme, path) {
 }
 
 for (const scheme of schemes) {
-  for (const viewport of viewports) {
+  for (const viewport of viewports.filter((v) => v.axe || scheme === schemes[0])) {
     console.log(`\n${scheme} scheme, ${viewport.name}`);
     // The site reads the saved choice before the first paint (docs/.vitepress/scheme.ts), so it is set before any page script runs.
     const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
@@ -97,5 +98,5 @@ for (const scheme of schemes) {
   }
 }
 await browser.close();
-console.log(failures ? `\n${failures} of ${total} page checks have problems` : `\nAll ${total} page checks are clean (${schemes.join(" and ")}, desktop and phone)`);
+console.log(failures ? `\n${failures} of ${total} page checks have problems` : `\nAll ${total} page checks are clean (desktop in ${schemes.join(" and ")}, phone in ${schemes[0]})`);
 process.exit(failures ? 1 : 0);
