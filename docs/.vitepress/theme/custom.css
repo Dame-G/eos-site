@@ -446,13 +446,9 @@ body {
     scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
   }
 
-  /* A section runs from its heading to the next divider; the space above its content is its own padding. */
-  :scope .doc-section {
-    padding-top: var(--e-space-6);
-  }
-
+  /* A section is its heading and what follows it, up to the next divider, and starts at the title. All the space between two sections belongs to the divider. */
   :scope .doc-divider {
-    margin-top: var(--e-space-12);
+    margin-block: var(--e-space-12) var(--e-space-6);
     border-top: var(--e-stroke-hair) solid var(--e-border);
   }
 
