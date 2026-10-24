@@ -1,6 +1,6 @@
 ---
 title: Theming
-description: "Rebrand EOS with defineTheme, plain CSS variables or a scoped theme."
+description: "Rebrand eos with defineTheme, plain CSS variables or a scoped theme."
 ---
 
 # Theming
@@ -232,4 +232,4 @@ Every menu, option list and tooltip leaves an empty wrapper in the portal target
 
 ## Cascade layers
 
-EOS puts its CSS in cascade layers, so your own unlayered CSS wins without `!important`. The order, and how to place another layered framework such as Tailwind around it, is under [Tailwind and CSS](/guide/tailwind-and-css#layer-order).
+eos puts its CSS in cascade layers, so your own unlayered CSS wins without `!important`. The order, and how to place another layered framework such as Tailwind around it, is under [Tailwind and CSS](/guide/tailwind-and-css#layer-order).

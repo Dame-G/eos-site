@@ -12,7 +12,7 @@ Everything below is exported from `@eos-ui/vue`. The components have [their own 
 ### `createEos(options?)`
 
 ```ts
-function createEos(options?: EosOptions): Eos;
+function createEos(options?: EosOptions): eos;
 ```
 
 Provides the config and a toast store, and applies the theme in a browser. Install it with `app.use()`.
@@ -34,10 +34,10 @@ createApp(App).use(createEos({ locale: "en-CA", currency: "CAD", theme: { brand:
 | `applyTheme` | `boolean` | `true` | Sets the theme's tokens on `themeTarget` as inline custom properties. Turn it off when the page ships the theme as CSS itself (`themeCss()` in a `<style>`, or a stylesheet with a dark variant), so inline tokens never override it. `lang` and `dir` are still set |
 | `warnOnContrast` | `boolean` | `true` outside production | Warns in the console when the theme fails a contrast pair |
 
-It returns an `Eos`:
+It returns an `eos`:
 
 ```ts
-interface Eos {
+interface eos {
   install(app: App): void;
   config: EosConfig; // reactive: change config.locale or config.messages and components follow
   theme: Theme;

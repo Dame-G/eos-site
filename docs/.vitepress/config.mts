@@ -14,7 +14,7 @@ import { vitepressInLayer } from "./vitepress-layer";
 
 const SITE = "https://eos.dame.gg";
 const IMAGE = SITE + "/og.png";
-const IMAGE_ALT = "EOS: a component library for Vue, shown as the word EOS in heavy teal letters.";
+const IMAGE_ALT = "eos: a component library for Vue. The eos logo, a white e on a tile beside the word eos, on a teal card with a darker edge along the bottom like a button.";
 /** The size of docs/public/og.png. */
 const IMAGE_SIZE = { width: "1200", height: "630" };
 let warnedFont = false;
@@ -49,8 +49,8 @@ const patterns: DefaultTheme.SidebarItem[] = [
 ];
 
 export default defineConfig({
-  title: "EOS",
-  titleTemplate: ":title · EOS",
+  title: "eos",
+  titleTemplate: ":title · eos",
   description: "A component library for Vue. High contrast by default, rebrandable with a few lines.",
   sitemap: {
     hostname: SITE,
@@ -93,7 +93,7 @@ export default defineConfig({
     const head: HeadConfig[] = [
       ["link", { rel: "canonical", href: url }],
       ["meta", { property: "og:type", content: "website" }],
-      ["meta", { property: "og:site_name", content: "EOS" }],
+      ["meta", { property: "og:site_name", content: "eos" }],
       ["meta", { property: "og:title", content: title }],
       ["meta", { property: "og:description", content: description }],
       ["meta", { property: "og:url", content: url }],
@@ -107,6 +107,9 @@ export default defineConfig({
       ["meta", { name: "twitter:image", content: IMAGE }],
       ["meta", { name: "twitter:image:alt", content: IMAGE_ALT }],
     ];
+    // The title's face is in the header on every page, so it loads with the body face rather than swapping in late.
+    const titleFont = assets.find((a) => /\/outfit-latin-wght-normal\.[^/]*\.woff2$/.test(a));
+    if (titleFont) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: titleFont, crossorigin: "" }]);
     const font = assets.find((a) => /\/bricolage-grotesque-latin-wght-normal\.[^/]*\.woff2$/.test(a));
     if (font) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: font, crossorigin: "" }]);
     // A renamed font file would silently drop the preload and bring the late font swap back, so say so once.
@@ -138,7 +141,7 @@ export default defineConfig({
         JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareSourceCode",
-          name: "EOS",
+          name: "eos",
           description,
           url: SITE,
           codeRepository: "https://github.com/Dame-G/eos",

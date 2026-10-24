@@ -1,6 +1,6 @@
 {
-  "name": "EOS",
-  "short_name": "EOS",
+  "name": "eos",
+  "short_name": "eos",
   "description": "A component library for Vue.",
   "start_url": "/",
   "display": "minimal-ui",

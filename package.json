@@ -3,7 +3,7 @@
   "private": true,
   "license": "MIT",
   "version": "0.0.0",
-  "description": "Documentation and live previews for the Eos component library, published at https://eos.dame.gg.",
+  "description": "Documentation and live previews for the eos component library, published at https://eos.dame.gg.",
   "type": "module",
   "packageManager": "pnpm@12.14.0",
   "engines": {
@@ -24,6 +24,7 @@
   "dependencies": {
     "@eos-ui/tokens": "link:../eos/packages/tokens",
     "@eos-ui/vue": "link:../eos/packages/vue",
+    "@fontsource-variable/outfit": "^5.3.0",
     "vue": "^3.5.44"
   },
   "devDependencies": {

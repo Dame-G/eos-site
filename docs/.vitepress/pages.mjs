@@ -14,7 +14,7 @@ export const GUIDE = [
   { group: "Style", slug: "design-principles", name: "Design principles", note: "Spacing rhythm, depth, control height, hover and focus by family, and tone, variant and status" },
   { group: "Style", slug: "theming", name: "Theming", note: "defineTheme inputs, light and dark, CSS variables, scoped themes, portalTarget, cascade layers" },
   { group: "Style", slug: "tokens", name: "Token reference", note: "The tokens you will use most, the theme inputs, then every colour, size, radius, shadow and motion token with usage notes and contrast" },
-  { group: "Style", slug: "tailwind-and-css", name: "Tailwind and CSS", note: "Overriding a component with your own classes, and using EOS beside Tailwind" },
+  { group: "Style", slug: "tailwind-and-css", name: "Tailwind and CSS", note: "Overriding a component with your own classes, and using eos beside Tailwind" },
   { group: "Platform", slug: "ssr", name: "Nuxt and SSR", note: "Server rendering, the theme in the head without a flash, and Nuxt setup" },
   { group: "Platform", slug: "accessibility", name: "Accessibility", note: "Contrast table, keyboard, forced colours, what is tested" },
   { group: "Platform", slug: "versioning", name: "Versioning and support", note: "Pre-1.0 stability, semver, supported Vue and browsers" },

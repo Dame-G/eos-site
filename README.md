@@ -1,8 +1,8 @@
 # eos-site
 
-Source of https://eos.dame.gg, the documentation and live-preview site for the public [EOS](https://github.com/Dame-G/eos) library. It is released under the [MIT license](LICENSE).
+Source of https://eos.dame.gg, the documentation and live-preview site for the public [eos](https://github.com/Dame-G/eos) library. It is released under the [MIT license](LICENSE).
 
-The site is built with [VitePress](https://vitepress.dev) and uses the library it documents. The page frame (header, navigation, search, footer), the home page, the tokens page and the playground are EOS components. Only the markdown prose and code blocks use VitePress styles, and those read the library's tokens.
+The site is built with [VitePress](https://vitepress.dev) and uses the library it documents. The page frame (header, navigation, search, footer), the home page, the tokens page and the playground are eos components. Only the markdown prose and code blocks use VitePress styles, and those read the library's tokens.
 
 - `docs/`: guide pages, the tokens page, the theme playground, patterns, and one generated page per component.
 ## Run it
@@ -73,7 +73,7 @@ The page is the component's `README.md` from the library, read at build time and
 ## Two copies of Vue, and CSS layers
 
 - The library is linked from `../eos`, which has its own `node_modules`. `resolve.dedupe: ["vue"]` and `ssr.noExternal` in the config keep one copy of Vue in the dev server, the build and the tests.
-- VitePress ships unlayered CSS, which would beat the library's `@layer e.*` rules inside the demos. A small Vite plugin in the config wraps the VitePress default theme CSS in `@layer e.reset`, the lowest EOS layer. The site's own `custom.css` is unlayered and wins over both.
+- VitePress ships unlayered CSS, which would beat the library's `@layer e.*` rules inside the demos. A small Vite plugin in the config wraps the VitePress default theme CSS in `@layer e.reset`, the lowest eos layer. The site's own `custom.css` is unlayered and wins over both.
 
 ### Upgrading VitePress
 

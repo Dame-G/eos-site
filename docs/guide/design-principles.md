@@ -1,11 +1,11 @@
 ---
 title: Design principles
-description: "The layout rules that make every EOS theme feel like the same system: spacing, type, depth, how a control answers the pointer, and what a theme changes."
+description: "The layout rules that make every eos theme feel like the same system: spacing, type, depth, how a control answers the pointer, and what a theme changes."
 ---
 
 # Design principles
 
-These rules hold in every theme. A theme changes colours, corners, fonts, scales and control height. It does not change the rules. They are also how to build a screen of your own that sits next to EOS components without looking foreign.
+These rules hold in every theme. A theme changes colours, corners, fonts, scales and control height. It does not change the rules. They are also how to build a screen of your own that sits next to eos components without looking foreign.
 
 - **Compose.** A card is [`ESurface`](/components/Surface), buttons go in [`EActions`](/components/Actions), label and text rows are [`EDescriptionList`](/components/DescriptionList). If you need a custom box or a hand-written flex row, a building block is missing: report it.
 - **The parent owns space.** Children set no outer margin. [`EStack`](/components/Stack), [`EInline`](/components/Inline), [`EGrid`](/components/Grid) and `EActions` space them.

@@ -1,11 +1,11 @@
 ---
 title: Nuxt and SSR
-description: "Server rendering EOS components, and what to configure in Nuxt."
+description: "Server rendering eos components, and what to configure in Nuxt."
 ---
 
 # Nuxt and SSR
 
-EOS components render on the server with `renderToString`:
+eos components render on the server with `renderToString`:
 
 - Components render with and without the plugin. Generated ids are stable between server and client, so hydration has no id mismatches.
 - `createEos()` does not touch `document` or `window`. The locale reaches the server HTML.

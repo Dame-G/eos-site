@@ -5,7 +5,7 @@ description: "The target, contrast of every colour pair, keyboard use and built-
 
 # Accessibility
 
-EOS targets WCAG 2.2 AA, and AAA for text contrast wherever the brand allows. Every component is keyboard operable and has an accessible name.
+eos targets WCAG 2.2 AA, and AAA for text contrast wherever the brand allows. Every component is keyboard operable and has an accessible name.
 
 Test your own pages with real screen readers, zoom, touch and forced colours.
 

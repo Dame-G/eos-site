@@ -17,7 +17,7 @@ const SITE = "https://eos.dame.gg";
 const out = [];
 const line = (s = "") => out.push(s);
 
-line("# EOS");
+line("# eos");
 line();
 line("> A component library for Vue. Install `@eos-ui/vue`, add `createEos()`, and use components such as `EButton` and `ETextField`. Themes are built with `defineTheme()` and checked for contrast.");
 line();

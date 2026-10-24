@@ -12,7 +12,7 @@ export const DOC_SCOPE_LIMIT = ".demo-stage, .pattern-stage, .eos-live, .e-code,
 
 /**
  * VitePress ships unlayered CSS, which would beat the library's `@layer e.*` rules inside the demos. This wraps the
- * default theme's CSS in `@layer e.reset`, the lowest EOS layer, so the library wins inside demos and the site's own
+ * default theme's CSS in `@layer e.reset`, the lowest eos layer, so the library wins inside demos and the site's own
  * unlayered `custom.css` wins over both. `@import`s are hoisted (they must come first) and given the same layer, and
  * `vp-doc.css` is scoped to stop at the demos.
  */
