@@ -86,7 +86,8 @@ onMounted(() => {
     if (now - last < gap || document.hidden || !visible) return;
     last = now;
     const start = performance.now();
-    paint(now / 1000);
+    // The same clock as every other paint: a redraw for a new scheme or size must land on the frame the loop would have drawn, or the lines jump.
+    paint(clock());
     gap = Math.min(500, Math.max(66, (performance.now() - start) * 4));
   };
   requestAnimationFrame(flow);
