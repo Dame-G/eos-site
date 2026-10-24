@@ -7,6 +7,9 @@ import type { Field } from "./flow";
 
 const root = ref<HTMLElement | null>(null);
 const canvas = ref<HTMLCanvasElement | null>(null);
+/** The pattern's clock, in seconds: a little faster than real time, so the drift reads as motion at a glance. */
+const SPEED = 1.35;
+const clock = () => (performance.now() / 1000) * SPEED;
 let cleanup: Array<() => void> = [];
 
 onMounted(() => {
@@ -39,7 +42,7 @@ onMounted(() => {
     cv.height = el.clientHeight;
   };
   fit();
-  paint(performance.now() / 1000);
+  paint(clock());
 
   // A bigger window brings more lines; a smaller one keeps what it has.
   let size = { w: innerWidth, h: innerHeight };
@@ -49,7 +52,7 @@ onMounted(() => {
       field = area(size.w, size.h);
     }
     fit();
-    paint(performance.now() / 1000);
+    paint(clock());
   };
   addEventListener("resize", resized, { passive: true });
   cleanup.push(() => removeEventListener("resize", resized));
@@ -57,7 +60,7 @@ onMounted(() => {
   // The ink changes with the colour scheme.
   const rescheme = () => {
     readInk();
-    paint(performance.now() / 1000);
+    paint(clock());
   };
   const observer = new MutationObserver(rescheme);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-scheme"] });
