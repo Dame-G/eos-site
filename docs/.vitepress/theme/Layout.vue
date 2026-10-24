@@ -115,15 +115,46 @@ function spy() {
   spies = [lines, end];
 }
 
-// A click in the outline briefly highlights the section it goes to, so the eye finds it after the jump. Taking the class off and putting it back (after a reflow) lets a second click on the same heading flash again.
+// A click in the outline, or a #hash in the address, briefly washes the whole section it goes to, from its heading to the next one, so the eye finds it after the jump. The page is a flat run of headings and blocks, so the wash is a box drawn behind them from just under the heading's divider to the section's last block.
+let lastFlash = { id: "", at: 0 };
+function flashSection(id: string) {
+  const heading = document.getElementById(id);
+  if (!heading || !heading.closest(".site-main")) return;
+  // A click on an outline link and the hash change it causes both ask for the same flash: the second one is the same flash, not a restart.
+  const now = performance.now();
+  if (lastFlash.id === id && now - lastFlash.at < 600) return;
+  lastFlash = { id, at: now };
+  document.querySelectorAll(".flash-section").forEach((old) => old.remove());
+  let last: Element = heading;
+  while (last.nextElementSibling && !/^H[12]$/.test(last.nextElementSibling.tagName)) last = last.nextElementSibling;
+  const from = heading.getBoundingClientRect();
+  const to = last.getBoundingClientRect();
+  const parent = heading.parentElement!.getBoundingClientRect();
+  const pad = 12;
+  // The heading draws the divider above its section as its own top border: the wash starts under that line.
+  const top = from.top + scrollY + (parseFloat(getComputedStyle(heading).borderTopWidth) || 0);
+  const box = document.createElement("div");
+  box.className = "flash-section";
+  box.setAttribute("aria-hidden", "true");
+  Object.assign(box.style, {
+    top: `${top}px`,
+    left: `${parent.left + scrollX - pad}px`,
+    width: `${parent.width + 2 * pad}px`,
+    height: `${to.bottom + scrollY + pad - top}px`,
+  });
+  document.body.append(box);
+  box.addEventListener("animationend", () => box.remove(), { once: true });
+}
+
+/** The section the address points at, flashed once the page has settled: on a first visit, after following a link to another page's section and when the hash alone changes. */
+function flashHash() {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  if (id) setTimeout(() => flashSection(id), 150);
+}
+
 function flash(e: MouseEvent) {
   const link = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href^='#']");
-  const target = link && document.getElementById(decodeURIComponent(link.hash.slice(1)));
-  if (!target) return;
-  target.classList.remove("flash-target");
-  void target.offsetWidth;
-  target.classList.add("flash-target");
-  target.addEventListener("animationend", () => target.classList.remove("flash-target"), { once: true });
+  if (link) flashSection(decodeURIComponent(link.hash.slice(1)));
 }
 
 function showCurrent() {
@@ -157,6 +188,8 @@ onMounted(() => {
   spy();
   showCurrent();
   window.addEventListener("keydown", onShortcut);
+  window.addEventListener("hashchange", flashHash);
+  flashHash();
   const load = () => (searchLoaded.value = true);
   if ("requestIdleCallback" in window) searchIdle = window.requestIdleCallback(load, { timeout: 3000 });
   else searchIdle = window.setTimeout(load, 1000);
@@ -164,6 +197,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   for (const o of spies) o.disconnect();
   window.removeEventListener("keydown", onShortcut);
+  window.removeEventListener("hashchange", flashHash);
   if ("cancelIdleCallback" in window) window.cancelIdleCallback(searchIdle);
   else clearTimeout(searchIdle);
 });
@@ -199,6 +233,7 @@ watch(
     if (target) {
       if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: true });
+      flashHash();
     } else {
       document.getElementById("main")?.focus({ preventScroll: true });
     }

@@ -446,12 +446,6 @@ body {
     scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
   }
 
-  /* The section an outline link has just taken you to (Layout.vue): a wash of the primary that fades out. */
-  :scope .flash-target {
-    border-radius: var(--e-radius-sm);
-    animation: flash-target 1.6s ease-out;
-  }
-
   :scope a:focus-visible,
   :scope summary:focus-visible {
     outline: var(--e-stroke-focus) solid var(--e-focus-ring);
@@ -746,13 +740,19 @@ body {
   }
 }
 
-@keyframes flash-target {
-  from {
-    background: var(--e-primary-soft);
-    box-shadow: 0 0 0 0.3em var(--e-primary-soft);
-  }
+/* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It sits over the page and lets every click through. */
+.flash-section {
+  position: absolute;
+  z-index: 1;
+  border-radius: var(--e-radius-md);
+  /* Translucent, since it sits over the section and its text has to stay readable. */
+  background: color-mix(in srgb, var(--e-primary) 14%, transparent);
+  pointer-events: none;
+  animation: flash-section 1.8s ease-out forwards;
+}
+
+@keyframes flash-section {
   to {
-    background: transparent;
-    box-shadow: 0 0 0 0.3em transparent;
+    opacity: 0;
   }
 }
