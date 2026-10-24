@@ -68,7 +68,7 @@ function randomOnce(): Partial<State> {
     textScale: chance(0.8) ? int(100, 112, 2) : int(94, 98, 2),
     spaceScale,
     controlHeight: int(44, 56, 2),
-    motion: weighted([["default", 4], ["snappy", 3], ["gentle", 3], ["none", 1]] as const),
+    motion: weighted([["default", 4], ["snappy", 3], ["gentle", 3]] as const),
     variants: randomVariants(spaceScale),
   };
 }

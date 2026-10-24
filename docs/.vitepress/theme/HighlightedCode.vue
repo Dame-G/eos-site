@@ -5,7 +5,7 @@ import { ECodeBlock } from "@eos-ui/vue";
 // `note` is shown after the code as a comment, but is not part of what the copy button copies.
 const props = defineProps<{ code: string; lang: string; copyLabel?: string; note?: string }>();
 
-// The code is on the page as plain text from the first paint. Shiki and its WebAssembly are only fetched once the browser is idle after the page has mounted, so the highlighter never competes with the first paint.
+// The code is on the page as plain text from the first paint. Shiki and its grammars are only fetched once the browser is idle after the page has mounted, so the highlighter never competes with the first paint.
 const html = ref("");
 let latest = 0;
 let idle = 0;

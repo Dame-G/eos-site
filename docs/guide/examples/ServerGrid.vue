@@ -76,6 +76,6 @@ onMounted(() => load({ sort: null, page: 1, pageSize: 5, search: "" }));
     >
       <template #cell-amount="{ value }">${{ Number(value).toFixed(2) }}</template>
     </EDataGrid>
-    <EText v-if="failed" small role="alert">The visits did not load. Try again.</EText>
+    <EText v-if="failed" size="sm" role="alert">The visits did not load. Try again.</EText>
   </EStack>
 </template>

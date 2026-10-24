@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { EActions, EButton, ECodeBlock, EStack } from "@eos-ui/vue";
+import { EActions } from "@eos-ui/vue/components/EActions";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { ECodeBlock } from "@eos-ui/vue/components/ECodeBlock";
+import { EStack } from "@eos-ui/vue/components/EStack";
 import BubbleTitle from "./BubbleTitle.vue";
 import FlowField from "./FlowField.vue";
 

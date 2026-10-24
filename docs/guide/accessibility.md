@@ -39,7 +39,7 @@ Add your own shortcuts with [`useShortcuts()`](/guide/composables#useshortcuts-m
 ## Built in
 
 - Colour never carries meaning alone: statuses have a word and an icon.
-- Every control is 48px tall by default (`controlHeight`).
+- Controls share `--e-control-height`, 48px by default (`controlHeight`). A small button drops to the 44px tap target, `--e-tap`, and no target is smaller.
 - Motion stops under `prefers-reduced-motion`.
 - Selected states, borders and checked controls work in forced-colours mode.
 - Required and optional are words, not asterisks. Inputs take `autocomplete`.
@@ -48,3 +48,11 @@ Add your own shortcuts with [`useShortcuts()`](/guide/composables#useshortcuts-m
 - Changes nobody can see are announced with [`useAnnouncer()`](/guide/composables#useannouncer), and confirmations with [toasts](/guide/toasts).
 - Set `lang` and `dir` on `<html>`. Words, dates and direction follow the locale: see [Words and language](/guide/language).
 - Dark themes are checked for contrast like any other: see [Light and dark](/guide/theming#light-and-dark).
+
+## What is tested
+
+- **Every component** has browser tests in Chromium that run [axe](https://github.com/dequelabs/axe-core) on what it renders, open menus and dialogs included.
+- **A theme matrix** runs the core controls, and every tone of Tag, Stamp, Text, Metric, Highlight and Kbd, under the light, dark and high-contrast themes, left to right and right to left, through axe.
+- **Forced colours**: the rules each component sets under `forced-colors: active` are checked, so selected states, borders and focus rings keep a system colour.
+- **Server rendering**: every component is rendered on the server from the built package, with and without the plugin, and must give the same HTML twice (stable ids) without a Vue warning.
+- **This site** runs axe on every demo, guide example and pattern, and on whole pages in the light and dark scheme.

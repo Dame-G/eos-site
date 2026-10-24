@@ -26,7 +26,11 @@ Whole tasks built only from EOS components, with source. If a pattern needs a cu
 
 ## Pages and states
 
-- [AppShell page frame](/patterns/app-shell): skip link, header, side navigation, main and footer around a page header.
+- [Page frame](/patterns/app-shell): skip link, header, side navigation, main and footer around a page header.
 - [Command palette](/patterns/command-palette): reach any page or action from the keyboard.
 - [Dashboard overview](/patterns/dashboard): a notice, key figures and recent activity.
 - [Empty and error states](/patterns/empty-and-error): loading, error, empty and loaded versions of one list.
+
+## Small recipes
+
+A toggle button, a button group, a back link and a panel are a few lines of the components EOS already has, so they are not components of their own. They are on [Small recipes](/patterns/recipes).

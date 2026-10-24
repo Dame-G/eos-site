@@ -31,7 +31,7 @@ function decline() {
         Check the card number or use another card.
         <template #actions><EButton variant="outline">Use another card</EButton></template>
       </ENotice>
-      <EText small muted>A toast goes by itself. A notice stays until it is dealt with.</EText>
+      <EText size="sm" tone="neutral">A toast goes by itself. A notice stays until it is dealt with.</EText>
     </EStack>
   </EToastProvider>
 </template>

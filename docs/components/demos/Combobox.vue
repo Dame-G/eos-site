@@ -27,15 +27,15 @@ function search(text: string) {
 
 <template>
   <EStack>
-    <ECombobox v-model="practitioner" label="Practitioner" placeholder="Type to search" :options="people" hint="Only listed names are accepted." />
-    <EText small muted>Value: {{ practitioner || "none" }}</EText>
-    <ECombobox v-model="clinic" label="Clinic" :options="found" :loading="searching" :filter="() => true" @input-change="search" />
-    <ECombobox label="Visit type" :options="['Checkup', 'Follow-up']" error="Choose a visit type." required />
-    <ECombobox label="Region" :options="['North', 'South']" disabled />
-    <ECombobox v-model="street" freeform label="Street" autocomplete="address-line1" placeholder="Start typing" hint="Pick a suggestion or type your own." :options="streets" />
-    <EText small muted>Text: {{ street || "nothing yet" }}</EText>
-    <ECombobox v-model="ways" multiple label="Remind me by" :options="['Text', 'Email', 'Call', 'Post']" hint="Choose as many as you like." />
-    <EText small muted>Chosen: {{ ways.join(", ") || "none" }}</EText>
-    <ECombobox multiple label="Locked choices" :model-value="['Email']" :options="['Text', 'Email']" disabled />
+    <ECombobox clearable v-model="practitioner" label="Practitioner" placeholder="Type to search" :options="people" hint="Only listed names are accepted." />
+    <EText size="sm" tone="neutral">Value: {{ practitioner || "none" }}</EText>
+    <ECombobox clearable v-model="clinic" label="Clinic" :options="found" :loading="searching" :filter="() => true" @input-change="search" />
+    <ECombobox clearable label="Visit type" :options="['Checkup', 'Follow-up']" error="Choose a visit type." required />
+    <ECombobox clearable label="Region" :options="['North', 'South']" disabled />
+    <ECombobox clearable v-model="street" freeform label="Street" autocomplete="address-line1" placeholder="Start typing" hint="Pick a suggestion or type your own." :options="streets" />
+    <EText size="sm" tone="neutral">Text: {{ street || "nothing yet" }}</EText>
+    <ECombobox clearable v-model="ways" multiple label="Remind me by" :options="['Text', 'Email', 'Call', 'Post']" hint="Choose as many as you like." />
+    <EText size="sm" tone="neutral">Chosen: {{ ways.join(", ") || "none" }}</EText>
+    <ECombobox clearable multiple label="Locked choices" :model-value="['Email']" :options="['Text', 'Email']" disabled />
   </EStack>
 </template>

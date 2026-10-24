@@ -21,7 +21,8 @@ export default defineConfig({
     __TEXTS__: JSON.stringify(listComponents().flatMap((name) => [firstParagraph(readReadme(name)), summaryOf(readReadme(name))].map((text) => ({ name, text })))),
   },
   server: { fs: { allow: ["..", "."] } },
-  optimizeDeps: { include: ["vue", "vitest-browser-vue", "axe-core"] },
+  // Shiki and its grammars are listed so a cold cache does not re-optimise them in the middle of a run.
+  optimizeDeps: { include: ["vue", "vitest-browser-vue", "axe-core", "shiki/core", "shiki/engine/javascript", ...["typescript", "css", "vue", "html", "shellscript"].map((l) => `shiki/langs/${l}.mjs`)] },
   test: {
     include: ["tests/**/*.test.ts"],
     setupFiles: ["./tests/setup.ts"],

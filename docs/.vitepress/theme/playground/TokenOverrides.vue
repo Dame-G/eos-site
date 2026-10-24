@@ -9,7 +9,6 @@ const props = defineProps<{
   tokens: Record<string, string>;
   overridden: Record<string, string>;
   colour?: boolean;
-  notes?: (name: string) => { hint?: string; error?: string };
 }>();
 const emit = defineEmits<{ set: [name: string, value: string]; follow: [name: string] }>();
 
@@ -17,23 +16,17 @@ const hexOf = (name: string) => {
   const v = resolve(props.tokens, name);
   return /^#[0-9a-f]{6}$/i.test(v) ? v : null;
 };
-
-const hintOf = (item: DerivedToken) => {
-  const hint = props.notes?.(item.name).hint;
-  return hint ? `Follows ${item.from}. ${hint}` : `Follows ${item.from}`;
-};
 </script>
 
 <template>
   <EDisclosure :title="title">
     <EStack :gap="4">
-      <EText small muted>Each follows the input named under it. Set one by hand and it stops following.</EText>
+      <EText size="sm" tone="neutral">Each follows the input named under it. Set one by hand and it stops following.</EText>
       <div v-for="item in items" :key="item.name" class="row">
         <EColorField
           v-if="colour && hexOf(item.name)"
           :label="item.name"
-          :hint="hintOf(item)"
-          :error="notes?.(item.name).error"
+          :hint="`Follows ${item.from}`"
           :model-value="hexOf(item.name)!"
           @update:model-value="emit('set', item.name, $event)"
         />

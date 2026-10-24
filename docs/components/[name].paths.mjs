@@ -33,7 +33,9 @@ export default {
       const readme = readReadme(name);
       if (readme) {
         for (const heading of ["Accessibility", ...EXPECTED_SECTIONS]) {
-          if (!new RegExp(`^## ${heading}\\s*$`, "m").test(readme)) missing.push({ name, heading });
+          const a11y = /^## Accessibility\s*$([\s\S]*?)(?=^## |(?![\s\S]))/m.exec(readme)?.[1] ?? "";
+          const optional = heading === "Keyboard" && /^(?:- )?Not focusable\.\s*$/m.test(a11y);
+          if (!optional && !new RegExp(`^## ${heading}\\s*$`, "m").test(readme)) missing.push({ name, heading });
         }
       }
       const hasDemo = existsSync(join(siteRoot, "docs/components/demos", `${name}.vue`));
@@ -56,8 +58,9 @@ export default {
         content,
       };
     });
-    // Every README must have Accessibility, Keyboard and Related, and a missing one fails the build. Set EOS_LENIENT_SECTIONS
-    // to downgrade that to a warning when building against an older library release that predates the sections.
+    // Every README must have Accessibility, Keyboard and Related, and a missing one fails the build. A component that cannot
+    // take focus may leave out Keyboard when its Accessibility section has the line "Not focusable." (or "- Not focusable.").
+    // Set EOS_LENIENT_SECTIONS to downgrade that to a warning when building against an older library release that predates the sections.
     for (const heading of ["Accessibility", ...EXPECTED_SECTIONS]) {
       const lacking = missing.filter((m) => m.heading === heading).map((m) => `E${m.name}`);
       if (lacking.length) console.warn(`[eos-site] ${lacking.length} README.md file(s) have no "## ${heading}" section: ${lacking.join(", ")}.`);

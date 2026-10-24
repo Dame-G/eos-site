@@ -48,7 +48,7 @@ function retry() {
       <EStack v-else :gap="2">
         <ENotice v-if="showRetryNote" tone="success" title="Statements loaded" :heading-level="3">Back online.</ENotice>
         <EExpandableRow v-for="s in items" :key="s.id" :title="s.title" :subtitle="s.sub">
-          <template #leading><EStamp :status="s.status" small /></template>
+          <template #leading><EStamp :status="s.status" size="sm" /></template>
           Details of {{ s.sub }}.
         </EExpandableRow>
       </EStack>

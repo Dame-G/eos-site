@@ -8,11 +8,11 @@ const names = ["card", "receipt", "calendar", "download", "lock", "mail", "phone
     <EInline :gap="6">
       <EInline v-for="n in names" :key="n" :gap="2">
         <EIcon :name="n" />
-        <EText as="span" muted>{{ n }}</EText>
+        <EText as="span" tone="neutral">{{ n }}</EText>
       </EInline>
     </EInline>
     <EInline>
-      <EIcon name="wallet" small />
+      <EIcon name="wallet" size="sm" />
       <EIcon name="wallet" />
       <EIcon name="wallet" bold />
       <EText as="span">Small, regular and bold wallet</EText>

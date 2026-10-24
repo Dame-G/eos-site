@@ -5,7 +5,7 @@ description: "Every export of @eos-ui/vue that is not a component: createEos, th
 
 # API reference
 
-Everything below is exported from `@eos-ui/vue`. The components have [their own pages](/components/). Other entry points: `@eos-ui/vue/style.css` (required), `@eos-ui/vue/fonts.css`, `@eos-ui/vue/resolver`, `@eos-ui/vue/icons`, `@eos-ui/vue/icons/iconify`, and `@eos-ui/vue/llms.txt`. The package is ESM only.
+Everything below is exported from `@eos-ui/vue`. The components have [their own pages](/components/). Other entry points: `@eos-ui/vue/style.css` (required), `@eos-ui/vue/fonts.css`, `@eos-ui/vue/components/E<Name>` (one component), `@eos-ui/vue/plugin` (`createEos` and `themeCss`), `@eos-ui/vue/icons/builtin` (registers the built-in icons, which the per-component paths leave out), `@eos-ui/vue/globals` (opt-in global component types), `@eos-ui/vue/resolver`, `@eos-ui/vue/icons`, `@eos-ui/vue/icons/iconify`, and `@eos-ui/vue/llms.txt`. See [Install options](/guide/install). The package is ESM only.
 
 ## Plugin
 
@@ -31,6 +31,7 @@ createApp(App).use(createEos({ locale: "en-CA", currency: "CAD", theme: { brand:
 | `portalTarget` | `string \| HTMLElement` | `"body"` | Where menus, dialogs, tooltips and toasts render |
 | `theme` | `Theme \| ThemeInput` | the light theme | A theme from `defineTheme()`, or the same options |
 | `themeTarget` | `HTMLElement \| null` | `document.documentElement` | The element the theme is applied to |
+| `applyTheme` | `boolean` | `true` | Sets the theme's tokens on `themeTarget` as inline custom properties. Turn it off when the page ships the theme as CSS itself (`themeCss()` in a `<style>`, or a stylesheet with a dark variant), so inline tokens never override it. `lang` and `dir` are still set |
 | `warnOnContrast` | `boolean` | `true` outside production | Warns in the console when the theme fails a contrast pair |
 
 It returns an `Eos`:
@@ -80,7 +81,7 @@ interface EosConfig {
 const CONFIG_KEY: InjectionKey<EosConfig>;
 ```
 
-The key `createEos()` provides the config under. Provide a different `EosConfig` under it to change the language of one subtree. You rarely need it.
+The key `createEos()` provides the config under. To change the theme, language or words of one part of the page, use [`EConfigProvider`](/components/ConfigProvider) rather than providing a config yourself.
 
 ### `usePortalTarget()`
 
@@ -97,6 +98,15 @@ function useDir(): ComputedRef<"ltr" | "rtl">;
 ```
 
 The direction to use: `dir` from `createEos()` when set, otherwise the one the locale is written in. Give it to anything you build on a library that assumes left to right, such as Reka UI's `ConfigProvider`.
+
+### `useLogicalSide(side)`
+
+```ts
+function useLogicalSide(side: () => LogicalSide): ComputedRef<"top" | "bottom" | "left" | "right">;
+type LogicalSide = "top" | "bottom" | "start" | "end" | "left" | "right";
+```
+
+The physical side for a floating part of your own: `start` and `end` become `left` and `right` in a left-to-right page, and the other way round in a right-to-left one.
 
 ### `useMessages()`
 
@@ -144,25 +154,7 @@ function defineTheme(input: ThemeInput): Theme;
 
 Re-exported from `@eos-ui/tokens`. Derives every token from a few colours and checks the contrast of each pair the system promises.
 
-| Input | Type | What it sets |
-| --- | --- | --- |
-| `name` | `string` | The `data-e-theme` value |
-| `brand`, `accent`, `danger`, `warning` | colour | Action and status colours, each derived to hold contrast |
-| `background`, `surface`, `foreground` | colour | Ground, cards and fields, text and lines |
-| `fonts` | `{ sans?, mono?, script? }` | Full `font-family` stacks for text, code and signatures. Nothing is bundled |
-| `radius` | `"sharp" \| "default" \| "round" \| { sm?, md?, lg? }` | Corners |
-| `textScale`, `spaceScale` | `number` | Multipliers for the type and space scales |
-| `strokes` | `{ hair?, focus?, edge?, card? }` | Line weights in px |
-| `contrast` | `"standard" \| "high" \| "auto"` | Full-strength lines and secondary text. `auto` switches to `high` under `prefers-contrast: more` |
-| `scheme` | `"light" \| "dark" \| "auto"` | `auto` follows `prefers-color-scheme` and applies `dark` on a dark page |
-| `dark` | `ThemeVariant` | What changes on a dark page when `scheme` is `auto`. The grounds are never inherited |
-| `density` | `"comfortable" \| "compact"` | `compact` tightens the space scale and makes controls the 44px tap target |
-| `motion` | `"default" \| "snappy" \| "gentle" \| "none"` | Durations and easing |
-| `elevation` | `"outline" \| "lifted" \| "bold"` | How depth is drawn |
-| `preset` | `"paper" \| "ink" \| "quiet"` | A named look that sets `elevation`, `strokes`, `radius` and `motion` together. Your own entries win |
-| `controlHeight` | `number` | Height in px of every tappable control |
-| `tokens` | `Record<string, string>` | Any token by name. Wins over everything derived |
-| `strict` | `boolean` | Throw on a contrast failure instead of listing it |
+The inputs, with their types and what each one derives, are listed once, under [The inputs](/guide/theming#the-inputs) in Theming. `@eos-ui/tokens` also exports `deprecated`, the names of the [deprecated tokens](/guide/tokens#deprecated-tokens).
 
 A `Theme` has:
 
@@ -180,21 +172,9 @@ A `Theme` has:
 
 See [Theming](/guide/theming) and the [Token reference](/guide/tokens). Types: `Theme`, `ThemeInput`.
 
-### Tokens at a glance
+### Shared types
 
-Tokens are CSS custom properties named `--e-*`. The families:
-
-| Family | Examples |
-| --- | --- |
-| Colour | `--e-primary`, `--e-secondary`, `--e-danger`, `--e-ink`, `--e-muted`, `--e-surface`, `--e-surface-tint`, `--e-background`, `--e-border` |
-| Type | `--e-font-sans`, `--e-font-mono`, `--e-text-xs` to `--e-text-4xl` |
-| Space | `--e-space-1` to `--e-space-8`, then `--e-space-10`, `-12` and `-16` |
-| Shape | `--e-radius-sm`, `--e-radius-md`, `--e-radius-lg`, `--e-stroke-hair`, `--e-stroke-card`, `--e-stroke-edge` |
-| Depth | `--e-frame`, `--e-well`, `--e-float` |
-| Sizes | `--e-control-height`, `--e-chip-height` |
-| Motion | `--e-duration-tap`, `--e-duration-move`, `--e-easing-out` |
-
-The full list, with usage and contrast, is the [Token reference](/guide/tokens).
+`Size` (`"sm" | "md" | "lg" | "xl"`), `Tone` and `ElementTag` are the vocabulary the components' props narrow with `Extract`, such as `size?: Extract<Size, "sm" | "md">`.
 
 ## Composables
 
@@ -207,20 +187,35 @@ function useToast(): ToastApi;
 
 interface ToastApi {
   show(options: ToastOptions): string; // returns the toast's id
+  update(id: string, patch: Partial<ToastOptions>): void; // changes a toast on screen and restarts its timer
+  promise<T>(promise: Promise<T>, options: ToastPromiseOptions<T>): Promise<T>; // loading, then success or error
   dismiss(id: string): void;
   clear(): void;
 }
 
+type ToastTone = "neutral" | "info" | "success" | "warning" | "danger";
+
 interface ToastOptions {
   title: string;
   message?: string;
-  tone?: "info" | "success" | "warning" | "danger";
+  tone?: ToastTone; // "info" by default
+  icon?: IconProp; // replaces the tone's icon
+  closable?: boolean; // the Dismiss button. true by default, and always shown when duration is 0
+  key?: string; // a toast with the same key updates the one on screen instead of adding another
   action?: VNodeChild | (() => VNodeChild);
-  duration?: number; // ms. 5000 by default, 0 for none, 0 for danger and with an action
+  duration?: number; // ms. 0 stays. 5000, or 0 for danger and for a toast with an action
+}
+
+interface ToastPromiseOptions<T> {
+  loading: string | Omit<ToastOptions, "tone">;
+  success: string | Omit<ToastOptions, "tone"> | ((value: T) => string | Omit<ToastOptions, "tone">);
+  error: string | Omit<ToastOptions, "tone"> | ((reason: unknown) => string | Omit<ToastOptions, "tone">);
 }
 ```
 
-Also exported: `createToasts()` (a `ToastStore`: `items`, `show`, `dismiss`, `clear`, `pause`, `resume`), `TOAST_KEY`, and the types `ToastTone` and `ToastItem`. See [Toasts and notifications](/guide/toasts).
+`update()` with a new `tone` or `action` and no `duration` takes that tone's default again, so a toast turned into `danger` stays. `promise()` returns the promise it was given, so the caller still handles the result; the error toast is `danger`.
+
+Also exported: `createToasts()` (a `ToastStore`: the `ToastApi` plus `items`, `limit`, `pause` and `resume`), `TOAST_KEY`, and the types `ToastItem`, `ToastApi` and `ToastStore`. See [Toasts and notifications](/guide/toasts).
 
 ### `useAnnouncer()`
 
@@ -245,7 +240,6 @@ interface ShortcutOptions {
   preventDefault?: boolean; // default true
 }
 function formatShortcut(combo: string, apple?: boolean): string[];
-function isApple(): boolean;
 ```
 
 [Guide](/guide/composables#useshortcuts-map-options)
@@ -288,7 +282,17 @@ function useLocale(): {
 };
 ```
 
-Reads the configured locale, so changing it re-renders everything that uses it. `formatMoney` always shows two decimals. Also exported: `localeDirection(locale)`, the direction a locale is written in (`"rtl"` for Arabic, Hebrew, Persian and Urdu, else `"ltr"`).
+Reads the configured locale, so changing it re-renders everything that uses it. `formatMoney` always shows two decimals.
+
+[Guide](/guide/composables#smaller-helpers)
+
+### `useReducedMotion()`
+
+```ts
+function useReducedMotion(): () => boolean;
+```
+
+Returns a function that says whether the person asked for less motion (`prefers-reduced-motion: reduce`). Call it when the motion starts, so it follows a change of the setting. On the server it says no.
 
 [Guide](/guide/composables#smaller-helpers)
 
@@ -305,8 +309,10 @@ function useUid(given?: MaybeRefOrGetter<string | undefined>): ComputedRef<strin
 ```ts
 function useFieldAttrs(): {
   wrapper(): { class: unknown; style: unknown };
-  input(describedby?: string): Record<string, unknown>;
+  input(describedby?: DescribedBy | readonly DescribedBy[]): Record<string, unknown>; // ids in front of the consumer's aria-describedby
+  group(describedby?: DescribedBy | readonly DescribedBy[]): Record<string, unknown>; // the same, with focus and blur as focusin and focusout
 };
+type DescribedBy = string | false | null | undefined;
 ```
 
 [Guide](/guide/composables#smaller-helpers)
@@ -335,78 +341,22 @@ function focusInside(e: MouseEvent): void;
 
 [Guide](/guide/composables#smaller-helpers)
 
-### `useDetails(open, options?)`
-
-Advanced. For a component of your own built on `<details>`.
-
-```ts
-function useDetails(
-  open: Ref<boolean | undefined>,
-  options?: { group?: MaybeRefOrGetter<string | undefined>; disabled?: MaybeRefOrGetter<boolean | undefined> },
-): { details: ComputedRef<object>; summary: ComputedRef<object> };
-```
-
-Bind `details` to the `<details>` and `summary` to its `<summary>`. The native `toggle` event writes back to `open`, so a click, the keyboard, a `group` that closes its siblings and your `v-model:open` stay in step. A disabled summary stays focusable with `aria-disabled`. `EDisclosure` and `EExpandableRow` use it.
-
-[Guide](/guide/composables#smaller-helpers)
-
-### `useOverflow(scroller, watch?)`
+### `useOverflow(scroller, watch?, options?)`
 
 Advanced.
 
 ```ts
-function useOverflow(scroller: Ref<HTMLElement | null>, watch?: MaybeRefOrGetter<HTMLElement | null>[]): Ref<boolean>;
+function useOverflow(
+  scroller: Ref<HTMLElement | null>,
+  watch?: MaybeRefOrGetter<HTMLElement | null>[], // other elements whose size can change it
+  options?: UseOverflowOptions,
+): Ref<boolean>;
+interface UseOverflowOptions {
+  children?: boolean; // also watch the scroller's children as they come and go
+}
 ```
 
 Whether an element scrolls: its content is wider or taller than it is. Make a scrolling region a tab stop and a named landmark only while this is true. It is `false` until mounted, so the server and the first client render agree.
 
 [Guide](/guide/composables#smaller-helpers)
 
-### `useSize(props, component)`
-
-Advanced.
-
-```ts
-type Size = "sm" | "md" | "lg";
-function useSize(props: { size?: Size; small?: boolean; large?: boolean }, component: string): ComputedRef<Size>;
-```
-
-The size of a component that takes `size` and the older `small` and `large` flags. `size` wins, and giving both warns in development.
-
-[Guide](/guide/composables#smaller-helpers)
-
-### `useFieldControl(props)`
-
-Advanced. For a text-like field of your own; use `ETextField` when you can.
-
-```ts
-function useFieldControl<El extends HTMLElement = HTMLInputElement>(props: FieldControlProps): {
-  attrs: ReturnType<typeof useFieldAttrs>;
-  input: Ref<El | null>;
-  shell(invalid?: boolean | string): object; // props for the input shell
-  bind(field: FieldSlot, describedby?: DescribedBy[]): Record<string, unknown>; // id, aria-*, required, disabled, readonly, data-size
-  hidden(name: string | undefined, value: string | number | null | undefined): object; // a hidden input that posts the value
-  exposed: { input: Ref<El | null>; focus(): void };
-};
-```
-
-Use it with `defineOptions({ inheritAttrs: false })` and `defineExpose(control.exposed)`. It does what the library's own fields share: the id, `aria-invalid`, `aria-describedby` (your ids, the hint or error id, then the consumer's own), and the hidden input for a `name`.
-
-[Guide](/guide/composables#smaller-helpers)
-
-### `useFormField(entry)`
-
-Advanced.
-
-```ts
-interface FormFieldEntry {
-  id: () => string; // the control's id, which the summary links to
-  label: () => string;
-  error: () => string | undefined;
-}
-function useFormField(entry: FormFieldEntry): void;
-```
-
-Registers a field of your own with the [`EForm`](/components/Form) around it so its `error` is listed in the error summary. Outside a form it does nothing. Also exported: `FORM_KEY`, the injection key `EForm` provides, and the `FormContext` type.
-
-[Guide](/guide/composables#smaller-helpers)

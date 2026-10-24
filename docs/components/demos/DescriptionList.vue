@@ -21,8 +21,8 @@ function editEmail() {
 
     <EDescriptionList
       :items="[
-        { label: 'Email', text: email, icon: 'mail', badge: 'Verified', badgeTone: 'success', editable: true },
-        { label: 'Phone', text: '(555) 010-2299', badge: 'Needs update', badgeTone: 'warning', editable: true },
+        { label: 'Email', text: email, icon: 'mail', stamp: 'Verified', stampTone: 'success', editable: true },
+        { label: 'Phone', text: '(555) 010-2299', stamp: 'Needs update', stampTone: 'warning', editable: true },
         { label: 'Member since', text: 'Jan 14, 2024' },
       ]"
       @edit="editEmail"

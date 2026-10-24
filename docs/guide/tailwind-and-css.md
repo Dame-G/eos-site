@@ -1,5 +1,5 @@
 ---
-title: Tailwind and CSS interop
+title: Tailwind and CSS
 description: "How EOS CSS layers sit with Tailwind and your own CSS, and how to override a component."
 ---
 
@@ -7,7 +7,7 @@ description: "How EOS CSS layers sit with Tailwind and your own CSS, and how to 
 import Interop from "./examples/Interop.vue";
 </script>
 
-# Tailwind and CSS interop
+# Tailwind and CSS
 
 All EOS rules sit inside `@layer e.*`. CSS outside any layer beats every layered rule, whatever its specificity. So your own classes win over EOS with no `!important`, as long as they are not in a lower layer than EOS.
 

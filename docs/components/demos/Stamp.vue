@@ -25,7 +25,7 @@ import { EInline, EStack, EStamp } from "@eos-ui/vue";
     </EInline>
     <EInline>
       <EStamp>Draft</EStamp>
-      <EStamp tone="ink" size="sm">Ink</EStamp>
+      <EStamp tone="neutral" size="sm">Neutral</EStamp>
       <EStamp tone="success">Signed</EStamp>
       <EStamp tone="info" size="sm">Scheduled</EStamp>
     </EInline>

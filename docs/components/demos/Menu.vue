@@ -20,6 +20,6 @@ const items = [
       <EMenu label="More" variant="secondary" :items="items" @select="(item) => (last = `Selected: ${item.label}`)" />
       <EMenu label="Account" variant="quiet" icon="user" :items="items" />
     </EInline>
-    <EText small muted>{{ last }}</EText>
+    <EText size="sm" tone="neutral">{{ last }}</EText>
   </EStack>
 </template>

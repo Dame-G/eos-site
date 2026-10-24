@@ -1,5 +1,5 @@
 ---
-title: AppShell page frame
+title: Page frame
 description: "The frame of a whole page: skip link, header, side navigation, main, footer and a page header."
 aside: false
 ---
@@ -8,7 +8,7 @@ aside: false
 import Pattern from "./AppFrame.vue";
 </script>
 
-# AppShell page frame
+# Page frame
 
 Built from: [`EAppShell`](/components/AppShell), [`EAppHeader`](/components/AppHeader), [`ENavList`](/components/NavList), [`EPageHeader`](/components/PageHeader), [`EBreadcrumb`](/components/Breadcrumb), [`EAppFooter`](/components/AppFooter), [`EGrid`](/components/Grid), [`ESurface`](/components/Surface), and the layout and text components.
 

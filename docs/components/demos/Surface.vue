@@ -8,7 +8,7 @@ import { EButton, EGrid, EHeading, ESurface, EText } from "@eos-ui/vue";
       <EHeading :level="3">Default</EHeading>
       <EText>Flat and outlined, with medium padding.</EText>
     </ESurface>
-    <ESurface as="article" raised>
+    <ESurface as="article" variant="raised">
       <EHeading :level="3">Raised</EHeading>
       <EText>The lifted shadow of a toast.</EText>
     </ESurface>

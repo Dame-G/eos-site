@@ -52,3 +52,11 @@ export function toSections(items: DefaultTheme.SidebarItem[], path: string): Nav
 export function flatten(sections: NavSection[]): NavItem[] {
   return sections.flatMap((s) => s.items).filter((i) => i.href);
 }
+
+/** The page a mistyped address means when only its letter case is wrong, such as /components/button for /components/Button. */
+export function pageByCase(sidebar: DefaultTheme.Sidebar | undefined, path: string): string | undefined {
+  const lists = !sidebar ? [] : Array.isArray(sidebar) ? [sidebar] : Object.values(sidebar).map((v) => (Array.isArray(v) ? v : v.items));
+  const links = (items: DefaultTheme.SidebarItem[]): string[] => items.flatMap((i) => [...(i.link ? [i.link] : []), ...links(i.items ?? [])]);
+  const want = cleanPath(path).toLowerCase();
+  return lists.flatMap(links).find((link) => cleanPath(link).toLowerCase() === want && cleanPath(link) !== cleanPath(path));
+}

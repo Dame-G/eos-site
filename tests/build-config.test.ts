@@ -3,8 +3,10 @@ import { describe, expect, it } from "vitest";
 import vpDocCss from "vitepress/dist/client/theme-default/styles/components/vp-doc.css?raw";
 import varsCss from "vitepress/dist/client/theme-default/styles/vars.css?raw";
 import { headersFile, inlineScripts, redirectsFile } from "../docs/.vitepress/csp-policy.mjs";
+import { highlight } from "../docs/.vitepress/theme/highlight";
 import { SYNONYMS, areaOf, breadcrumb, componentDocs } from "../docs/.vitepress/search";
-import { THEME_CSS_MARK, isThemeCss, wrapInLayer } from "../docs/.vitepress/vitepress-layer";
+import customCss from "../docs/.vitepress/theme/custom.css?raw";
+import { DOC_SCOPE_LIMIT, THEME_CSS_MARK, isThemeCss, wrapInLayer } from "../docs/.vitepress/vitepress-layer";
 
 describe("vitepressInLayer", () => {
   const id = ["C:", "x", "node_modules", "vitepress", "dist", "client", "theme-default", "styles", "components", "vp-doc.css"].join(String.fromCharCode(92));
@@ -27,7 +29,9 @@ describe("vitepressInLayer", () => {
 
   it("scopes the doc styles so they stop at the demos and the library's own markup", () => {
     const out = wrapInLayer(".vp-doc h1 { margin: 0 }", id);
-    expect(out).toContain("@scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-acc, .e-details)");
+    expect(out).toContain("@scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-details)");
+    // The site's own doc rules stop at the same places.
+    expect(customCss).toContain(`@scope (.vp-doc) to (${DOC_SCOPE_LIMIT})`);
     expect(out).toContain(":scope h1");
   });
 
@@ -46,6 +50,8 @@ describe("headers and redirects", () => {
     const scriptSrc = /script-src ([^;]*)/.exec(enforced)![1]!;
     expect(scriptSrc).toContain("'sha256-abc='");
     expect(scriptSrc).not.toContain("unsafe-inline");
+    // Shiki runs on its JavaScript regex engine, so nothing needs WebAssembly or eval.
+    expect(scriptSrc).not.toContain("eval");
     expect(file).toContain("/assets/*");
   });
 
@@ -63,6 +69,7 @@ describe("headers and redirects", () => {
   it("redirects /guide and each lower-case component address, which static assets match case-sensitively", () => {
     const file = redirectsFile(["Button", "TextField", "ab"]);
     expect(file).toContain("/guide/ /guide/getting-started 302");
+    expect(file).toContain("/guide/recipes /patterns/recipes 301");
     expect(file).toContain("/components/button /components/Button 301");
     expect(file).toContain("/components/textfield /components/TextField 301");
     expect(file).not.toContain("/components/ab ");
@@ -85,5 +92,13 @@ describe("search words", () => {
     expect(breadcrumb("/guide/theming", "Theming", [])).toBe("Guide");
     expect(breadcrumb("/guide/theming#scopes", "Scoped themes", ["Theming"])).toBe("Guide › Theming");
     expect(breadcrumb("/components/Select", "ESelect", ["Form controls"])).toBe("Components › Form controls");
+  });
+});
+
+describe("highlight", () => {
+  it("colours each language the live code blocks use, without WebAssembly", async () => {
+    for (const [lang, code] of [["ts", "const a = 1;"], ["css", ":root { --e-primary: red; }"], ["vue", "<template><EButton /></template>"], ["vue", "<EButton />"], ["bash", "npm install x"]]) {
+      expect(await highlight(code!, lang!)).toContain("--shiki-token-");
+    }
   });
 });

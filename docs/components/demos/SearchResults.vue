@@ -33,7 +33,7 @@ function onKeydown(e: KeyboardEvent) {
 
 <template>
   <EStack>
-    <ESearchBar ref="field" v-model="query" label="Search the docs" placeholder="Search the docs" hide-action autocomplete="off" @keydown="onKeydown" />
+    <ESearchBar clearable ref="field" v-model="query" label="Search the docs" placeholder="Search the docs" hide-action autocomplete="off" @keydown="onKeydown" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ items.length }} results</EVisuallyHidden>
     <ESearchResults
       ref="results"
@@ -44,13 +44,13 @@ function onKeydown(e: KeyboardEvent) {
       @select="onSelect"
       @edge="field?.focus()"
     />
-    <EText small muted>While results load</EText>
+    <EText size="sm" tone="neutral">While results load</EText>
     <EStack :gap="2" aria-busy="true">
       <ESkeleton :height="56" />
       <ESkeleton :height="56" />
     </EStack>
-    <EText small muted>No results</EText>
+    <EText size="sm" tone="neutral">No results</EText>
     <ESearchResults label="Empty results" :items="[]" query="tax" empty-text="Nothing found for &quot;tax&quot;. Try a shorter word." />
-    <EText small muted>{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
+    <EText size="sm" tone="neutral">{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
   </EStack>
 </template>

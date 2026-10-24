@@ -9,7 +9,7 @@ const view = ref("list");
 <template>
   <EStack>
     <ESegmented v-model="range" label="Show statements for" :options="['Day', 'Week', 'Month']" />
-    <EText small muted>Showing {{ range.toLowerCase() }} view.</EText>
+    <EText size="sm" tone="neutral">Showing {{ range.toLowerCase() }} view.</EText>
     <ESegmented
       v-model="view"
       label="View"

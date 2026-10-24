@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { EField, EStack } from "@eos-ui/vue";
+import { ref } from "vue";
+import { EField, ESelect, EStack } from "@eos-ui/vue";
+
+const pharmacy = ref("");
+const PHARMACIES = ["Main Street Pharmacy", "Riverside Drugs", "Hillcrest Chemist"];
 </script>
 
 <template>
   <EStack>
     <EField label="Preferred pharmacy" hint="We send the prescription here." v-slot="{ id, ariaInvalid, ariaDescribedby }">
-      <input :id="id" class="e-input" :aria-invalid="ariaInvalid" :aria-describedby="ariaDescribedby" />
+      <ESelect :id="id" v-model="pharmacy" bare label="Preferred pharmacy" :options="PHARMACIES" :aria-invalid="ariaInvalid" :aria-describedby="ariaDescribedby" />
     </EField>
   </EStack>
 </template>

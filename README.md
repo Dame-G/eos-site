@@ -35,7 +35,7 @@ corepack pnpm docs:build      # static site in docs/.vitepress/dist
 corepack pnpm docs:preview    # serve the build
 corepack pnpm test            # Vitest browser mode with Playwright (Edge locally, Chromium when CI is set)
 corepack pnpm pages:check     # checks the pages of a running preview (pass its URL), in the light and dark scheme
-corepack pnpm ssr:check       # renders components with renderToString and reports the result
+
 corepack pnpm llms            # writes docs/public/llms.txt (dev and build run it)
 ```
 
@@ -67,7 +67,7 @@ The page is the component's `README.md` from the library, read at build time and
 | `docs/data/` | Build-time loaders for the component list, the tokens page and the contrast table |
 | `scripts/gen-llms.mjs` | Writes `docs/public/llms.txt` (pages and component props) |
 | `scripts/check-pages.mjs` | Page checks against a running preview |
-| `scripts/ssr-check.mjs` | The server rendering checks behind the Nuxt and SSR page |
+
 | `tests/` | Demo and pattern tests |
 
 ## Two copies of Vue, and CSS layers
@@ -100,6 +100,6 @@ Cloudflare static assets match paths case-sensitively, and component pages are w
 
 `wrangler.jsonc` describes a Worker named `eos-site` that serves `docs/.vitepress/dist` as static assets. Unknown paths get VitePress's `404.html`. The Worker uses the custom domain `eos.dame.gg`, and Cloudflare creates the DNS record and certificate on deploy.
 
-- `.github/actions/verify/action.yml`: the shared steps. It checks out `Dame-G/eos` beside the site, builds the library, installs the site, then runs `knip`, the docs build, the tests, `pages:check` (axe, 404 and console checks on full pages, in both the light and dark scheme) and `ssr:check`. CI and Deploy both call it, so they run the same gates.
+- `.github/actions/verify/action.yml`: the shared steps. It checks out `Dame-G/eos` beside the site, builds the library, installs the site, then runs `knip`, the docs build, the tests, `pages:check` (axe, 404 and console checks on full pages, in both the light and dark scheme). Server rendering of every component is checked in the library (`pnpm ssr`). CI and Deploy both call it, so they run the same gates.
 - `.github/workflows/ci.yml`: on pull requests, runs the shared steps against the library's `main`. No deploy.
 - `.github/workflows/deploy.yml`: runs on every push to `main` and on demand from the Actions tab. It runs the same shared steps against the latest released library (see above), then `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy from your machine instead, run `pnpm docs:build` and `pnpm deploy`.

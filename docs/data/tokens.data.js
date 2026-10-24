@@ -90,7 +90,13 @@ export default {
   watch: [file],
   load() {
     const json = JSON.parse(readFileSync(file, "utf8"));
-    const colours = json.color.tokens.map((t) => {
+    // Deprecated tokens are still emitted, but the tables list only the current ones. They have a table of their own.
+    const current = (tokens) => tokens.filter((t) => !t.deprecated);
+    const deprecated = Object.values(json)
+      .flatMap((group) => (group && Array.isArray(group.tokens) ? group.tokens : []))
+      .filter((t) => t.deprecated)
+      .map((t) => ({ name: t.name, note: t.deprecated }));
+    const colours = current(json.color.tokens).map((t) => {
       const value = resolveColour(t.name);
       const nonText = NON_TEXT.has(t.name);
       const partners = (PARTNERS[t.name] ?? [])
@@ -128,7 +134,7 @@ export default {
     });
 
     const theme = defineTheme({ name: "light" });
-    const scale = (key) => json[key].tokens.map((t) => ({ name: t.name, value: t.value, usage: t.usage, ...provenance(t) }));
+    const scale = (key) => current(json[key].tokens).map((t) => ({ name: t.name, value: t.value, usage: t.usage, ...provenance(t) }));
     const inputs = themeInputs().map(([name, controls, neutral]) => ({
       name,
       controls,
@@ -141,6 +147,7 @@ export default {
     return {
       inputs,
       colours,
+      deprecated,
       promised,
       issues: theme.issues,
       spacing: scale("spacing"),

@@ -8,6 +8,6 @@ const image = ref("");
 <template>
   <EStack>
     <ESignaturePad v-model="image" :height="180" />
-    <EText small muted>{{ image ? "Signature drawn" : "Nothing drawn yet" }}</EText>
+    <EText size="sm" tone="neutral">{{ image ? "Signature drawn" : "Nothing drawn yet" }}</EText>
   </EStack>
 </template>

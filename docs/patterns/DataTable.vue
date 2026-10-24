@@ -60,7 +60,7 @@ function remove() {
           empty-title="No statements"
           empty-text="They appear here after your first visit."
         >
-          <template #cell-status="{ row }"><EStamp :status="row.status" small /></template>
+          <template #cell-status="{ row }"><EStamp :status="row.status" size="sm" /></template>
           <template #cell-amount="{ row }">{{ money(row.amount) }}</template>
           <template #bulk-actions>
             <EButton variant="outline" icon="download" @click="download">Download receipts</EButton>

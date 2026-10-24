@@ -1,5 +1,5 @@
 ---
-title: Data tables and DataGrid
+title: Data tables
 description: "Choose between ETable and EDataGrid, then sort, filter, select and format rows in the browser or from a server."
 ---
 
@@ -8,7 +8,7 @@ import ClientGrid from "./examples/ClientGrid.vue";
 import ServerGrid from "./examples/ServerGrid.vue";
 </script>
 
-# Data tables and DataGrid
+# Data tables
 
 ## Which one
 
@@ -38,7 +38,7 @@ The default. Give the grid all the rows and it sorts, filters, searches and page
   selectable
 >
   <template #cell-date="{ row }">{{ formatDate(row.date) }}</template>
-  <template #cell-status="{ row }"><EStamp :status="row.status" small /></template>
+  <template #cell-status="{ row }"><EStamp :status="row.status" size="sm" /></template>
   <template #cell-amount="{ row }">{{ formatMoney(row.amount) }}</template>
   <template #bulk-actions><EButton variant="outline" icon="download">Download receipts</EButton></template>
 </EDataGrid>

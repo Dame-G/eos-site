@@ -7,7 +7,7 @@ description: "Every EOS design token with its usage note and contrast, generated
 
 Every EOS component is styled with CSS variables named `--e-<name>`, so a theme is a set of variables and nothing else. Use the same variables in your own CSS and your screens will follow the theme, including dark surfaces and high contrast, without a line of extra code.
 
-This page has three parts: the tokens you will use most, the inputs that generate all the rest, and the full reference. The values come from `@eos-ui/tokens`. To change them, see [Theming](/guide/theming) or try values in the [playground](/playground).
+This page has three parts: the tokens you will use most, what each theme input derives, and the full reference. The values come from `@eos-ui/tokens`. To change them, see [Theming](/guide/theming) or try values in the [playground](/playground).
 
 ## Start here
 
@@ -20,7 +20,7 @@ You will almost never need more than these. Pick by the job, not by the colour.
 | Page | `--e-background` | The ground behind everything. |
 | Cards and fields | `--e-surface` | Anything that sits on the page: cards, inputs, popovers, dialogs. |
 | Quiet fill | `--e-surface-tint` | Wells, table headers, footers and empty slots. |
-| Hover and selected | `--e-surface-hover` | The fill of a hovered row or item, and the selected item in a list. |
+| Hover and selected | `--e-wash-hover`, `--e-wash-press` | The wash over a hovered or pressed row or item, and the selected item in a list. |
 | Lines | `--e-border`, `--e-border-strong` | Hairlines and card outlines, then the edge of a control. |
 | Action | `--e-primary`, `--e-on-primary` | The main button and every selected state, then the text on it. |
 | Status | `--e-danger`, `--e-warning-strong`, `--e-secondary` | Errors, cautions and success, each with a `-soft` tint for backgrounds. |
@@ -43,7 +43,7 @@ A custom card built only from those:
 }
 
 .balance:hover {
-  background: var(--e-surface-hover);
+  background: var(--e-wash-hover);
 }
 
 .balance small {
@@ -52,11 +52,11 @@ A custom card built only from those:
 }
 ```
 
-Two rules keep a custom screen accessible. Put `ink` and `muted` only on `surface`, `surface-tint` or `background`, since those pairs are checked. Never use `brand-blue` or `brand-green` for text: they are for decoration, and `primary` and `secondary` are the text-safe versions.
+Two rules keep a custom screen accessible. Put `ink` and `muted` only on `surface`, `surface-tint` or `background`, since those pairs are checked. Never use `brand` or `brand-accent` for text: they are for decoration, and `primary` and `secondary` are the text-safe versions.
 
-## The inputs
+## What each input derives
 
-`defineTheme()` takes the inputs below and derives every token from them, so you set a brand colour and a surface and the rest follows with its contrast checked. The **Derives** column lists what each input drives. Constants, such as `depth`, never change. Any token can still be set by name in `tokens`, and a token set that way wins over a derived value.
+`defineTheme()` derives every token from a few inputs, so you set a brand colour and a surface and the rest follows with its contrast checked. The inputs and their types are listed under [The inputs](/guide/theming#the-inputs) in Theming. This table is read from the tokens package: the tokens each input drives, and its value when you leave it out. Constants, such as `depth`, never change. Any token can still be set by name in `tokens`, and wins over a derived value.
 
 <TokenTables section="inputs" />
 
@@ -137,3 +137,9 @@ Short durations and one easing. Components switch their motion off for people wh
 A short, named stack, so layers never need a number you make up.
 
 <TokenTables section="zIndex" />
+
+## Deprecated tokens
+
+Still emitted, so CSS that reads them keeps working, and removed in a later major version. `defineTheme` warns when you set one in `tokens`, and `theme.explain()` and the design-tokens export (`$deprecated`) name them. The tables above leave them out.
+
+<TokenTables section="deprecated" />

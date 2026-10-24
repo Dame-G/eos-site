@@ -30,7 +30,7 @@ const items = () => [
 <template>
   <div class="pattern-lg">
     <EStack :gap="3">
-      <EText small muted>The frame below stands in for a whole page. Switch the page to see the current item move.</EText>
+      <EText size="sm" tone="neutral">The frame below stands in for a whole page. Switch the page to see the current item move.</EText>
       <EInline>
         <EButton variant="outline" :aria-pressed="page === 'home'" @click="page = 'home'">Home</EButton>
         <EButton variant="outline" :aria-pressed="page === 'statements'" @click="page = 'statements'">Statements</EButton>
@@ -63,13 +63,13 @@ const items = () => [
             <EGrid min="12rem" as="ul">
               <ESurface as="li">
                 <EStack :gap="2">
-                  <EStamp status="due" small />
+                  <EStamp status="due" size="sm" />
                   <EText>October statement, $162.40</EText>
                 </EStack>
               </ESurface>
               <ESurface as="li">
                 <EStack :gap="2">
-                  <EStamp status="paid" small />
+                  <EStamp status="paid" size="sm" />
                   <EText>September statement, $84.00</EText>
                 </EStack>
               </ESurface>

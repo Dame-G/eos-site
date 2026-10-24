@@ -57,7 +57,7 @@ function search(q: string) {
   <div class="pattern-md">
     <EStack :gap="4">
       <EPageHeader :heading-level="2" title="Statements and receipts" description="Everything you have been billed, newest first." />
-      <ESearchBar v-model="typed" placeholder="Search by visit or statement number" @submit="search" />
+      <ESearchBar clearable v-model="typed" placeholder="Search by visit or statement number" @submit="search" />
 
       <EInline justify="between">
         <EActions label="Show">
@@ -65,12 +65,12 @@ function search(q: string) {
           <EButton variant="outline" :aria-pressed="filter === 'due'" @click="setFilter('due')">Needs payment</EButton>
           <EButton variant="outline" :aria-pressed="filter === 'paid'" @click="setFilter('paid')">Paid</EButton>
         </EActions>
-        <EText small muted role="status">{{ matches.length }} {{ matches.length === 1 ? "statement" : "statements" }}</EText>
+        <EText size="sm" tone="neutral" role="status">{{ matches.length }} {{ matches.length === 1 ? "statement" : "statements" }}</EText>
       </EInline>
 
       <EStack v-if="shown.length" :gap="2">
         <EExpandableRow v-for="s in shown" :key="s.id" :title="s.title" :subtitle="s.sub">
-          <template #leading><EStamp :status="s.status" small /></template>
+          <template #leading><EStamp :status="s.status" size="sm" /></template>
           <template #trailing>{{ money(s.amount) }}</template>
           <EDescriptionList :items="[{ label: 'Status', text: s.reason }]" />
           <template #actions>

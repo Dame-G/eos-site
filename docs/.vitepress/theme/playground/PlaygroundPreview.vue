@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import ThemedScope from "./ThemedScope.vue";
+import { computed, ref } from "vue";
+import type { Theme } from "@eos-ui/tokens";
 import {
   EButton,
+  EConfigProvider,
   ECalendar,
   ECheckbox,
   EDataGrid,
@@ -15,6 +16,7 @@ import {
   EKicker,
   ELink,
   EMenu,
+  EMetric,
   ENavList,
   ENotice,
   ENumberField,
@@ -36,7 +38,7 @@ import {
 import { variantProps } from "./build";
 import { DEFAULT_VARIANTS, type Variants } from "./model";
 
-const props = withDefaults(defineProps<{ tokens: Record<string, string>; locale: string; currency: string; variants?: Variants }>(), { variants: () => ({ ...DEFAULT_VARIANTS }) });
+const props = withDefaults(defineProps<{ theme: Theme; locale: string; currency: string; variants?: Variants }>(), { variants: () => ({ ...DEFAULT_VARIANTS }) });
 
 const vp = computed(() => variantProps(props.variants));
 
@@ -93,34 +95,25 @@ const navItems = [
 const tone = { paid: "success", due: "info", overdue: "danger" } as const;
 const fmt = (n: unknown) => new Intl.NumberFormat(props.locale, { style: "currency", currency: props.currency }).format(Number(n));
 
-const sceneItems = [
-  { id: "overview", label: "Overview" },
-  { id: "actions", label: "Actions" },
-  { id: "forms", label: "Forms" },
-  { id: "feedback", label: "Feedback" },
-  { id: "navigation", label: "Navigation" },
-  { id: "data", label: "Data" },
-  { id: "overlays", label: "Overlays" },
-  { id: "type", label: "Type" },
+const SCENES = [
+  { value: "overview", label: "Overview" },
+  { value: "actions", label: "Actions" },
+  { value: "forms", label: "Forms" },
+  { value: "feedback", label: "Feedback" },
+  { value: "navigation", label: "Navigation" },
+  { value: "data", label: "Data" },
+  { value: "overlays", label: "Overlays" },
+  { value: "type", label: "Type" },
 ];
 const scene = ref("overview");
-
-/** The scene list sits beside the scene, on its right, when there is room, above it when there is not. */
-const wrap = ref<HTMLElement | null>(null);
-const narrow = ref(false);
-let watcher: ResizeObserver | undefined;
-onMounted(() => {
-  watcher = new ResizeObserver(([entry]) => (narrow.value = entry!.contentRect.width < 576));
-  if (wrap.value) watcher.observe(wrap.value);
-});
-onBeforeUnmount(() => watcher?.disconnect());
 </script>
 
 <template>
-  <ThemedScope :tokens="tokens" :locale="locale" :currency="currency">
-    <div ref="wrap" class="pv-wrap">
-      <ETabs v-model="scene" :items="sceneItems" :orientation="narrow ? 'horizontal' : 'vertical'" side="start" class="pv">
-          <template #overview>
+  <div class="pv">
+  <ESelect v-model="scene" class="pv-scene" bare label="Scene" :options="SCENES" />
+  <EConfigProvider :theme="theme" :locale="locale" :currency="currency">
+    <div class="pv-wrap">
+          <template v-if="scene === 'overview'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="A bill, the way a page would use it">Overview</EHeading>
             <EStack :gap="vp.gap">
@@ -129,24 +122,20 @@ onBeforeUnmount(() => watcher?.disconnect());
                   <EHeading :level="2" kicker="Oct 1 to Oct 31">October statement</EHeading>
                   <EStamp status="due" detail="Oct 22" />
                 </EInline>
-                <EStack :gap="1">
-                  <EKicker>You owe</EKicker>
-                  <p class="site-figure">{{ formatMoney(162.4) }}</p>
-                  <EText small muted>Insurance paid {{ formatMoney(80) }}</EText>
-                </EStack>
+                <EMetric label="You owe" :value="formatMoney(162.4)" :help="`Insurance paid ${formatMoney(80)}`" />
                 <ENotice tone="info" title="Your visit is Thursday">Main office, 9:30 am.</ENotice>
                 <ESelect v-model="plan" label="Pay with" :options="planOptions" />
                 <EInline :gap="vp.inlineGap">
                   <EButton icon="lock">Pay {{ money }}</EButton>
                   <EButton variant="outline">Download PDF</EButton>
                 </EInline>
-                <EText small>Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
+                <EText size="sm">Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
               </EStack>
             </EStack>
             </EStack>
           </template>
 
-          <template #actions>
+          <template v-if="scene === 'actions'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Buttons, menus and links">Actions</EHeading>
             <EStack :gap="vp.gap">
@@ -174,13 +163,13 @@ onBeforeUnmount(() => watcher?.disconnect());
                     <template #actions><EButton variant="outline">Set up a plan</EButton></template>
                   </EDefinition>
                 </EInline>
-                <EText small>Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
+                <EText size="sm">Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
               </EStack>
             </EStack>
             </EStack>
           </template>
 
-          <template #forms>
+          <template v-if="scene === 'forms'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Fields and choices">Forms</EHeading>
             <EStack :gap="vp.gap">
@@ -208,7 +197,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #feedback>
+          <template v-if="scene === 'feedback'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Status, notices and progress">Feedback</EHeading>
             <EStack :gap="vp.gap">
@@ -250,7 +239,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #navigation>
+          <template v-if="scene === 'navigation'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Moving around">Navigation</EHeading>
             <EStack :gap="vp.gap">
@@ -264,7 +253,7 @@ onBeforeUnmount(() => watcher?.disconnect());
                     { id: 'settings', label: 'Settings' },
                   ]"
                 >
-                  <template #panel="{ item }"><EText small muted>{{ item.label }} panel.</EText></template>
+                  <template #panel="{ item }"><EText size="sm" tone="neutral">{{ item.label }} panel.</EText></template>
                 </ETabs>
                 <EStepper :steps="steps" label="Checkout" />
                 <EPagination v-model="page" :page-count="6" aria-label="Visit pages" />
@@ -279,7 +268,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #data>
+          <template v-if="scene === 'data'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Tables and dates">Data</EHeading>
             <EStack :gap="vp.gap">
@@ -296,7 +285,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #overlays>
+          <template v-if="scene === 'overlays'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Dialogs and floating layers">Overlays</EHeading>
             <EStack :gap="vp.gap">
@@ -309,7 +298,7 @@ onBeforeUnmount(() => watcher?.disconnect());
                     <EButton variant="outline" @click="dialogOpen = false">Keep it</EButton>
                   </template>
                 </EDialog>
-                <ESurface raised small><EText small>A floating surface: menus, lists and toasts.</EText></ESurface>
+                <ESurface variant="raised" size="sm"><EText size="sm">A floating surface: menus, lists and toasts.</EText></ESurface>
                 <EInline :gap="vp.inlineGap">
                   <EMenu label="More" :items="menuItems" />
                   <ETooltip label="Help"><EIconButton icon="info" label="Help" /></ETooltip>
@@ -319,7 +308,7 @@ onBeforeUnmount(() => watcher?.disconnect());
             </EStack>
           </template>
 
-          <template #type>
+          <template v-if="scene === 'type'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="Headings and text">Type</EHeading>
             <EStack :gap="vp.gap">
@@ -327,20 +316,29 @@ onBeforeUnmount(() => watcher?.disconnect());
                 <EHeading :level="1">Your account</EHeading>
                 <EHeading :level="2">Upcoming visits</EHeading>
                 <EHeading :level="3">Visit on Oct 2</EHeading>
-                <EText large>Your balance is due November 1.</EText>
+                <EText size="lg">Your balance is due November 1.</EText>
                 <EText>Pay online in about a minute. Receipts are emailed the same day.</EText>
-                <EText small muted>Statement 4471, sent Oct 14</EText>
+                <EText size="sm" tone="neutral">Statement 4471, sent Oct 14</EText>
                 <EKicker>History</EKicker>
               </EStack>
             </EStack>
             </EStack>
           </template>
-      </ETabs>
     </div>
-  </ThemedScope>
+  </EConfigProvider>
+  </div>
 </template>
 
 <style scoped>
+.pv {
+  display: grid;
+  gap: var(--e-space-3);
+  min-width: 0;
+}
+.pv-scene {
+  justify-self: start;
+  min-width: 12rem;
+}
 .pv-wrap {
   min-width: 0;
   padding: var(--e-space-4);

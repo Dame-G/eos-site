@@ -54,8 +54,8 @@ const facts = computed(() => [
         <EPageHeader :heading-level="2" title="Command palette" description="Reach any page or action from the keyboard." />
         <EInline align="center">
           <EButton variant="outline" icon="search" aria-haspopup="dialog" @click="open = true">Search commands</EButton>
-          <EText small muted>
-            or press <template v-for="k in keys" :key="k"><EKbd small>{{ k }}</EKbd>{{ " " }}</template>
+          <EText size="sm" tone="neutral">
+            or press <template v-for="k in keys" :key="k"><EKbd size="sm">{{ k }}</EKbd>{{ " " }}</template>
           </EText>
         </EInline>
         <EDescriptionList :items="facts" />

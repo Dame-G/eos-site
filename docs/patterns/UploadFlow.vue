@@ -72,7 +72,7 @@ onBeforeUnmount(() => clearInterval(timer));
             :disabled="phase === 'sending'"
             :error="error"
             hint="PDF, JPG or PNG. Up to 3 files, 5 MB each."
-            @files="onFiles"
+            @update:model-value="onFiles"
             @reject="onReject"
           />
           <EProgress v-if="phase === 'sending'" label="Sending documents" :value="progress" />

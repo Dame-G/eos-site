@@ -3,8 +3,8 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import {
   EButton,
   EColorField,
+  EDrawer,
   EGrid,
-  EInline,
   EKicker,
   ENumberField,
   ESegmented,
@@ -33,39 +33,47 @@ const built = computed(() => build(s));
 const tokens = computed(() => built.value.theme.tokens);
 const cssVars = computed(() => Object.fromEntries(Object.entries(tokens.value).map(([k, v]) => [`--e-${k}`, v])));
 
-const sig = () => JSON.stringify({ ...s, preset: "" });
-let snapshot = sig();
+// The state is serialised once per change. The same string says whether anything was edited since the last preset (then the preset reads "custom") and is what the address holds.
+const link = computed(() => encode(s));
+let snapshot = link.value;
+// What the address stands for. On load it is the state the page started on, so loading writes nothing.
+let shown = link.value;
+/** After a preset, or after loading, the state as it now stands is the starting point again. */
+function settle(loaded = false) {
+  snapshot = link.value;
+  if (loaded) shown = link.value;
+}
 function usePreset(id: string) {
   if (id === "random" || id === "custom") return;
   applyPreset(s, id);
-  snapshot = sig();
+  settle();
 }
 function useRandom() {
   applyRandom(s);
-  snapshot = sig();
+  settle();
 }
-watch(sig, (v) => {
-  if (v !== snapshot && s.preset !== "custom") s.preset = "custom";
-});
 
 let timer: ReturnType<typeof setTimeout> | undefined;
 const HASH = "#t=";
-watch(
-  () => encode(s),
-  (code) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      try {
-        history.replaceState(null, "", code ? `${HASH}${code}` : location.pathname + location.search);
-      } catch {
-      }
-    }, 200);
-  },
-);
+watch(link, (code) => {
+  if (code !== snapshot && s.preset !== "custom") {
+    s.preset = "custom";
+    return;
+  }
+  if (code === shown) return;
+  shown = code;
+  clearTimeout(timer);
+  // The address follows each edit in place, so the edits do not fill the history.
+  timer = setTimeout(() => {
+    try {
+      history.replaceState(history.state, "", code ? `${HASH}${code}` : location.pathname + location.search);
+    } catch {}
+  }, 200);
+});
 const copied = ref("");
 async function copyLink() {
   try {
-    await navigator.clipboard.writeText(location.href);
+    await navigator.clipboard.writeText(location.origin + location.pathname + (link.value ? HASH + link.value : ""));
     copied.value = "Link copied";
   } catch {
     copied.value = "Copy the address bar";
@@ -92,14 +100,14 @@ function loadHash() {
   const loaded = m ? decode(m[1]!) : null;
   if (loaded && encode(loaded) !== encode(s)) {
     Object.assign(s, loaded);
-    snapshot = sig();
+    settle(true);
   }
 }
 /** With no state in the address, start on the scheme the site is showing, so a visitor in dark mode gets a dark preview. A shared link keeps its own scheme. */
 function followSite() {
   if (/^#t=/.test(location.hash) || document.documentElement.dataset["scheme"] !== "dark") return;
   Object.assign(s, withGround("dark"));
-  snapshot = sig();
+  settle(true);
 }
 onMounted(() => {
   followSite();
@@ -200,11 +208,7 @@ const controlItems = [
   { id: "space", label: "Space" },
   { id: "motion", label: "Motion" },
 ];
-const stageTab = ref("preview");
-const stageItems = [
-  { id: "preview", label: "Preview" },
-  { id: "export", label: "Export" },
-];
+const exporting = ref(false);
 
 const format = ref("code");
 const code = computed(() => {
@@ -220,18 +224,15 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 <template>
   <div class="playground eos-live">
     <section class="bar" aria-label="Presets">
-      <PresetPicker :model-value="s.preset" name="playground-preset" :tokens="tokens" select @select="usePreset" @random="useRandom" />
-      <div class="bar-row">
-        <div class="bar-info">
-          <EText small muted role="status">{{ copied }}</EText>
+      <PresetPicker class="bar-presets" :model-value="s.preset" :tokens="tokens" @select="usePreset" @random="useRandom" />
+      <div class="bar-actions">
+        <ESwitch v-model="wholePage" label="Apply to the whole page" />
+        <div class="bar-buttons">
+          <EButton variant="outline" @click="usePreset('eos')">Reset</EButton>
+          <EButton variant="outline" @click="copyLink">Copy link</EButton>
+          <EButton @click="exporting = true">Export</EButton>
         </div>
-        <div class="bar-actions">
-          <ESwitch v-model="wholePage" label="Apply to the whole page" />
-          <div class="bar-buttons">
-            <EButton variant="outline" @click="usePreset('eos')">Reset</EButton>
-            <EButton variant="outline" @click="copyLink">Copy link</EButton>
-          </div>
-        </div>
+        <EText size="sm" tone="neutral" role="status">{{ copied }}</EText>
       </div>
     </section>
 
@@ -244,7 +245,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
               <EStack :gap="2">
                 <ESwitch v-model="s.autoScheme" label="Follow light and dark" />
                 <ESwitch v-model="s.autoContrast" label="Follow high contrast" :disabled="s.scheme === 'contrast'" />
-                <EText small muted>Sets scheme and contrast to auto in the export. The preview shows the one theme.</EText>
+                <EText size="sm" tone="neutral">Sets scheme and contrast to auto in the export. The preview shows the one theme.</EText>
               </EStack>
               <EKicker>Ground</EKicker>
               <EGrid min="9rem" :gap="3">
@@ -274,7 +275,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
                 <ENumberField label="Focus outline" hint="At least 2" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.focus" @update:model-value="setField('focus', $event)" />
               </EGrid>
               <EKicker>Spacing</EKicker>
-              <EText small muted>Component props, not tokens. They are not part of defineTheme.</EText>
+              <EText size="sm" tone="neutral">Component props, not tokens. They are not part of defineTheme.</EText>
               <ESegmented v-for="f in VARIANT_FIELDS" :key="f.key" :model-value="s.variants[f.key]" :label="f.label" :options="f.options" :hint="f.hint" @update:model-value="setVariant(f.key, $event)" />
               <TokenOverrides title="All shape tokens" :items="LISTS.shape" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
@@ -317,8 +318,8 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
           <template #motion>
             <EStack :gap="4">
-              <ESegmented :model-value="s.motion" label="Feel" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }, { value: 'none', label: 'None' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
-              <EText small muted>Try it with Replay in the preview. Everything stops under reduced motion.</EText>
+              <ESegmented :model-value="s.motion" label="Feel" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
+              <EText size="sm" tone="neutral">Try it with Replay in the preview. Everything stops under reduced motion.</EText>
               <TokenOverrides title="All motion tokens" :items="LISTS.motion" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
           </template>
@@ -326,27 +327,22 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
       </ControlsDock>
 
       <section class="stage" aria-labelledby="playground-result">
-        <EVisuallyHidden as="h2" id="playground-result">Result</EVisuallyHidden>
-        <ETabs v-model="stageTab" :items="stageItems" class="stage-tabs">
-          <template #preview>
-            <PlaygroundPreview :tokens="cssVars" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
-          </template>
-          <template #export>
-            <EStack :gap="3">
-              <EInline>
-                <ESegmented v-model="format" label="Format" :options="[{ value: 'code', label: 'defineTheme' }, { value: 'css', label: 'CSS changes' }, { value: 'full', label: 'Full CSS' }]" />
-              </EInline>
-              <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
-              <template v-if="variantTags">
-                <EText small muted>Spacing is set with component props, not tokens. This look also used:</EText>
-                <HighlightedCode lang="vue" copy-label="Copy spacing props" :code="variantTags" />
-              </template>
-              <EText small muted>{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. The link in the address bar holds this theme.</EText>
-            </EStack>
-          </template>
-        </ETabs>
+        <EVisuallyHidden as="h2" id="playground-result">Preview</EVisuallyHidden>
+        <PlaygroundPreview :theme="built.theme" :locale="s.locale" :currency="s.currency" :variants="s.variants" />
       </section>
     </div>
+
+    <EDrawer v-model:open="exporting" title="Export the theme" size="lg">
+      <EStack :gap="3">
+        <ESegmented v-model="format" label="Format" :options="[{ value: 'code', label: 'defineTheme' }, { value: 'css', label: 'CSS changes' }, { value: 'full', label: 'Full CSS' }]" />
+        <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
+        <template v-if="variantTags">
+          <EText size="sm" tone="neutral">Spacing is set with component props, not tokens. This look also used:</EText>
+          <HighlightedCode lang="vue" copy-label="Copy spacing props" :code="variantTags" />
+        </template>
+        <EText size="sm" tone="neutral">{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. Copy link shares this theme.</EText>
+      </EStack>
+    </EDrawer>
   </div>
 </template>
 
@@ -358,45 +354,29 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
   min-width: 0;
 }
 .bar {
-  display: grid;
-  gap: var(--e-space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--e-space-3) var(--e-space-5);
   padding-block-end: var(--e-space-6);
   border-bottom: var(--e-stroke-hair) solid var(--e-border);
   min-width: 0;
 }
-.bar-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--e-space-3) var(--e-space-5);
-}
-.bar-info {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  flex: 1 1 18rem;
-  gap: var(--e-space-1) var(--e-space-3);
-  min-width: 0;
+.bar-presets {
+  flex: 1 1 22rem;
+  max-width: 32rem;
 }
 .bar-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--e-space-3) var(--e-space-4);
+  gap: var(--e-space-2) var(--e-space-3);
+  min-height: var(--e-control-height);
   min-width: 0;
 }
 .bar-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
   gap: var(--e-space-2);
-  width: 100%;
-}
-@media (min-width: 30rem) {
-  .bar-buttons {
-    display: flex;
-    width: auto;
-  }
 }
 .workbench {
   display: grid;
@@ -407,15 +387,11 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 }
 .stage {
   display: grid;
-  /* One column that can shrink below its content: an auto column grows to the preview's min-content, which flips with the tab orientation, which is chosen from this width. */
+  /* One column that can shrink below its content: an auto column would grow to the preview's min-content. */
   grid-template-columns: minmax(0, 1fr);
   gap: var(--e-space-3);
   min-width: 0;
   scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
-}
-.stage-tabs > :deep(.e-tabpanel) {
-  padding-top: var(--e-space-3);
-  min-width: 0;
 }
 .groups :deep(.e-seg-text) {
   min-width: 0;

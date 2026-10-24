@@ -7,8 +7,8 @@ export function isThemeCss(id: string): boolean {
   return posix(id).includes(THEME_CSS_MARK) && (id.endsWith(".css") || id.includes(".css?") || id.includes("type=style"));
 }
 
-/** Where the doc styles are scoped so they stop at the demos, patterns and library components. */
-const DOC_SCOPE_LIMIT = ".demo-stage, .pattern-stage, .eos-live, .e-code, .e-acc, .e-details";
+/** Where the doc styles are scoped so they stop at the demos, patterns and library components. custom.css scopes its own doc rules to the same list. */
+export const DOC_SCOPE_LIMIT = ".demo-stage, .pattern-stage, .eos-live, .e-code, .e-details";
 
 /**
  * VitePress ships unlayered CSS, which would beat the library's `@layer e.*` rules inside the demos. This wraps the

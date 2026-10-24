@@ -35,7 +35,7 @@ import { EEmptyState, ESurface, EStack, ETable } from "@eos-ui/vue";
       </tbody>
     </ETable>
 
-    <ETable caption="Dense reference table" hide-caption dense max-height="9rem">
+    <ETable caption="Dense reference table" hide-caption size="sm" max-height="9rem">
       <thead>
         <tr><th scope="col">Code</th><th scope="col">Meaning</th></tr>
       </thead>

@@ -1,9 +1,9 @@
 ---
-title: Recipes
-description: "Small compositions of EOS components that replace single-purpose components: toggle button, button group, link card, back link and panel."
+title: Small recipes
+description: "Small compositions of EOS components that replace single-purpose components: toggle button, button group, back link and panel."
 ---
 
-# Recipes
+# Small recipes
 
 Some things are a few lines of the pieces EOS already has. They are recipes, not components, so there is less to learn and nothing extra to maintain. Copy one and change the words.
 
@@ -38,48 +38,12 @@ Buttons that belong together, side by side, announced as one labelled group. [`E
 
 ## Link card
 
-A card with a title, a short description and one link, where the whole card is the click target. Put one `a` in an [`ESurface`](/components/Surface), stretch its `::after` over the card, and keep everything else in the card free of links and buttons.
+A card that is one link is a component now: [`ELinkCard`](/components/LinkCard). The whole card is the click target, and its border recolours on hover without thickening.
 
 ```vue
-<ESurface as="li" small class="link-card">
-  <a href="/components/Button" class="link-card-link">EButton</a>
-  <EText small muted>A button for an action, or a link that looks like one.</EText>
-</ESurface>
-```
-
-```css
-.link-card {
-  position: relative;
-  display: grid;
-  gap: var(--e-space-1);
-  align-content: start;
-}
-
-.link-card:hover {
-  outline: var(--e-stroke-edge) solid var(--e-border-strong);
-}
-
-.link-card:has(:focus-visible) {
-  outline: var(--e-stroke-focus) solid var(--e-focus-ring);
-  outline-offset: var(--e-stroke-focus);
-}
-
-.link-card-link {
-  color: var(--e-primary);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.link-card-link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--e-radius-md);
-}
-
-.link-card-link:focus-visible {
-  outline: none;
-}
+<EGrid as="ul" min="17rem" :gap="3">
+  <ELinkCard as="li" size="sm" title="EButton" href="/components/Button">A button for an action, or a link that looks like one.</ELinkCard>
+</EGrid>
 ```
 
 The component list on this site is built this way.

@@ -62,10 +62,10 @@ async function check(context, viewport, scheme, path) {
     const violations = await page.evaluate(async () => {
       // @ts-ignore axe is injected above
       const r = await axe.run(document, { resultTypes: ["violations"] });
-      return r.violations.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(" ") + " :: " + (n.failureSummary || "").replace(/s+/g, " ").slice(0, 160)) }));
+      return r.violations.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(" ") + " :: " + (n.failureSummary || "").replace(/\s+/g, " ").slice(0, 160)) }));
     });
     for (const v of violations.filter((x) => !(ALLOWED[path] ?? []).includes(x.id))) problems.push(`axe ${v.id} (${v.impact}): ${v.nodes.join(" | ")}`);
-    if (shots) await page.screenshot({ path: join(shots, (path.replace(/W+/g, "_") || "home") + `.${scheme}.png`), fullPage: true });
+    if (shots) await page.screenshot({ path: join(shots, (path.replace(/\W+/g, "_") || "home") + `.${scheme}.png`), fullPage: true });
   }
   await page.close();
   return problems;
@@ -73,8 +73,7 @@ async function check(context, viewport, scheme, path) {
 
 for (const scheme of schemes) {
   for (const viewport of viewports) {
-    console.log(`
-${scheme} scheme, ${viewport.name}`);
+    console.log(`\n${scheme} scheme, ${viewport.name}`);
     // The site reads the saved choice before the first paint (docs/.vitepress/scheme.ts), so it is set before any page script runs.
     const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
     await context.addInitScript((value) => {
@@ -98,7 +97,5 @@ ${scheme} scheme, ${viewport.name}`);
   }
 }
 await browser.close();
-console.log(failures ? `
-${failures} of ${total} page checks have problems` : `
-All ${total} page checks are clean (${schemes.join(" and ")}, desktop and phone)`);
+console.log(failures ? `\n${failures} of ${total} page checks have problems` : `\nAll ${total} page checks are clean (${schemes.join(" and ")}, desktop and phone)`);
 process.exit(failures ? 1 : 0);

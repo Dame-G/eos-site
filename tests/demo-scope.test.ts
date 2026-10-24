@@ -1,16 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { defineComponent, h } from "vue";
-import { ESelect } from "@eos-ui/vue";
-import ThemedScope from "../docs/.vitepress/theme/playground/ThemedScope.vue";
+import { EConfigProvider, ESelect } from "@eos-ui/vue";
 import { mount, settle } from "./helpers";
 
-// Menus and option lists portal into the scope and leave an empty wrapper behind, so the scope must not add space per wrapper.
-describe("ThemedScope", () => {
+// The demos and the playground preview sit in an EConfigProvider. Menus and option lists portal into it and leave an empty wrapper behind, so the scope must not add space per wrapper.
+describe("EConfigProvider as the demo scope", () => {
   it("keeps its height when an option list opens and closes", async () => {
     const Demo = defineComponent({
       render: () =>
-        h(ThemedScope, { tokens: {}, locale: "en-US", currency: "USD", class: "probe" }, () =>
+        h(EConfigProvider, { theme: { name: "light" }, class: "probe" }, () =>
           h(ESelect, { label: "Plan", options: ["Basic", "Team"], modelValue: "Basic" }),
         ),
     });

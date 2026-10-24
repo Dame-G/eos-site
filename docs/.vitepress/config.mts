@@ -4,9 +4,9 @@ import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
 import { collectScriptHashes, headersFile, redirectsFile } from "./csp.mjs";
-import { GROUPS, libraryBuildInfo, licenseText, listComponents, componentModified } from "./eos-source.mjs";
+import { GROUPS, groupedComponents, libraryBuildInfo, licenseText, listComponents, componentModified } from "./eos-source.mjs";
 import { GROUP_OF } from "./groups.mjs";
-import { DESIGN, PATTERNS, guideSections } from "./pages.mjs";
+import { PATTERN_EXTRAS, guideSections, patternSections } from "./pages.mjs";
 import { areaOf, renderForSearch, searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
 import { BOOT_SCRIPT, THEME_COLOR, darkCss } from "./scheme";
@@ -41,14 +41,12 @@ const guide: DefaultTheme.SidebarItem[] = guideSections().map((s) => ({
   items: [...s.pages.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })), ...(s.title === "Reference" ? [{ text: "Changelog", link: "/changelog" }] : [])],
 }));
 
+// Grouped as the overview groups them, then the pages that are not whole patterns.
 const patterns: DefaultTheme.SidebarItem[] = [
-  {
-    text: "Patterns",
-    items: [{ text: "Overview", link: "/patterns/" }, ...PATTERNS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` }))],
-  },
+  { text: "Overview", link: "/patterns/" },
+  ...patternSections().map((s) => ({ text: s.title, items: s.pages.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) })),
+  { text: "More", items: PATTERN_EXTRAS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) },
 ];
-
-const tools: DefaultTheme.SidebarItem[] = [{ text: "Design", items: DESIGN.map((d) => ({ text: d.name, link: `/${d.slug}` })) }];
 
 export default defineConfig({
   title: "EOS",
@@ -83,6 +81,8 @@ export default defineConfig({
     return code.replace(/<link\b[^>]*\bvp-icons\.css[^>]*>\s*/g, "");
   },
   transformPageData(pageData) {
+    // The components index draws its group headings itself, so they are not in its markdown. The outline lists them all the same.
+    if (pageData.relativePath === "components/index.md") pageData.headers = groupedComponents().map((g) => ({ level: 2, title: g.title, slug: g.id, link: `#${g.id}`, children: [] }));
     const description = pageData.params?.description;
     if (typeof description === "string" && description) pageData.description = description;
   },
@@ -161,6 +161,8 @@ export default defineConfig({
   ],
   markdown: {
     theme: SHIKI_THEME,
+    // Each page's h2s, for the outline beside it.
+    headers: { level: [2] },
     config(md) {
       md.renderer.rules.table_open = (tokens, idx, _options, env) => {
         let heading = "";
@@ -219,8 +221,6 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: { src: "/favicon.svg", alt: "" },
-    siteTitle: "EOS",
     nav: [
       { text: "Guide", link: "/guide/getting-started", activeMatch: "/guide/" },
       { text: "Components", link: "/components/", activeMatch: "/components/" },
@@ -232,11 +232,9 @@ export default defineConfig({
       "/changelog": guide,
       "/components/": componentSidebar(),
       "/patterns/": patterns,
-      "/playground": tools,
     },
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],
     search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions }, _render: renderForSearch } },
-    outline: { level: [2, 3], label: "On this page" },
   },
   vite: {
     plugins: [vitepressInLayer()],

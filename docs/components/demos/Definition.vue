@@ -24,6 +24,6 @@ const open = ref(true);
       <template #trigger>Late fees</template>
       A $10.00 fee applies to balances paid after the due date.
     </EDefinition>
-    <EText small muted>The late fees panel is {{ open ? "open" : "closed" }}.</EText>
+    <EText size="sm" tone="neutral">The late fees panel is {{ open ? "open" : "closed" }}.</EText>
   </EStack>
 </template>

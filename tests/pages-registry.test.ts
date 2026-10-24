@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { GUIDE, GUIDE_GROUPS, PATTERNS, guideSections } from "../docs/.vitepress/pages.mjs";
+import { GUIDE, GUIDE_GROUPS, PATTERNS, PATTERN_EXTRAS, PATTERN_GROUPS, guideSections, patternSections } from "../docs/.vitepress/pages.mjs";
 import { builtFrom, frontMatter, section } from "../docs/data/patterns-source.js";
 
 declare const __COMPONENTS__: string[];
@@ -21,9 +21,13 @@ describe("guide pages", () => {
 
   it("groups the sidebar and leaves no group empty", () => {
     const sections = guideSections();
-    expect(sections.map((s) => s.title)).toEqual(["Start", "Theming", "Build", "Platform", "Reference"]);
+    expect(sections.map((s) => s.title)).toEqual(["Start", "Build", "Style", "Platform", "Reference"]);
     for (const s of sections) expect(s.pages.length, `${s.title} has pages`).toBeGreaterThan(0);
     expect(sections.flatMap((s) => s.pages)).toHaveLength(GUIDE.length);
+  });
+
+  it("names each guide page in the sidebar as its title", () => {
+    for (const g of GUIDE) expect(frontMatter(guidePages[`../docs/guide/${g.slug}.md`]!, "title"), g.slug).toBe(g.name);
   });
 
   it("gives each page a title and a description", () => {
@@ -37,7 +41,8 @@ describe("guide pages", () => {
 describe("pattern pages", () => {
   it("has a page and a demo for every pattern, and no page that is not listed", () => {
     const listed = PATTERNS.map((p) => p.slug).sort();
-    const files = [...pages.keys()].filter((n) => n !== "index").sort();
+    const extras = PATTERN_EXTRAS.map((p) => p.slug);
+    const files = [...pages.keys()].filter((n) => n !== "index" && !extras.includes(n)).sort();
     expect(files, "docs/patterns/*.md against PATTERNS").toEqual(listed);
     for (const slug of listed) {
       const demo = /import \w+ from "\.\/(\w+)\.vue"/.exec(pages.get(slug)!)?.[1];
@@ -46,9 +51,21 @@ describe("pattern pages", () => {
     }
   });
 
-  it("links every pattern from the overview", () => {
+  it("links every pattern and extra page from the overview", () => {
     const overview = pages.get("index")!;
-    for (const { slug } of PATTERNS) expect(overview, `/patterns/${slug} on the overview`).toContain(`(/patterns/${slug})`);
+    for (const { slug } of [...PATTERNS, ...PATTERN_EXTRAS]) expect(overview, `/patterns/${slug} on the overview`).toContain(`(/patterns/${slug})`);
+    for (const { slug } of PATTERN_EXTRAS) expect(pages.has(slug), `docs/patterns/${slug}.md exists`).toBe(true);
+  });
+
+  it("groups the patterns as the overview does, and each page's sidebar name is its title", () => {
+    const overview = pages.get("index")!;
+    const headings = [...overview.matchAll(/^## (.+)$/gm)].map((m) => m[1]!.trim());
+    expect(headings.filter((h) => PATTERN_GROUPS.includes(h))).toEqual(PATTERN_GROUPS);
+    for (const s of patternSections()) {
+      const under = overview.split(/^## /m).find((part) => part.startsWith(s.title))!;
+      for (const p of s.pages) expect(under, `${p.slug} under ${s.title}`).toContain(`(/patterns/${p.slug})`);
+    }
+    for (const p of [...PATTERNS, ...PATTERN_EXTRAS]) expect(frontMatter(pages.get(p.slug)!, "title"), p.slug).toBe(p.name);
   });
 
   it.each(PATTERNS.map((p) => [p.slug] as const))("%s names what it is built from and why", (slug) => {
