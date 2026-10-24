@@ -75,7 +75,7 @@ body {
   min-height: 100vh;
 }
 
-/* The eos logo in the header's brand link: the tile (the favicon) and the wordmark beside it, at their own size. The word takes the link's colours, which are the library's. */
+/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's primary) and the wordmark beside it, at their own size. The word takes the link's colours, which are the library's. */
 .site-logo {
   display: block;
   width: 2rem;
