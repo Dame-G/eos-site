@@ -30,7 +30,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 110,
       controlHeight: 52,
       motion: "gentle",
-      variants: { pad: "lg", disclosure: "card", gap: "roomy" },
+      variants: { size: "lg", disclosure: "card", gap: "roomy" },
     },
   },
   {
@@ -65,7 +65,7 @@ export const PRESETS: Preset[] = [
       controlHeight: 52,
       motion: "snappy",
       t: { "stroke-edge": "2px" },
-      variants: { pad: "lg" },
+      variants: { size: "lg" },
     },
   },
   {
@@ -83,7 +83,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 90,
       controlHeight: 44,
       motion: "snappy",
-      variants: { pad: "sm", gap: "tight" },
+      variants: { size: "sm", gap: "tight" },
     },
   },
   {
@@ -103,7 +103,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 125,
       controlHeight: 56,
       motion: "gentle",
-      variants: { pad: "lg", gap: "roomy" },
+      variants: { size: "lg", gap: "roomy" },
     },
   },
   {
@@ -122,7 +122,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 75,
       controlHeight: 40,
       motion: "snappy",
-      variants: { pad: "sm", gap: "tight" },
+      variants: { size: "sm", gap: "tight" },
     },
   },
   {
@@ -145,7 +145,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 90,
       controlHeight: 44,
       motion: "snappy",
-      variants: { pad: "sm" },
+      variants: { size: "sm" },
     },
   },
   {
@@ -168,7 +168,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 112,
       controlHeight: 52,
       motion: "gentle",
-      variants: { pad: "lg", surface: "tint", disclosure: "card", gap: "roomy" },
+      variants: { size: "lg", surface: "tint", disclosure: "card", gap: "roomy" },
     },
   },
 ];

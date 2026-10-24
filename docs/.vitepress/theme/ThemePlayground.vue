@@ -190,7 +190,7 @@ function setMotion(v: string) {
   followTab("motion");
 }
 const VARIANT_FIELDS: { key: VariantKey; label: string; hint: string; options: { value: string; label: string }[] }[] = [
-  { key: "pad", label: "Surface padding", hint: "ESurface pad.", options: [{ value: "sm", label: "Small" }, { value: "md", label: "Medium" }, { value: "lg", label: "Large" }] },
+  { key: "size", label: "Surface padding", hint: "ESurface size.", options: [{ value: "sm", label: "Small" }, { value: "md", label: "Medium" }, { value: "lg", label: "Large" }] },
   { key: "gap", label: "Gaps", hint: "EStack, EInline and EGrid gap.", options: [{ value: "tight", label: "Tight" }, { value: "default", label: "Default" }, { value: "roomy", label: "Roomy" }] },
 ];
 function setVariant(key: VariantKey, v: string) {

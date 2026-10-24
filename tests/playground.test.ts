@@ -11,7 +11,7 @@ import { PRESETS, applyPreset } from "../docs/.vitepress/theme/playground/preset
 
 describe("playground export", () => {
   for (const preset of PRESETS) {
-    // The edge and card strokes have no input of their own now that strokes.edge and strokes.card are deprecated, so they are the only raw tokens a preset may set.
+    // The edge and card strokes have no input of their own (strokes takes only hair and focus), so they are the only raw tokens a preset may set.
     it(`${preset.label} is reproduced by defineTheme(input) with no raw token overrides but the strokes`, () => {
       const s = initialState();
       applyPreset(s, preset.id);
@@ -22,7 +22,7 @@ describe("playground export", () => {
     });
   }
 
-  it("keeps stroke-edge and stroke-card overrides as tokens, since strokes.edge and strokes.card are deprecated", () => {
+  it("keeps stroke-edge and stroke-card overrides as tokens, since strokes takes only hair and focus", () => {
     const s = initialState();
     s.t = { "stroke-edge": "2px", "stroke-card": "3px" };
     const b = build(s);

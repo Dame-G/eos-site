@@ -29,7 +29,7 @@ const ENUMS: Partial<Record<keyof State, readonly string[]>> = {
   density: ["comfortable", "compact"],
   themePreset: ["none", "paper", "ink", "quiet"],
   elevation: ["outline", "lifted", "bold"],
-  motion: ["default", "snappy", "gentle", "none"],
+  motion: ["default", "snappy", "gentle"],
   sans: Object.keys(SANS),
   mono: Object.keys(MONO),
 };
@@ -70,6 +70,11 @@ export function decode(code: string): State | null {
   try {
     const raw = JSON.parse(b64.dec(code)) as Record<string, unknown>;
     if ("shadow" in raw && !("elevation" in raw)) raw["elevation"] = raw["shadow"];
+    // The library dropped motion "none"; snappy is the shortest feel left.
+    if (raw["motion"] === "none") raw["motion"] = "snappy";
+    // The surface padding variant followed ESurface `pad` before it became `size`.
+    const rv = raw["variants"] as Record<string, unknown> | null | undefined;
+    if (rv && typeof rv === "object" && "pad" in rv && !("size" in rv)) rv["size"] = rv["pad"];
     const s = initialState();
     const d = s as unknown as Record<string, unknown>;
     for (const [k, v] of Object.entries(raw)) {
