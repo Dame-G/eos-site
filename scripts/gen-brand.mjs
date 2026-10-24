@@ -41,8 +41,10 @@ const lines = `<g opacity=".14" transform="rotate(${TILT})" fill="${PRIMARY}">${
   .map((d) => `<path d="${d}"/>`)
   .join("")}</g>`;
 
-// The lockup is the library's own logo, so the name sits against the tile as it does in the header.
-const logo = pathToFileURL(join(eosRoot, "brand/logo.svg")).href;
+// The lockup is the library's own logo, with the name lifted so the middle of its letters sits on the middle of the tile's e (the file sets the baseline low, by 6.2 units of 64).
+const logo = `data:image/svg+xml;base64,${Buffer.from(
+  readFileSync(join(eosRoot, "brand/logo.svg"), "utf8").replaceAll('<path class="word', '<path transform="translate(0 -6.2)" class="word'),
+).toString("base64")}`;
 
 const page = `<!doctype html><meta charset="utf-8"><style>
 @font-face{font-family:B;src:url("${bricolage}");font-weight:100 900}
