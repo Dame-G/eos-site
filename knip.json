@@ -19,6 +19,7 @@
   "ignoreDependencies": [
     "@fontsource-variable/bricolage-grotesque",
     "@fontsource-variable/geist-mono",
+    "@fontsource-variable/outfit",
     "@localSearchIndex"
   ],
   "ignoreBinaries": [

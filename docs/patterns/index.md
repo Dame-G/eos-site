@@ -1,11 +1,11 @@
 ---
 title: Patterns
-description: "Fifteen whole pages and flows built only from EOS components, with source."
+description: "Fifteen whole pages and flows built only from eos components, with source."
 ---
 
 # Patterns
 
-Whole tasks built only from EOS components, with source. If a pattern needs a custom box, the library is missing a building block.
+Whole tasks built only from eos components, with source. If a pattern needs a custom box, the library is missing a building block.
 
 ## Forms and flows
 
@@ -33,4 +33,4 @@ Whole tasks built only from EOS components, with source. If a pattern needs a cu
 
 ## Small recipes
 
-A toggle button, a button group, a back link and a panel are a few lines of the components EOS already has, so they are not components of their own. They are on [Small recipes](/patterns/recipes).
+A toggle button, a button group, a back link and a panel are a few lines of the components eos already has, so they are not components of their own. They are on [Small recipes](/patterns/recipes).

@@ -49,7 +49,7 @@ export function watchConsole() {
   };
 }
 
-/** Mounts a component the way the site does: with the Eos plugin installed, inside an `e-root` stage. */
+/** Mounts a component the way the site does: with the eos plugin installed, inside an `e-root` stage. */
 export async function mount(component: Component, options: { locale?: string; currency?: string } = {}) {
   const screen = await render(component, {
     global: { plugins: [createEos({ locale: options.locale ?? "en-US", currency: options.currency ?? "USD", warnOnContrast: false })] },

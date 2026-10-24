@@ -12,7 +12,7 @@ export default {
     const notes = found ? changelogBody(readFileSync(changelogFile, "utf8")) : "The library has no CHANGELOG.md in this checkout.";
     const content = [
       "# Changelog",
-      `Release notes for \`@eos-ui/vue\`, newest first. \`@eos-ui/tokens\` shares the version. Read these before you update while EOS is pre-1.0, see [Versioning and support](/guide/versioning).`,
+      `Release notes for \`@eos-ui/vue\`, newest first. \`@eos-ui/tokens\` shares the version. Read these before you update while eos is pre-1.0, see [Versioning and support](/guide/versioning).`,
       notes,
     ].join("\n\n");
     return [{ params: { changelog: "changelog", description: "Every release of @eos-ui/vue, with what changed." }, content }];

@@ -37,7 +37,7 @@ createApp(App).use(
 );
 ```
 
-`fonts.sans` and `fonts.mono` are full CSS `font-family` stacks and set `--e-font-sans` and `--e-font-mono`. They work with any font you load. EOS never bundles fonts. Without any font loaded, the stack falls back to `system-ui`.
+`fonts.sans` and `fonts.mono` are full CSS `font-family` stacks and set `--e-font-sans` and `--e-font-mono`. They work with any font you load. eos never bundles fonts. Without any font loaded, the stack falls back to `system-ui`.
 
 ## Import only what you use
 
@@ -67,7 +67,7 @@ export default {
 
 ## TypeScript
 
-EOS ships its own types, so there is nothing to install. Props, events and slots are typed in templates when you use Volar, and importing the package types `$e` (the config).
+eos ships its own types, so there is nothing to install. Props, events and slots are typed in templates when you use Volar, and importing the package types `$e` (the config).
 
 unplugin-vue-components writes the global `components.d.ts` for auto-imported components (its `dts` option, on by default when TypeScript is installed), so commit it or add it to your `tsconfig` includes.
 
@@ -82,7 +82,7 @@ Or put `"types": ["@eos-ui/vue/globals"]` in `tsconfig.json`. Load them only whe
 ## Nuxt or a script tag
 
 - Nuxt: add `css: ["@eos-ui/vue/style.css"]` and install the plugin in `plugins/eos.ts`. See [Nuxt and SSR](/guide/ssr).
-- Script tag or CDN: there is no global build. EOS ships ES modules only, so use a bundler, or an import map that resolves `vue` and `@eos-ui/vue` to ES module URLs you host.
+- Script tag or CDN: there is no global build. eos ships ES modules only, so use a bundler, or an import map that resolves `vue` and `@eos-ui/vue` to ES module URLs you host.
 
 ## Using an AI assistant
 

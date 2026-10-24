@@ -1,11 +1,11 @@
 ---
 title: Token reference
-description: "Every EOS design token with its usage note and contrast, generated from @eos-ui/tokens. Start with the tokens you will reach for."
+description: "Every eos design token with its usage note and contrast, generated from @eos-ui/tokens. Start with the tokens you will reach for."
 ---
 
 # Token reference
 
-Every EOS component is styled with CSS variables named `--e-<name>`, so a theme is a set of variables and nothing else. Use the same variables in your own CSS and your screens will follow the theme, including dark surfaces and high contrast, without a line of extra code.
+Every eos component is styled with CSS variables named `--e-<name>`, so a theme is a set of variables and nothing else. Use the same variables in your own CSS and your screens will follow the theme, including dark surfaces and high contrast, without a line of extra code.
 
 This page has three parts: the tokens you will use most, what each theme input derives, and the full reference. The values come from `@eos-ui/tokens`. To change them, see [Theming](/guide/theming) or try values in the [playground](/playground).
 

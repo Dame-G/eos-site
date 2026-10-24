@@ -5,7 +5,7 @@ description: "Use the built-in icons, or bring Lucide, Tabler, Heroicons, Phosph
 
 # Icons
 
-EOS ships a built-in set (Phosphor, MIT), so everything works with no setup. Components draw icons by name, and an `icon` prop also takes an icon component.
+eos ships a built-in set (Phosphor, MIT), so everything works with no setup. Components draw icons by name, and an `icon` prop also takes an icon component.
 
 ```vue
 <EButton icon="lock">Pay $162.40</EButton>
@@ -33,7 +33,7 @@ createEos({ icons: lucide({ Check, X, CreditCard, TriangleAlert }) });
 | Phosphor (Vue) | `phosphorVue(ph)` |
 | Iconify | `iconify("lucide")` from `@eos-ui/vue/icons/iconify`, needs `@iconify/vue` |
 
-List the icons you use: only those ship. `import * as` keeps the whole library in your bundle. Every adapter takes `{ aliases, builtin }`: `aliases` renames EOS names (`{ card: "wallet-cards" }`), `builtin: false` turns off the fallback. `iconNames` lists the names components ask for.
+List the icons you use: only those ship. `import * as` keeps the whole library in your bundle. Every adapter takes `{ aliases, builtin }`: `aliases` renames eos names (`{ card: "wallet-cards" }`), `builtin: false` turns off the fallback. `iconNames` lists the names components ask for.
 
 ## Custom resolver
 

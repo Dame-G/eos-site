@@ -27,6 +27,8 @@ import type { Choice } from "../scheme";
 import { followScheme, schemeChoice, setChoice } from "./site-theme";
 
 const ORDER = ["system", "light", "dark"] as const;
+/** The logo tile in the header is the favicon. Bound rather than written as `src`, so the template compiler leaves it a public URL instead of importing the file. */
+const LOGO = "/favicon.svg";
 declare const __EOS_LICENSE__: string;
 // The licence file hard-wraps its lines: each paragraph is joined into one. The first paragraph is its title, which the panel shows itself.
 const license = __EOS_LICENSE__.split(/\n\n/).slice(1).map((p) => p.replace(/\n/g, " "));
@@ -201,8 +203,8 @@ watch(
   <div class="site e-root e-shell">
     <ESkipLink href="#main" />
     <EVisuallyHidden as="div" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</EVisuallyHidden>
-    <EAppHeader sticky brand-label="EOS, home">
-      <template #brand><BubbleTitle decorative class="site-mark" /></template>
+    <EAppHeader sticky brand-label="eos, home">
+      <template #brand><img :src="LOGO" alt="" width="32" height="32" class="site-logo" /><BubbleTitle decorative class="site-mark" /></template>
       <template #logo>
         <EButton variant="outline" icon="search" class="site-search-button" aria-keyshortcuts="/" @click="searching = true">
           Search<span class="site-search-key" aria-hidden="true"><EKbd size="sm">/</EKbd></span>
@@ -242,7 +244,7 @@ watch(
     <EAppFooter>
       <div class="site-footer-about">
         <EText size="sm" tone="neutral" class="site-footer-license">
-          EOS is released under the
+          eos is released under the
           <EDefinition inline label="Full text of the MIT license" title="MIT License">
             <template #trigger>MIT license</template>
             <span v-for="p in license" :key="p" class="site-license">{{ p }}</span>

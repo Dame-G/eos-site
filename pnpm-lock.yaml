@@ -172,6 +172,9 @@ importers:
       '@eos-ui/vue':
         specifier: link:../eos/packages/vue
         version: link:../eos/packages/vue
+      '@fontsource-variable/outfit':
+        specifier: ^5.3.0
+        version: 5.3.0
       vue:
         specifier: ^3.5.44
         version: 3.5.44
@@ -698,6 +701,9 @@ packages:
 
   '@fontsource-variable/geist-mono@5.3.0':
     resolution: {integrity: sha512-vBbuwDEo9AkrqADMXOrlAR3DFcJi4/JxeuU43FoiQERnNwsfXNnvxvReZG02cQKmyk4DZkZdBZX3oTDvy2zBAw==}
+
+  '@fontsource-variable/outfit@5.3.0':
+    resolution: {integrity: sha512-fPb5XnYK0k7SbR++HEmm4+ZqDszmLKQ+sPRUr8oQ/KNC0vy6r6hazJFe8iYozv4cqlHbvJ/JECkJWrfDodUMVQ==}
 
   '@iconify-json/simple-icons@1.2.100':
     resolution: {integrity: sha512-536pN2RCEQyy5bYwzayrs4e9egr8cmtVcbdSHLaQl/ULUsihzn1eZ0+Hhn50zgz9cbEotiynKsKQSEjFJ7qKmw==}
@@ -2725,6 +2731,8 @@ snapshots:
   '@fontsource-variable/bricolage-grotesque@5.3.0': {}
 
   '@fontsource-variable/geist-mono@5.3.0': {}
+
+  '@fontsource-variable/outfit@5.3.0': {}
 
   '@iconify-json/simple-icons@1.2.100':
     dependencies:

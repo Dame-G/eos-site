@@ -1,6 +1,6 @@
 ---
 title: Getting started
-description: "Install EOS, import the stylesheet, add the plugin and build a working form in three steps."
+description: "Install eos, import the stylesheet, add the plugin and build a working form in three steps."
 ---
 
 <script setup>
@@ -9,7 +9,7 @@ import FirstForm from "./examples/FirstForm.vue";
 
 # Getting started
 
-Needs Vue 3.5+, Node 22+ and a bundler that handles CSS, such as Vite. EOS is ESM only: use `import`, not `require`.
+Needs Vue 3.5+, Node 22+ and a bundler that handles CSS, such as Vite. eos is ESM only: use `import`, not `require`.
 
 ## 1. Install
 

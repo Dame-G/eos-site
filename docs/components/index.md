@@ -1,6 +1,6 @@
 ---
 title: Components
-description: "Every EOS component with its props and a live demo, grouped by what you are trying to do."
+description: "Every eos component with its props and a live demo, grouped by what you are trying to do."
 ---
 
 <script setup>

@@ -1,19 +1,19 @@
 ---
 title: Versioning and support
-description: "Pre-1.0 stability, how versions change, and what EOS supports."
+description: "Pre-1.0 stability, how versions change, and what eos supports."
 ---
 
 # Versioning and support
 
 ## Stability
 
-EOS is pre-1.0. Props, events and tokens can change between minor versions until 1.0. Every breaking change is listed in the release notes.
+eos is pre-1.0. Props, events and tokens can change between minor versions until 1.0. Every breaking change is listed in the release notes.
 
 ## Versions
 
-EOS follows semantic versioning. From 1.0, a breaking change means a new major version, a new feature a minor, and a fix a patch.
+eos follows semantic versioning. From 1.0, a breaking change means a new major version, a new feature a minor, and a fix a patch.
 
-Pin a minor version while EOS is pre-1.0 (`~0.x.y`). Read the release notes before you update. `@eos-ui/vue` and `@eos-ui/tokens` share one version.
+Pin a minor version while eos is pre-1.0 (`~0.x.y`). Read the release notes before you update. `@eos-ui/vue` and `@eos-ui/tokens` share one version.
 
 ## What is supported
 
@@ -26,7 +26,7 @@ Pin a minor version while EOS is pre-1.0 (`~0.x.y`). Read the release notes befo
 
 ## Browsers
 
-The minimum versions come from the newest CSS feature the stylesheet needs in each browser. EOS does not use the native popover or dialog elements.
+The minimum versions come from the newest CSS feature the stylesheet needs in each browser. eos does not use the native popover or dialog elements.
 
 | Feature | Used for | Chrome, Edge | Firefox | Safari |
 | --- | --- | --- | --- | --- |
