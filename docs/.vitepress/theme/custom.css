@@ -73,6 +73,18 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  /* The ground outside the sheet is a neutral grey, not the theme's lavender tint. */
+  --site-ground: #f4f4f5;
+  background: var(--site-ground);
+}
+
+:root[data-scheme="dark"] .site {
+  --site-ground: #1e1e22;
+}
+
+/* The brand link already sits a gap before the search button; the library's extra end margin doubled it. */
+.site .e-appheader-brand:not(:last-child) {
+  margin-inline-end: 0;
 }
 
 /* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it, at their own size. The word takes the link's colours, which are the library's. */
@@ -336,12 +348,12 @@ body {
 
 .flow-base {
   color: var(--e-primary);
-  opacity: 0.019;
+  opacity: 0.07;
 }
 
 /* Dark ink on a light page needs more to be seen at all. */
 :root[data-scheme="light"] .flow-base {
-  opacity: 0.14;
+  opacity: 0.16;
 }
 
 @keyframes flow-in {
