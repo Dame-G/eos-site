@@ -426,8 +426,18 @@ body {
   }
 
   :scope h2 {
+    /* The divider above a section is its own element (.doc-divider), not the heading's border. */
+    margin: 0 0 var(--e-space-4);
+    border-top: 0;
+    padding-top: 0;
     font-size: var(--e-text-2xl);
     scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
+  }
+
+  /* A section is its heading and what follows it, up to the next divider, and starts at the title. All the space between two sections belongs to the divider. */
+  :scope .doc-divider {
+    margin-block: var(--e-space-12) var(--e-space-6);
+    border-top: var(--e-stroke-hair) solid var(--e-border);
   }
 
   :scope h3 {
@@ -629,8 +639,8 @@ body {
   width: 5.5rem;
 }
 
-/* The Source panel closes the demo's section. The heading that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
-.site-article .e-details:has(+ h2) {
+/* The Source panel closes the demo's section. The divider that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
+.site-article .doc-section > .e-details:last-child {
   margin-bottom: calc(-1 * var(--e-space-6));
 }
 
@@ -725,5 +735,22 @@ body {
   .home-install code {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+  }
+}
+
+/* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It sits over the page and lets every click through. */
+.flash-section {
+  position: absolute;
+  z-index: 1;
+  border-radius: var(--e-radius-md);
+  /* Translucent, since it sits over the section and its text has to stay readable. */
+  background: color-mix(in srgb, var(--e-primary) 14%, transparent);
+  pointer-events: none;
+  animation: flash-section 1.8s ease-out forwards;
+}
+
+@keyframes flash-section {
+  to {
+    opacity: 0;
   }
 }

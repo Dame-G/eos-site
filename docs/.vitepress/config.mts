@@ -185,6 +185,27 @@ export default defineConfig({
         if (!tokens[idx]!.attrGet("class")?.includes("header-anchor")) tokens[idx]!.attrJoin("class", "e-link");
         return linkOpen(tokens, idx, options, env, self);
       };
+      // Each h2 starts a section: a divider, then a <section> that runs to the next h2. The divider is its own element, so a section is only its content and has the same box on every page (the outline flash highlights it as it is).
+      md.core.ruler.push("doc_sections", (state) => {
+        const html = (content: string) => {
+          const token = new state.Token("html_block", "", 0);
+          token.content = content;
+          token.block = true;
+          return token;
+        };
+        const out: typeof state.tokens = [];
+        let open = false;
+        for (const token of state.tokens) {
+          if (token.type === "heading_open" && token.tag === "h2" && token.level === 0) {
+            if (open) out.push(html("</section>\n"));
+            out.push(html('<div class="doc-divider" aria-hidden="true"></div>\n'), html('<section class="doc-section">\n'));
+            open = true;
+          }
+          out.push(token);
+        }
+        if (open) out.push(html("</section>\n"));
+        state.tokens = out;
+      });
       // A hex colour gets the library's own swatch beside it wherever it is written: in plain text, in inline code and in code blocks.
       md.core.ruler.push("colour_swatches", (state) => {
         for (const block of state.tokens) {
