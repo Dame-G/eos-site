@@ -754,8 +754,8 @@ body {
   position: absolute;
   z-index: 1;
   border-radius: var(--e-radius-md);
-  /* Translucent, since it sits over the section and its text has to stay readable. */
-  background: color-mix(in srgb, var(--e-primary) 24%, transparent);
+  /* The library's hover wash: over the surface it is exactly `surface-tint`, the ground beside the page, and it is translucent, so the section's text stays readable (and over an already-tinted row it goes one step deeper). */
+  background: var(--e-wash-hover);
   pointer-events: none;
   animation: flash-section 2.4s ease-out forwards;
 }
