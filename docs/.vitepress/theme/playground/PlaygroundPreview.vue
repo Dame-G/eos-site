@@ -112,7 +112,7 @@ const scene = ref("overview");
   <div class="pv">
   <ESelect v-model="scene" class="pv-scene" bare label="Scene" :options="SCENES" />
   <EConfigProvider :theme="theme" :locale="locale" :currency="currency">
-    <div class="pv-wrap">
+    <ESurface class="pv-wrap">
           <template v-if="scene === 'overview'">
             <EStack :gap="vp.gap">
               <EHeading :level="2" kicker="A bill, the way a page would use it">Overview</EHeading>
@@ -324,7 +324,7 @@ const scene = ref("overview");
             </EStack>
             </EStack>
           </template>
-    </div>
+    </ESurface>
   </EConfigProvider>
   </div>
 </template>
@@ -339,12 +339,8 @@ const scene = ref("overview");
   justify-self: start;
   min-width: 12rem;
 }
+/* The preview is a library card, so its edge and shadow follow the theme's elevation like any other card. */
 .pv-wrap {
   min-width: 0;
-  padding: var(--e-space-4);
-  border: var(--e-stroke-card) solid var(--e-border);
-  border-radius: var(--e-radius-md);
-  background: var(--e-surface);
-  color: var(--e-ink);
 }
 </style>
