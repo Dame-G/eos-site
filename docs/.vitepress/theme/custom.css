@@ -438,8 +438,22 @@ body {
   }
 
   :scope h2 {
+    /* The divider above a section is its own element (.doc-divider), not the heading's border. */
+    margin: 0 0 var(--e-space-4);
+    border-top: 0;
+    padding-top: 0;
     font-size: var(--e-text-2xl);
     scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
+  }
+
+  /* A section runs from its heading to the next divider; the space above its content is its own padding. */
+  :scope .doc-section {
+    padding-top: var(--e-space-6);
+  }
+
+  :scope .doc-divider {
+    margin-top: var(--e-space-12);
+    border-top: var(--e-stroke-hair) solid var(--e-border);
   }
 
   :scope h3 {
@@ -641,8 +655,8 @@ body {
   width: 5.5rem;
 }
 
-/* The Source panel closes the demo's section. The heading that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
-.site-article .e-details:has(+ h2) {
+/* The Source panel closes the demo's section. The divider that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
+.site-article .doc-section > .e-details:last-child {
   margin-bottom: calc(-1 * var(--e-space-6));
 }
 

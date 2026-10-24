@@ -125,14 +125,15 @@ function flashSection(id: string) {
   if (lastFlash.id === id && now - lastFlash.at < 600) return;
   lastFlash = { id, at: now };
   document.querySelectorAll(".flash-section").forEach((old) => old.remove());
+  // The page's sections are elements of their own (.doc-section, from the markdown); a heading outside one (a page that draws its own) is washed from the heading to the next one.
+  const section = heading.closest(".doc-section");
   let last: Element = heading;
-  while (last.nextElementSibling && !/^H[12]$/.test(last.nextElementSibling.tagName)) last = last.nextElementSibling;
-  const from = heading.getBoundingClientRect();
-  const to = last.getBoundingClientRect();
-  const parent = heading.parentElement!.getBoundingClientRect();
+  if (!section) while (last.nextElementSibling && !/^H[12]$/.test(last.nextElementSibling.tagName)) last = last.nextElementSibling;
+  const from = (section ?? heading).getBoundingClientRect();
+  const to = (section ?? last).getBoundingClientRect();
+  const parent = (section ?? heading).parentElement!.getBoundingClientRect();
   const pad = 12;
-  // The heading draws the divider above its section as its own top border: the wash starts under that line.
-  const top = from.top + scrollY + (parseFloat(getComputedStyle(heading).borderTopWidth) || 0);
+  const top = from.top + scrollY;
   const box = document.createElement("div");
   box.className = "flash-section";
   box.setAttribute("aria-hidden", "true");
