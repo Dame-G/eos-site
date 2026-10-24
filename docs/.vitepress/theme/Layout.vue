@@ -131,9 +131,10 @@ let searchIdle = 0;
 watch(searching, (open) => {
   if (open) searchLoaded.value = true;
 });
+// Search opens on "/" only, the key shown on its button. Ctrl or Cmd and K stays free for ECommandPalette, whose default it is, so the palette demos open on their own.
 function onShortcut(e: KeyboardEvent) {
   const typing = (e.target as HTMLElement | null)?.closest("input, textarea, select, [contenteditable]");
-  if ((e.key === "k" && (e.ctrlKey || e.metaKey)) || (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey)) {
+  if (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
     e.preventDefault();
     searching.value = true;
   }
