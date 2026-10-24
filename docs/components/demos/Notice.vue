@@ -18,10 +18,5 @@ const showClosable = ref(true);
     <ENotice v-if="showClosable" closable title="Reminders are on" @close="showClosable = false">
       We message you two days before each visit.
     </ENotice>
-
-    <div style="border: 1px solid var(--e-border); border-radius: var(--e-radius-md); overflow: clip">
-      <ENotice tone="warning" title="Unsaved changes">Save before you leave this page.</ENotice>
-      <div style="padding: var(--e-space-4)">The notice is attached to the top of this container.</div>
-    </div>
   </EStack>
 </template>

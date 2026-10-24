@@ -353,7 +353,7 @@ body {
 
 /* Dark ink on a light page needs more to be seen at all. */
 :root[data-scheme="light"] .flow-base {
-  opacity: 0.16;
+  opacity: 0.3;
 }
 
 @keyframes flow-in {
