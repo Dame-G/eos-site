@@ -70,6 +70,7 @@ body {
 
 .site {
   --e-shell-width: var(--site-wide);
+  --site-logo: 2rem;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -80,19 +81,19 @@ body {
   margin-inline-end: 0;
 }
 
-/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it, at their own size. The word takes the link's colours, which are the library's. */
+/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it. The word takes the link's colours, which are the library's. The word is sized from the tile, in the proportion of the library's own lockup (brand/logo.svg, which the share image uses as it is): there its letters are 31.43 of the tile's 64 units tall, and Outfit's are 0.51 of the font size, so the font size is 0.963 of the tile. */
 .site-logo {
   display: block;
-  width: 2rem;
-  height: 2rem;
+  width: var(--site-logo);
+  height: var(--site-logo);
   margin-inline-end: var(--e-gap-tight);
 }
 
-/* Lowercase letters have no ascenders, so their ink sits low in the line box. Lifted by that much, the word's x-height is centred on the tile. */
+/* Lowercase letters have no ascenders, so their ink sits low in the line box. Lifted by that much (0.175em, measured), the middle of the letters is on the middle of the tile's e, as in the lockup. */
 .site-mark {
-  font-size: var(--e-text-3xl);
+  font-size: calc(var(--site-logo) * 0.963);
   line-height: 1;
-  transform: translateY(-0.15em);
+  transform: translateY(-0.175em);
 }
 
 .site-topnav {
@@ -425,6 +426,11 @@ body {
     line-height: 1.15;
   }
 
+  :scope h2 .header-anchor {
+    /* VitePress drops the # by the heading's old 24px of top padding; the heading has none now. */
+    top: 0;
+  }
+
   :scope h2 {
     /* The divider above a section is its own element (.doc-divider), not the heading's border. */
     margin: 0 0 var(--e-space-4);
@@ -603,10 +609,20 @@ body {
 
 /* The frame every demo shares: a bar with the preview options, then the stage. */
 .demo-frame {
-  border: var(--e-stroke-edge) solid var(--e-border);
+  position: relative;
   border-radius: var(--e-radius-md);
   overflow: clip;
   background: var(--e-surface);
+}
+
+/* The edge is drawn over the content, not around it: the bar's tint and the stage run to the frame's outer curve, and the line sits on top. With a border of its own, the clip's soft edge let a sliver of the frame's background through between the tint and the border at the top corners. */
+.demo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--e-stroke-edge) solid var(--e-border);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .demo-bar {
@@ -739,18 +755,28 @@ body {
 }
 
 /* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It sits over the page and lets every click through. */
+.doc-section {
+  position: relative;
+}
+
 .flash-section {
   position: absolute;
   z-index: 1;
   border-radius: var(--e-radius-md);
-  /* Translucent, since it sits over the section and its text has to stay readable. */
-  background: color-mix(in srgb, var(--e-primary) 14%, transparent);
+  /* The library's hover wash: over the surface it is exactly `surface-tint`, the ground beside the page, and it is translucent, so the section's text stays readable (and over an already-tinted row it goes one step deeper). */
+  background: var(--e-wash-hover);
   pointer-events: none;
-  animation: flash-section 1.8s ease-out forwards;
+  animation: flash-section 2.4s ease-out forwards;
 }
 
+/* Full strength for the first third, so it is seen, then the fade. */
 @keyframes flash-section {
-  to {
+  0%,
+  35% {
+    opacity: 1;
+  }
+
+  100% {
     opacity: 0;
   }
 }
