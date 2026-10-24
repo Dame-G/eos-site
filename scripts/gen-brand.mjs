@@ -13,7 +13,6 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const out = join(root, "docs", "public");
 const eosRoot = resolve(process.env.EOS_DIR || join(root, "../eos"));
 const font = (pkg, file) => pathToFileURL(join(root, "node_modules/@fontsource-variable", pkg, "files", file)).href;
-const outfit = font("outfit", "outfit-latin-wght-normal.woff2");
 const bricolage = font("bricolage-grotesque", "bricolage-grotesque-latin-wght-normal.woff2");
 const mono = font("geist-mono", "geist-mono-latin-wght-normal.woff2");
 
@@ -31,34 +30,34 @@ if (!e) throw new Error("[eos-site] No e glyph in brand/mark.svg: the mark chang
 // The touch icon: the tile full bleed, as iOS rounds the corners itself (about 14.3 of 64). Built as the logo is: the slab is the body and the face sits in it, so the slab runs round the face as a border and is thicker below. The face's corners are concentric with the OS's, so the border has an even width round each corner.
 const touch = `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 64 64"><rect width="64" height="64" fill="${SLAB}"/><rect x="2.5" y="2.5" width="59" height="54.5" rx="11.8" fill="${FACE}"/><path d="${e}" fill="${ON}"/></svg>`;
 
-// The share card is the home page on the light theme (white, the flowing lines in the primary at the page's 14%), with the name set in a card styled as an EToast: a surface that floats, with a heavy slab down the start side. The lines are drawn by the same maths as the home page (docs/.vitepress/theme/flow.ts) at one chosen moment. Sizes are the toast's, at four times.
+// The share card is an EToast that is the whole card: a white surface with the home page's flowing lines on it (the primary at the light theme's 14%) and the heavy slab down the start side, full bleed and square. The lines are drawn by the same maths as the home page (docs/.vitepress/theme/flow.ts) at one chosen moment.
 const W = 1200;
 const H = 630;
 const PRIMARY = "#624b90";
+const SLAB_W = 24; // the toast's slab, at four times
 const { TILT, draw, fieldFor } = await import(pathToFileURL(join(root, "docs/.vitepress/theme/flow.ts")).href);
 const MOMENT = 140; // seconds into the animation: any moment will do, this one has swellings spread across the card
-const lines = `<g opacity=".14" transform="rotate(${TILT})" fill="${PRIMARY}">${draw(fieldFor(W, H), MOMENT)
+const lines = `<g opacity=".14" transform="rotate(${TILT})" fill="${PRIMARY}">${draw(fieldFor(W - SLAB_W, H), MOMENT)
   .map((d) => `<path d="${d}"/>`)
   .join("")}</g>`;
 
-// The logo's tile, as in brand/mark.svg.
-const tile = `<svg width="176" height="176" viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="55" rx="12" fill="${SLAB}"/><rect x="5.5" y="5.5" width="53" height="48.5" rx="10.5" fill="${FACE}"/><path d="${e}" fill="${ON}"/></svg>`;
+// The lockup is the library's own logo, so the name sits against the tile as it does in the header.
+const logo = pathToFileURL(join(eosRoot, "brand/logo.svg")).href;
 
 const page = `<!doctype html><meta charset="utf-8"><style>
-@font-face{font-family:O;src:url("${outfit}");font-weight:100 900}
 @font-face{font-family:B;src:url("${bricolage}");font-weight:100 900}
 @font-face{font-family:M;src:url("${mono}");font-weight:100 900}
 *{box-sizing:border-box;margin:0}
-body{width:${W}px;height:${H}px;background:#fff;color:#000;position:relative;overflow:hidden;font-family:B;display:grid;place-items:center}
+body{width:${W}px;height:${H}px;background:#fff;color:#000;position:relative;overflow:hidden;font-family:B}
+.toast{position:absolute;inset:0;border-inline-start:${SLAB_W}px solid ${SLAB};overflow:hidden;padding:0 90px 100px 80px;display:flex;flex-direction:column;justify-content:center}
 svg.bg{position:absolute;inset:0}
-.toast{position:relative;width:1000px;padding:56px 72px 56px 64px;border-inline-start:20px solid ${SLAB};border-radius:32px;background:#fff;box-shadow:0 0 0 3px #7c8c93,0 4px 8px 0 rgba(36,36,36,.08),0 16px 32px -8px rgba(36,36,36,.1),0 48px 96px -24px rgba(36,36,36,.14),0 96px 192px -48px rgba(36,36,36,.18)}
-.lockup{display:flex;align-items:center;gap:48px}
-.word{font:600 190px/1 O;letter-spacing:-.01em;color:${PRIMARY};margin-top:-14px}
-p{font:500 48px/1.2 B;margin-top:36px;color:#000}
-.foot{display:flex;justify-content:space-between;align-items:center;margin-top:44px;font:500 28px M;color:#515151}
-.pill{padding:10px 22px;border:3px solid #7c8c93;border-radius:12px;color:#000}
-</style><svg class="bg" width="${W}" height="${H}">${lines}</svg>
-<div class="toast"><div class="lockup">${tile}<span class="word">eos</span></div><p>A component library for Vue.</p>
+.toast>*{position:relative}
+img{display:block;align-self:flex-start;height:240px;margin-left:-15px}
+p{font:500 52px/1.2 B;margin-top:16px;color:#000}
+.foot{position:absolute;left:80px;right:90px;bottom:48px;display:flex;justify-content:space-between;align-items:center;font:500 28px M;color:#515151}
+.pill{padding:10px 22px;border:3px solid #7c8c93;border-radius:12px;color:#000;background:#fff}
+</style><div class="toast"><svg class="bg" width="${W - SLAB_W}" height="${H}">${lines}</svg>
+<img src="${logo}" alt=""><p>A component library for Vue.</p>
 <div class="foot"><span>eos.dame.gg</span><span class="pill">@eos-ui/vue</span></div></div>`;
 
 const dir = mkdtempSync(join(tmpdir(), "eos-brand-"));
