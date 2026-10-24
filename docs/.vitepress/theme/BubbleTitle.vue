@@ -1,12 +1,13 @@
 <script setup lang="ts">
-// The home page's title: the eos wordmark in lowercase Outfit SemiBold, the face of the logo, in a single colour, standing on a slab of that colour darkened so they pop off the page. The letters float together, barely.
+// The eos wordmark: lowercase Outfit SemiBold, the face of the logo, in a single colour, standing on a slab of that colour darkened so they pop off the page. The letters float together, barely; the decorative copy in the header does not move at all.
 // It sizes with the text around it and takes its colour from `color`. Screen readers get the word, not the letters.
+defineProps<{ decorative?: boolean }>();
 const letters = ["e", "o", "s"];
 </script>
 
 <template>
-  <span class="bubble">
-    <span class="bubble-word">eos</span>
+  <span class="bubble" :class="{ 'bubble--still': decorative }" :aria-hidden="decorative ? 'true' : undefined">
+    <span v-if="!decorative" class="bubble-word">eos</span>
     <span class="bubble-letters" aria-hidden="true">
       <span v-for="(c, n) in letters" :key="n" class="bubble-letter" :style="{ '--n': n }">{{ c }}</span>
     </span>
@@ -61,9 +62,14 @@ const letters = ["e", "o", "s"];
   }
 }
 
+/* The small one in the header stays still. */
 /* On the dark page the slab has to be a good deal darker than the letters to read as depth. */
 :root[data-scheme="dark"] .bubble-letter {
   --slab: 58%;
+}
+
+.bubble--still .bubble-letter {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -75,11 +75,17 @@ body {
   min-height: 100vh;
 }
 
-/* The eos logo in the header's brand link: the tile alone (the favicon), at its own size. The link's label names it. */
+/* The eos logo in the header's brand link: the tile (the favicon) and the wordmark beside it, at their own size. The word takes the link's colours, which are the library's. */
 .site-logo {
   display: block;
   width: 2rem;
   height: 2rem;
+  margin-inline-end: var(--e-gap-tight);
+}
+
+.site-mark {
+  font-size: var(--e-text-3xl);
+  line-height: 1;
 }
 
 .site-topnav {

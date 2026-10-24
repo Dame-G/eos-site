@@ -107,9 +107,9 @@ export default defineConfig({
       ["meta", { name: "twitter:image", content: IMAGE }],
       ["meta", { name: "twitter:image:alt", content: IMAGE_ALT }],
     ];
-    // The home page's title is set in the logo's face, so there it loads with the body face rather than swapping in late.
+    // The title's face is in the header on every page, so it loads with the body face rather than swapping in late.
     const titleFont = assets.find((a) => /\/outfit-latin-wght-normal\.[^/]*\.woff2$/.test(a));
-    if (titleFont && pageData.relativePath === "index.md") head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: titleFont, crossorigin: "" }]);
+    if (titleFont) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: titleFont, crossorigin: "" }]);
     const font = assets.find((a) => /\/bricolage-grotesque-latin-wght-normal\.[^/]*\.woff2$/.test(a));
     if (font) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: font, crossorigin: "" }]);
     // A renamed font file would silently drop the preload and bring the late font swap back, so say so once.
