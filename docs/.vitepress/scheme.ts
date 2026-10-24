@@ -1,7 +1,7 @@
 import { defineTheme, type ThemeInput } from "@eos-ui/tokens";
 
 /** The inputs of the dark scheme, shared with the demos' own dark toggle. */
-export const DARK_INPUT = { name: "dark", background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" } satisfies ThemeInput;
+export const DARK_INPUT = { name: "dark", background: "#0d0a12", surface: "#14111a", foreground: "#ffffff" } satisfies ThemeInput;
 
 /** The site's two themes. Kept free of Vue so the config can render the dark one into the document head. */
 const lightTheme = defineTheme({ name: "light" });

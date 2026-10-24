@@ -14,7 +14,7 @@ import { vitepressInLayer } from "./vitepress-layer";
 
 const SITE = "https://eos.dame.gg";
 const IMAGE = SITE + "/og.png";
-const IMAGE_ALT = "eos: a component library for Vue. The eos logo, a white e on a tile beside the word eos, on a teal card with a darker edge along the bottom like a button.";
+const IMAGE_ALT = "eos: a component library for Vue. The eos logo, a white e on a tile beside the word eos, on a pastel lavender card with a darker edge along the bottom like a button.";
 /** The size of docs/public/og.png. */
 const IMAGE_SIZE = { width: "1200", height: "630" };
 let warnedFont = false;
