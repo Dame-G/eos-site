@@ -115,6 +115,17 @@ function spy() {
   spies = [lines, end];
 }
 
+// A click in the outline briefly highlights the section it goes to, so the eye finds it after the jump. Taking the class off and putting it back (after a reflow) lets a second click on the same heading flash again.
+function flash(e: MouseEvent) {
+  const link = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href^='#']");
+  const target = link && document.getElementById(decodeURIComponent(link.hash.slice(1)));
+  if (!target) return;
+  target.classList.remove("flash-target");
+  void target.offsetWidth;
+  target.classList.add("flash-target");
+  target.addEventListener("animationend", () => target.classList.remove("flash-target"), { once: true });
+}
+
 function showCurrent() {
   const side = document.querySelector<HTMLElement>(".site-side");
   const here = side?.querySelector<HTMLElement>("[aria-current=page]");
@@ -233,7 +244,7 @@ watch(
         </template>
       </main>
       <div v-if="showOutline" class="site-rail site-rail--outline">
-        <div class="site-outline">
+        <div class="site-outline" @click="flash">
           <EKicker class="site-outline-title" aria-hidden="true">On this page</EKicker>
           <ENavList label="On this page" :items="outline" />
         </div>
