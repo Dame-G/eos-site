@@ -269,7 +269,7 @@ body {
 }
 
 .site-drawer-pages {
-  margin: var(--e-space-1) 0 var(--e-space-2) calc(var(--e-space-4) + var(--e-space-1));
+  margin: var(--e-space-2) 0 var(--e-space-3) calc(var(--e-space-4) + var(--e-space-1));
   padding-inline-start: var(--e-space-3);
   border-inline-start: var(--e-stroke-edge) solid var(--e-border);
 }

@@ -43,7 +43,7 @@ const guide: DefaultTheme.SidebarItem[] = guideSections().map((s) => ({
 
 // Grouped as the overview groups them, then the pages that are not whole patterns.
 const patterns: DefaultTheme.SidebarItem[] = [
-  { text: "Patterns", items: [{ text: "Overview", link: "/patterns/" }] },
+  { text: "Overview", link: "/patterns/" },
   ...patternSections().map((s) => ({ text: s.title, items: s.pages.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) })),
   { text: "More", items: PATTERN_EXTRAS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) },
 ];
