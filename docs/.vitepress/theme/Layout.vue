@@ -132,8 +132,9 @@ function flashSection(id: string) {
   const from = (section ?? heading).getBoundingClientRect();
   const to = (section ?? last).getBoundingClientRect();
   const parent = (section ?? heading).parentElement!.getBoundingClientRect();
+  // The same space on every side. It reaches into the gap the divider leaves above the section, so it never touches the divider's line.
   const pad = 12;
-  const top = from.top + scrollY;
+  const top = from.top + scrollY - pad;
   const box = document.createElement("div");
   box.className = "flash-section";
   box.setAttribute("aria-hidden", "true");
