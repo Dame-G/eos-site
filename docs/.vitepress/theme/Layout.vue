@@ -127,13 +127,22 @@ function flashSection(id: string) {
   document.querySelectorAll(".flash-section").forEach((old) => old.remove());
   // The page's sections are elements of their own (.doc-section, from the markdown); a heading outside one (a page that draws its own) is washed from the heading to the next one.
   const section = heading.closest(".doc-section");
+  const pad = 12;
+  if (section) {
+    // Inside the section, so a late layout shift (a font, a demo, a code block) moves it with the content instead of leaving it behind.
+    const box = document.createElement("div");
+    box.className = "flash-section";
+    box.setAttribute("aria-hidden", "true");
+    box.style.inset = `${-pad}px`;
+    section.append(box);
+    box.addEventListener("animationend", () => box.remove(), { once: true });
+    return;
+  }
   let last: Element = heading;
   if (!section) while (last.nextElementSibling && !/^H[12]$/.test(last.nextElementSibling.tagName)) last = last.nextElementSibling;
   const from = (section ?? heading).getBoundingClientRect();
   const to = (section ?? last).getBoundingClientRect();
   const parent = (section ?? heading).parentElement!.getBoundingClientRect();
-  // The same space on every side. It reaches into the gap the divider leaves above the section, so it never touches the divider's line.
-  const pad = 12;
   const top = from.top + scrollY - pad;
   const box = document.createElement("div");
   box.className = "flash-section";
@@ -146,6 +155,23 @@ function flashSection(id: string) {
   });
   document.body.append(box);
   box.addEventListener("animationend", () => box.remove(), { once: true });
+}
+
+/** A page opened on a #hash is scrolled there before the fonts, demos and code blocks have settled, so the heading ends up off its place once they do. Scrolled again when they have, unless the visitor has already moved. */
+function settleHash() {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  if (!id) return;
+  let moved = false;
+  const stop = () => (moved = true);
+  const events = ["wheel", "touchstart", "keydown", "mousedown"] as const;
+  for (const name of events) window.addEventListener(name, stop, { once: true, passive: true });
+  const realign = () => {
+    for (const name of events) window.removeEventListener(name, stop);
+    if (!moved) document.getElementById(id)?.scrollIntoView({ block: "start" });
+  };
+  const later = () => setTimeout(realign, 150);
+  if (document.readyState === "complete") void document.fonts.ready.then(later);
+  else window.addEventListener("load", () => void document.fonts.ready.then(later), { once: true });
 }
 
 /** The section the address points at, flashed once the page has settled: on a first visit, after following a link to another page's section and when the hash alone changes. */
@@ -191,6 +217,7 @@ onMounted(() => {
   showCurrent();
   window.addEventListener("keydown", onShortcut);
   window.addEventListener("hashchange", flashHash);
+  settleHash();
   flashHash();
   const load = () => (searchLoaded.value = true);
   if ("requestIdleCallback" in window) searchIdle = window.requestIdleCallback(load, { timeout: 3000 });

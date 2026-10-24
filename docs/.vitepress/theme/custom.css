@@ -426,6 +426,11 @@ body {
     line-height: 1.15;
   }
 
+  :scope h2 .header-anchor {
+    /* VitePress drops the # by the heading's old 24px of top padding; the heading has none now. */
+    top: 0;
+  }
+
   :scope h2 {
     /* The divider above a section is its own element (.doc-divider), not the heading's border. */
     margin: 0 0 var(--e-space-4);
@@ -750,6 +755,10 @@ body {
 }
 
 /* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It sits over the page and lets every click through. */
+.doc-section {
+  position: relative;
+}
+
 .flash-section {
   position: absolute;
   z-index: 1;
