@@ -36,6 +36,12 @@ describe("share link codec", () => {
     expect(s.t).toEqual({ primary: "#123456" });
   });
 
+  it("still loads links made with motion none and the surface pad variant", () => {
+    const s = decode(btoa(JSON.stringify({ motion: "none", variants: { pad: "lg" } })))!;
+    expect(s.motion).toBe("snappy");
+    expect(s.variants.size).toBe("lg");
+  });
+
   it("returns null for text that is not a link", () => {
     expect(decode("%%%")).toBeNull();
   });

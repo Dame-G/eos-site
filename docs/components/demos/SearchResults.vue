@@ -42,7 +42,7 @@ function onKeydown(e: KeyboardEvent) {
       :query="query"
       :empty-text="emptyText"
       @select="onSelect"
-      @edge="field?.focus()"
+      @exit-top="field?.focus()"
     />
     <EText size="sm" tone="neutral">While results load</EText>
     <EStack :gap="2" aria-busy="true">

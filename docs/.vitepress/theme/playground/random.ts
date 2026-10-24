@@ -30,7 +30,7 @@ function hsl(h: number, sat: number, lum: number): string {
 function randomVariants(spaceScale: number): Variants {
   const v: Variants = { ...DEFAULT_VARIANTS };
   const roomy = spaceScale >= 100;
-  if (chance(0.5)) v.pad = roomy ? "lg" : "sm";
+  if (chance(0.5)) v.size = roomy ? "lg" : "sm";
   if (chance(0.45)) v.gap = roomy ? "roomy" : "tight";
   return v;
 }

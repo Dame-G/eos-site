@@ -5,13 +5,13 @@ import { defaults } from "@eos-ui/tokens";
 export type Scheme = "light" | "paper" | "dark" | "contrast" | "custom";
 type RadiusStyle = "sharp" | "default" | "round";
 type ElevationStyle = "outline" | "lifted" | "bold";
-type MotionStyle = "default" | "snappy" | "gentle" | "none";
+type MotionStyle = "default" | "snappy" | "gentle";
 type Density = "comfortable" | "compact";
 /** The library's own named look (`defineTheme({ preset })`), or `none` to leave it out. Not the playground preset, which is a whole starting state. */
 type ThemePresetChoice = "none" | "paper" | "ink" | "quiet";
 
 export const VARIANT_VALUES = {
-  pad: ["sm", "md", "lg"],
+  size: ["sm", "md", "lg"],
   gap: ["tight", "default", "roomy"],
 } as const;
 
@@ -20,7 +20,7 @@ export type VariantKey = keyof Variants;
 
 export const VARIANT_KEYS = Object.keys(VARIANT_VALUES) as VariantKey[];
 
-export const DEFAULT_VARIANTS: Variants = { pad: "md", gap: "default" };
+export const DEFAULT_VARIANTS: Variants = { size: "md", gap: "default" };
 
 export interface State {
   /** The preset last applied, `random` after Randomize, or `custom` once anything was edited. */

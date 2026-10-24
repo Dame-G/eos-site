@@ -46,7 +46,7 @@ describe("site chrome", () => {
     expect(document.activeElement?.id).toBe("main");
   });
 
-  it("opens search with / and with Ctrl+K, finds a component by another library's word, and opens it with Enter", async () => {
+  it("opens search with /, leaves Ctrl+K to command palettes, finds a component by another library's word, and opens it with Enter", async () => {
     await mount(Layout);
     await userEvent.keyboard("/");
     const box = page.getByRole("combobox", { name: "Search the docs" });
@@ -60,8 +60,10 @@ describe("site chrome", () => {
     await userEvent.keyboard("{Enter}");
     expect(go).toHaveBeenCalledWith("/components/Select");
 
+    // Ctrl+K belongs to ECommandPalette (its default), so the palette demos open without the site search.
     await userEvent.keyboard("{Control>}k{/Control}");
-    await expect.element(page.getByRole("combobox", { name: "Search the docs" })).toBeVisible();
+    await settle(150);
+    await expect.element(page.getByRole("combobox", { name: "Search the docs" })).not.toBeInTheDocument();
   });
 
   it("labels a page hit with its area when it has no headings above it", async () => {

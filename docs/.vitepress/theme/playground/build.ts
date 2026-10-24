@@ -72,7 +72,7 @@ export function build(s: State, name = "my-theme"): Built {
   const strokes: NonNullable<ThemeInput["strokes"]> = {};
   if (s.hair !== NEUTRAL.hair) strokes.hair = s.hair;
   if (s.focus !== NEUTRAL.focus) strokes.focus = s.focus;
-  // `strokes` takes only hair and focus: its edge and card fields are deprecated, so a stroke-edge or stroke-card override stays a token.
+  // `strokes` takes only hair and focus, which derive the edge and card strokes, so a pinned stroke-edge or stroke-card stays a token.
   const t = { ...s.t };
   if (Object.keys(strokes).length) input.strokes = strokes;
   if (s.motion !== "default") input.motion = s.motion;
@@ -164,7 +164,7 @@ const INLINE_GAP = { tight: 1, default: 2, roomy: 3 } as const;
 /** The props each variant maps to, as the previews apply them. */
 export function variantProps(v: Variants) {
   return {
-    pad: v.pad,
+    size: v.size,
     gap: SPACE_GAP[v.gap],
     inlineGap: INLINE_GAP[v.gap],
   };
@@ -174,7 +174,7 @@ export function variantProps(v: Variants) {
 export function variantCode(v: Variants): string {
   const g = SPACE_GAP[v.gap];
   const lines = [
-    v.pad === "md" ? "" : `<ESurface pad="${v.pad}" />`,
+    v.size === "md" ? "" : `<ESurface size="${v.size}" />`,
     v.gap === "default" ? "" : `<EStack :gap="${g}" />\n<EGrid :gap="${g}" />`,
   ];
   return lines.filter(Boolean).join("\n");

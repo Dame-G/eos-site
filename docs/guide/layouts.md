@@ -48,11 +48,11 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 
 ## Gaps
 
-`gap` takes the name of a gap token (`tight`, `snug`, `base`, `loose` or `section`), a space token number (1 to 8, 10, 12 or 16, meaning `--e-space-N`) or any CSS length as a string. The names say the job and follow a theme's `spaceScale` and `density`, so prefer them. The defaults are `base` for `EStack`, `loose` for `EGrid` and `snug` for `EInline`. The table of which gap to use when is under [Spacing and layout conventions](/guide/design-principles#spacing-and-layout-conventions). Nest layouts to get a tighter gap inside a looser one, as the heading and cards above do.
+`gap` takes the name of a gap token (`tight`, `snug`, `base`, `loose` or `section`), a space token number (1 to 6, 8, 10, 12 or 16, meaning `--e-space-N`) or any CSS length as a string. The names say the job and follow a theme's `spaceScale` and `density`, so prefer them. The defaults are `base` for `EStack`, `loose` for `EGrid` and `snug` for `EInline`. The table of which gap to use when is under [Spacing and layout conventions](/guide/design-principles#spacing-and-layout-conventions). Nest layouts to get a tighter gap inside a looser one, as the heading and cards above do.
 
 ## Rows and columns
 
-- `EInline` wraps instead of overflowing. `justify="between"` pushes the first and last children apart, `align="baseline"` lines up text, and `nowrap` keeps one line.
+- `EInline` wraps instead of overflowing. `justify="between"` pushes the first and last children apart, `align="baseline"` lines up text, and `:wrap="false"` keeps one line.
 - `EGrid` responds to its own width, not the screen's. `min` is the narrowest a column may be. Below it there is one column. `masonry` packs cards of uneven height.
 - `EStack` stretches children across the column. `align="center"` or `"end"` positions them instead, and never changes focus order.
 
