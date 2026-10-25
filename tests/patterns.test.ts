@@ -59,6 +59,8 @@ describe("Register", () => {
 
     await page.getByRole("textbox", { name: /First name/ }).fill("Ana");
     await page.getByRole("textbox", { name: /Last name/ }).fill("Ruiz");
+    await page.getByRole("textbox", { name: /Date of birth/ }).fill("03/14/1990");
+    await userEvent.keyboard("{Tab}"); // the typed date is read when the box loses focus
     await page.getByRole("textbox", { name: /Mobile phone/ }).fill("5551234567");
     await page.getByRole("button", { name: "Continue" }).click();
     await expect.element(page.getByText("How you will pay").first()).toBeVisible();
