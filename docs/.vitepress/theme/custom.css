@@ -206,8 +206,9 @@ body {
     border-inline-start: var(--e-stroke-hair) solid var(--e-border);
   }
 
+  /* The same space between the content and the rule on its right as on its left (see `.site-body--side .site-main`), so the dividers run as far one way as the other. */
   .site-body--outline .site-main {
-    padding-inline-end: var(--e-space-8);
+    padding-inline-end: var(--e-space-4);
   }
 }
 
