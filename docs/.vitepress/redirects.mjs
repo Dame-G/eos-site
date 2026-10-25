@@ -1,5 +1,7 @@
 // The Cloudflare `_redirects` file, written at the end of the build.
 
+import { PATTERN_MOVES } from "./pages.mjs";
+
 /** `TextField` as a URL slug: `text-field`. */
 const kebab = (name) => name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/([A-Z])([A-Z][a-z])/g, "$1-$2").toLowerCase();
 
@@ -15,6 +17,8 @@ export function redirectsFile(components) {
     "/guide/ /guide/getting-started 302",
     // Recipes moved from the guide to the patterns.
     "/guide/recipes /patterns/recipes 301",
+    // Patterns that were merged or renamed (pages.mjs).
+    ...Object.entries(PATTERN_MOVES).map(([from, to]) => `${from} ${to} 301`),
     ...aliases,
   ];
   return lines.join("\n") + "\n";

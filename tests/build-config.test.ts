@@ -33,6 +33,9 @@ describe("headers and redirects", () => {
     const file = redirectsFile(["Button", "TextField", "ab"]);
     expect(file).toContain("/guide/ /guide/getting-started 302");
     expect(file).toContain("/guide/recipes /patterns/recipes 301");
+    expect(file).toContain("/patterns/empty-and-error /patterns/loading-empty-and-error 301");
+    expect(file).toContain("/patterns/loading-and-paging /patterns/loading-empty-and-error 301");
+    expect(file).toContain("/patterns/app-shell /patterns/page-frame 301");
     expect(file).toContain("/components/button /components/Button 301");
     expect(file).toContain("/components/textfield /components/TextField 301");
     expect(file).toContain("/components/text-field /components/TextField 301");
