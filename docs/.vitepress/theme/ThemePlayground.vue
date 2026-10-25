@@ -107,13 +107,21 @@ function followSite() {
   Object.assign(s, withGround("dark"));
   settle(true);
 }
+// From 64rem the controls are a sticky dock beside the preview (ControlsDock.vue): the tabs then stretch to its height and the panel scrolls on its own. Narrower, the page scrolls them.
+const docked = ref(false);
+let dockQuery: MediaQueryList | undefined;
+const followDock = () => (docked.value = !!dockQuery?.matches);
 onMounted(() => {
   followSite();
   loadHash();
   window.addEventListener("hashchange", loadHash);
+  dockQuery = window.matchMedia("(min-width: 64rem)");
+  followDock();
+  dockQuery.addEventListener("change", followDock);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("hashchange", loadHash);
+  dockQuery?.removeEventListener("change", followDock);
   wholePage.value = false;
   syncPage();
   clearTimeout(timer);
@@ -243,10 +251,10 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
     <div class="workbench">
       <ControlsDock>
-        <ETabs v-model="controlTab" :items="controlItems" fill class="groups">
+        <ETabs v-model="controlTab" :items="controlItems" fill :stretch="docked" class="groups">
           <template #colour>
             <EStack :gap="4">
-              <ESegmented :model-value="s.scheme" label="Colour set" hint="Sets the three ground colours below." :options="schemeOptions" @update:model-value="setScheme" />
+              <ESegmented :model-value="s.scheme" size="sm" label="Colour set" hint="Sets the three ground colours below." :options="schemeOptions" @update:model-value="setScheme" />
               <EStack :gap="2">
                 <ESwitch v-model="s.autoScheme" label="Follow light and dark" />
                 <ESwitch v-model="s.autoContrast" label="Follow high contrast" :disabled="s.scheme === 'contrast'" />
@@ -266,8 +274,8 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
           <template #shape>
             <EStack :gap="4">
-              <ESegmented :model-value="s.radius" label="Radius" :options="[{ value: 'sharp', label: 'Sharp' }, { value: 'default', label: 'Default' }, { value: 'round', label: 'Round' }]" @update:model-value="setRadius" />
-              <ESegmented :model-value="s.elevation" label="Elevation" :options="[{ value: 'outline', label: 'Outline' }, { value: 'lifted', label: 'Lifted' }, { value: 'bold', label: 'Bold' }]" hint="Edges are rings of the card edge colour." @update:model-value="setElevation" />
+              <ESegmented :model-value="s.radius" size="sm" label="Radius" :options="[{ value: 'sharp', label: 'Sharp' }, { value: 'default', label: 'Default' }, { value: 'round', label: 'Round' }]" @update:model-value="setRadius" />
+              <ESegmented :model-value="s.elevation" size="sm" label="Elevation" :options="[{ value: 'outline', label: 'Outline' }, { value: 'lifted', label: 'Lifted' }, { value: 'bold', label: 'Bold' }]" hint="Edges are rings of the card edge colour." @update:model-value="setElevation" />
               <ESelect
                 v-model="s.themePreset"
                 label="Preset"
@@ -281,7 +289,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
               </EGrid>
               <EKicker>Spacing</EKicker>
               <EText size="sm" tone="muted">Component props, not tokens. They are not part of defineTheme.</EText>
-              <ESegmented v-for="f in VARIANT_FIELDS" :key="f.key" :model-value="s.variants[f.key]" :label="f.label" :options="f.options" :hint="f.hint" @update:model-value="setVariant(f.key, $event)" />
+              <ESegmented v-for="f in VARIANT_FIELDS" :key="f.key" size="sm" :model-value="s.variants[f.key]" :label="f.label" :options="f.options" :hint="f.hint" @update:model-value="setVariant(f.key, $event)" />
               <TokenOverrides title="All shape tokens" :items="LISTS.shape" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
           </template>
@@ -308,6 +316,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
             <EStack :gap="4">
               <ESegmented
                 :model-value="s.density"
+                size="sm"
                 label="Density"
                 :options="[{ value: 'comfortable', label: 'Comfortable' }, { value: 'compact', label: 'Compact' }]"
                 hint="Compact tightens the space scale and makes controls the 44px tap target."
@@ -323,7 +332,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
           <template #motion>
             <EStack :gap="4">
-              <ESegmented :model-value="s.motion" label="Motion" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
+              <ESegmented :model-value="s.motion" size="sm" label="Motion" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
               <EText size="sm" tone="muted">Try it with Replay in the preview. Everything stops under reduced motion.</EText>
               <TokenOverrides title="All motion tokens" :items="LISTS.motion" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
@@ -398,32 +407,15 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
   min-width: 0;
   scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
 }
-.groups :deep(.e-seg-text) {
-  min-width: 0;
-  padding-inline: var(--e-space-3);
-}
 @media (min-width: 64rem) {
   .workbench {
     grid-template-columns: minmax(22rem, 26rem) minmax(0, 1fr);
     gap: calc(var(--e-space-8) * 1.5);
   }
+  /* The tabs fill the sticky dock's height, and with `stretch` their panel scrolls its own content. */
   .groups {
-    display: flex;
-    flex-direction: column;
     flex: 1;
     min-height: 0;
-  }
-  .groups > :deep(.e-tabpanel) {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    /* At the end of the list a small wheel or trackpad movement would carry on into the page and move it under the sticky panel. */
-    overscroll-behavior: contain;
-
-    /* Scrolling clips sideways too, so a focused field's outline (which reaches outside it) would be cut where the field meets the panel. Room for it on the sides and below, taken back with the margin so the fields still line up with the column. */
-    padding-inline: calc(2 * var(--e-stroke-focus));
-    padding-block-end: calc(2 * var(--e-stroke-focus));
-    margin-inline: calc(-2 * var(--e-stroke-focus));
   }
 }
 </style>

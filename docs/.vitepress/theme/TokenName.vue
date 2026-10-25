@@ -9,7 +9,7 @@ defineProps<{ name: string }>();
 <template>
   <span class="token-name">
     <EHighlight code>--e-{{ name }}</EHighlight>
-    <ECopyButton :text="`--e-${name}`" :label="`Copy --e-${name}`" class="token-copy" />
+    <ECopyButton :text="`--e-${name}`" :label="`Copy --e-${name}`" size="sm" />
   </span>
 </template>
 
@@ -18,8 +18,5 @@ defineProps<{ name: string }>();
   display: inline-flex;
   align-items: center;
   gap: var(--e-space-1);
-}
-.token-copy {
-  --e-control-height: 1.75rem;
 }
 </style>

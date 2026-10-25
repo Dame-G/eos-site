@@ -1,8 +1,8 @@
 /* The site's own layout and prose. Everything else on the page is the library's, from @eos-ui/vue/style.css. VitePress's theme CSS is not loaded at all. */
 
 :root {
-  /* EAppHeader's height: the control height and a loose gap. The library is adding a public header-height variable to replace this. */
-  --site-header: 4rem;
+  /* The sticky EAppHeader's height, which it writes on the root as --e-header-height once it runs. Until then (the server-rendered first paint) its usual height: the control height and a loose gap. */
+  --site-header: var(--e-header-height, 4rem);
   /* EAppFooter's height on one row: its padding (gap-section above and below), the tap-height link row and its top rule. A footer that wraps on a narrow window is taller. */
   --site-footer: calc(2 * var(--e-gap-section) + var(--e-tap) + var(--e-stroke-hair));
   --site-wide: 90rem;
@@ -40,11 +40,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-/* Library override, to remove once the library's AppHeader brand-margin fix lands: the brand link already sits a gap before the search button; the library's extra end margin doubled it. */
-.site .e-appheader-brand:not(:last-child) {
-  margin-inline-end: 0;
 }
 
 /* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it. The word takes the link's colours, which are the library's. The word is sized from the tile, in the proportion of the library's own lockup (brand/logo.svg, which the share image uses as it is): there its letters are 31.43 of the tile's 64 units tall, and Outfit's are 0.51 of the font size, so the font size is 0.963 of the tile. */
@@ -184,50 +179,6 @@ body {
   }
 }
 
-/* The side lists, and the same lists in the phone menu, are plain rows: no rule between them, and short enough to show a whole group. A touch screen gets a little more height per row so a finger still lands on one. */
-.site-side .e-nav li + li::before,
-.site-outline .e-nav li + li::before,
-.site-drawer .e-nav li + li::before {
-  content: none;
-}
-
-/* Library override, to replace with ENavList's density option once it lands. */
-.site-side .e-nav,
-.site-outline .e-nav,
-.site-drawer .e-nav {
-  --e-control-height: 2rem;
-}
-
-/* With no rule between them, a small gap keeps the rows from touching. */
-.site-side .e-nav ul,
-.site-outline .e-nav ul,
-.site-drawer .e-nav ul {
-  gap: var(--e-space-1);
-}
-
-@media (pointer: coarse) {
-  .site-side .e-nav,
-  .site-outline .e-nav,
-  .site-drawer .e-nav {
-    --e-control-height: 2.5rem;
-  }
-}
-
-/* A heading too long for the rail wraps onto a second line inside its row. */
-.site-outline .e-nav-item {
-  height: auto;
-  min-height: var(--e-control-height);
-  padding-block: var(--e-space-1);
-  line-height: var(--e-leading-snug);
-}
-
-/* Library override, to replace with ENavList's plain-current variant once it lands. The header's current section and the sidebar's current page both take the library's raised row: you are in Components and on EAppHeader. The outline's current heading is marked by colour and weight alone, because it moves as you scroll. */
-.site-outline .e-nav-item[aria-current="page"] {
-  --_slab: transparent;
-  --_lift: 0px;
-  background-color: transparent;
-}
-
 .site-main {
   min-width: 0;
   max-width: var(--site-prose);
@@ -248,6 +199,10 @@ body {
 
 .site-outline-title {
   margin: 0 0 var(--e-space-3);
+}
+
+.site-edit {
+  margin: var(--e-space-8) 0 0;
 }
 
 .site-pager {
@@ -417,13 +372,6 @@ body {
   display: grid;
   align-content: center;
   min-height: calc(100svh - var(--site-header) - var(--site-footer) - var(--e-space-8) * 2);
-}
-
-/* Library override, to replace with EActions' stack-when-narrow option once it lands. On a phone the hero buttons stack at full width, so none sits alone on a second row. */
-@media (max-width: 32rem) {
-  .home-actions > .e-btn {
-    flex: 1 1 100%;
-  }
 }
 
 /* A restrained entrance for the title and the hero: a short rise and fade, once. These are the wordmark's entrance as it has always been, so they stay as they are. */
@@ -621,11 +569,6 @@ body {
   margin-bottom: calc(-1 * var(--e-space-6));
 }
 
-/* Library override, to remove once the library's Disclosure focus fix lands: an open disclosure clips its content at the top edge, and a code block's border is a 1px ring drawn outside its box, so the ring was cut off wherever the browser ignores the clip margin. A little padding keeps the ring inside the clip. */
-.site-article .e-details-body {
-  padding-block-start: var(--e-space-1);
-}
-
 .demo {
   margin-block: var(--e-space-4);
 }
@@ -648,9 +591,8 @@ body {
   pointer-events: none;
 }
 
-/* Library override (the control height), to replace with ESegmented size="sm" once it lands. */
+/* The bar's controls are the small size of ESegmented and ESelect (ComponentDemo.vue). */
 .demo-bar {
-  --e-control-height: 2.25rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -660,24 +602,17 @@ body {
   background: var(--e-surface-tint);
 }
 
-/* One row at every width: two short toggles and the text size as a compact select, all at the small text size. */
+/* One row at every width: two short toggles and the text size as a compact select. */
 .demo-tools {
-  --e-text-md: var(--e-text-sm);
-  --e-pad-control: var(--e-space-2);
   display: flex;
   align-items: center;
   gap: var(--e-space-2);
   min-width: 0;
 }
 
-/* Library override, to replace with ESegmented size="sm" once it lands. */
-.demo-tools .e-seg-text {
-  min-width: 0;
-}
-
 .demo-size {
   flex: none;
-  width: 5.5rem;
+  width: 6.5rem;
 }
 
 .demo-stage {

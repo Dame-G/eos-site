@@ -36,6 +36,13 @@ afterEach(() => {
 });
 
 describe("site chrome", () => {
+  it("links a guide page to its source in the site's repository to edit", async () => {
+    await mount(Layout);
+    const edit = page.getByRole("link", { name: /Edit this page on GitHub/ });
+    await expect.element(edit).toBeVisible();
+    expect(edit.element().getAttribute("href")).toBe("https://github.com/Dame-G/eos-site/edit/main/docs/guide/theming.md");
+  });
+
   it("the skip link is the first stop and moves focus to the main content", async () => {
     await mount(Layout);
     await userEvent.tab();

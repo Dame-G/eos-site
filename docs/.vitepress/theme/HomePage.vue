@@ -26,7 +26,7 @@ const installHtml = __EOS_INSTALL_HTML__;
         <div class="eos-live home-install">
           <ECodeBlock lang="bash" :code="install" copy-label="Copy install command"><div v-html="installHtml" /></ECodeBlock>
         </div>
-        <EActions class="home-actions">
+        <EActions stack="narrow">
           <EButton href="/guide/getting-started">Get started</EButton>
           <EButton href="/components/" variant="outline">Components</EButton>
           <EButton href="/playground" variant="outline">Playground</EButton>

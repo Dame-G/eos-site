@@ -29,6 +29,7 @@ import { hiddenHeadings } from "./outline";
 
 const ORDER = ["system", "light", "dark"] as const;
 const LICENSE_URL = "https://github.com/Dame-G/eos/blob/main/LICENSE";
+const SITE_EDIT_URL = "https://github.com/Dame-G/eos-site/edit/main/docs/";
 const SCHEME_ICON = { system: MonitorIcon, light: SunIcon, dark: MoonIcon };
 const NAMES: Record<Choice, string> = { system: "System", light: "Light", dark: "Dark" };
 // The header and the phone menu offer the same choice with the same control, so any of the three modes can be picked directly.
@@ -39,6 +40,8 @@ const route = useRoute();
 
 const isHome = computed(() => frontmatter.value.layout === "home");
 const isWide = computed(() => frontmatter.value.layout === "page");
+// A guide page is a markdown file of this site, so it links to its source to edit. Component pages say so in their own text, since they are the library's READMEs.
+const editUrl = computed(() => (page.value.relativePath.startsWith("guide/") ? SITE_EDIT_URL + page.value.relativePath : undefined));
 
 const topNav = computed<NavItem[]>(() => {
   const here = cleanPath(route.path);
@@ -251,12 +254,13 @@ watch(
 
     <div v-else class="site-body" :class="{ 'site-body--side': hasSidebar, 'site-body--outline': showOutline, 'site-body--wide': isWide }">
       <div v-if="hasSidebar" class="site-rail site-rail--side"><div class="site-side">
-        <ENavList label="Pages" :sections="sections" />
+        <ENavList label="Pages" size="sm" :sections="sections" />
       </div></div>
       <main id="main" class="site-main" tabindex="-1">
         <NotFoundPage v-if="page.isNotFound" @search="searching = true" />
         <template v-else>
           <article class="site-article site-prose"><Content /></article>
+          <EText v-if="editUrl" as="p" size="sm" class="site-edit"><ELink :href="editUrl" external>Edit this page on GitHub</ELink></EText>
           <nav v-if="pager.prev || pager.next" class="site-pager" aria-label="Previous and next page">
             <EButton v-if="pager.prev" variant="outline" icon="arrow-left" :href="pager.prev.href">{{ pager.prev.label }}</EButton>
             <EButton v-if="pager.next" variant="outline" icon-end="arrow-right" :href="pager.next.href" class="site-pager-next">{{ pager.next.label }}</EButton>
@@ -266,7 +270,7 @@ watch(
       <div v-if="showOutline" class="site-rail site-rail--outline">
         <div class="site-outline" @click="flashSame">
           <EKicker class="site-outline-title" aria-hidden="true">On this page</EKicker>
-          <ENavList label="On this page" :items="outline" />
+          <ENavList label="On this page" size="sm" :items="outline" />
         </div>
       </div>
     </div>
@@ -284,11 +288,11 @@ watch(
 
     <EDrawer v-model:open="menuOpen" side="start" title="Menu" class="site-drawer">
       <ESelect class="site-drawer-scheme" label="Colour scheme" :model-value="schemeChoice" :options="SCHEME_OPTIONS" @update:model-value="chooseScheme($event as Choice)" />
-      <ENavList label="Site menu" :items="menuSplit.before" />
+      <ENavList label="Site menu" size="sm" :items="menuSplit.before" />
       <div v-if="hasSidebar" class="site-drawer-pages">
-        <ENavList label="Pages" :sections="sections" />
+        <ENavList label="Pages" size="sm" :sections="sections" />
       </div>
-      <ENavList v-if="menuSplit.after.length" label="More of the site" :items="menuSplit.after" />
+      <ENavList v-if="menuSplit.after.length" label="More of the site" size="sm" :items="menuSplit.after" />
     </EDrawer>
     <SiteSearch v-if="searchLoaded" v-model:open="searching" />
   </div>
