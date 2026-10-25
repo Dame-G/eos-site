@@ -47,6 +47,7 @@ These changes are on the library's main branch and not released yet. See the [ch
 **CSS and tokens**
 
 - Classes: `.e-combo-btn` is `.e-input-btn`, `.e-choice--bare` is `.e-choice--label-hidden`, `.e-nav-count` is `.e-count`, `e-table-wrap--striped` and `--dense` are `e-table--striped` and `--dense` on the `table`, `e-gridtable--busy` is `e-table--busy`, and `e-surface--pad-*` is gone. The disclosure chevron is `.e-details-chevron`, not `summary::after`. The private `--e-ring` of fields is `--_ring`.
+- Renamed tokens: `text-link` → `link`; `warning-strong` → `warning` (the old `warning` alias is gone); `icon-size`, `icon-size-md`, `icon-size-lg` → `icon-size-md`, `icon-size-lg`, `icon-size-xl` (each moves up one name; `icon-size-sm` stays); `size-panel-sm`, `-md`, `-lg` → `panel-width-sm`, `-md`, `-lg`; `frame`, `well`, `float`, `paper` → `shadow-frame`, `shadow-well`, `shadow-float`, `shadow-paper`; `slab-sink`, `ring-hover`, `ring-press` → `shadow-sink`, `shadow-ring-hover`, `shadow-ring-press`; `slab-thin`, `slab-bold` → `depth-thin`, `depth-bold` (now in a `depth` group); `focus-gap-field`, `underline-offset` → `stroke-focus-gap-field`, `stroke-underline-offset`. Rename the icon sizes in one pass, largest first, since the names shift into each other.
 - Removed tokens: `slab-edge`, `tracking-snug` and `tracking-wide` (use `tracking-label`, or none). `tokens.json` drops the top-level `name`, `version`, `color.themes` and `type.fonts`.
 - The layer order gains `e.state` after `e.page`. If you declare the order yourself, add it.
 

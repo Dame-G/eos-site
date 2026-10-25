@@ -27,7 +27,7 @@ const vars = computed(() => ({
   background: var(--g);
 }
 .pt::before {
-  --lift: var(--e-slab-thin);
+  --lift: var(--e-depth-thin);
   content: "";
   box-sizing: border-box;
   width: 0.875rem;

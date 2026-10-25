@@ -23,7 +23,7 @@ You will almost never need more than these. Pick by the job, not by the colour.
 | Hover and selected | `--e-wash-hover`, `--e-wash-press` | The [wash](/guide/glossary#wash) over a hovered or pressed row or item, and the selected item in a list. |
 | Lines | `--e-border`, `--e-border-strong` | Hairlines and card outlines, then the edge of a control. |
 | Action | `--e-primary`, `--e-on-primary` | The main button and every selected state, then the text on it. |
-| Status | `--e-danger`, `--e-warning-strong`, `--e-success` | Errors, cautions and success, each with a `-soft` tint for backgrounds. |
+| Status | `--e-danger`, `--e-warning`, `--e-success` | Errors, cautions and success, each with a `-soft` tint for backgrounds. |
 | Spacing | `--e-space-1` to `--e-space-8` | The raw scale, from 4px to 32px (no `space-7`). Larger steps run to `--e-space-16`. |
 | Spacing, by job | `--e-gap-snug`, `--e-gap-base`, `--e-pad-card` | Named gaps and paddings that follow `spaceScale` and `density`. Prefer these. [Which one when](/guide/design-principles#spacing). |
 | Corners | `--e-radius-sm`, `-md`, `-lg`, `-pill` | Match the component you sit beside. |

@@ -194,7 +194,7 @@ function setRadius(v: string | undefined) {
 function setElevation(v: string | undefined) {
   if (!v) return;
   s.elevation = v as State["elevation"];
-  for (const k of ["frame", "well", "float"]) delete s.t[k];
+  for (const k of ["shadow-frame", "shadow-well", "shadow-float"]) delete s.t[k];
 }
 function setMotion(v: string | undefined) {
   if (!v) return;

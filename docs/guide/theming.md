@@ -29,19 +29,19 @@ app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be
 | Input | Type | Derives |
 | --- | --- | --- |
 | `brand`, `accent` | colour | `primary`, `secondary`, their tints and `surface-tint`. `brand` and `brand-accent` keep the colours as given, for decoration |
-| `danger`, `warning`, `success` | colour | `danger`, `on-danger`, `danger-soft`, `warning-strong`, `warning-soft`, `success`, `success-soft`. `accent` does not change the success tone: `success` does |
+| `danger`, `warning`, `success` | colour | `danger`, `on-danger`, `danger-soft`, `warning`, `warning-soft`, `success`, `success-soft`. `accent` does not change the success tone: `success` does |
 | `background`, `surface`, `foreground` | colour | The grounds, `ink`, `muted`, `border` and `border-strong`. A dark surface lifts the action colours |
 | `fonts` | `{ sans?, mono?, script? }` | `font-sans`, `font-mono`, `font-script` (signatures). Full `font-family` stacks; nothing is bundled |
 | `radius` | `"sharp" | "default" | "round" | number | { sm?, md?, lg? }` | `radius-sm` to `radius-lg` and `radius-row`. A number is `radius-md` in px, with `sm` half of it and `lg` double |
 | `textScale`, `spaceScale` | `number` | `text-xs` to `text-4xl` plus the icon, checkbox and avatar boxes (`textScale`, on top of the visitor's own browser font size, since these tokens are in rem), and `space-1` to `space-16` with the `gap-*`, `pad-*` and `gutter` tokens that reference them (`spaceScale`). 1 is the default |
-| `strokes` | `{ hair?, focus? }` | `stroke-hair`, `stroke-focus` (the width of the focus outline and its gap), and from them `stroke-edge` (1.5 times `hair`), `stroke-card` (`hair`, 2px on a bold elevation) and `focus-gap-field`. To pin `stroke-edge` or `stroke-card`, set it in `tokens` |
+| `strokes` | `{ hair?, focus? }` | `stroke-hair`, `stroke-focus` (the width of the focus outline and its gap), and from them `stroke-edge` (1.5 times `hair`), `stroke-card` (`hair`, 2px on a bold elevation) and `stroke-focus-gap-field`. To pin `stroke-edge` or `stroke-card`, set it in `tokens` |
 | `contrast` | `"standard" | "high" | "auto"` | With `high`, `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey and `scrim` is darker. `auto` stays standard and switches to `high` under `prefers-contrast: more` |
 | `scheme`, `dark` | `"light" | "dark" | "auto"`, `ThemeVariant` | `auto` keeps the theme light and applies `dark` (a dark surface of `#15121b` unless you give one) when the visitor prefers a dark page. The grounds are never inherited. See [Light and dark](#light-and-dark) |
 | `density` | `"comfortable" | "compact"` | `compact` scales the space scale by 0.75 (the `gap-*`, `pad-*` and `gutter` tokens follow) and makes controls exactly the 44px tap target. A smaller `controlHeight` is raised to 44 and reported in `warnings` |
 | `preset` | `"paper" | "ink" | "quiet"` | `elevation`, `strokes`, `radius`, `depth` and `motion` together. Your own entries win. See [Presets](#presets) |
 | `motion` | `"default" | "snappy" | "gentle"` | `duration-tap`, `duration-fade`, `duration-move`, `easing-out`. Every theme already stops moving under `prefers-reduced-motion`; to zero the durations anyway, set them in `tokens` |
-| `elevation` | `"outline" | "lifted" | "bold"` | `frame`, `well`, `float` and `paper`. Floating panels are slabs lifted off the page; `lifted` also stands cards on a slab and `bold` draws 2px rings and deeper wells. Every shadow is drawn in one shade |
-| `depth` | `number` | `depth` (px, 2 by default), and from it `slab-thin` (half, at least 1px) and `slab-bold` (double): how far every raised face, tone edge and floating panel reaches |
+| `elevation` | `"outline" | "lifted" | "bold"` | `shadow-frame`, `shadow-well`, `shadow-float` and `shadow-paper`. Floating panels are slabs lifted off the page; `lifted` also stands cards on a slab and `bold` draws 2px rings and deeper wells. Every shadow is drawn in one shade |
+| `depth` | `number` | `depth` (px, 2 by default), and from it `depth-thin` (half, at least 1px) and `depth-bold` (double): how far every raised face, tone edge and floating panel reaches |
 | `controlHeight` | `number` | `control-height` (the number is px) and `chip-height` |
 | `name` | `string` | Not a token: the value of `data-e-theme` when the theme is applied to an element |
 | `tokens` | `Record<string, string>` | Any token by name. Wins over everything derived and is not contrast-corrected. A name that is not a token adds a warning, and only adds a custom property |

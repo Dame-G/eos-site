@@ -481,7 +481,7 @@ body {
     inset-block-start: 0;
     inset-inline-end: 0;
     padding-inline: var(--e-space-2);
-    color: var(--e-text-link);
+    color: var(--e-link);
     font-weight: var(--e-weight-medium);
     text-decoration: none;
     opacity: 0;

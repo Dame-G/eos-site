@@ -13,7 +13,7 @@ export interface Built {
   overrides: Record<string, string>;
 }
 
-const SHADOWS = ["frame", "well", "float"] as const;
+const SHADOWS = ["shadow-frame", "shadow-well", "shadow-float"] as const;
 const literal = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 function followShadows(base: Record<string, string>, next: Record<string, string>): Record<string, string> {

@@ -1,17 +1,18 @@
 import { describe, it, expect } from "vitest";
+import { themeInputs } from "@eos-ui/tokens";
 import { interfaceMembers } from "../docs/data/theme-source.js";
 import { INPUT_NOTES, NOT_INPUTS } from "../docs/data/theme-inputs.js";
 import theming from "../docs/guide/theming.md?raw";
 import api from "../docs/guide/api.md?raw";
 import tokensGuide from "../docs/guide/tokens.md?raw";
 
-// The guides describe defineTheme by hand. These tests read the library's ThemeInput and Theme interfaces and fail when
-// the documented inputs differ, so a new, renamed or removed input cannot go unnoticed.
+// The guides describe defineTheme by hand. These tests read the library's ThemeInput (its exported themeInputs) and the
+// Theme interface, and fail when the documented inputs differ, so a new, renamed or removed input cannot go unnoticed.
 
 const sources = import.meta.glob("../node_modules/@eos-ui/tokens/src/theme.ts", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 const source = Object.values(sources)[0] ?? "";
 
-const inputKeys = interfaceMembers(source, "ThemeInput").map((m) => m.name);
+const inputKeys = themeInputs.map((m) => m.name);
 const themeMembers = interfaceMembers(source, "Theme").map((m) => m.name);
 
 /** The first-column keys of the Markdown table whose header starts with `header`. */

@@ -67,12 +67,10 @@ const value = { key: "value", label: "Value" };
 const usage = { key: "usage", label: "Used for" };
 const from = { key: "from", label: "From" };
 const plainColumns = [token, value, from, usage];
-const isSlab = (t: Token) => /^slab(-|$)/.test(t.name);
-/** Rows of a plain scale, so the stroke table and the slab table share one source. */
+/** Rows of a plain scale. The slab table is the depth group. */
 function plainRows(section: string): Token[] {
   if (section === "motion") return [...data.duration, ...data.easing];
-  if (section === "stroke") return (data.stroke as Token[]).filter((t) => !isSlab(t));
-  if (section === "slab") return (data.stroke as Token[]).filter(isSlab);
+  if (section === "slab") return data.depth;
   return data[section] ?? [];
 }
 const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r.constant ? "constant" : r.from.join(", ") }));

@@ -21,7 +21,7 @@ A see-through fill laid over whatever is beneath, so the ground shows through. `
 
 ## Well
 
-A part pressed into the page: inputs, meters and empty slots. `--e-well` is its shadow. With [slabs](#slab) and [floating](#float) parts, it is one of the three kinds of depth eos allows.
+A part pressed into the page: inputs, meters and empty slots. `--e-shadow-well` is its shadow. With [slabs](#slab) and [floating](#float) parts, it is one of the three kinds of depth eos allows.
 
 ## Slab
 
@@ -29,15 +29,15 @@ The raised bottom edge under something you can press: a button, a checked box, t
 
 ## Frame
 
-The flat outline of everything that is not clickable: cards, summaries, the search bar. `--e-frame` is a ring in `--e-border` with no depth. The `elevation` input changes how frames, wells and floating parts are drawn.
+The flat outline of everything that is not clickable: cards, summaries, the search bar. `--e-shadow-frame` is a ring in `--e-border` with no depth. The `elevation` input changes how frames, wells and floating parts are drawn.
 
 ## Float
 
-What a popover, a menu or a toast does: it floats over the page with a soft shadow, `--e-float`. Nothing in the flow of the page floats.
+What a popover, a menu or a toast does: it floats over the page as a slab lifted off it: a hard bottom edge twice `--e-depth` deep and one faint drop, `--e-shadow-float`. Nothing in the flow of the page floats.
 
 ## Paper
 
-Three related things. The `paper` variant of [`ESurface`](/components/Surface) is a warm ground and a pressed edge, for a statement or a receipt, and `--e-paper` is that edge. `"paper"` is also the default [preset](#preset): flat outlines, default corners and motion. The theme playground's "Paper" options are separate from both.
+Three related things. The `paper` variant of [`ESurface`](/components/Surface) is a warm ground and a pressed edge, for a statement or a receipt, and `--e-shadow-paper` is that edge. `"paper"` is also the default [preset](#preset): flat outlines, default corners and motion. The theme playground's "Paper" options are separate from both.
 
 ## Kicker
 

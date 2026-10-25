@@ -9,9 +9,9 @@ Compose from eos first: most screens need no CSS of their own (see [Design princ
 
 ## The slab
 
-A button, a checked box, the chosen day and the current nav item have a raised bottom edge: the slab. It is a border on all four sides in the slab colour, with the bottom one thicker. Pressing sinks the face over it. Its thickness is `--e-depth`, or `--e-slab-thin` for the two small parts, a key (`EKbd`) and a tag (`ETag`). Each tone has an edge colour, such as `--e-primary-slab`, and a neutral face uses `--e-slab-ink`. A slab drawn some other way (a gradient, a pseudo-element bar, an inset shadow) will not follow a theme.
+A button, a checked box, the chosen day and the current nav item have a raised bottom edge: the slab. It is a border on all four sides in the slab colour, with the bottom one thicker. Pressing sinks the face over it. Its thickness is `--e-depth`, or `--e-depth-thin` for the two small parts, a key (`EKbd`) and a tag (`ETag`). Each tone has an edge colour, such as `--e-primary-slab`, and a neutral face uses `--e-slab-ink`. A slab drawn some other way (a gradient, a pseudo-element bar, an inset shadow) will not follow a theme.
 
-**One bold tone edge.** A notice, a stamp and a toast mark their tone with one thick side, never a slab: the inline-start border is `--e-stroke-edge` plus `--e-slab-bold` wide, in the tone's colour (a notice and a stamp also draw the other sides at `--e-stroke-edge`). It mirrors in right-to-left text.
+**One bold tone edge.** A notice, a stamp and a toast mark their tone with one thick side, never a slab: the inline-start border is `--e-stroke-edge` plus `--e-depth-bold` wide, in the tone's colour (a notice and a stamp also draw the other sides at `--e-stroke-edge`). It mirrors in right-to-left text.
 
 ## Hover, press and focus
 
@@ -23,7 +23,7 @@ Each family of things that can be pressed answers the pointer one way. A border 
 | Breadcrumb | A wash under the link text | The same |
 | Disclosure summary (`EDisclosure`) | `--e-wash-hover` only: no ring, no underline | `--e-wash-press` |
 | Bordered item: a tab, a segment, a card, a link card | The border turns `--e-wash-ring` | The border turns `--e-ink` |
-| Unbordered row: a menu item, an option, a nav item, a page in a pager, a quiet button | `--e-wash-hover` and `box-shadow: var(--e-ring-hover)` | `--e-wash-press` and `box-shadow: var(--e-ring-press)` |
+| Unbordered row: a menu item, an option, a nav item, a page in a pager, a quiet button | `--e-wash-hover` and `box-shadow: var(--e-shadow-ring-hover)` | `--e-wash-press` and `box-shadow: var(--e-shadow-ring-press)` |
 | Filled control: a button, a checked box | The tone's `-hover` fill | The tone's `-press` fill, and the slab sinks |
 
 Every family changes over `transition: var(--e-transition-state)`, and hover styles apply only on devices that can hover. The text link is the one family where colour is the whole change: it is already underlined, so the underline carries it.

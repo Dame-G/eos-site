@@ -44,6 +44,28 @@ const RANGES: Partial<Record<keyof State, [number, number]>> = {
 
 const COLOUR_FIELDS = new Set(["brand", "accent", "danger", "warning", "success", "background", "surface", "foreground"]);
 
+/** Tokens the library renamed in 0.18, so a link made before keeps its overrides. Only names that are gone are read under their new name: `icon-size-md` and `icon-size-lg` exist again (one step larger), and a link does not say which version made it. */
+const RENAMED: Record<string, string> = {
+  "text-link": "link",
+  "warning-strong": "warning",
+  "icon-size": "icon-size-md",
+  "size-panel-sm": "panel-width-sm",
+  "size-panel-md": "panel-width-md",
+  "size-panel-lg": "panel-width-lg",
+  "size-list-max": "list-max-height",
+  frame: "shadow-frame",
+  well: "shadow-well",
+  float: "shadow-float",
+  paper: "shadow-paper",
+  "slab-sink": "shadow-sink",
+  "ring-hover": "shadow-ring-hover",
+  "ring-press": "shadow-ring-press",
+  "focus-gap-field": "stroke-focus-gap-field",
+  "underline-offset": "stroke-underline-offset",
+  "slab-thin": "depth-thin",
+  "slab-bold": "depth-bold",
+};
+
 const LEGACY: { token: string; field: "hair" | "focus" | "controlHeight"; siblings: string[] }[] = [
   { token: "stroke-hair", field: "hair", siblings: ["stroke-edge"] },
   { token: "stroke-focus", field: "focus", siblings: ["focus-gap"] },
@@ -84,8 +106,10 @@ export function decode(code: string): State | null {
             if (name in VARIANT_VALUES && (VARIANT_VALUES[name as VariantKey] as readonly unknown[]).includes(val)) (s.variants as Record<string, unknown>)[name] = val;
       } else if (k === "t") {
         if (v && typeof v === "object")
-          for (const [name, val] of Object.entries(v as Record<string, unknown>))
+          for (const [old, val] of Object.entries(v as Record<string, unknown>)) {
+            const name = old in defaults ? old : (RENAMED[old] ?? old);
             if (name in defaults && typeof val === "string" && val.length < 300 && SAFE.test(val)) s.t[name] = val;
+          }
       } else if (k in d && typeof v === typeof d[k]) {
         const allowed = ENUMS[k as keyof State];
         if (allowed && !allowed.includes(v as string)) continue;

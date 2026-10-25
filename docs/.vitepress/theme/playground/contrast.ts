@@ -23,7 +23,7 @@ const PAIRS: Pair[] = [
   { fg: "on-danger", bg: "danger", min: 4.5, role: "Danger button label" },
   { fg: "danger", bg: "surface", min: 4.5, role: "Error text" },
   { fg: "danger", bg: "danger-soft", min: 4.5, role: "Danger notice text" },
-  { fg: "warning-strong", bg: "warning-soft", min: 4.5, role: "Warning notice text" },
+  { fg: "warning", bg: "warning-soft", min: 4.5, role: "Warning notice text" },
   { fg: "success", bg: "success-soft", min: 4.5, role: "Success notice text" },
   { fg: "border", bg: "surface", min: 3, role: "Card outline (non-text)" },
   { fg: "border-strong", bg: "surface", min: 3, role: "Control edge (non-text)" },
