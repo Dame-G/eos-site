@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { EUpload, EStack } from "@eos-ui/vue";
-import cardUrl from "./insurance-card.png";
 
 const files = ref<File[]>([]);
 // The insurance card starts out chosen: a picture of one, so the single-file zone shows it as a large preview.
 const card = ref<File[]>([]);
+// A file of the site's own (public/demos), not an imported asset: a small import is inlined as a data: URL, and the
+// site's policy lets the page fetch only from its own origin.
 onMounted(async () => {
-  const image = await (await fetch(cardUrl)).blob();
+  const image = await (await fetch("/demos/insurance-card.png")).blob();
   card.value = [new File([image], "insurance-card.png", { type: "image/png" })];
 });
 const signed = ref<File[]>([]);
