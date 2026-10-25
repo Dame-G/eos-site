@@ -47,7 +47,7 @@ function remove() {
     <EToastProvider>
       <EStack gap="loose">
         <EPageHeader :heading-level="2" title="Payment methods" description="Cards you can pay with." />
-        <EText v-if="!cards.length" tone="neutral">No cards saved. Add one when you pay your next bill.</EText>
+        <EText v-if="!cards.length" tone="muted">No cards saved. Add one when you pay your next bill.</EText>
         <ESurface v-for="card in cards" :key="card.id">
           <EStack gap="base">
             <EDescriptionList

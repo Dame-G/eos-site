@@ -77,7 +77,7 @@ const passwordError = computed(() => (tried.value && !password.value ? "Enter yo
       <EStack gap="loose">
         <ELink href="#sign-in" icon="arrow-left">Back to sign in</ELink>
         <EHeading :level="2">Check your email</EHeading>
-        <EText tone="neutral">We sent a 6-digit code to m***@example.com. It expires in 10 minutes.</EText>
+        <EText tone="muted">We sent a 6-digit code to m***@example.com. It expires in 10 minutes.</EText>
         <EOtpField v-model="code" label="Sign-in code" :length="6" :group-size="3" hint="Enter the code from the email." />
         <EActions>
           <EButton :disabled="code.length < 6">Verify and sign in</EButton>

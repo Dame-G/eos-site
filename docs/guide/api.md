@@ -279,10 +279,12 @@ function useLocale(): {
   parseDate(s: string): Date | null;
   formatLong(d: Date): string;
   formatMoney(n: number, options?: { locale?: string; currency?: string }): string;
+  formatNumber(n: number): string; // "1,234.5" in en-US, "1.234,5" in de-DE
+  formatList(items: string[], type?: "conjunction" | "disjunction"): string; // "Ada, Grace and Mary"
 };
 ```
 
-Reads the configured locale, so changing it re-renders everything that uses it. `formatMoney` always shows two decimals.
+Reads the configured locale, so changing it re-renders everything that uses it. `formatMoney` uses the currency's own decimals: "$162.40", "¥1,000".
 
 [Guide](/guide/composables#smaller-helpers)
 

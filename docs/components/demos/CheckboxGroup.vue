@@ -13,6 +13,6 @@ const channels = ref<string[]>(["Email"]);
       hint="Choose any that suit you."
       :options="['Email', 'Text', { value: 'post', label: 'Post', description: 'Statements only.' }]"
     />
-    <EText size="sm" tone="neutral">Chosen: {{ channels.length ? channels.join(", ") : "none" }}</EText>
+    <EText size="sm" tone="muted">Chosen: {{ channels.length ? channels.join(", ") : "none" }}</EText>
   </EStack>
 </template>

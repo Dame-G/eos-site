@@ -53,7 +53,7 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
       <EStack gap="loose">
         <ELink href="#forms" icon="arrow-left">Back to forms</ELink>
         <EHeading :level="2">New client form</EHeading>
-        <EText tone="neutral">By signing, you confirm the details you gave us are correct and you agree to our payment policy.</EText>
+        <EText tone="muted">By signing, you confirm the details you gave us are correct and you agree to our payment policy.</EText>
         <ESignatureField v-model="signature" mode="both" :date="new Date(2026, 9, 18, 12)" />
         <EUpload v-model="id" label="Photo ID" optional accept=".jpg,.png,.pdf" hint="A photo of your driver licence or passport." />
         <ENotice v-if="submitted" tone="success" title="Form submitted">Thank you. We have your signed form.</ENotice>

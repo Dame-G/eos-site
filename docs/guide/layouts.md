@@ -39,7 +39,7 @@ A few layout components cover almost every screen. Spacing comes from the `gap` 
       <EStack gap="snug">
         <EStamp :status="v.status" size="sm" />
         <EText>{{ v.title }}</EText>
-        <EText size="sm" tone="neutral">{{ v.when }}</EText>
+        <EText size="sm" tone="muted">{{ v.when }}</EText>
       </EStack>
     </ESurface>
   </EGrid>
@@ -76,10 +76,10 @@ A few layout components cover almost every screen. Spacing comes from the `gap` 
 
 See the full [`EAppShell`](/components/AppShell) demo, and [Statements](/patterns/statements) for a finished page.
 
-For a page that needs a centred column but not the whole frame, such as a sign-in page or an article, use [`EContainer`](/components/Container). It sets a maximum width (`sm`, `md`, `lg` or `full`), centres itself and keeps the page gutter at its sides. Use `as="main"` for the one main landmark.
+For a page that needs a centred column but not the whole frame, such as a sign-in page or an article, use [`EContainer`](/components/Container). Its `width` sets how wide it grows (`sm`, `md`, `lg` or `full`), and it centres itself and keeps the page gutter at its sides. Use `as="main"` for the one main landmark.
 
 ```vue
-<EContainer as="main" size="md">
+<EContainer as="main" width="md">
   <EStack gap="section">
     <EPageHeader title="Sign in" />
     <ESurface>...</ESurface>

@@ -23,7 +23,7 @@ const visits = [
         <EStack gap="snug">
           <EStamp :status="v.status" size="sm" />
           <EText>{{ v.title }}</EText>
-          <EText size="sm" tone="neutral">{{ v.when }}</EText>
+          <EText size="sm" tone="muted">{{ v.when }}</EText>
         </EStack>
       </ESurface>
     </EGrid>

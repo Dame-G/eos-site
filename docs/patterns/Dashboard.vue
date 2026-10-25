@@ -25,21 +25,21 @@ const recent = [
       <EGrid min="15rem" as="ul" class="pattern-cards">
         <ESurface as="li">
           <EStack gap="snug">
-            <EText size="sm" tone="neutral">Balance due</EText>
+            <EText size="sm" tone="muted">Balance due</EText>
             <EText size="lg">{{ money(162.4) }}</EText>
             <EStamp status="due" size="sm" detail="Nov 1" />
           </EStack>
         </ESurface>
         <ESurface as="li">
           <EStack gap="snug">
-            <EText size="sm" tone="neutral">Paid this year</EText>
+            <EText size="sm" tone="muted">Paid this year</EText>
             <EText size="lg">{{ money(1286.75) }}</EText>
-            <EText size="sm" tone="neutral">Across 9 statements</EText>
+            <EText size="sm" tone="muted">Across 9 statements</EText>
           </EStack>
         </ESurface>
         <ESurface as="li">
           <EStack gap="snug">
-            <EText size="sm" tone="neutral">Visits used</EText>
+            <EText size="sm" tone="muted">Visits used</EText>
             <EProgress label="Visits used" :value="9" :max="12" value-text="9 of 12" />
           </EStack>
         </ESurface>

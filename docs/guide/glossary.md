@@ -45,7 +45,7 @@ A small label above a value or a section, in the mono face and upper case: "Bill
 
 ## Tone
 
-Meaning carried by a colour: `neutral`, `info`, `success`, `warning` or `danger`, on `ENotice`, `EToast`, `EStamp`, `ETag` and `EText`. A tone is never a look; `variant` is the look. One word is in both: `danger` is a `variant` on `EButton` (a destructive action) and a `tone` everywhere else (something went wrong). See [Tone, variant and status](/guide/design-principles#tone-variant-and-status).
+Meaning carried by a colour: `neutral`, `info`, `success`, `warning` or `danger`, on `ENotice`, `EToast`, `EStamp`, `ETag` and `EText`. A tone is never a look; `variant` is the look. `neutral` means no tone, the default look; on `EText` and `EMetric`, `muted` is the quieter secondary colour. One word is in both: `danger` is a `variant` on `EButton` (a destructive action) and a `tone` everywhere else (something went wrong). See [Tone, variant and status](/guide/design-principles#tone-variant-and-status).
 
 ## Status
 

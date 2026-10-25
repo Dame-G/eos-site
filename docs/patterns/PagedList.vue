@@ -71,7 +71,7 @@ const range = computed(() => `${(page.value - 1) * PAGE_SIZE + 1} to ${Math.min(
             <ESurface>
               <EStack gap="snug">
                 <EText>{{ s.title }}</EText>
-                <EText size="sm" tone="neutral">Statement {{ s.id }}</EText>
+                <EText size="sm" tone="muted">Statement {{ s.id }}</EText>
                 <EStamp :status="s.status" size="sm" />
               </EStack>
             </ESurface>
@@ -84,7 +84,7 @@ const range = computed(() => `${(page.value - 1) * PAGE_SIZE + 1} to ${Math.min(
         <template #actions><EButton variant="outline" @click="load">Try again</EButton></template>
       </ENotice>
 
-      <EText v-if="state === 'ready'" size="sm" tone="neutral">Showing {{ range }}</EText>
+      <EText v-if="state === 'ready'" size="sm" tone="muted">Showing {{ range }}</EText>
       <EPagination v-model="page" :page-count="pageCount" label="Statement pages" />
     </EStack>
   </div>

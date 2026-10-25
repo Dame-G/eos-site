@@ -21,11 +21,11 @@ const keys = formatShortcut("mod+k");
   <EStack>
     <EInline align="center">
       <EButton variant="outline" @click="open = true">Open the palette</EButton>
-      <EText size="sm" tone="neutral">
+      <EText size="sm" tone="muted">
         or press <template v-for="k in keys" :key="k"><EKbd size="sm">{{ k }}</EKbd>{{ " " }}</template>
       </EText>
     </EInline>
-    <EText size="sm" tone="neutral">{{ chosen ? `You chose “${chosen}”.` : "Nothing chosen yet." }}</EText>
+    <EText size="sm" tone="muted">{{ chosen ? `You chose “${chosen}”.` : "Nothing chosen yet." }}</EText>
     <ECommandPalette v-model:open="open" label="Command palette" :items="commands" @select="chosen = $event.label" />
   </EStack>
 </template>

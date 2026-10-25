@@ -10,7 +10,7 @@ const day = new Date(2026, 9, 22, 12);
 <template>
   <EStack>
     <ESignatureField v-model="signed" mode="both" label="Sign the consent form" :date="day" />
-    <EText size="sm" tone="neutral">{{ signed.agreed ? "Agreed" : "Not yet agreed" }} by {{ signed.name || "no name" }} ({{ signed.method }})</EText>
+    <EText size="sm" tone="muted">{{ signed.agreed ? "Agreed" : "Not yet agreed" }} by {{ signed.name || "no name" }} ({{ signed.method }})</EText>
     <ESignatureField label="Sign the payment plan" mode="draw" agreement="I agree to pay $54.13 a month." :date="day" />
     <ESignatureField label="Signature" disabled :date="day" />
   </EStack>

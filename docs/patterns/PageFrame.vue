@@ -29,7 +29,7 @@ const items = () => [
 <template>
   <div class="pattern-lg">
     <EStack gap="base">
-      <EText size="sm" tone="neutral">The frame below stands in for a whole page. Switch the page to see the current item move.</EText>
+      <EText size="sm" tone="muted">The frame below stands in for a whole page. Switch the page to see the current item move.</EText>
       <EInline>
         <EButton variant="outline" :aria-pressed="page === 'home'" @click="page = 'home'">Home</EButton>
         <EButton variant="outline" :aria-pressed="page === 'statements'" @click="page = 'statements'">Statements</EButton>

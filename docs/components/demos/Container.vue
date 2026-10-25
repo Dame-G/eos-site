@@ -4,19 +4,19 @@ import { EContainer, EHeading, EStack, ESurface, EText } from "@eos-ui/vue";
 
 <template>
   <EStack gap="section">
-    <EContainer size="sm" :gutter="false">
+    <EContainer width="sm" :gutter="false">
       <ESurface>
         <EHeading :level="3">Small</EHeading>
         <EText>At most 40rem wide, and centred when its parent is wider.</EText>
       </ESurface>
     </EContainer>
-    <EContainer size="md" :gutter="false">
+    <EContainer width="md" :gutter="false">
       <ESurface>
         <EHeading :level="3">Medium</EHeading>
         <EText>At most 60rem wide.</EText>
       </ESurface>
     </EContainer>
-    <EContainer size="full" :gutter="false">
+    <EContainer width="full" :gutter="false">
       <ESurface>
         <EHeading :level="3">Full</EHeading>
         <EText>The whole width. Leave the gutter on at the top of a page so content never touches the screen edge.</EText>

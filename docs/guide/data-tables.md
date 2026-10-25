@@ -71,7 +71,7 @@ A cell shows `row[key]` until you fill the `cell-<key>` slot. A slot changes how
 
 ### Many rows
 
-Set `virtual` to render only the rows in view, for thousands of rows. It replaces paging. A grid narrower than 40rem turns rows into cards unless you set `:cards="false"`; virtual and resizable grids keep the table.
+Set `virtual` to render only the rows in view, for thousands of rows. It replaces paging. Set `cards` to turn rows into cards when the grid is narrower than 40rem; virtual and resizable grids keep the table. `dense` and `striped` tighten and stripe the rows.
 
 ## Manual mode
 

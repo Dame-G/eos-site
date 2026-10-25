@@ -59,7 +59,7 @@ function clear() {
         <ESelect v-model="year" label="Year" :options="['Any year', '2026', '2025']" />
       </EInline>
       <EInline justify="between">
-        <EText size="sm" tone="neutral" role="status">{{ items.length }} {{ items.length === 1 ? "document" : "documents" }}</EText>
+        <EText size="sm" tone="muted" role="status">{{ items.length }} {{ items.length === 1 ? "document" : "documents" }}</EText>
         <EButton v-if="filtered" variant="quiet" @click="clear">Clear filters</EButton>
       </EInline>
       <ESearchResults label="Documents" :items="items" :query="query" :empty-text="emptyText" />

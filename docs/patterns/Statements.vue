@@ -65,7 +65,7 @@ function search(q: string) {
           <EButton variant="outline" :aria-pressed="filter === 'due'" @click="setFilter('due')">Needs payment</EButton>
           <EButton variant="outline" :aria-pressed="filter === 'paid'" @click="setFilter('paid')">Paid</EButton>
         </EActions>
-        <EText size="sm" tone="neutral" role="status">{{ matches.length }} {{ matches.length === 1 ? "statement" : "statements" }}</EText>
+        <EText size="sm" tone="muted" role="status">{{ matches.length }} {{ matches.length === 1 ? "statement" : "statements" }}</EText>
       </EInline>
 
       <EStack v-if="shown.length" gap="snug">
