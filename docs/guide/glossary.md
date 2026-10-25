@@ -73,7 +73,7 @@ The smallest area a finger can press reliably: `--e-tap`, 44px. No control is sm
 
 ## Toggletip
 
-A small panel that opens on a press (a click, Enter or Space), not on hover, and holds a short explanation, sometimes with a button. [`EDefinition`](/components/Definition) is one: a term in running text that opens its definition in a non-modal panel. A tooltip (`ETooltip`) only names a control and never holds anything to read or click.
+A small panel that opens on a press (a click, Enter or Space), not on hover, and holds a short explanation, sometimes with a button. [`EToggletip`](/components/Toggletip) is one: a term in running text that opens its explanation in a non-modal panel. It was called `EDefinition` before 0.18, and that name still works for one minor. A tooltip (`ETooltip`) only names a control and never holds anything to read or click.
 
 ## Scoped theme
 

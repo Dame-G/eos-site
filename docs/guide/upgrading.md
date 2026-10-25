@@ -7,6 +7,21 @@ description: "The changes that need something from you, minor version by minor v
 
 Before 1.0 a minor version can change the API: an old name is removed outright, with no deprecated alias. This page lists, for each recent minor, what you may have to change in your code. Patch versions never need changes. The full notes, including new features and fixes, are in the [changelog](/changelog). See [Versioning and support](/guide/versioning) for how version ranges behave before 1.0.
 
+## 0.18 (next release)
+
+These changes are on the library's main branch and not released yet. See the [changelog](/changelog) once 0.18 is out for the full list.
+
+- `EDefinition` is renamed `EToggletip`. `EDefinition` still works in 0.18 as a deprecated alias that warns in development.
+- `ETable` `size="sm"` is the boolean `dense`, which `EDataGrid` takes too. `EDataGrid` `cards` is opt-in: pass `cards` to keep rows turning into cards below 40rem.
+- `EContainer` `size` is renamed `width`.
+- `ESurface` `size` is removed: set `padding` (`size="lg"` was `padding="section"`).
+- `EAvatar` `as="button"` is the boolean `interactive`.
+- `EText` and `EMetric` take `tone="muted"` for the quieter colour; `tone="neutral"` still renders muted in 0.18 and warns, and will mean the default ink.
+- The message `codeCopied` is renamed `copied`.
+- `success` and `success-soft` are their own colours, from a new `success` input of `defineTheme()`. A theme that set `accent` to change success states sets `success` instead.
+- `createEos()` without a `theme` applies nothing (`style.css` carries the default), and with one adds it as a stylesheet in the `e.tokens` layer instead of inline custom properties.
+- `EConfigProvider` renders menus, dialogs, tooltips and toasts inside itself only when it sets a `theme` or `scheme`.
+
 ## 0.17
 
 No code changes. The default colours moved: `surface-tint` is deeper and carries a light touch of the brand hue (in a dark theme too, from 0.17.1), the default `border` is `#6d7d84` (was `#7c8c93`), and the hover and press washes are made from the tint instead of from `ink`. If you relied on the old values, set them in `defineTheme({ tokens })`.

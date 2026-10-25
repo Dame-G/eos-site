@@ -41,7 +41,7 @@ const passwordError = computed(() => (tried.value && !password.value ? "Enter yo
 
 <template>
   <EGrid min="20rem" gap="section" class="pattern-lg">
-    <ESurface size="lg">
+    <ESurface padding="section">
       <EStack gap="loose">
         <EHeading :level="2">Sign in</EHeading>
         <EForm @invalid="tried = true" @submit.prevent>
@@ -73,7 +73,7 @@ const passwordError = computed(() => (tried.value && !password.value ? "Enter yo
       </EStack>
     </ESurface>
 
-    <ESurface size="lg">
+    <ESurface padding="section">
       <EStack gap="loose">
         <ELink href="#sign-in" icon="arrow-left">Back to sign in</ELink>
         <EHeading :level="2">Check your email</EHeading>
@@ -86,7 +86,7 @@ const passwordError = computed(() => (tried.value && !password.value ? "Enter yo
       </EStack>
     </ESurface>
 
-    <ESurface size="lg">
+    <ESurface padding="section">
       <EStack gap="loose">
         <EHeading :level="2">Choose a new password</EHeading>
         <EPasswordField v-model="newPassword" label="New password" mode="new" :rules="rules" required />

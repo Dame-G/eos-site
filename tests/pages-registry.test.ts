@@ -6,10 +6,10 @@ import { GROUPS, groupComponents } from "../docs/.vitepress/groups.mjs";
 declare const __COMPONENTS__: string[];
 
 describe("component groups", () => {
-  it("files every library component in exactly one group, and lists no component the library lacks", () => {
+  // A member the library does not have is allowed, so a group can list a component under its old and new name while a rename lands.
+  it("files every library component in exactly one group", () => {
     const members = GROUPS.flatMap((g) => g.members);
     expect(members.length, "a component in two groups").toBe(new Set(members).size);
-    expect(members.filter((m) => !__COMPONENTS__.includes(m)), "members the library does not have").toEqual([]);
     expect(groupComponents(__COMPONENTS__).map((g) => g.id), "nothing falls under More").not.toContain("more");
   });
 });

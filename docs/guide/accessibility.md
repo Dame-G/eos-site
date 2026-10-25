@@ -25,7 +25,8 @@ Every component page has a Keyboard section with its keys. The common ones:
 | [Combobox](/components/Combobox) (also free text and multiple) | Focus stays in the input. Arrows move, Enter chooses, Escape closes |
 | [Calendar](/components/Calendar), [DatePicker](/components/DatePicker) | Arrows move by day and week, Page Up and Page Down by month (with Shift, by year), Home and End jump to the ends, Enter chooses |
 | [Tabs](/components/Tabs) | Arrows, Home and End |
-| [Menu](/components/Menu), [Definition](/components/Definition) | Arrows move between items, Escape closes |
+| [Menu](/components/Menu) | Arrows move between items, Escape closes |
+| [Toggletip](/components/Toggletip) | Enter or Space opens the panel and moves focus into it, Tab moves through it, Escape closes and returns focus to the term |
 | [Dialog](/components/Dialog), [Drawer](/components/Drawer) | Focus is trapped. Escape closes and focus returns to the opener |
 | [CommandPalette](/components/CommandPalette) | Opens with Ctrl or Cmd and K by default. Arrows move, Enter runs, Escape closes |
 | [DataGrid](/components/DataGrid) | Sort buttons and filters are in the tab order. Arrow keys resize a column edge |

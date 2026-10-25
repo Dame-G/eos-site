@@ -49,7 +49,7 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
       </ul>
     </EStack>
 
-    <ESurface size="lg">
+    <ESurface padding="section">
       <EStack gap="loose">
         <ELink href="#forms" icon="arrow-left">Back to forms</ELink>
         <EHeading :level="2">New client form</EHeading>

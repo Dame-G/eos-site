@@ -41,7 +41,7 @@ Every component page says what it is for in its first line. This page collects t
 | A card that is one link, in an index of pages | [`ELinkCard`](/components/LinkCard) |
 | A few actions with no room for buttons | [`EMenu`](/components/Menu) |
 | A name for an icon-only button | [`ETooltip`](/components/Tooltip) |
-| An explanation of a term | [`EDefinition`](/components/Definition), a [toggletip](/guide/glossary#toggletip): the term opens a small panel on a press, which can hold a sentence and a button |
+| An explanation of a term | [`EToggletip`](/components/Toggletip): the term opens a small panel on a press, which can hold a sentence and a button |
 
 ## Telling people things
 
