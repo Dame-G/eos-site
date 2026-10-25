@@ -262,8 +262,8 @@ watch(
           <article class="site-article site-prose"><Content /></article>
           <EText v-if="editUrl" as="p" size="sm" class="site-edit"><ELink :href="editUrl" external>Edit this page on GitHub</ELink></EText>
           <nav v-if="pager.prev || pager.next" class="site-pager" aria-label="Previous and next page">
-            <EButton v-if="pager.prev" variant="outline" icon="arrow-left" :href="pager.prev.href">{{ pager.prev.label }}</EButton>
-            <EButton v-if="pager.next" variant="outline" icon-end="arrow-right" :href="pager.next.href" class="site-pager-next">{{ pager.next.label }}</EButton>
+            <EButton v-if="pager.prev" variant="outline" icon="chevron-left" :href="pager.prev.href">{{ pager.prev.label }}</EButton>
+            <EButton v-if="pager.next" variant="outline" icon-end="chevron-right" :href="pager.next.href" class="site-pager-next">{{ pager.next.label }}</EButton>
           </nav>
         </template>
       </main>

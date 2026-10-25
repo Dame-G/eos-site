@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { headersFile, inlineScripts, policyOf } from "../docs/.vitepress/csp.mjs";
 import { redirectsFile } from "../docs/.vitepress/redirects.mjs";
 import { highlight } from "../docs/.vitepress/theme/highlight";
-import { SYNONYMS, areaOf, breadcrumb, renderForSearch, searchOptions } from "../docs/.vitepress/search";
+import { SYNONYMS, areaOf, breadcrumb, componentSections, searchOptions } from "../docs/.vitepress/search";
 
 describe("headers and redirects", () => {
   const hashes = ["'sha256-abc='"];
@@ -46,13 +46,16 @@ describe("headers and redirects", () => {
 });
 
 describe("search", () => {
-  const md = { render: () => "<h1>ESelect</h1><p>Pick one.</p><h2>Props</h2>" };
-
-  it("puts a component's other names in its page's own entry, right after its title", () => {
-    const html = renderForSearch("", { relativePath: "components/Select.md" }, md);
-    expect(html).toMatch(/^<h1>ESelect<\/h1><p>Select [^<]*dropdown/);
-    expect(html.indexOf("dropdown")).toBeLessThan(html.indexOf("<h2>"));
-    expect(renderForSearch("", { relativePath: "guide/theming.md" }, md)).toBe(md.render());
+  it("indexes a component page from its README: its own entry carries its other names, and each section follows", () => {
+    const readme = "# ENavList\n\nA list of links for **site navigation**.\n\n```vue\n<ENavList />\n```\n\n## Props\n\nThe `items` prop.\n\n## Keyboard\n\nTab moves.";
+    const [page, ...rest] = componentSections("NavList", readme);
+    expect(page).toEqual({ anchor: "enavlist", titles: ["ENavList"], text: expect.stringContaining("Nav List NavList navigation") });
+    expect(page!.text).toContain("A list of links for site navigation.");
+    expect(page!.text).not.toContain("<ENavList");
+    expect(rest).toEqual([
+      { anchor: "props", titles: ["ENavList", "Props"], text: "The items prop." },
+      { anchor: "keyboard", titles: ["ENavList", "Keyboard"], text: "Tab moves." },
+    ]);
     expect(SYNONYMS["Dialog"]).toContain("modal");
     expect(SYNONYMS["Toast"]).toContain("snackbar");
   });

@@ -5,10 +5,10 @@ import { join } from "node:path";
 import { isColor, withSwatches, withSwatchesInMarkup } from "./color";
 import { collectScriptHashes, headersFile } from "./csp.mjs";
 import { redirectsFile } from "./redirects.mjs";
-import { componentModified, eosRoot, groupedComponents, libraryVersion, listComponents, siteRoot } from "./eos-source.mjs";
+import { componentModified, eosRoot, groupedComponents, libraryVersion, listComponents, readReadme, siteRoot } from "./eos-source.mjs";
 import { checkGrouped, groupComponents } from "./groups.mjs";
 import { PATTERN_EXTRAS, guideSections, patternSections } from "./pages.mjs";
-import { areaOf, renderForSearch } from "./search";
+import { areaOf, componentSections, type SearchSection } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
 import { BOOT_SCRIPT, THEME_COLOR, darkCss } from "./scheme";
 import { leanThemeChunk } from "./lean-theme-chunk";
@@ -256,8 +256,22 @@ export default defineConfig({
       "/patterns/": patterns,
     },
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],
-    // VitePress builds the page index; the site's own search (theme/SiteSearch.vue) loads and ranks it.
-    search: { provider: "local", options: { _render: renderForSearch } },
+    // VitePress builds the page index; the site's own search (theme/SiteSearch.vue) loads and ranks it. VitePress
+    // indexes only markdown files that exist, so the component pages (all from components/[name].md) are indexed from
+    // their READMEs.
+    search: {
+      provider: "local",
+      options: {
+        miniSearch: {
+          _splitIntoSections: (file: string) => {
+            const name = /components[\\/]([A-Za-z0-9]+)\.md$/.exec(file)?.[1];
+            if (name && components.includes(name)) return componentSections(name, readReadme(name));
+            // Any other page goes to VitePress's own splitter, which it falls back to on undefined (its type does not say so).
+            return undefined as unknown as SearchSection[];
+          },
+        },
+      },
+    },
   },
   vite: {
     plugins: [leanThemeChunk()],
