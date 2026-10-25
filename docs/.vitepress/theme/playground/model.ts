@@ -29,6 +29,7 @@ export interface State {
   accent: string;
   danger: string;
   warning: string;
+  success: string;
   /** The page ground: the colour behind everything. */
   background: string;
   /** What sits on the page: cards, fields, popovers, panels. */
@@ -74,6 +75,7 @@ export const DEFAULT_BRAND = defaults["brand"];
 export const DEFAULT_ACCENT = defaults["brand-accent"];
 export const DEFAULT_DANGER = defaults["danger"];
 export const DEFAULT_WARNING = defaults["warning-strong"];
+export const DEFAULT_SUCCESS = defaults["success"];
 export const NEUTRAL = { hair: 1, focus: 2, controlHeight: 48 } as const;
 export const DEFAULT_GROUND = { background: defaults["background"], surface: defaults["surface"], foreground: defaults["ink"] };
 
@@ -134,6 +136,8 @@ export const COLOUR_KEYS = [
   "on-danger",
   "warning-strong",
   "warning-soft",
+  "success",
+  "success-soft",
   "primary",
   "on-primary",
   "secondary",
@@ -151,6 +155,7 @@ export function initialState(): State {
     accent: DEFAULT_ACCENT,
     danger: DEFAULT_DANGER,
     warning: DEFAULT_WARNING,
+    success: DEFAULT_SUCCESS,
     ...DEFAULT_GROUND,
     scheme: "light",
     radius: "default",

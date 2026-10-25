@@ -17,12 +17,13 @@ const PARTNERS = {
     ["surface", "Links and small primary text"],
   ],
   "on-primary": [["primary", "Primary button label"]],
-  secondary: [
-    ["on-secondary", "Secondary button label"],
-    ["secondary-soft", "Success notice text"],
-  ],
+  secondary: [["on-secondary", "Secondary button label"]],
   "on-secondary": [["secondary", "Secondary button label"]],
-  "secondary-soft": [["secondary", "Success notice text"]],
+  success: [
+    ["surface", "Success text"],
+    ["success-soft", "Success notice text"],
+  ],
+  "success-soft": [["success", "Success notice text"]],
   danger: [
     ["on-danger", "Danger button label"],
     ["surface", "Error text"],
@@ -115,7 +116,7 @@ export default {
       ["danger", "surface", 4.5, "Error text"],
       ["danger", "danger-soft", 4.5, "Danger chip, stamp and notice text"],
       ["warning-strong", "warning-soft", 4.5, "Warning chip, stamp and notice text"],
-      ["secondary", "secondary-soft", 4.5, "Success chip, stamp and notice text"],
+      ["success", "success-soft", 4.5, "Success chip, stamp and notice text"],
       ["border", "surface", 3, "Card outline (non-text)"],
       ["border-strong", "surface", 3, "Control edge (non-text)"],
       ["ink", "background", 7, "Text on the page"],

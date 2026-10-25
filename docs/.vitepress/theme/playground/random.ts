@@ -59,6 +59,7 @@ function randomOnce(): Partial<State> {
     accent: hsl(hue2, rnd(45, 75), dark ? rnd(54, 64) : rnd(30, 38)),
     danger: hsl(rnd(352, 368), rnd(65, 80), dark ? rnd(62, 68) : rnd(38, 44)),
     warning: dark ? hsl(rnd(38, 48), rnd(85, 100), rnd(62, 68)) : hsl(rnd(36, 46), 100, rnd(21, 26)),
+    success: hsl(rnd(135, 160), rnd(45, 70), dark ? rnd(55, 65) : rnd(24, 30)),
     radius: weighted([["sharp", 3], ["default", 3], ["round", 4]] as const),
     elevation: weighted([["outline", 4], ["lifted", 4], ["bold", 2]] as const),
     hair: weighted([[1, 6], [1.5, 2], [2, 3]] as const),

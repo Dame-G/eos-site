@@ -38,9 +38,10 @@ app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be
 | `contrast` | `"standard" | "high" | "auto"` | With `high`, `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey and `scrim` is darker. `auto` stays standard and switches to `high` under `prefers-contrast: more` |
 | `scheme`, `dark` | `"light" | "dark" | "auto"`, `ThemeVariant` | `auto` keeps the theme light and applies `dark` (a dark surface of `#15121b` unless you give one) when the visitor prefers a dark page. The grounds are never inherited. See [Light and dark](#light-and-dark) |
 | `density` | `"comfortable" | "compact"` | `compact` scales the space scale by 0.75 (the `gap-*`, `pad-*` and `gutter` tokens follow) and makes controls exactly the 44px tap target. A smaller `controlHeight` is raised to 44 and reported in `warnings` |
-| `preset` | `"paper" | "ink" | "quiet"` | `elevation`, `strokes`, `radius` and `motion` together. Your own entries win. See [Presets](#presets) |
+| `preset` | `"paper" | "ink" | "quiet"` | `elevation`, `strokes`, `radius`, `depth` and `motion` together. Your own entries win. See [Presets](#presets) |
 | `motion` | `"default" | "snappy" | "gentle"` | `duration-tap`, `duration-fade`, `duration-move`, `easing-out`. Every theme already stops moving under `prefers-reduced-motion`; to zero the durations anyway, set them in `tokens` |
-| `elevation` | `"outline" | "lifted" | "bold"` | `frame`, `well`, `float` and `paper`. The shadow tint follows `background` |
+| `elevation` | `"outline" | "lifted" | "bold"` | `frame`, `well`, `float` and `paper`. Floating panels are slabs lifted off the page; `lifted` also stands cards on a slab and `bold` draws 2px rings and deeper wells. Every shadow is drawn in one shade |
+| `depth` | `number` | `depth` (px, 2 by default), and from it `slab-thin` (half, at least 1px) and `slab-bold` (double): how far every raised face, tone edge and floating panel reaches |
 | `controlHeight` | `number` | `control-height` (the number is px) and `chip-height` |
 | `name` | `string` | Not a token: the value of `data-e-theme` when the theme is applied to an element |
 | `tokens` | `Record<string, string>` | Any token by name. Wins over everything derived and is not contrast-corrected. A name that is not a token adds a warning, and only adds a custom property |
@@ -50,13 +51,13 @@ The [token reference](/guide/tokens) lists each token with the input it follows.
 
 ## Presets
 
-`preset` is a starting look (see [preset](/guide/glossary#preset) in the glossary): one word that sets `elevation`, `strokes`, `radius` and `motion` together. Anything you set yourself wins, and `strokes` merges entry by entry. Fonts and colours are never part of a preset.
+`preset` is a starting look (see [preset](/guide/glossary#preset) in the glossary): one word that sets `elevation`, `strokes`, `radius`, `depth` and `motion` together. Anything you set yourself wins, and `strokes` merges entry by entry. Fonts and colours are never part of a preset.
 
 | Preset | Look |
 | --- | --- |
 | `"paper"` | The default: flat outlines, default corners and motion |
-| `"ink"` | Bold elevation, heavier lines (`hair: 2`, `focus: 3`), sharp corners and snappy motion |
-| `"quiet"` | Lifted elevation, round corners and gentle motion |
+| `"ink"` | Bold elevation, heavier lines (`hair: 2`, `focus: 3`), sharp corners, snappy motion and a 3px slab |
+| `"quiet"` | Outline elevation on a quiet 1px slab, round corners and gentle motion |
 
 ```ts
 defineTheme({ preset: "ink", brand: "#8a2be2" });

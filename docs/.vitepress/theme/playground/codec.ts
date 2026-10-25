@@ -42,7 +42,7 @@ const RANGES: Partial<Record<keyof State, [number, number]>> = {
   controlHeight: [32, 72],
 };
 
-const COLOUR_FIELDS = new Set(["brand", "accent", "danger", "warning", "background", "surface", "foreground"]);
+const COLOUR_FIELDS = new Set(["brand", "accent", "danger", "warning", "success", "background", "surface", "foreground"]);
 
 const LEGACY: { token: string; field: "hair" | "focus" | "controlHeight"; siblings: string[] }[] = [
   { token: "stroke-hair", field: "hair", siblings: ["stroke-edge"] },
