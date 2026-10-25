@@ -101,8 +101,8 @@ Three colours set the neutrals. Everything else follows from them.
 | Input | Token it sets | What it derives |
 | --- | --- | --- |
 | `background` | `--e-background`, painted by [`EAppShell`](/components/AppShell) | The tint of shadows. Checked against ink, muted text, primary and the border |
-| `surface` | `--e-surface` | `--e-surface-tint`, the second ground (wells, hovered rows, table headers): its lightness moved 0.045 toward the foreground, in the brand hue, or 0.06 the other way on a dark surface. Also `--e-secondary-soft`, `--e-danger-soft` and `--e-warning-soft`, at the same offset from the surface |
-| `foreground` | `--e-ink` | `--e-muted`: ink softened toward the surface until it holds 7:1 (never below 4.5). `--e-border` at 3.4:1 and `--e-border-strong` at 4.5:1 on the surface. The focus ring and the hover and press washes follow ink |
+| `surface` | `--e-surface` | `--e-surface-tint`, the second ground (wells, hovered rows, table headers): the surface darkened by 0.1 in OKLCH lightness (lightened by 0.06 on a dark surface), with a light touch of the brand hue (chroma at most 0.02). Also `--e-secondary-soft`, `--e-danger-soft` and `--e-warning-soft`, each at its own lightness offset from the surface. The hover and press washes are made from `--e-surface-tint` |
+| `foreground` | `--e-ink` | `--e-muted`: ink softened toward the surface until it holds 7:1 (never below 4.5). `--e-border` at 3.4:1 and `--e-border-strong` at 4.5:1 on the surface. The focus ring follows ink |
 
 When the surface is dark (relative luminance under 0.179), `defineTheme` also switches the filled action colours (`primary`, `secondary`, `danger`) to light variants with black `on-*` text, lifts the warning text, and darkens the scrim and wells, so every contrast pair still holds. A surface without a foreground picks black or white for you.
 
@@ -119,7 +119,7 @@ const midnight = defineTheme({
 midnight.issues; // []
 ```
 
-The [playground](/playground) has these three as its Ground colours, with Light, Paper, Dark and Contrast as presets.
+In the [playground](/playground) these three are the page, surface and text colours, and its example themes start you from a finished look, dark and high-contrast ones included.
 
 ## Light and dark
 
@@ -140,54 +140,7 @@ clinic.alternates; // [{ media: "(prefers-color-scheme: dark)", scheme: "dark", 
 
 `contrast: "auto"` works the same way for `prefers-contrast: more`, and the two combine. `theme.alternates` lists every variant in cascade order, the last match wins. On the server, `theme.css()` writes the media queries, so the first paint is already right.
 
-To let people choose "system", "light" or "dark" themselves, use a fixed theme per choice instead of `scheme: "auto"`. A fixed theme with a dark `surface` is a dark theme: `defineTheme` lifts the action colours for it.
-
-```ts
-const light = defineTheme({ name: "light" });
-const dark = defineTheme({ name: "dark", background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" });
-```
-
-Save only "light" and "dark", so no saved value means follow the system. To avoid a flash of the wrong theme, set the scheme before the first paint with a small script in `<head>`, and render the dark tokens under the attribute it sets. This site does it that way (`docs/.vitepress/scheme.ts` and `theme/site-theme.ts` in the [repository](https://github.com/Dame-G/eos-site)).
-
-```html
-<script>
-  (function () {
-    try {
-      var saved = localStorage.getItem("my-scheme");
-      var dark = saved === "dark" || (saved !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
-      document.documentElement.dataset.scheme = dark ? "dark" : "light";
-      document.documentElement.style.colorScheme = dark ? "dark" : "light";
-    } catch (e) {}
-  })();
-</script>
-<style>
-  /* dark.css({ selector: ':root[data-scheme="dark"]', layer: false }) */
-</style>
-```
-
-`layer: false` writes the tokens outside `@layer e.tokens`, so they win over the library's default tokens wherever the style sits in the head.
-
-Once the app has mounted, apply the theme that matches and keep it up to date. `apply()` sets every token inline, so one call replaces the other theme completely.
-
-```ts
-function paint(isDark: boolean) {
-  (isDark ? dark : light).apply(document.documentElement);
-  document.documentElement.dataset.scheme = isDark ? "dark" : "light";
-}
-
-const query = matchMedia("(prefers-color-scheme: dark)");
-query.addEventListener("change", (e) => {
-  if (!localStorage.getItem("my-scheme")) paint(e.matches);
-});
-
-function choose(choice: "system" | "light" | "dark") {
-  if (choice === "system") localStorage.removeItem("my-scheme");
-  else localStorage.setItem("my-scheme", choice);
-  paint(choice === "dark" || (choice === "system" && query.matches));
-}
-```
-
-Wrap `localStorage` in `try` as the script does, since storage can be blocked. Both themes should have an empty `issues` list.
+To let people choose "system", "light" or "dark" themselves, with no flash of the wrong theme, see the [Light, dark or system](/patterns/recipes#light-dark-or-system) recipe.
 
 ## Plain CSS
 
@@ -227,8 +180,6 @@ createEos({ theme: clinic, themeTarget: el, portalTarget: el }); // portalTarget
 ```
 
 On the server, give `themeCss(theme, selector)` the same scope.
-
-Every menu, option list and tooltip leaves an empty wrapper in the portal target after it opens. Do not make that element a grid or flex container with a `gap`, or each wrapper adds a gap and the container grows a little every time something opens. Plain block flow (or `display: flow-root`) is safe.
 
 ## Cascade layers
 

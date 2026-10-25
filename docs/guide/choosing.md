@@ -24,7 +24,7 @@ Every component page says what it is for in its first line. This page collects t
 | About six to a few dozen | [`ESelect`](/components/Select) |
 | Long, or found by typing | [`ECombobox`](/components/Combobox) |
 | Any text, with suggestions | [`ECombobox`](/components/Combobox) with `freeform` |
-| Several values | [`ECombobox`](/components/Combobox) with `multiple`, or a group of [`ECheckbox`](/components/Checkbox) |
+| Several values | [`ECombobox`](/components/Combobox) with `multiple`, or an [`ECheckboxGroup`](/components/CheckboxGroup) |
 | Yes or no, submitted later | [`ECheckbox`](/components/Checkbox) |
 | Yes or no, takes effect now | [`ESwitch`](/components/Switch) |
 
@@ -34,14 +34,14 @@ Every component page says what it is for in its first line. This page collects t
 | --- | --- |
 | A short decision that blocks the page | [`EDialog`](/components/Dialog) |
 | Reading a record beside a list, or a filter panel | [`EDrawer`](/components/Drawer) |
-| Secondary detail inside the page | [`EDisclosure`](/components/Disclosure). Give several the same `group` for an accordion |
+| Secondary detail inside the page | [`EDisclosure`](/components/Disclosure): it opens in place, in the flow of the page, not over it. Give several the same `group` for an accordion |
 | A list row that opens to more | [`EExpandableRow`](/components/ExpandableRow) |
 | Switching views of the same record | [`ETabs`](/components/Tabs) |
 | Links to other pages | [`ENavList`](/components/NavList) |
 | A card that is one link, in an index of pages | [`ELinkCard`](/components/LinkCard) |
 | A few actions with no room for buttons | [`EMenu`](/components/Menu) |
 | A name for an icon-only button | [`ETooltip`](/components/Tooltip) |
-| An explanation of a term | [`EDefinition`](/components/Definition) |
+| An explanation of a term | [`EDefinition`](/components/Definition), a [toggletip](/guide/glossary#toggletip): the term opens a small panel on a press, which can hold a sentence and a button |
 
 ## Telling people things
 

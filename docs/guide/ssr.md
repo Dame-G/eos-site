@@ -31,9 +31,11 @@ const head = `<style>${css}</style>`;
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  css: ["@eos-ui/vue/style.css", "@eos-ui/vue/fonts.css"],
+  css: ["@eos-ui/vue/style.css"],
 });
 ```
+
+Add `"@eos-ui/vue/fonts.css"` to the list only if you accept that it loads the fonts from Google, which sends your visitors' IP addresses there. [Install options](/guide/install#fonts) shows how to self-host them instead.
 
 ```ts
 // plugins/eos.ts

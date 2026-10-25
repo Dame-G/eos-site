@@ -13,7 +13,7 @@ eos is pre-1.0. Props, events and tokens can change between minor versions until
 
 eos follows semantic versioning. From 1.0, a breaking change means a new major version, a new feature a minor, and a fix a patch.
 
-Pin a minor version while eos is pre-1.0 (`~0.x.y`). Read the release notes before you update. `@eos-ui/vue` and `@eos-ui/tokens` share one version.
+`npm install @eos-ui/vue` saves a caret range such as `^0.17.1`. Before 1.0 a caret range stays inside one minor version (`^0.17.1` takes 0.17.2 but never 0.18.0), so the default already keeps breaking changes out: nothing to change. Move to a new minor on purpose, after reading [Upgrading](/guide/upgrading) and the release notes. `@eos-ui/vue` and `@eos-ui/tokens` share one version, so keep them on the same one if you install both.
 
 ## What is supported
 
@@ -39,7 +39,7 @@ The minimum versions come from the newest CSS feature the stylesheet needs in ea
 
 Text wrapping (`text-wrap: balance`) and scrollbar colours (`scrollbar-color`, `scrollbar-width`) are extras. Where a browser lacks them, text wraps normally and scrollbars keep their default look.
 
-The JavaScript is built for ES2022, which adds nothing above the CSS minimums. The versions are read from the built `style.css` and the build target using browser compatibility data. They are not tested, since the test suite runs in Chromium.
+The JavaScript is built for ES2022, which adds nothing above the CSS minimums. The versions are read from the built `style.css` and the build target using browser compatibility data. The test suite runs in Chromium on every change. Firefox and WebKit run nightly in a job that reports failures but does not block a release, so the minimum versions themselves are not tested.
 
 ## Changelog
 
