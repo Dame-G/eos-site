@@ -16,13 +16,12 @@ Built from: [`EGrid`](/components/Grid), [`ESurface`](/components/Surface), [`EP
   <Pattern />
 </div>
 
-- Key figures are `ESurface` cards in an `EGrid`, so they wrap by the grid's own width, not the screen's.
-- The cards are items in a real list. The one filled button is the next step.
-- The notice has a button that goes where the problem is solved.
+- Narrow the window: the figures wrap by the grid's own width.
+- Press the notice's button: it goes where the problem is solved.
 
 ## Decisions
 
-- **`ESurface` cards in `EGrid`.** The grid responds to its own width, so the figures wrap in a sidebar as they do on a phone.
+- **`ESurface` cards in `EGrid`.** The grid responds to its own width, so the figures wrap in a sidebar as they do on a phone. The cards are items in a real list, and the one filled button is the next step.
 - **`ENotice` first.** One thing needs attention, so it leads. More than two notices is a sign they should be a list.
 - **`ETable` for recent activity.** Read-only facts in columns. Swap for `EDataGrid` once rows need sorting, filtering or selection.
 - **`EProgress` for the one fraction.** "9 of 12 visits" reads faster as a bar. A plain figure suits a total that has no limit.

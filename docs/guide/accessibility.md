@@ -37,7 +37,7 @@ Add your own shortcuts with [`useShortcuts()`](/guide/composables#useshortcuts-m
 ## Built in
 
 - Colour never carries meaning alone: statuses have a word and an icon.
-- Controls share `--e-control-height`, 48px by default (`controlHeight`). A small button drops to the 44px tap target, `--e-tap`, and no target is smaller.
+- Controls share `--e-control-height`, 48px by default (`controlHeight`). A small button drops to the 44px [tap target](/guide/glossary#tap-target), `--e-tap`, and no target is smaller.
 - Motion stops under `prefers-reduced-motion`.
 - Selected states, borders and checked controls work in forced-colours mode.
 - Required and optional are words, not asterisks. Inputs take `autocomplete`.

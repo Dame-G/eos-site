@@ -50,7 +50,7 @@ The [token reference](/guide/tokens) lists each token with the input it follows.
 
 ## Presets
 
-`preset` is a starting look: one word that sets `elevation`, `strokes`, `radius` and `motion` together. Anything you set yourself wins, and `strokes` merges entry by entry. Fonts and colours are never part of a preset.
+`preset` is a starting look (see [preset](/guide/glossary#preset) in the glossary): one word that sets `elevation`, `strokes`, `radius` and `motion` together. Anything you set yourself wins, and `strokes` merges entry by entry. Fonts and colours are never part of a preset.
 
 | Preset | Look |
 | --- | --- |
@@ -96,7 +96,7 @@ theme.explain("primary");
 
 ## Background, surface and foreground
 
-Three colours set the neutrals. Everything else follows from them.
+Three colours set the neutrals: the two [grounds](/guide/glossary#ground) and the [ink](/guide/glossary#ink). Everything else follows from them.
 
 | Input | Token it sets | What it derives |
 | --- | --- | --- |

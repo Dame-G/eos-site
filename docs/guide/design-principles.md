@@ -18,7 +18,7 @@ These rules hold in every theme. A theme changes colours, corners, fonts, scales
 
 ## Spacing
 
-Spacing has two layers. The scale is `--e-space-1` to `--e-space-16`: 4, 8, 12, 16, 20, 24, 28, 32, 40, 48 and 64px by default. On top of it sit semantic tokens that name the job. They are references to the scale, so a theme's `spaceScale` and [`density`](/guide/glossary#density) reach every one of them. In your own CSS reach for the semantic token first, and on a layout component use the gap's name: `<EStack gap="loose">`.
+Spacing has two layers. The scale runs from `--e-space-1` to `--e-space-16` (steps 1 to 6, 8, 10, 12 and 16): 4, 8, 12, 16, 20, 24, 32, 40, 48 and 64px by default. On top of it sit semantic tokens that name the job. They are references to the scale, so a theme's `spaceScale` and [`density`](/guide/glossary#density) reach every one of them. In your own CSS reach for the semantic token first, and on a layout component use the gap's name: `<EStack gap="loose">`.
 
 | Need | Token, and `gap` name | Default |
 | --- | --- | --- |

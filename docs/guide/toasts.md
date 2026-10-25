@@ -17,7 +17,7 @@ import ToastsAndNotices from "./examples/ToastsAndNotices.vue";
 | Dismiss button | on by default; `closable: false` hides it on a toast that goes by itself | off by default, `closable` shows it |
 | Appears | floating, at the edge of the page | in the page, where it applies |
 | For | "Saved", "Payment received", "Statement removed, Undo" | a form error, a deadline, an outage, a failed payment |
-| Announced | politely (an error at once) | politely (an error at once) |
+| Announced | politely ([tone](/guide/glossary#tone) `danger` at once) | politely (`danger` at once) |
 
 If the person must read it before going on, it is a Notice. If it confirms what they just did, it is a toast.
 

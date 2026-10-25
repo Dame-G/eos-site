@@ -24,7 +24,7 @@ You will almost never need more than these. Pick by the job, not by the colour.
 | Lines | `--e-border`, `--e-border-strong` | Hairlines and card outlines, then the edge of a control. |
 | Action | `--e-primary`, `--e-on-primary` | The main button and every selected state, then the text on it. |
 | Status | `--e-danger`, `--e-warning-strong`, `--e-secondary` | Errors, cautions and success, each with a `-soft` tint for backgrounds. |
-| Spacing | `--e-space-1` to `--e-space-8` | Every gap and padding, from 4px to 32px. Larger steps run to `--e-space-16`. |
+| Spacing | `--e-space-1` to `--e-space-8` | The raw scale, from 4px to 32px (no `space-7`). Larger steps run to `--e-space-16`. |
 | Spacing, by job | `--e-gap-snug`, `--e-gap-base`, `--e-pad-card` | Named gaps and paddings that follow `spaceScale` and `density`. Prefer these. [Which one when](/guide/design-principles#spacing). |
 | Corners | `--e-radius-sm`, `-md`, `-lg`, `-pill` | Match the component you sit beside. |
 | Line widths | `--e-stroke-hair`, `--e-stroke-edge`, `--e-stroke-focus` | How thick a hairline, a control edge and a focus ring are. |
@@ -92,7 +92,7 @@ The raw size scale the styles above use.
 
 ## Spacing
 
-A 4px scale from `space-1` (4px) to `space-8` (32px), then `space-10`, `-12` and `-16` for page-sized gaps, and `space-5` between the steps. Use the small steps between related things, the middle steps between groups, and `space-8` between sections.
+Steps `space-1` (4px) to `space-6` (24px) in 4px steps, then `space-8` (32px), and `space-10`, `-12` and `-16` for page-sized gaps. There is no `space-7`. Use the small steps between related things, the middle steps between groups, and `space-8` between sections. In your own CSS, prefer the named tokens below.
 
 <TokenTables section="spacing" />
 
