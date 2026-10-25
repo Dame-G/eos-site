@@ -7,17 +7,13 @@ import { plainText } from "./plain-text.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const siteRoot = resolve(here, "../..");
-const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
-/** The published version of the library the site is built against. */
-const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
-/** The library version, which the home page pins the install command to. */
-/** The library licence, shown in the footer. */
-export const licenseText = readFileSync(join(eosRoot, "LICENSE"), "utf8").replace(/\r\n/g, "\n").trim();
-export const libraryBuildInfo = { version: libraryVersion };
+export const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
+/** The published version of the library the site is built against, which the home page pins the install command to. */
+export const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
 
-/** The library changelog, published as the /changelog page. */
-/** The built library package, where llms-full.txt lands after a library build. */
+/** The built library package, where the library's llms files land after a library build. */
 export const libraryDist = join(eosRoot, "packages/vue/dist");
+/** The library changelog, published as the /changelog page. */
 export const changelogFile = join(eosRoot, "packages/vue/CHANGELOG.md");
 export const componentsDir = join(eosRoot, "packages/vue/src/components");
 
@@ -68,17 +64,4 @@ export function firstParagraph(markdown) {
 /** The first sentence of the description paragraph. */
 export function summaryOf(markdown) {
   return firstParagraph(markdown).split(/(?<=\.)\s/)[0] ?? "";
-}
-
-/** Rows of the first "## Props" table (| Prop | Type | Default | Notes |): [{ prop, type, def, notes }]. */
-export function propsTable(markdown) {
-  const m = /^## Props\s*\n([\s\S]*?)(?=\n## |(?![\s\S]))/m.exec(markdown);
-  if (!m) return [];
-  const rows = m[1].split("\n").filter((l) => l.trim().startsWith("|"));
-  const cells = (l) => l.trim().replace(/^[|]|[|]$/g, "").split(/(?<![\\])[|]/).map((c) => c.trim().replace(/[\\][|]/g, "|"));
-  return rows
-    .slice(2)
-    .map(cells)
-    .filter((c) => c.length >= 2)
-    .map(([prop, type, def, notes]) => ({ prop: prop.replace(/`/g, ""), type: (type ?? "").replace(/`/g, ""), def: (def ?? "").replace(/[`*]/g, ""), notes: (notes ?? "").replace(/`/g, "") }));
 }

@@ -12,7 +12,7 @@ defineEmits<{ search: [] }>();
 const { theme } = useData();
 const router = useRouter();
 
-// The host sends each component's lower-case address to its page. Any other mix of case, or such a link followed inside the site, lands here. When a page differs only in case, go there, replacing this address so Back does not return to it.
+// The host sends each component's lower-case and kebab-case address to its page. Any other spelling, or such a link followed inside the site, lands here. When a page differs only in case or hyphens, go there, replacing this address so Back does not return to it.
 onMounted(() => {
   const target = pageByCase(theme.value.sidebar, location.pathname);
   if (!target) return;

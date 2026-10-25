@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { EStamp, EHighlight, EStack, EText } from "@eos-ui/vue";
+import { EHighlight } from "@eos-ui/vue/components/EHighlight";
+import { EStack } from "@eos-ui/vue/components/EStack";
+import { EStamp } from "@eos-ui/vue/components/EStamp";
+import { EText } from "@eos-ui/vue/components/EText";
 import PlainTable from "./PlainTable.vue";
 // @ts-expect-error a build-time data loader (docs/data/tokens.data.js)
 import { data } from "../../data/tokens.data.js";
@@ -30,10 +33,8 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
     <PlainTable caption="Promised contrast pairs" :columns="columns" :rows="rows">
       <template #cell-pair="{ row }">
         <span class="pair">
-          <span class="dot" :style="{ background: row.fgValue as string }" role="img" :aria-label="`${row.fg} ${row.fgValue}`" />
-          <EHighlight code>{{ row.fg }}</EHighlight> on
-          <span class="dot" :style="{ background: row.bgValue as string }" role="img" :aria-label="`${row.bg} ${row.bgValue}`" />
-          <EHighlight code>{{ row.bg }}</EHighlight>
+          <EHighlight code :swatch="row.fgValue as string">{{ row.fg }}</EHighlight> on
+          <EHighlight code :swatch="row.bgValue as string">{{ row.bg }}</EHighlight>
         </span>
       </template>
       <template #cell-level="{ row }"><EStamp :tone="tone(row.level as string)" size="sm">{{ row.level }}</EStamp></template>
@@ -49,12 +50,5 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
   flex-wrap: wrap;
   gap: var(--e-space-1);
   align-items: center;
-}
-.dot {
-  display: inline-block;
-  width: var(--e-space-4);
-  height: var(--e-space-4);
-  border: var(--e-stroke-hair) solid var(--e-border-strong);
-  border-radius: var(--e-radius-pill);
 }
 </style>

@@ -2,15 +2,16 @@ import { codeToHtml } from "shiki";
 import { defineConfig, type DefaultTheme, type HeadConfig } from "vitepress";
 import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
-import { collectScriptHashes, headersFile, redirectsFile } from "./csp.mjs";
-import { groupedComponents, libraryBuildInfo, licenseText, listComponents, componentModified } from "./eos-source.mjs";
+import { isColor, withSwatches, withSwatchesInMarkup } from "./color";
+import { collectScriptHashes, headersFile } from "./csp.mjs";
+import { redirectsFile } from "./redirects.mjs";
+import { componentModified, eosRoot, groupedComponents, libraryVersion, listComponents, siteRoot } from "./eos-source.mjs";
 import { checkGrouped, groupComponents } from "./groups.mjs";
 import { PATTERN_EXTRAS, guideSections, patternSections } from "./pages.mjs";
-import { areaOf, renderForSearch, searchBuildOptions, searchOptions } from "./search";
+import { areaOf, renderForSearch } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
 import { BOOT_SCRIPT, THEME_COLOR, darkCss } from "./scheme";
-import { vitepressInLayer } from "./vitepress-layer";
+import { leanThemeChunk } from "./lean-theme-chunk";
 
 const SITE = "https://eos.dame.gg";
 const IMAGE = SITE + "/og.png";
@@ -21,7 +22,7 @@ let warnedFont = false;
 
 const components = listComponents();
 /** The home page's install line, coloured here so the browser does not fetch a highlighter for one line. */
-const installHtml = await codeToHtml(`npm install @eos-ui/vue@${libraryBuildInfo.version}`, { lang: "bash", theme: SHIKI_THEME });
+const installHtml = await codeToHtml(`npm install @eos-ui/vue@${libraryVersion}`, { lang: "bash", theme: SHIKI_THEME });
 
 // The groups are in groups.mjs. In CI a component with no group fails the build (checkGrouped).
 function componentSidebar(): DefaultTheme.SidebarItem[] {
@@ -70,10 +71,11 @@ export default defineConfig({
     writeFileSync(join(siteConfig.outDir, "site.webmanifest"), JSON.stringify({ ...manifest, theme_color: THEME_COLOR.light, background_color: THEME_COLOR.light }, null, 2) + "\n");
   },
   transformHtml(code) {
-    return code.replace(/<link\b[^>]*\bvp-icons\.css[^>]*>\s*/g, "");
+    // VitePress's own icon stylesheet (empty here: the site draws its icons itself) and the script that marks a Mac for its default theme, which this theme does not use. buildEnd hashes the inline scripts that are left.
+    return code.replace(/<link\b[^>]*\bvp-icons\.css[^>]*>\s*/g, "").replace(/<script id="check-mac-os">[\s\S]*?<\/script>\s*/g, "");
   },
   transformPageData(pageData) {
-    // The components index draws its group headings itself, so they are not in its markdown. The outline lists them all the same.
+    // The components index draws its group headings itself, so they are not in its markdown. The outline lists them all the same, and leaves out the ones its filter hides (theme/outline.ts).
     if (pageData.relativePath === "components/index.md") pageData.headers = groupedComponents().map((g) => ({ level: 2, title: g.title, slug: g.id, link: `#${g.id}`, children: [] }));
     const description = pageData.params?.description;
     if (typeof description === "string" && description) pageData.description = description;
@@ -99,10 +101,10 @@ export default defineConfig({
       ["meta", { name: "twitter:image", content: IMAGE }],
       ["meta", { name: "twitter:image:alt", content: IMAGE_ALT }],
     ];
-    // The title's face is in the header on every page, so it loads with the body face rather than swapping in late.
-    const titleFont = assets.find((a) => /\/outfit-latin-wght-normal\.[^/]*\.woff2$/.test(a));
+    // The wordmark's face is in the header on every page, so it loads with the body face rather than swapping in late. It is only the three letters the mark draws, under 1 KB.
+    const titleFont = assets.find((a) => /\/outfit-eos\.[^/]*\.woff2$/.test(a));
     if (titleFont) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: titleFont, crossorigin: "" }]);
-    const font = assets.find((a) => /\/bricolage-grotesque-latin-wght-normal\.[^/]*\.woff2$/.test(a));
+    const font = assets.find((a) => /\/bricolage-grotesque-latin-opsz-normal\.[^/]*\.woff2$/.test(a));
     if (font) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: font, crossorigin: "" }]);
     // A renamed font file would silently drop the preload and bring the late font swap back, so say so once.
     else if (!warnedFont) {
@@ -169,7 +171,8 @@ export default defineConfig({
         }
         env.tableCount = (env.tableCount ?? 0) + 1;
         const label = md.utils.escapeHtml(`${heading || "Page"}, table ${env.tableCount}`);
-        return `<div class="e-table-wrap e-table-wrap--striped e-table-wrap--dense"><div class="e-table-scroll" tabindex="0" role="region" aria-label="${label}"><table class="e-table">`;
+        // ETable's markup (striped, size sm), written out so the page carries no component per table. Like ETable, the frame is a focusable, named region only while it scrolls: theme/table-scroll.ts sets that from data-label.
+        return `<div class="e-table-wrap e-table-wrap--striped e-table-wrap--dense"><div class="e-table-scroll" data-label="${label}"><table class="e-table">`;
       };
       md.renderer.rules.table_close = () => "</table></div></div>";
       const linkOpen = md.renderer.rules.link_open ?? ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
@@ -222,7 +225,8 @@ export default defineConfig({
         const escaped = md.utils.escapeHtml(content);
         const braces = (s: string) => s.replace(/[{}]/g, (c) => (c === "{" ? "&#123;" : "&#125;"));
         if (isColor(content)) return `<EHighlight code swatch="${escaped.trim()}">${braces(escaped)}</EHighlight>`;
-        return `<EHighlight code>${braces(withSwatches(escaped))}</EHighlight>`;
+        // Otherwise it is the markup EHighlight renders for `code`, which the library documents as a stable static form, so Vue hoists it as plain HTML instead of a component call per snippet.
+        return `<code class="e-highlight e-highlight--code">${braces(withSwatches(escaped))}</code>`;
       };
       const fence = md.renderer.rules.fence!;
       md.renderer.rules.fence = (...args) => {
@@ -243,7 +247,7 @@ export default defineConfig({
       { text: "Patterns", link: "/patterns/", activeMatch: "/patterns/" },
       { text: "Playground", link: "/playground" },
       // The library version the site documents, linking to its release notes.
-      { text: `v${libraryBuildInfo.version}`, link: "/changelog" },
+      { text: `v${libraryVersion}`, link: "/changelog" },
     ],
     sidebar: {
       "/guide/": guide,
@@ -252,16 +256,19 @@ export default defineConfig({
       "/patterns/": patterns,
     },
     socialLinks: [{ icon: "github", link: "https://github.com/Dame-G/eos" }],
-    search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions }, _render: renderForSearch } },
+    // VitePress builds the page index; the site's own search (theme/SiteSearch.vue) loads and ranks it.
+    search: { provider: "local", options: { _render: renderForSearch } },
   },
   vite: {
-    plugins: [vitepressInLayer()],
-    define: { __EOS_BUILD__: JSON.stringify(libraryBuildInfo), __EOS_INSTALL_HTML__: JSON.stringify(installHtml), __EOS_LICENSE__: JSON.stringify(licenseText) },
+    plugins: [leanThemeChunk()],
+    define: { __EOS_VERSION__: JSON.stringify(libraryVersion), __EOS_INSTALL_HTML__: JSON.stringify(installHtml) },
     resolve: {
       dedupe: ["vue"],
     },
     ssr: { noExternal: ["@eos-ui/vue", "@eos-ui/tokens", "reka-ui", "@vueuse/core", "@vueuse/shared", "@internationalized/date", "@floating-ui/vue"] },
-    server: { fs: { allow: ["../.."] } },
-    build: { chunkSizeWarningLimit: 650 },
+    // The site and the library checkout beside it (its READMEs, its built packages and their dependencies), nothing else.
+    server: { fs: { allow: [siteRoot, eosRoot] } },
+    // A font inlined as a data: URL would be blocked by the policy's font-src 'self', so fonts stay files however small they are.
+    build: { assetsInlineLimit: (file: string) => (file.endsWith(".woff2") ? false : undefined) },
   },
 });

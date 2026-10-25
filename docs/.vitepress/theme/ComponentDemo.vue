@@ -7,6 +7,7 @@ import { ESelect } from "@eos-ui/vue/components/ESelect";
 import { EConfigProvider } from "@eos-ui/vue/components/EConfigProvider";
 import { DARK_INPUT } from "../scheme";
 import { activeScheme } from "./site-theme";
+import { stopPlaceholderLinks } from "./placeholder-links";
 
 const demos = import.meta.glob("../../components/demos/*.vue");
 
@@ -49,7 +50,8 @@ const theme = computed<Theme | undefined>(() => {
           <ESelect v-model="size" class="demo-size" bare label="Preview text size" :options="SIZES" />
         </div>
       </div>
-      <EConfigProvider class="demo-stage" :theme="theme" :dir="dir"><component :is="Demo" /></EConfigProvider>
+      <!-- The demos link to stand-in addresses such as #statements: following one must not change the page's address. -->
+      <EConfigProvider class="demo-stage vp-raw" :theme="theme" :dir="dir" @click="stopPlaceholderLinks"><component :is="Demo" /></EConfigProvider>
     </div>
     <p v-else class="demo-missing">
       There is no demo for E{{ name }} yet. Add <EHighlight code>docs/components/demos/{{ name }}.vue</EHighlight> to the site repository.

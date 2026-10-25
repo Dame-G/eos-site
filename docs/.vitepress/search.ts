@@ -74,17 +74,29 @@ function componentWords(title: string): string {
   return [words === name ? name : `${words} ${name}`, SYNONYMS[name]].filter(Boolean).join(" ");
 }
 
+/** The fields of VitePress's page index (one entry per page section), which the site's search loads as it is. */
 export const searchBuildOptions = {
   fields: ["title", "titles", "text"],
   storeFields: ["title", "titles"],
 };
 
+/** A component page's own entry (its title section, `/components/Select#eselect`). */
+const COMPONENT_PAGE = /^\/components\/[A-Z][A-Za-z0-9]*(?:\.html)?(?:#[^#]*)?$/;
+
+/** One index for everything: a title counts most, and a component page's own entry, which carries the component's other names, is lifted over the pages that only mention it. */
 export const searchOptions = {
   fuzzy: 0.2,
   prefix: true,
   boost: { title: 6, titles: 1, text: 1 },
+  boostDocument: (id: string, _term: string, stored?: Record<string, unknown>) =>
+    COMPONENT_PAGE.test(id) && Array.isArray(stored?.["titles"]) && (stored["titles"] as unknown[]).length === 0 ? 3 : 1,
 };
 
+/**
+ * What VitePress indexes for a page. A component page gets the component's name in words and the names other
+ * libraries use for it (SYNONYMS) right after its title, so they belong to the page's own entry: "dropdown" finds
+ * ESelect itself rather than one of its sections.
+ */
 export function renderForSearch(
   src: string,
   env: { relativePath?: string },
@@ -93,7 +105,8 @@ export function renderForSearch(
   const html = md.render(src, env);
   const name = /^components\/([A-Za-z0-9]+)\.md$/.exec(env.relativePath ?? "")?.[1];
   const words = name && name !== "index" ? componentWords(`E${name}`) : "";
-  return words ? `${html}<p>${words}</p>` : html;
+  if (!words) return html;
+  return html.includes("</h1>") ? html.replace("</h1>", `</h1><p>${words}</p>`) : `<p>${words}</p>${html}`;
 }
 
 export function titleRank(title: string, query: string): number {
@@ -102,29 +115,6 @@ export function titleRank(title: string, query: string): number {
   if (name === q) return 0;
   if (name.startsWith(q)) return 1;
   return 2;
-}
-
-export const componentSearchOptions = {
-  fields: ["title", "names", "text"],
-  storeFields: ["title", "titles"],
-  searchOptions: { fuzzy: 0.2, prefix: true, boost: { names: 12, title: 6, text: 1 } },
-};
-
-export interface ComponentGroup {
-  title: string;
-  items: { name: string; summary: string }[];
-}
-
-export function componentDocs(groups: ComponentGroup[]) {
-  return groups.flatMap((g) =>
-    g.items.map((c) => ({
-      id: `/components/${c.name}`,
-      title: `E${c.name}`,
-      titles: [g.title],
-      names: componentWords(`E${c.name}`),
-      text: c.summary,
-    })),
-  );
 }
 
 /** The area of the site a page id belongs to, used as the first step of the breadcrumb line under a result. */

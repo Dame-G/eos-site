@@ -79,10 +79,19 @@ runs:
       working-directory: eos-site
       run: pnpm knip
 
+    - name: Type-check
+      if: inputs.full == 'true'
+      shell: bash
+      working-directory: eos-site
+      run: pnpm typecheck
+
     - name: Build the docs
       shell: bash
       working-directory: eos-site
       run: pnpm docs:build
+      env:
+        # The library was just built, so its llms files must be there for the site to publish (scripts/gen-llms.mjs).
+        EOS_REQUIRE_LLMS_FULL: "true"
 
     - name: Check the built pages
       shell: bash

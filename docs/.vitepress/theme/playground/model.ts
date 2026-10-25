@@ -15,7 +15,7 @@ export const VARIANT_VALUES = {
   gap: ["tight", "default", "roomy"],
 } as const;
 
-export type Variants = { [K in keyof typeof VARIANT_VALUES]: (typeof VARIANT_VALUES)[K][number] };
+export type Variants = { -readonly [K in keyof typeof VARIANT_VALUES]: (typeof VARIANT_VALUES)[K][number] };
 export type VariantKey = keyof Variants;
 
 export const VARIANT_KEYS = Object.keys(VARIANT_VALUES) as VariantKey[];

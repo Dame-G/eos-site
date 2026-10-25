@@ -1,19 +1,38 @@
-import { copyFileSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { groupedComponents, libraryDist, listComponents, propsTable, readReadme, siteRoot, summaryOf } from "../docs/.vitepress/eos-source.mjs";
+import { groupedComponents, libraryDist, listComponents, readReadme, siteRoot, summaryOf } from "../docs/.vitepress/eos-source.mjs";
 import { DESIGN, guideSections } from "../docs/.vitepress/pages.mjs";
 import { patternInfo } from "../docs/.vitepress/patterns.mjs";
 
-/** "name (type, required)" or "name (type, default X)". The README writes **Required** or None in the Default column. */
-function propText({ prop, type, def }) {
-  const parts = [type];
-  if (/^required$/i.test(def)) parts.push("required");
-  else if (def && !/^none$/i.test(def)) parts.push(`default ${def}`);
-  const inner = parts.filter(Boolean).join(", ");
-  return inner ? `${prop} (${inner})` : prop;
-}
+// Writes docs/public/llms.txt, the site's index for AI assistants (https://llmstxt.org): the site's own pages, and each
+// component's page beside the library's reference for it. The references themselves are the library's: its build writes
+// llms-full.txt (every README in one file) and llms/<Name>.txt (one each), and they are published here as they are.
 
 const SITE = "https://eos.dame.gg";
+const publicDir = join(siteRoot, "docs/public");
+mkdirSync(publicDir, { recursive: true });
+
+/** Publishes one of the library's llms files, or says why it cannot. CI builds the library first and sets EOS_REQUIRE_LLMS_FULL, so a missing file there is a broken build, not a local shortcut. */
+function publish(name, copy) {
+  const source = join(libraryDist, name);
+  const target = join(publicDir, name);
+  rmSync(target, { recursive: true, force: true });
+  if (existsSync(source)) {
+    copy(source, target);
+    return true;
+  }
+  const message = `${name}: not found at ${source}, so it is not published. Build the library to get it.`;
+  if (process.env.EOS_REQUIRE_LLMS_FULL) {
+    console.error(message);
+    process.exit(1);
+  }
+  console.warn(message);
+  return false;
+}
+
+const hasFull = publish("llms-full.txt", copyFileSync);
+const hasPerComponent = publish("llms", (from, to) => cpSync(from, to, { recursive: true }));
+
 const out = [];
 const line = (s = "") => out.push(s);
 
@@ -44,46 +63,25 @@ for (const { slug, name, description, uses } of patternInfo()) {
 }
 line();
 
-// The library's one-file documentation is published beside this index when the library has been built.
-const publicDir = join(siteRoot, "docs/public");
-mkdirSync(publicDir, { recursive: true });
-const fullSource = join(libraryDist, "llms-full.txt");
-const fullTarget = join(publicDir, "llms-full.txt");
-if (existsSync(fullSource)) {
-  copyFileSync(fullSource, fullTarget);
+if (hasFull) {
   line(`The complete library documentation in one file: ${SITE}/llms-full.txt`);
   line();
-} else {
-  rmSync(fullTarget, { force: true });
-  const message = `llms-full.txt: not found at ${fullSource}, so it is not published. Build the library to get it.`;
-  // CI sets EOS_REQUIRE_LLMS_FULL when it builds the library first, so a missing file there is a broken build, not a local shortcut.
-  if (process.env.EOS_REQUIRE_LLMS_FULL) {
-    console.error(message);
-    process.exit(1);
-  }
-  console.warn(message);
 }
 
 line("## Components");
 line();
-line("Every component has a page with its README and a live demo. Props are listed as name (type, default or required).");
+line(`Every component has a page with its README and a live demo.${hasPerComponent ? " Its props, slots, events and accessibility notes are in the library's reference for it, linked under each one." : ""}`);
 line();
 
 for (const g of groupedComponents()) {
   line(`### ${g.title}`);
   line();
   for (const name of g.names) {
-    const readme = readReadme(name);
-    line(`- [E${name}](${SITE}/components/${name}): ${summaryOf(readme)}`);
-    const props = propsTable(readme);
-    if (props.length) {
-      line(`  Props: ${props.map(propText).join(", ")}`);
-    }
+    line(`- [E${name}](${SITE}/components/${name}): ${summaryOf(readReadme(name))}`);
+    if (hasPerComponent && existsSync(join(publicDir, "llms", `E${name}.txt`))) line(`  Reference: ${SITE}/llms/E${name}.txt`);
   }
   line();
 }
 
-const dir = join(siteRoot, "docs/public");
-mkdirSync(dir, { recursive: true });
-writeFileSync(join(dir, "llms.txt"), out.join("\n"), "utf8");
+writeFileSync(join(publicDir, "llms.txt"), out.join("\n"), "utf8");
 console.log(`llms.txt: ${listComponents().length} components, ${out.length} lines`);

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { EButton, EColorField, EDisclosure, EStack, EText, ETextField } from "@eos-ui/vue";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { EColorField } from "@eos-ui/vue/components/EColorField";
+import { EDisclosure } from "@eos-ui/vue/components/EDisclosure";
+import { EStack } from "@eos-ui/vue/components/EStack";
+import { EText } from "@eos-ui/vue/components/EText";
+import { ETextField } from "@eos-ui/vue/components/ETextField";
 import type { DerivedToken } from "./build";
 import { resolve } from "./contrast";
 
