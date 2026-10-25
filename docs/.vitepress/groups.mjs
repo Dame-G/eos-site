@@ -6,7 +6,7 @@
 export const GROUPS = [
   { id: "layout", title: "Layout", members: ["Stack", "Inline", "Grid", "Container", "Surface", "Divider", "AppShell", "AppHeader", "AppFooter", "PageHeader"] },
   { id: "text-and-media", title: "Text and media", members: ["Heading", "Text", "Kicker", "Highlight", "Kbd", "CodeBlock", "Icon", "Avatar", "AvatarGroup", "VisuallyHidden"] },
-  { id: "data-display", title: "Data display", members: ["Table", "DataGrid", "DescriptionList", "Toggletip", "Definition", "Metric", "Tag", "Stamp", "ExpandableRow"] },
+  { id: "data-display", title: "Data display", members: ["Table", "DataGrid", "DescriptionList", "Toggletip", "Metric", "Tag", "Stamp", "ExpandableRow"] },
   { id: "actions", title: "Actions", members: ["Button", "IconButton", "CopyButton", "Link", "Actions"] },
   { id: "form-structure", title: "Form structure", members: ["Form", "Field", "Fieldset"] },
   { id: "text-inputs", title: "Text inputs", members: ["TextField", "Textarea", "PasswordField", "NumberField", "CurrencyField", "PhoneField", "OtpField", "ColorField"] },
@@ -38,6 +38,8 @@ function ungrouped(names) {
 /**
  * `names` by group, in group order, each group keeping the order of `names` (alphabetical from the library): [{ id, title, names }].
  * Ungrouped names come last under "More". A member the library does not have (yet, or any more) is left out, and so is an empty group.
+ * @param {string[]} names
+ * @returns {{ id: string; title: string; names: string[] }[]}
  */
 export function groupComponents(names) {
   return [

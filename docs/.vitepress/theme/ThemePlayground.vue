@@ -126,9 +126,10 @@ const GROUND = [
 ] as const;
 const TONES = [
   ["brand", "Brand", "Sets primary and the tinted ground."],
-  ["accent", "Accent", "Sets secondary and the success tint."],
+  ["accent", "Accent", "Sets the secondary action colour."],
   ["danger", "Danger", "Sets danger, its text and tint."],
   ["warning", "Warning", "Sets the warning text and tint."],
+  ["success", "Success", "Sets the success text and tint: paid, done, saved."],
 ] as const;
 const COLOUR_SET = new Set<string>(groups.color);
 const LISTS = {
@@ -193,7 +194,7 @@ function setMotion(v: string | undefined) {
   followTab("motion");
 }
 const VARIANT_FIELDS: { key: VariantKey; label: string; hint: string; options: { value: string; label: string }[] }[] = [
-  { key: "size", label: "Surface padding", hint: "ESurface size.", options: [{ value: "sm", label: "Small" }, { value: "md", label: "Medium" }, { value: "lg", label: "Large" }] },
+  { key: "size", label: "Surface padding", hint: "ESurface padding.", options: [{ value: "sm", label: "Small" }, { value: "md", label: "Medium" }, { value: "lg", label: "Large" }] },
   { key: "gap", label: "Gaps", hint: "EStack, EInline and EGrid gap.", options: [{ value: "tight", label: "Tight" }, { value: "default", label: "Default" }, { value: "roomy", label: "Roomy" }] },
 ];
 function setVariant(key: VariantKey, v: string | undefined) {
@@ -236,7 +237,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
           <EButton variant="outline" @click="copyLink">Copy link</EButton>
           <EButton @click="exporting = true">Export</EButton>
         </div>
-        <EText size="sm" tone="neutral" role="status">{{ copied }}</EText>
+        <EText size="sm" tone="muted" role="status">{{ copied }}</EText>
       </div>
     </section>
 
@@ -249,7 +250,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
               <EStack :gap="2">
                 <ESwitch v-model="s.autoScheme" label="Follow light and dark" />
                 <ESwitch v-model="s.autoContrast" label="Follow high contrast" :disabled="s.scheme === 'contrast'" />
-                <EText size="sm" tone="neutral">Sets scheme and contrast to auto in the export. The preview shows the one theme.</EText>
+                <EText size="sm" tone="muted">Sets scheme and contrast to auto in the export. The preview shows the one theme.</EText>
               </EStack>
               <EKicker>Ground</EKicker>
               <EGrid min="9rem" :gap="3">
@@ -279,7 +280,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
                 <ENumberField label="Focus stroke" hint="strokes.focus: at least 2" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.focus" @update:model-value="setField('focus', $event)" />
               </EGrid>
               <EKicker>Spacing</EKicker>
-              <EText size="sm" tone="neutral">Component props, not tokens. They are not part of defineTheme.</EText>
+              <EText size="sm" tone="muted">Component props, not tokens. They are not part of defineTheme.</EText>
               <ESegmented v-for="f in VARIANT_FIELDS" :key="f.key" :model-value="s.variants[f.key]" :label="f.label" :options="f.options" :hint="f.hint" @update:model-value="setVariant(f.key, $event)" />
               <TokenOverrides title="All shape tokens" :items="LISTS.shape" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
@@ -291,7 +292,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
                 <ESelect v-model="s.sans" label="Sans font" hint="fonts.sans: reading text" :options="sansOptions" />
                 <ESelect v-model="s.mono" label="Mono font" hint="fonts.mono: labels and numbers" :options="monoOptions" />
               </EGrid>
-              <ETextField v-if="s.sans === 'custom'" v-model="s.sansCustom" label="Sans stack" placeholder='"Inter", system-ui, sans-serif' spellcheck="false" hint="Fonts are never bundled: install or load them yourself." />
+              <ETextField v-if="s.sans === 'custom'" v-model="s.sansCustom" label="Sans stack" placeholder='"Inter", system-ui, sans-serif' spellcheck="false" hint="Load the fonts yourself: a theme only names them." />
               <ETextField v-if="s.mono === 'custom'" v-model="s.monoCustom" label="Mono stack" placeholder='"JetBrains Mono", monospace' spellcheck="false" />
               <ENumberField label="Text scale" hint="Percent of the default type scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.textScale" @update:model-value="setField('textScale', $event)" />
               <EKicker>Language</EKicker>
@@ -323,7 +324,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
           <template #motion>
             <EStack :gap="4">
               <ESegmented :model-value="s.motion" label="Motion" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
-              <EText size="sm" tone="neutral">Try it with Replay in the preview. Everything stops under reduced motion.</EText>
+              <EText size="sm" tone="muted">Try it with Replay in the preview. Everything stops under reduced motion.</EText>
               <TokenOverrides title="All motion tokens" :items="LISTS.motion" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>
           </template>
@@ -341,10 +342,10 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
         <ESegmented v-model="format" label="Format" :options="[{ value: 'code', label: 'defineTheme' }, { value: 'css', label: 'CSS changes' }, { value: 'full', label: 'Full CSS' }]" />
         <HighlightedCode :lang="codeLang" :copy-label="copyLabel" :code="code" />
         <template v-if="variantTags">
-          <EText size="sm" tone="neutral">Spacing is set with component props, not tokens. This look also used:</EText>
+          <EText size="sm" tone="muted">Spacing is set with component props, not tokens. This look also used:</EText>
           <HighlightedCode lang="vue" copy-label="Copy spacing props" :code="variantTags" />
         </template>
-        <EText size="sm" tone="neutral">{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. Copy link shares this theme.</EText>
+        <EText size="sm" tone="muted">{{ changedCount }} {{ changedCount === 1 ? "setting differs" : "settings differ" }} from the defaults. Copy link shares this theme.</EText>
       </EStack>
     </EDrawer>
   </div>

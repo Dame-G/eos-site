@@ -273,7 +273,7 @@ watch(
 
     <EAppFooter>
       <div class="site-footer-about">
-        <EText size="sm" tone="neutral">eos is released under the <ELink :href="LICENSE_URL" external>MIT license</ELink>.</EText>
+        <EText size="sm" tone="muted">eos is released under the <ELink :href="LICENSE_URL" external>MIT license</ELink>.</EText>
       </div>
       <nav class="site-footer-links" aria-label="Project">
         <ELink href="/changelog">Changelog</ELink>

@@ -23,7 +23,7 @@ const columns = [
   { key: "amount", label: "Amount", width: 200, numeric: true, sortable: true, filter: { type: "number" } as const },
 ];
 
-const selected = ref<string[]>([]);
+const selected = ref<number[]>([]);
 const sort = ref<{ key: string; dir: "asc" | "desc" } | null>({ key: "date", dir: "desc" });
 </script>
 
@@ -40,6 +40,7 @@ const sort = ref<{ key: string; dir: "asc" | "desc" } | null>({ key: "date", dir
       filterable
       selectable
       column-toggle
+      cards
     >
       <template #cell-amount="{ value }">${{ Number(value).toFixed(2) }}</template>
       <template #bulk-actions><EButton variant="outline">Download selected</EButton></template>

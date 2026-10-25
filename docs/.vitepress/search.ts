@@ -44,7 +44,6 @@ export const SYNONYMS: Record<string, string> = {
   Divider: "separator rule hr",
   Segmented: "segmented control button group toggle group",
   Toggletip: "definition glossary term toggletip tooltip popover",
-  Definition: "glossary term toggletip tooltip popover",
   CurrencyField: "money amount price",
   PhoneField: "telephone phone number",
   SignaturePad: "signature draw sign",

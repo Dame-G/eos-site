@@ -25,7 +25,7 @@ function retry() {
   <div class="pattern-md">
     <EStack gap="loose">
       <EPageHeader :heading-level="2" title="Statements" description="Every state a list can be in." />
-      <ESegmented v-model="state" label="Preview state" :options="['Loading', 'Error', 'Empty', 'Loaded']" />
+      <ESegmented v-model="state" label="Preview state" hide-label :options="['Loading', 'Error', 'Empty', 'Loaded']" />
 
       <EStack v-if="state === 'Loading'" gap="snug" aria-busy="true">
         <ESkeleton :height="64" />

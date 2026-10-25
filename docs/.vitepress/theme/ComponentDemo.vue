@@ -42,11 +42,12 @@ const theme = computed<Theme | undefined>(() => {
         <div class="demo-tools" role="group" aria-label="Preview options">
           <ESegmented
             label="Preview colour scheme"
+            hide-label
             :model-value="shown"
             :options="[{ value: 'light', label: 'Light' }, { value: 'dark', label: 'Dark' }]"
             @update:model-value="scheme = $event as 'light' | 'dark'"
           />
-          <ESegmented v-model="dir" label="Preview direction" :options="[{ value: 'ltr', label: 'LTR' }, { value: 'rtl', label: 'RTL' }]" />
+          <ESegmented v-model="dir" label="Preview direction" hide-label :options="[{ value: 'ltr', label: 'LTR' }, { value: 'rtl', label: 'RTL' }]" />
           <ESelect v-model="size" class="demo-size" bare label="Preview text size" :options="SIZES" />
         </div>
       </div>

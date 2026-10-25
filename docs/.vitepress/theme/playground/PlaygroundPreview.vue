@@ -6,7 +6,7 @@ import { ECalendar } from "@eos-ui/vue/components/ECalendar";
 import { ECheckbox } from "@eos-ui/vue/components/ECheckbox";
 import { EConfigProvider } from "@eos-ui/vue/components/EConfigProvider";
 import { EDataGrid } from "@eos-ui/vue/components/EDataGrid";
-import { EDefinition } from "@eos-ui/vue/components/EDefinition";
+import { EToggletip } from "@eos-ui/vue/components/EToggletip";
 import { EDialog } from "@eos-ui/vue/components/EDialog";
 import { EDisclosure } from "@eos-ui/vue/components/EDisclosure";
 import { EHeading } from "@eos-ui/vue/components/EHeading";
@@ -150,11 +150,11 @@ const scene = ref("overview");
             <EInline :gap="vp.inlineGap">
               <EMenu label="More" :items="menuItems" />
               <ETooltip label="Help"><EIconButton icon="info" label="Help" /></ETooltip>
-              <EDefinition label="About payment plans" title="Payment plan">
+              <EToggletip label="About payment plans" title="Payment plan">
                 <template #trigger>What is a payment plan?</template>
                 Split your balance of {{ money(162.4) }} into equal monthly payments. There is no interest and no fee.
                 <template #actions><EButton variant="outline">Set up a plan</EButton></template>
-              </EDefinition>
+              </EToggletip>
             </EInline>
             <EText size="sm">Questions about a charge? <ELink href="#preview">Read how billing works</ELink>.</EText>
           </EStack>
@@ -228,7 +228,7 @@ const scene = ref("overview");
                 { id: 'settings', label: 'Settings' },
               ]"
             >
-              <template #panel="{ item }"><EText size="sm" tone="neutral">{{ item.label }} panel.</EText></template>
+              <template #panel="{ item }"><EText size="sm" tone="muted">{{ item.label }} panel.</EText></template>
             </ETabs>
             <EStepper :steps="steps" label="Checkout" />
             <EPagination v-model="page" :page-count="6" aria-label="Visit pages" />
@@ -261,7 +261,7 @@ const scene = ref("overview");
                 <EButton variant="outline" @click="dialogOpen = false">Keep it</EButton>
               </template>
             </EDialog>
-            <ESurface variant="raised" size="sm"><EText size="sm">A floating surface: menus, lists and toasts.</EText></ESurface>
+            <ESurface variant="raised" :padding="vp.padding"><EText size="sm">A floating surface: menus, lists and toasts.</EText></ESurface>
             <EInline :gap="vp.inlineGap">
               <EMenu label="More" :items="menuItems" />
               <ETooltip label="Help"><EIconButton icon="info" label="Help" /></ETooltip>
@@ -277,7 +277,7 @@ const scene = ref("overview");
             <EHeading :level="3">Visit on Oct 2</EHeading>
             <EText size="lg">Your balance is due November 1.</EText>
             <EText>Pay online in about a minute. Receipts are emailed the same day.</EText>
-            <EText size="sm" tone="neutral">Statement 4471, sent Oct 14</EText>
+            <EText size="sm" tone="muted">Statement 4471, sent Oct 14</EText>
             <EKicker>History</EKicker>
           </EStack>
         </EStack>

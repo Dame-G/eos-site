@@ -32,7 +32,7 @@ const born = ref<Date | null>(null);
 const phone = ref("");
 const street = ref("");
 const city = ref("");
-const region = ref<string | null>(null);
+const region = ref("");
 const postal = ref("");
 const pay = ref("card");
 const signature = ref<SignatureValue>({ method: "type", name: "", image: "", agreed: false });
@@ -75,7 +75,7 @@ function back() {
       <ENotice v-if="done" tone="success" title="You are registered">We sent a confirmation to your phone.</ENotice>
 
       <template v-else>
-        <EFieldset v-if="step === 0" section legend="Your details" hint="We use these to find your account and send reminders.">
+        <EFieldset v-if="step === 0" variant="section" legend="Your details" hint="We use these to find your account and send reminders.">
           <ETextField id="reg-first" v-model="first" label="First name" required autocomplete="given-name" :error="firstError" />
           <ETextField id="reg-last" v-model="last" label="Last name" required autocomplete="family-name" :error="lastError" />
           <EDatePicker v-model="born" label="Date of birth" required :max="new Date(2026, 9, 18, 12)" hint="Type it or choose from the calendar." :error="bornError" />
@@ -97,7 +97,7 @@ function back() {
           </EFieldset>
         </EFieldset>
 
-        <EFieldset v-else-if="step === 1" section legend="How you will pay" hint="You can change this at any time.">
+        <EFieldset v-else-if="step === 1" variant="section" legend="How you will pay" hint="You can change this at any time.">
           <ERadioGroup
             v-model="pay"
             label="Payment method"
@@ -108,11 +108,11 @@ function back() {
           />
         </EFieldset>
 
-        <EFieldset v-else-if="step === 2" section legend="Forms" hint="Typing your name is your signature.">
+        <EFieldset v-else-if="step === 2" variant="section" legend="Forms" hint="Typing your name is your signature.">
           <ESignatureField v-model="signature" label="New client form" mode="both" :date="new Date(2026, 9, 18, 12)" />
         </EFieldset>
 
-        <EFieldset v-else section legend="Review" hint="Check your details, then finish.">
+        <EFieldset v-else variant="section" legend="Review" hint="Check your details, then finish.">
           <EDescriptionList
             :items="[
               { label: 'Name', text: `${first} ${last}`.trim() || 'Not entered' },

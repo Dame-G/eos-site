@@ -8,7 +8,7 @@ import { EFieldset, ETextField, EStack } from "@eos-ui/vue";
       <ETextField label="Street" autocomplete="address-line1" />
       <ETextField label="City" autocomplete="address-level2" />
     </EFieldset>
-    <EFieldset legend="Phone numbers" optional bare>
+    <EFieldset legend="Phone numbers" optional variant="plain">
       <ETextField label="Mobile" type="tel" autocomplete="tel" />
       <ETextField label="Home" type="tel" />
     </EFieldset>
@@ -16,7 +16,7 @@ import { EFieldset, ETextField, EStack } from "@eos-ui/vue";
       <ETextField label="Card number" autocomplete="cc-number" />
       <ETextField label="Expiry" placeholder="MM/YY" autocomplete="cc-exp" />
     </EFieldset>
-    <EFieldset legend="Your details" section hint="As they appear on your card.">
+    <EFieldset legend="Your details" variant="section" hint="As they appear on your card.">
       <ETextField label="Name" autocomplete="name" />
       <ETextField label="Email" type="email" autocomplete="email" />
     </EFieldset>

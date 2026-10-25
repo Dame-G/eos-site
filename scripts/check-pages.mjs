@@ -35,7 +35,7 @@ const pages = [
 const ALLOWED = {
   "/components/AppShell": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
   "/patterns/page-frame": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
-  "/components/Definition": ["landmark-no-duplicate-banner", "landmark-unique"],
+  "/components/Toggletip": ["landmark-no-duplicate-banner", "landmark-unique"],
 };
 
 // The preview server does not send the headers Cloudflare will, so the build's Content-Security-Policy is put on every page here and any violation fails the page.

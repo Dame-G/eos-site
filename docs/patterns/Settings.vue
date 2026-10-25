@@ -34,7 +34,7 @@ function discard() {
         <EStack gap="section">
           <EPageHeader :heading-level="2" title="Settings" description="How we reach you and which language you read." />
 
-          <EFieldset section legend="Profile" hint="Used on receipts.">
+          <EFieldset variant="section" legend="Profile" hint="Used on receipts.">
             <EStack>
               <ETextField v-model="draft.name" label="Name" autocomplete="name" :error="nameError" />
               <ETextField v-model="draft.email" label="Email" type="email" autocomplete="email" :error="emailError" />
@@ -42,7 +42,7 @@ function discard() {
             </EStack>
           </EFieldset>
 
-          <EFieldset section legend="Notifications" hint="These save when you press Save changes.">
+          <EFieldset variant="section" legend="Notifications" hint="These save when you press Save changes.">
             <EStack>
               <ESwitch v-model="draft.reminders" label="Visit reminders" description="A text two days before each visit." />
               <ESwitch v-model="draft.receipts" label="Email receipts" description="A receipt after each payment." />

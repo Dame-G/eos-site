@@ -39,8 +39,8 @@ const rows = (data.promised as Record<string, unknown>[]).map((p) => ({
       </template>
       <template #cell-level="{ row }"><EStamp :tone="tone(row.level as string)" size="sm">{{ row.level }}</EStamp></template>
     </PlainTable>
-    <EText v-if="!data.issues.length" size="sm" tone="neutral">Every pair above is checked by <EHighlight code>defineTheme()</EHighlight> for the default theme, and none fails.</EText>
-    <EText v-else size="sm" tone="neutral">{{ data.issues.length }} pairs fail in the default theme. This should never ship.</EText>
+    <EText v-if="!data.issues.length" size="sm" tone="muted">Every pair above is checked by <EHighlight code>defineTheme()</EHighlight> for the default theme, and none fails.</EText>
+    <EText v-else size="sm" tone="muted">{{ data.issues.length }} pairs fail in the default theme. This should never ship.</EText>
   </EStack>
 </template>
 

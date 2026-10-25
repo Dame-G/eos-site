@@ -49,7 +49,6 @@ const GUIDES_OF = Object.fromEntries(
     Disclosure: ["showingMore"],
     Tooltip: ["showingMore"],
     Toggletip: ["showingMore", "toggletip"],
-    Definition: ["showingMore", "toggletip"],
     EmptyState: ["telling"],
     Skeleton: ["telling"],
     Stack: ["layouts"],

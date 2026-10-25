@@ -57,6 +57,7 @@ function remove() {
           searchable
           filterable
           selectable
+          cards
           empty-title="No statements"
           empty-text="They appear here after your first visit."
         >
