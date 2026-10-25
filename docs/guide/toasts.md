@@ -11,7 +11,7 @@ import ToastsAndNotices from "./examples/ToastsAndNotices.vue";
 
 ## Toast or Notice
 
-| | A toast, from [`useToast()`](/guide/api#usetoast) | [`ENotice`](/components/Notice) |
+| Behaviour | A toast, from [`useToast()`](/guide/api#usetoast) | [`ENotice`](/components/Notice) |
 | --- | --- | --- |
 | Goes away | by itself, after 5 seconds (a danger toast or one with an action stays) | when the problem is dealt with, or the person closes it |
 | Dismiss button | on by default; `closable: false` hides it on a toast that goes by itself | off by default, `closable` shows it |
