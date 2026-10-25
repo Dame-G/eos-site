@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { GROUP_OF } from "./groups.mjs";
+import { groupComponents } from "./groups.mjs";
 import { plainText } from "./plain-text.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -21,17 +21,6 @@ export const libraryDist = join(eosRoot, "packages/vue/dist");
 export const changelogFile = join(eosRoot, "packages/vue/CHANGELOG.md");
 export const componentsDir = join(eosRoot, "packages/vue/src/components");
 
-/** The groups, in the order the sidebar shows them. */
-export const GROUPS = [
-  { id: "layout", title: "Layout" },
-  { id: "content", title: "Content" },
-  { id: "actions", title: "Actions" },
-  { id: "forms", title: "Forms" },
-  { id: "navigation", title: "Navigation" },
-  { id: "feedback", title: "Feedback" },
-  { id: "overlays", title: "Overlays" },
-];
-
 /** Folder names of every component in the library, sorted. Adding a folder to the library adds a page here. */
 export function listComponents() {
   if (!existsSync(componentsDir)) throw new Error(`Component library not found at ${componentsDir}. Check out Dame-G/eos beside this repo or set EOS_DIR.`);
@@ -40,12 +29,9 @@ export function listComponents() {
     .sort((a, b) => a.localeCompare(b));
 }
 
-/** The components by sidebar group, those without a group last under "More". Empty groups are left out. */
+/** The library's components by group ([{ id, title, names }]), those without a group last under "More". The groups are in groups.mjs. */
 export function groupedComponents() {
-  const names = listComponents();
-  return [...GROUPS, { id: "more", title: "More" }]
-    .map((g) => ({ ...g, names: names.filter((n) => (GROUP_OF[n] ?? "more") === g.id) }))
-    .filter((g) => g.names.length);
+  return groupComponents(listComponents());
 }
 
 /** The date of the last library commit that touched a component, as an ISO string, or undefined when git history is not there. */

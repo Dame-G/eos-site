@@ -1,6 +1,6 @@
 ---
 title: Data tables
-description: "Choose between ETable and EDataGrid, then sort, filter, select and format rows in the browser or from a server."
+description: "Choose between ETable and EDataGrid, then sort, filter, select and format rows in the browser or from a server, and show loading, empty and failed states."
 ---
 
 <script setup>
@@ -15,7 +15,7 @@ import ServerGrid from "./examples/ServerGrid.vue";
 - [`ETable`](/components/Table) is a plain table for facts that are read: prices, specifications, comparisons. You write the `thead` and `tbody`.
 - [`EDataGrid`](/components/DataGrid) is for rows people work with: sort, filter, search, select, page. You give it `columns` and `rows`.
 
-A short static list with no toolbar is an `ETable`. Every grid has its foot.
+A short list that is only read, with no search, sorting or paging, is an `ETable`.
 
 ## Client mode
 
@@ -71,7 +71,7 @@ A cell shows `row[key]` until you fill the `cell-<key>` slot. A slot changes how
 
 ### Many rows
 
-Set `virtual` to render only the rows in view, for thousands of rows. It replaces paging. A grid narrower than 40rem turns rows into cards unless you set `:cards="false"`.
+Set `virtual` to render only the rows in view, for thousands of rows. It replaces paging. Set `cards` to turn rows into cards when the grid is narrower than 40rem; virtual and resizable grids keep the table. `dense` and `striped` tighten and stripe the rows.
 
 ## Manual mode
 
@@ -91,14 +91,16 @@ When the data lives on a server, set `manual`. The grid then leaves the rows alo
   :total="total"
   :loading="loading"
   :page-size="5"
+  :error="failed ? 'The visits could not be loaded.' : undefined"
   @query-change="load"
+  @retry="load(lastQuery)"
 />
 ```
 
 - `total` is the number of rows in all, not on this page. The pager needs it.
-- `loading` shows placeholder rows and sets `aria-busy`.
+- `loading` sets `aria-busy`. With no rows yet it shows placeholder rows; with the previous page on screen, those rows stay, dimmed.
 - An empty `rows` shows `emptyTitle` and `emptyText`. Set them so the empty state says something useful.
-- A failed request is yours to show: an [`ENotice`](/components/Notice) above the grid, or a [toast](/guide/toasts).
+- `error` shows a failed load in place of the rows, with a Try again button that emits `retry`. `true` says the default sentence (the `loadFailed` message); a string says your own. Keep the last query so `retry` can ask again. Fill the `error` slot for a failed state of your own. In the example above, switch on "Fail the next request" to see it.
 
 ## States to cover
 
@@ -108,6 +110,6 @@ When the data lives on a server, set `manual`. The grid then leaves the rows alo
 | Empty | `emptyTitle` and `emptyText` |
 | No search results | the same empty state, with words that mention the search |
 | Long text | cells wrap. Fix a column with `width` if it should not grow |
-| Error | an `ENotice` with a retry button, above the grid |
+| Failed load | `error`, and fetch again on `retry` |
 
 See [Data table with bulk actions](/patterns/data-table) for a whole page.

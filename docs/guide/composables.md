@@ -1,6 +1,6 @@
 ---
 title: Composables
-description: "useAnnouncer, useShortcuts, useCopy, useToast and the smaller helpers: when to reach for each one."
+description: "useAnnouncer, useShortcuts, useCopy and the smaller helpers: when to reach for each one."
 ---
 
 # Composables
@@ -12,7 +12,7 @@ Functions to call inside `setup()`. Each is exported from `@eos-ui/vue`. This pa
 | Tell a screen reader something that is not on screen | [`useAnnouncer`](#useannouncer) |
 | Run code on a key press | [`useShortcuts`](#useshortcuts-map-options) |
 | Copy text and show that it worked | [`useCopy`](#usecopy-options) |
-| Show a message that goes away | [`useToast`](#usetoast) |
+| Show a message that goes away | [`useToast`](/guide/toasts) |
 | Format a date or an amount like the components do | [`useLocale`](#smaller-helpers) |
 | Build my own field or popup | [`useUid`, `useFieldAttrs`, `useQuietFocus`, `useLogicalSide`](#smaller-helpers) |
 | Skip an animation for people who asked for less motion | [`useReducedMotion`](#smaller-helpers) |
@@ -63,12 +63,7 @@ await copy("npm install @eos-ui/vue"); // true if it reached the clipboard
 
 ## `useToast()`
 
-Shows a toast from anywhere in an app that installed `createEos()`, or from inside an [`EToastProvider`](/components/ToastProvider) without the plugin. The toast appears once an `EToastProvider` is mounted. See [Toasts and notifications](/guide/toasts).
-
-```ts
-const toast = useToast();
-toast.show({ title: "Saved", tone: "success" });
-```
+Shows a toast: see [Toasts and notifications](/guide/toasts).
 
 ## Smaller helpers
 

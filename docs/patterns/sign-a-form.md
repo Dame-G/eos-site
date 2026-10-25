@@ -16,8 +16,8 @@ Built from: [`ESignatureField`](/components/SignatureField), [`EUpload`](/compon
   <Pattern />
 </div>
 
-- A signature can be typed or drawn.
-- Submit waits until the person has agreed and signed.
+- Type your name, or switch to drawing and sign with the pointer.
+- Submit stays disabled until you have agreed and signed. Sign, then submit.
 
 ## Decisions
 

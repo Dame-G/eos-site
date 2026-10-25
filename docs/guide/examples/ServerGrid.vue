@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { EDataGrid, EStack, EText } from "@eos-ui/vue";
+import { EDataGrid, EStack, ESwitch } from "@eos-ui/vue";
 import type { DataGridQuery } from "@eos-ui/vue";
 
 interface Visit {
@@ -18,9 +18,16 @@ const everything: Visit[] = Array.from({ length: 47 }, (_, i) => ({
   amount: 40 + ((i * 37) % 180),
 }));
 
+// Lets you see the failed state: the next request rejects, once.
+const failNext = ref(false);
+
 function fetchVisits(q: DataGridQuery) {
-  return new Promise<{ rows: Visit[]; total: number }>((resolve) => {
+  return new Promise<{ rows: Visit[]; total: number }>((resolve, reject) => {
     setTimeout(() => {
+      if (failNext.value) {
+        failNext.value = false;
+        return reject(new Error("The server did not answer"));
+      }
       let list = everything.filter((v) => !q.search || v.service.toLowerCase().includes(q.search.toLowerCase()));
       if (q.sort) {
         const { key, dir } = q.sort;
@@ -41,8 +48,11 @@ const rows = ref<Visit[]>([]);
 const total = ref(0);
 const loading = ref(true);
 const failed = ref(false);
+// The last thing the grid asked for, so Try again can ask for it again.
+let lastQuery: DataGridQuery = { sort: null, page: 1, pageSize: 5, search: "", filters: {} };
 
 async function load(q: DataGridQuery) {
+  lastQuery = q;
   loading.value = true;
   failed.value = false;
   try {
@@ -56,11 +66,12 @@ async function load(q: DataGridQuery) {
   }
 }
 
-onMounted(() => load({ sort: null, page: 1, pageSize: 5, search: "" }));
+onMounted(() => load(lastQuery));
 </script>
 
 <template>
   <EStack>
+    <ESwitch v-model="failNext" label="Fail the next request" description="Then sort, search or change page." />
     <EDataGrid
       manual
       searchable
@@ -70,12 +81,13 @@ onMounted(() => load({ sort: null, page: 1, pageSize: 5, search: "" }));
       :total="total"
       :loading="loading"
       :page-size="5"
+      :error="failed ? 'The visits could not be loaded.' : undefined"
       empty-title="No visits found"
       empty-text="Try a different search."
       @query-change="load"
+      @retry="load(lastQuery)"
     >
       <template #cell-amount="{ value }">${{ Number(value).toFixed(2) }}</template>
     </EDataGrid>
-    <EText v-if="failed" size="sm" role="alert">The visits did not load. Try again.</EText>
   </EStack>
 </template>

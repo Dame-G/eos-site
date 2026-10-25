@@ -48,18 +48,18 @@ function clear() {
 
 <template>
   <div class="pattern-md">
-    <EStack :gap="4">
+    <EStack gap="loose">
       <EPageHeader :heading-level="2" title="Find a document" description="Statements, receipts and forms." />
       <ESearchBar clearable v-model="typed" placeholder="Search by title or number" @submit="search" />
       <EInline align="start">
-        <EStack :gap="2">
+        <EStack gap="snug">
           <EKicker as="span" aria-hidden="true">Type</EKicker>
           <ESegmented v-model="kind" label="Type" :options="['All', 'Statement', 'Receipt', 'Form']" />
         </EStack>
         <ESelect v-model="year" label="Year" :options="['Any year', '2026', '2025']" />
       </EInline>
       <EInline justify="between">
-        <EText size="sm" tone="neutral" role="status">{{ items.length }} {{ items.length === 1 ? "document" : "documents" }}</EText>
+        <EText size="sm" tone="muted" role="status">{{ items.length }} {{ items.length === 1 ? "document" : "documents" }}</EText>
         <EButton v-if="filtered" variant="quiet" @click="clear">Clear filters</EButton>
       </EInline>
       <ESearchResults label="Documents" :items="items" :query="query" :empty-text="emptyText" />

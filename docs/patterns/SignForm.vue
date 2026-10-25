@@ -29,8 +29,8 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
 </script>
 
 <template>
-  <EGrid min="22rem" :gap="6" class="pattern-lg">
-    <EStack :gap="3">
+  <EGrid min="22rem" gap="section" class="pattern-lg">
+    <EStack gap="base">
       <EHeading :level="2" kicker="Forms">To do before your visit</EHeading>
       <ENotice tone="warning" title="2 forms need your signature">Please finish them before Oct 22.</ENotice>
       <ul class="sign-list">
@@ -49,11 +49,11 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
       </ul>
     </EStack>
 
-    <ESurface size="lg">
-      <EStack :gap="4">
+    <ESurface padding="section">
+      <EStack gap="loose">
         <ELink href="#forms" icon="arrow-left">Back to forms</ELink>
         <EHeading :level="2">New client form</EHeading>
-        <EText tone="neutral">By signing, you confirm the details you gave us are correct and you agree to our payment policy.</EText>
+        <EText tone="muted">By signing, you confirm the details you gave us are correct and you agree to our payment policy.</EText>
         <ESignatureField v-model="signature" mode="both" :date="new Date(2026, 9, 18, 12)" />
         <EUpload v-model="id" label="Photo ID" optional accept=".jpg,.png,.pdf" hint="A photo of your driver licence or passport." />
         <ENotice v-if="submitted" tone="success" title="Form submitted">Thank you. We have your signed form.</ENotice>

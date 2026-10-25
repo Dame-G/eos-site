@@ -23,17 +23,17 @@ function retry() {
 
 <template>
   <div class="pattern-md">
-    <EStack :gap="4">
+    <EStack gap="loose">
       <EPageHeader :heading-level="2" title="Statements" description="Every state a list can be in." />
       <ESegmented v-model="state" label="Preview state" :options="['Loading', 'Error', 'Empty', 'Loaded']" />
 
-      <EStack v-if="state === 'Loading'" :gap="2" aria-busy="true">
+      <EStack v-if="state === 'Loading'" gap="snug" aria-busy="true">
         <ESkeleton :height="64" />
         <ESkeleton :height="64" />
         <ESkeleton :height="64" />
       </EStack>
 
-      <EStack v-else-if="state === 'Error'" :gap="2">
+      <EStack v-else-if="state === 'Error'" gap="snug">
         <ENotice tone="danger" title="Statements did not load" :heading-level="3">
           We could not reach the server. Your data is safe. Try again in a moment.
           <template #actions><EButton variant="outline" @click="retry">Try again</EButton></template>
@@ -45,7 +45,7 @@ function retry() {
         <template #action><EButton>Book a visit</EButton></template>
       </EEmptyState>
 
-      <EStack v-else :gap="2">
+      <EStack v-else gap="snug">
         <ENotice v-if="showRetryNote" tone="success" title="Statements loaded" :heading-level="3">Back online.</ENotice>
         <EExpandableRow v-for="s in items" :key="s.id" :title="s.title" :subtitle="s.sub">
           <template #leading><EStamp :status="s.status" size="sm" /></template>

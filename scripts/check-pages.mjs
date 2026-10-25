@@ -32,7 +32,7 @@ const pages = [
 
 const ALLOWED = {
   "/components/AppShell": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
-  "/patterns/app-shell": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
+  "/patterns/page-frame": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
   "/components/Definition": ["landmark-no-duplicate-banner", "landmark-unique"],
 };
 

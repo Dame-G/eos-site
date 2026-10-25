@@ -31,16 +31,16 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
 <template>
   <div class="pattern-narrow">
     <ESurface>
-      <EStack :gap="6">
-        <EStack :gap="3">
+      <EStack gap="section">
+        <EStack gap="base">
           <ELink href="#statements" icon="arrow-left">Back to statements</ELink>
-          <EStack :gap="3">
+          <EStack gap="base">
             <EHeading :level="2" kicker="Statement 4471">Pay your balance</EHeading>
             <EMetric label="You owe" :value="formatMoney(BALANCE)" help="Due Nov 1" />
           </EStack>
         </EStack>
 
-        <EStack :gap="4">
+        <EStack gap="loose">
           <ERadioGroup
             v-model="mode"
             label="How much would you like to pay?"
@@ -62,7 +62,7 @@ const canPay = computed(() => amount.value > 0 && !tooMuch.value);
             </template>
           </ERadioGroup>
 
-          <EStack :gap="2">
+          <EStack gap="snug">
             <ESelect
               v-model="method"
               label="Pay with"

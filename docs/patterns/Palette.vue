@@ -50,11 +50,11 @@ const facts = computed(() => [
 <template>
   <div class="pattern-md">
     <EToastProvider>
-      <EStack :gap="4">
+      <EStack gap="loose">
         <EPageHeader :heading-level="2" title="Command palette" description="Reach any page or action from the keyboard." />
         <EInline align="center">
           <EButton variant="outline" icon="search" aria-haspopup="dialog" @click="open = true">Search commands</EButton>
-          <EText size="sm" tone="neutral">
+          <EText size="sm" tone="muted">
             or press <template v-for="k in keys" :key="k"><EKbd size="sm">{{ k }}</EKbd>{{ " " }}</template>
           </EText>
         </EInline>

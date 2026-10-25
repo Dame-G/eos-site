@@ -1,6 +1,6 @@
 ---
 title: Composing layouts
-description: "Stack, Inline, Grid, Surface and AppShell: spacing and page structure without a custom box."
+description: "Stack, Inline, Grid, Surface, Container and AppShell, and the named gaps: spacing and page structure without a custom box."
 ---
 
 <script setup>
@@ -9,7 +9,7 @@ import Layouts from "./examples/Layouts.vue";
 
 # Composing layouts
 
-Six layout components cover almost every screen. The default `gap` is `base` on a stack, `snug` on an inline and `loose` on a grid. Spacing comes from the `gap` prop on a layout component, never from margins on content.
+A few layout components cover almost every screen. Spacing comes from the `gap` prop on a layout component, never from margins on content. The rest of the Layout group ([`EDivider`](/components/Divider), [`EAppHeader`](/components/AppHeader), [`EAppFooter`](/components/AppFooter), [`EPageHeader`](/components/PageHeader)) fills in the frame.
 
 | Need | Use |
 | --- | --- |
@@ -25,7 +25,7 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 </div>
 
 ```vue
-<EStack :gap="6">
+<EStack gap="section">
   <EInline justify="between">
     <EHeading :level="3">Visits</EHeading>
     <EInline>
@@ -36,10 +36,10 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 
   <EGrid min="14rem" as="ul">
     <ESurface v-for="v in visits" :key="v.id" as="li">
-      <EStack :gap="2">
+      <EStack gap="snug">
         <EStamp :status="v.status" size="sm" />
         <EText>{{ v.title }}</EText>
-        <EText size="sm" tone="neutral">{{ v.when }}</EText>
+        <EText size="sm" tone="muted">{{ v.when }}</EText>
       </EStack>
     </ESurface>
   </EGrid>
@@ -48,7 +48,7 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 
 ## Gaps
 
-`gap` takes the name of a gap token (`tight`, `snug`, `base`, `loose` or `section`), a space token number (1 to 6, 8, 10, 12 or 16, meaning `--e-space-N`) or any CSS length as a string. The names say the job and follow a theme's `spaceScale` and `density`, so prefer them. The defaults are `base` for `EStack`, `loose` for `EGrid` and `snug` for `EInline`. The table of which gap to use when is under [Spacing and layout conventions](/guide/design-principles#spacing-and-layout-conventions). Nest layouts to get a tighter gap inside a looser one, as the heading and cards above do.
+`gap` takes the name of a gap token: `tight` (4px), `snug` (8px), `base` (12px), `loose` (16px) or `section` (24px). The names say the job and follow a theme's `spaceScale` and [`density`](/guide/glossary#density), so use them. A space token number (1 to 6, 8, 10, 12 or 16, meaning `--e-space-N`) or any CSS length as a string also works, for the rare gap no name fits. The defaults are `base` for `EStack`, `loose` for `EGrid` and `snug` for `EInline`. The table of which gap to use when is under [Spacing](/guide/design-principles#spacing). Nest layouts to get a tighter gap inside a looser one, as the heading and cards above do.
 
 ## Rows and columns
 
@@ -58,7 +58,7 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 
 ## Lists
 
-`as="ul"` or `as="ol"` with `li` children makes a real list that screen readers count. Reset the bullets with your own class if the list is a row of cards.
+`as="ul"` or `as="ol"` with `li` children makes a real list that screen readers count. `EStack` and `EGrid` drop the bullets and padding and keep the list role.
 
 ## The page
 
@@ -76,10 +76,10 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 
 See the full [`EAppShell`](/components/AppShell) demo, and [Statements](/patterns/statements) for a finished page.
 
-For a page that needs a centred column but not the whole frame, such as a sign-in page or an article, use [`EContainer`](/components/Container). It sets a maximum width (`sm`, `md`, `lg` or `full`), centres itself and keeps the page gutter at its sides. Use `as="main"` for the one main landmark.
+For a page that needs a centred column but not the whole frame, such as a sign-in page or an article, use [`EContainer`](/components/Container). Its `width` sets how wide it grows (`sm`, `md`, `lg` or `full`), and it centres itself and keeps the page gutter at its sides. Use `as="main"` for the one main landmark.
 
 ```vue
-<EContainer as="main" size="md">
+<EContainer as="main" width="md">
   <EStack gap="section">
     <EPageHeader title="Sign in" />
     <ESurface>...</ESurface>

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { mount, expectNoViolations, settle, watchConsole } from "./helpers";
 import ConfirmDestructive from "../docs/patterns/ConfirmDestructive.vue";
-import AppFrame from "../docs/patterns/AppFrame.vue";
+import PageFrame from "../docs/patterns/PageFrame.vue";
 import UploadFlow from "../docs/patterns/UploadFlow.vue";
 import Palette from "../docs/patterns/Palette.vue";
 import PagedList from "../docs/patterns/PagedList.vue";
@@ -42,7 +42,7 @@ describe("Confirm a destructive action", () => {
 
 describe("AppShell page frame", () => {
   it("draws the landmarks and moves the current item with the page", async () => {
-    await mount(AppFrame);
+    await mount(PageFrame);
     await settle();
     await expect.element(page.getByRole("link", { name: /Statements/ }).first()).toHaveAttribute("aria-current", "page");
     await expect.element(page.getByRole("heading", { name: "Statements" })).toBeVisible();
@@ -126,12 +126,12 @@ describe("Loading and paging", () => {
 });
 
 describe("Sign in error summary", () => {
-  it("lists the problems and moves focus to the first invalid field", async () => {
+  it("lists the problems in EForm's summary, which takes focus, and each entry moves focus to its field", async () => {
     await mount(SignIn);
     await settle();
     await page.getByRole("button", { name: "Sign in" }).click();
-    await expect.element(page.getByText("Fix 2 things to sign in")).toBeVisible();
-    await expect.element(page.getByRole("textbox", { name: /Email address/ })).toHaveFocus();
+    await expect.element(page.getByText("There is a problem")).toBeVisible();
+    await expect.poll(() => document.activeElement?.textContent ?? "").toContain("There is a problem");
 
     await page.getByRole("link", { name: /Password: Enter your password/ }).click();
     await expect.element(page.getByLabelText(/^Password/)).toHaveFocus();

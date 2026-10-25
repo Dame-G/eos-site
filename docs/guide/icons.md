@@ -1,7 +1,11 @@
 ---
 title: Icons
-description: "Use the built-in icons, or bring Lucide, Tabler, Heroicons, Phosphor, Iconify or your own."
+description: "Every built-in icon by name, and how to bring Lucide, Tabler, Heroicons, Phosphor, Iconify or your own."
 ---
+
+<script setup>
+import IconGallery from "./examples/IconGallery.vue";
+</script>
 
 # Icons
 
@@ -12,6 +16,20 @@ eos ships a built-in set (Phosphor, MIT), so everything works with no setup. Com
 <EIcon name="receipt" />
 <EButton :icon="CreditCard">Pay now</EButton>
 ```
+
+## Built-in icons
+
+These are the names components ask for, and the names you can pass to `icon` and to [`EIcon`](/components/Icon) with no setup. The list is `iconNames`, exported from `@eos-ui/vue`, so this gallery is drawn from the installed library. A name with `left` or `right` in it mirrors in right-to-left text.
+
+<div class="pattern-stage">
+  <IconGallery />
+</div>
+
+<EDisclosure title="IconGallery.vue">
+
+<<< @/guide/examples/IconGallery.vue
+
+</EDisclosure>
 
 ## Your own set
 
@@ -52,3 +70,7 @@ createEos({
 A name resolves to the first match of: a component passed directly, `icons[name]`, `resolve()`, the built-in icon. If none match, nothing is drawn and development logs a warning. A source is a component, an `<svg>` string, or a `[regular, bold]` pair of paths in a 256 box.
 
 Icons never carry meaning alone, so a different or missing icon hides nothing.
+
+## Markup must be trusted
+
+An icon given as a string, from `icons` or returned by `resolve`, and a `[regular, bold]` pair of paths, is drawn as markup (`v-html`). Only use markup your app ships. Never build an icon from user data, a request, or a database a user can write to: a `<script>` or an `onload` attribute in it would run. Components are not injected as markup, so pass a component when the icon name could come from outside.

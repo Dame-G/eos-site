@@ -44,13 +44,13 @@ function onKeydown(e: KeyboardEvent) {
       @select="onSelect"
       @exit-top="field?.focus()"
     />
-    <EText size="sm" tone="neutral">While results load</EText>
-    <EStack :gap="2" aria-busy="true">
+    <EText size="sm" tone="muted">While results load</EText>
+    <EStack gap="snug" aria-busy="true">
       <ESkeleton :height="56" />
       <ESkeleton :height="56" />
     </EStack>
-    <EText size="sm" tone="neutral">No results</EText>
+    <EText size="sm" tone="muted">No results</EText>
     <ESearchResults label="Empty results" :items="[]" query="tax" empty-text="Nothing found for &quot;tax&quot;. Try a shorter word." />
-    <EText size="sm" tone="neutral">{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
+    <EText size="sm" tone="muted">{{ opened ? `Opened ${opened}.` : "Press the Down arrow to move into the results." }}</EText>
   </EStack>
 </template>

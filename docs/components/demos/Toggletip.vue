@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EButton, EInline, EDefinition, EStack, EText } from "@eos-ui/vue";
+import { EButton, EInline, EToggletip, EStack, EText } from "@eos-ui/vue";
 
 const open = ref(true);
 </script>
@@ -8,22 +8,22 @@ const open = ref(true);
 <template>
   <EStack>
     <EInline>
-      <EDefinition label="About payment plans" title="Payment plan">
+      <EToggletip label="About payment plans" title="Payment plan">
         <template #trigger>What is a payment plan?</template>
         Split your balance of $162.40 into equal monthly payments. There is no interest and no fee.
         <template #actions><EButton variant="outline">Set up a plan</EButton></template>
-      </EDefinition>
+      </EToggletip>
 
-      <EDefinition label="Explains the due date">
+      <EToggletip label="Explains the due date">
         <template #trigger>Due date</template>
         Payment is due 14 days after the statement date, Oct 22, 2026.
-      </EDefinition>
+      </EToggletip>
     </EInline>
 
-    <EDefinition v-model="open" label="About late fees" title="Late fees">
+    <EToggletip v-model="open" label="About late fees" title="Late fees">
       <template #trigger>Late fees</template>
       A $10.00 fee applies to balances paid after the due date.
-    </EDefinition>
-    <EText size="sm" tone="neutral">The late fees panel is {{ open ? "open" : "closed" }}.</EText>
+    </EToggletip>
+    <EText size="sm" tone="muted">The late fees panel is {{ open ? "open" : "closed" }}.</EText>
   </EStack>
 </template>

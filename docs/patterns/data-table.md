@@ -16,9 +16,8 @@ Built from: [`EDataGrid`](/components/DataGrid), [`EDialog`](/components/Dialog)
   <Pattern />
 </div>
 
-- Select rows to show the bulk actions. The selection survives paging and filtering.
-- The destructive action asks first, in a dialog whose button says what it does.
-- The result is a toast. For rows that live on a server, see [Data tables](/guide/data-tables).
+- Select rows to show the bulk actions, then change page or filter: the selection stays.
+- Remove the selected rows: the dialog asks first, then a toast confirms.
 
 ## Decisions
 
@@ -26,6 +25,7 @@ Built from: [`EDataGrid`](/components/DataGrid), [`EDialog`](/components/Dialog)
 - **Bulk actions appear on selection.** The toolbar holds only what applies to a selection. Always-on actions go in the page header.
 - **`EDialog` before the destructive action.** The button says "Remove" and the cancel says what is kept. See [Confirm a destructive action](/patterns/confirm-destructive-action).
 - **A toast for the result.** The row is gone, so there is nothing left to show the message on.
+- **Client mode here.** For rows that live on a server, see [manual mode](/guide/data-tables#manual-mode).
 
 <EDisclosure title="DataTable.vue">
 

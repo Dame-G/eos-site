@@ -16,9 +16,9 @@ Built from: [`ESearchBar`](/components/SearchBar), [`ESearchResults`](/component
   <Pattern />
 </div>
 
-- Search runs on Enter or the button. The filters apply at once.
-- The count is a status region, so changes are announced. The empty state says why nothing matched and what to do.
-- Clear filters appears only when a filter is on.
+- Type a query and press Enter or the button. Change a filter: it applies at once.
+- Combine filters until nothing matches, and read the empty state.
+- Turn a filter on to make Clear filters appear.
 
 ## Decisions
 
@@ -26,6 +26,7 @@ Built from: [`ESearchBar`](/components/SearchBar), [`ESearchResults`](/component
 - **`ESegmented` for the type, `ESelect` for the longer list.** Three or four exclusive options fit a segmented control. More belongs in a select.
 - **`ESearchResults` for the results.** They are links with a highlighted match. Use `ETable` or cards when results have more than a title and a line.
 - **Count in a status region.** The change is announced without moving focus.
+- **An empty state that says why.** It says why nothing matched and what to do.
 
 <EDisclosure title="SearchFilters.vue">
 

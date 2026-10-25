@@ -16,8 +16,8 @@ Built from: [`ESearchBar`](/components/SearchBar), [`EActions`](/components/Acti
   <Pattern />
 </div>
 
-- Search narrows the list, the toggles filter it, and the count is announced.
-- "Needs payment" includes overdue statements.
+- Search for "Lab", then turn on a filter: the list narrows and the count is announced.
+- Turn on "Needs payment": overdue statements are included.
 
 ## Decisions
 

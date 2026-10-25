@@ -24,12 +24,10 @@ line();
 
 line("## Guide");
 line();
-const sections = guideSections();
-for (const { title, pages } of sections) {
+for (const { title, pages } of guideSections()) {
   line(`### ${title}`);
   line();
-  for (const { slug, name, note } of pages) line(`- [${name}](${SITE}/guide/${slug}): ${note}`);
-  if (title === sections.at(-1).title) line(`- [Changelog](${SITE}/changelog): Release notes for every version of the library`);
+  for (const { link, name, note } of pages) line(`- [${name}](${SITE}${link}): ${note}`);
   line();
 }
 

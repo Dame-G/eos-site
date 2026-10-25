@@ -3,7 +3,7 @@ import { EButton, EGrid, EHeading, ESurface, EText } from "@eos-ui/vue";
 </script>
 
 <template>
-  <EGrid min="12rem" :gap="3">
+  <EGrid min="12rem" gap="base">
     <ESurface as="article">
       <EHeading :level="3">Default</EHeading>
       <EText>Flat and outlined, with medium padding.</EText>

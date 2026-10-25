@@ -9,7 +9,7 @@ function editEmail() {
 </script>
 
 <template>
-  <EStack :gap="6">
+  <EStack gap="section">
     <EDescriptionList
       :items="[
         { label: 'Covers', text: 'Visit on Sep 12, 2026' },

@@ -17,7 +17,7 @@ function cancel() {
 <template>
   <EStack>
     <EButton variant="outline" @click="open = true">Cancel appointment</EButton>
-    <EText size="sm" tone="neutral">{{ cancelled ? "Your Oct 22, 2026 visit was cancelled." : "Your visit on Oct 22, 2026 is booked." }}</EText>
+    <EText size="sm" tone="muted">{{ cancelled ? "Your Oct 22, 2026 visit was cancelled." : "Your visit on Oct 22, 2026 is booked." }}</EText>
 
     <EDialog v-model:open="open" dismissible title="Cancel this appointment?">
       You can book again at any time.

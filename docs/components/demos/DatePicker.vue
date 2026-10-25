@@ -16,7 +16,7 @@ const born = ref<Date | null>(null);
       :min="new Date(2026, 10, 1, 12)"
       :max="new Date(2026, 10, 30, 12)"
     />
-    <EText size="sm" tone="neutral">Chosen: {{ visit ? visit.toDateString() : "none" }}</EText>
+    <EText size="sm" tone="muted">Chosen: {{ visit ? visit.toDateString() : "none" }}</EText>
     <EDatePicker v-model="born" label="Date of birth" required :max="new Date(2026, 9, 18, 12)" />
     <EDatePicker label="Statement date" optional error="Choose the date on your statement." />
     <EDatePicker label="Due date" disabled :model-value="new Date(2026, 10, 3, 12)" />

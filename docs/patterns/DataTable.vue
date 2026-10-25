@@ -46,7 +46,7 @@ function remove() {
 <template>
   <div class="pattern-md">
     <EToastProvider>
-      <EStack :gap="4">
+      <EStack gap="loose">
         <EPageHeader :heading-level="2" title="All statements" description="Select rows to act on several at once." />
         <EDataGrid
           v-model:selected="selected"

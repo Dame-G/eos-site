@@ -1,6 +1,6 @@
 ---
 title: Small recipes
-description: "Small compositions of eos components that replace single-purpose components: toggle button, button group, back link and panel."
+description: "Small compositions of eos components that replace single-purpose components: toggle button, group of actions, back link, panel and a light, dark or system theme switch."
 ---
 
 # Small recipes
@@ -9,7 +9,7 @@ Some things are a few lines of the pieces eos already has. They are recipes, not
 
 ## Toggle button
 
-A button with two states, for a filter or a view option. Use an outline [`EButton`](/components/Button) with `aria-pressed`: eos draws `aria-pressed="true"` as selected (a tinted fill and a primary edge, and `Highlight` in forced colours). Keep the label the same in both states. Use [`ESwitch`](/components/Switch) for a setting that saves.
+A button with two states, for a filter or a view option. Use an outline [`EButton`](/components/Button) with `aria-pressed`: eos draws `aria-pressed="true"` filled in the primary colour, like a chosen segment. Keep the label the same in both states. Use [`ESwitch`](/components/Switch) for a setting that saves.
 
 ```vue
 <script setup lang="ts">
@@ -24,29 +24,19 @@ const unpaid = ref(false);
 </template>
 ```
 
-## Button group
+## Group of actions
 
-Buttons that belong together, side by side, announced as one labelled group. [`EActions`](/components/Actions) does this when you give it a `label`. Use [`ESegmented`](/components/Segmented) when the reader picks one option from several.
+Buttons that belong together, side by side, announced as one labelled group. [`EActions`](/components/Actions) does this when you give it a `label`. Each button does its own thing. Toggle buttons in a group are independent too: each one turns its own option on or off.
 
 ```vue
-<EActions label="Show">
-  <EButton variant="outline" :aria-pressed="filter === 'all'" @click="filter = 'all'">All</EButton>
-  <EButton variant="outline" :aria-pressed="filter === 'due'" @click="filter = 'due'">Needs payment</EButton>
-  <EButton variant="outline" :aria-pressed="filter === 'paid'" @click="filter = 'paid'">Paid</EButton>
+<EActions label="Statement">
+  <EButton variant="outline" icon="download">Download</EButton>
+  <EButton variant="outline">Print</EButton>
+  <EButton variant="outline" :aria-pressed="starred" @click="starred = !starred">Starred</EButton>
 </EActions>
 ```
 
-## Link card
-
-A card that is one link is a component now: [`ELinkCard`](/components/LinkCard). The whole card is the click target, and its border recolours on hover without thickening.
-
-```vue
-<EGrid as="ul" min="17rem" :gap="3">
-  <ELinkCard as="li" size="sm" title="EButton" href="/components/Button">A button for an action, or a link that looks like one.</ELinkCard>
-</EGrid>
-```
-
-The component list on this site is built this way.
+When the reader picks exactly one option from several, that is not a group of toggle buttons: use [`ESegmented`](/components/Segmented), which is a radio group underneath. See [Which component?](/guide/choosing).
 
 ## Back link
 
@@ -62,7 +52,7 @@ A flat, outlined container for statements, detail rows and forms. Render an `ESu
 
 ```vue
 <ESurface as="section">
-  <EStack :gap="3">
+  <EStack gap="base">
     <EHeading :level="3" kicker="Billing">Questions</EHeading>
     <EDisclosure title="Can I set up a payment plan?">Yes. Call billing before the due date.</EDisclosure>
   </EStack>
@@ -70,3 +60,54 @@ A flat, outlined container for statements, detail rows and forms. Render an `ESu
 ```
 
 For an action beside the title, put the heading and an `EButton` in an [`EInline`](/components/Inline) with `justify="between"`.
+
+## Light, dark or system
+
+`scheme: "auto"` in [`defineTheme()`](/guide/theming#light-and-dark) follows the visitor's setting with no code. To let people choose "system", "light" or "dark" themselves, use a fixed theme per choice instead. A fixed theme with a dark `surface` is a dark theme: `defineTheme` lifts the action colours for it.
+
+```ts
+const light = defineTheme({ name: "light" });
+const dark = defineTheme({ name: "dark", background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" });
+```
+
+Save only "light" and "dark", so no saved value means follow the system. To avoid a flash of the wrong theme, set the scheme before the first paint with a small script in `<head>`, and render the dark tokens under the attribute it sets. This site does it that way (`docs/.vitepress/scheme.ts` and `theme/site-theme.ts` in the [site repository](https://github.com/Dame-G/eos-site)).
+
+```html
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("my-scheme");
+      var dark = saved === "dark" || (saved !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.scheme = dark ? "dark" : "light";
+      document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    } catch (e) {}
+  })();
+</script>
+<style>
+  /* dark.css({ selector: ':root[data-scheme="dark"]', layer: false }) */
+</style>
+```
+
+`layer: false` writes the tokens outside `@layer e.tokens`, so they win over the library's default tokens wherever the style sits in the head.
+
+Once the app has mounted, apply the theme that matches and keep it up to date. `apply()` sets every token inline, so one call replaces the other theme completely.
+
+```ts
+function paint(isDark: boolean) {
+  (isDark ? dark : light).apply(document.documentElement);
+  document.documentElement.dataset.scheme = isDark ? "dark" : "light";
+}
+
+const query = matchMedia("(prefers-color-scheme: dark)");
+query.addEventListener("change", (e) => {
+  if (!localStorage.getItem("my-scheme")) paint(e.matches);
+});
+
+function choose(choice: "system" | "light" | "dark") {
+  if (choice === "system") localStorage.removeItem("my-scheme");
+  else localStorage.setItem("my-scheme", choice);
+  paint(choice === "dark" || (choice === "system" && query.matches));
+}
+```
+
+Wrap `localStorage` in `try` as the script does, since storage can be blocked. Both themes should have an empty `issues` list. Offer the choice with an [`ESegmented`](/components/Segmented) or an [`ESelect`](/components/Select).

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from "vue";
-import { EButton, ELink, ENotice, EStack, ETextField } from "@eos-ui/vue";
+import { EButton, ELink, ENotice, EStack, ETextField, useMessages } from "@eos-ui/vue";
 
+const t = useMessages();
 const first = ref("");
 const phone = ref("");
 const submitted = ref(false);
@@ -25,11 +26,12 @@ async function submit() {
 
 <template>
   <form novalidate @submit.prevent="submit">
-    <EStack>
-      <ENotice v-if="problems.length" tone="danger" :title="problems.length === 1 ? 'Fix 1 thing to continue' : `Fix ${problems.length} things to continue`">
-        <EStack as="ul" :gap="1">
+    <EStack gap="loose">
+      <!-- The same words as EForm's summary: the errorSummary title and one formIssue line per field. -->
+      <ENotice v-if="problems.length" tone="danger" :title="t('errorSummary')">
+        <EStack as="ul" gap="tight">
           <li v-for="p in problems" :key="p.id">
-            <ELink :href="`#${p.id}`" @click.prevent="focusField(p.id)">{{ p.label }}: {{ p.message }}</ELink>
+            <ELink :href="`#${p.id}`" @click.prevent="focusField(p.id)">{{ t("formIssue", { label: p.label, message: p.message }) }}</ELink>
           </li>
         </EStack>
       </ENotice>

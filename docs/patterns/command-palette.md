@@ -16,17 +16,17 @@ Built from: [`ECommandPalette`](/components/CommandPalette), [`EButton`](/compon
   <Pattern />
 </div>
 
-- Press the button, or Ctrl or Cmd with K, and type a few letters. Words match in any order and ignore case and accents. "bills" finds Statements through its `keywords`.
-- Commands are plain data: `id`, `label`, an optional `group`, `icon`, `description` and `keywords`. Rebuild the list when the state changes, so the label can say "off" when it is on.
-- "Pay October statement" is disabled once there is nothing due, and stays listed so people learn it exists.
-- Choosing a command closes the palette, returns focus to the button, and runs `@select`. The result shows in the list below and in a toast.
-- `shortcut` on an item only draws keycaps. To bind keys to the same actions, use [`useShortcuts`](/guide/composables#useshortcuts-map-options).
+- Press the button, or Ctrl or Cmd with K, and type a few letters in any order: "bills" finds Statements through its `keywords`.
+- Choose a command: the palette closes, focus returns to the button, and the result shows below and in a toast.
+- Pay the October statement, then open the palette again: the command is still listed, but disabled.
 
 ## Decisions
 
 - **A button beside the shortcut.** A shortcut alone hides the feature from people who do not use one. The visible button is the way in for touch and for screen reader users who have not found the key.
 - **`ECommandPalette`, not `ECombobox`.** A combobox chooses a value for a form field. The palette runs an action or moves somewhere. Swap to `ESearchResults` when the results are pages to open, not commands to run.
-- **Default matching.** It covers label, description, group and keywords. Pass `score` when you need fuzzy matching or recent-first ordering, and `loading` when the commands come from a server.
+- **Commands as plain data.** `id`, `label`, an optional `group`, `icon`, `description` and `keywords`. Rebuild the list when the state changes, so a label can say "off" when it is on, and keep a command that does not apply listed but disabled, so people learn it exists.
+- **Default matching.** Words match in any order and ignore case and accents, across label, description, group and keywords. Pass `score` when you need fuzzy matching or recent-first ordering, and `loading` when the commands come from a server.
+- **`shortcut` only draws keycaps.** To bind keys to the same actions, use [`useShortcuts`](/guide/composables#useshortcuts-map-options).
 - **A toast for the outcome.** The palette closes on choice, so the result needs a place to land that the person can see.
 
 <EDisclosure title="Palette.vue">
