@@ -15,7 +15,7 @@ import { leanThemeChunk } from "./lean-theme-chunk";
 
 const SITE = "https://eos.dame.gg";
 const IMAGE = SITE + "/og.png";
-const IMAGE_ALT = "eos: a component library for Vue. The eos logo, a white e on a tile beside the word eos, on a pastel lavender card with a darker edge along the bottom like a button.";
+const IMAGE_ALT = "eos: a component library for Vue. The eos logo, a white e on a teal tile beside the word eos, on a white card with faint teal lines and a deep teal edge down its left side.";
 /** The size of docs/public/og.png. */
 const IMAGE_SIZE = { width: "1200", height: "630" };
 let warnedFont = false;

@@ -3,7 +3,7 @@
 //
 //   node scripts/gen-brand.mjs
 
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -12,14 +12,19 @@ import { chromium } from "playwright";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const out = join(root, "docs", "public");
 const eosRoot = resolve(process.env.EOS_DIR || join(root, "../eos"));
-const font = (pkg, file) => pathToFileURL(join(root, "node_modules/@fontsource-variable", pkg, "files", file)).href;
-const bricolage = font("bricolage-grotesque", "bricolage-grotesque-latin-wght-normal.woff2");
-const mono = font("geist-mono", "geist-mono-latin-wght-normal.woff2");
+// The fonts the library ships in its build (packages/vue/dist/fonts), so the card is set in the site's own type. Build the library first.
+const font = (file) => {
+  const path = join(eosRoot, "packages/vue/dist/fonts", file);
+  if (!existsSync(path)) throw new Error(`[eos-site] No ${file} in the library's dist/fonts: build the library first.`);
+  return pathToFileURL(path).href;
+};
+const bricolage = font("bricolage-grotesque-latin-opsz-normal.woff2");
+const mono = font("geist-mono-latin-wght-normal.woff2");
 
-// The logo's colours, as in brand/mark.svg: the library's default brand (the pastel lavender), its slab (30% black) and the deep e on it (65% black).
-const FACE = "#bfa8f5";
-const SLAB = "#8676ac";
-const ON = "#433b56";
+// The logo's colours, as in brand/mark.svg: the library's default primary, its slab (30% black) and the white e on it.
+const FACE = "#005f7c";
+const SLAB = "#004357";
+const ON = "#ffffff";
 
 // The favicon is the mark itself, the same file the library keeps.
 const mark = readFileSync(join(eosRoot, "brand/mark.svg"), "utf8");
@@ -33,7 +38,7 @@ const touch = `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" 
 // The share card is an EToast that is the whole card: a white surface with the home page's flowing lines on it (the primary at the light theme's 14%) and the heavy slab down the start side, full bleed and square. The lines are drawn by the same maths as the home page (docs/.vitepress/theme/flow.ts) at one chosen moment.
 const W = 1200;
 const H = 630;
-const PRIMARY = "#624b90";
+const PRIMARY = "#005f7c";
 const SLAB_W = 24; // the toast's slab, at four times
 const { TILT, draw, fieldFor } = await import(pathToFileURL(join(root, "docs/.vitepress/theme/flow.ts")).href);
 const MOMENT = 140; // seconds into the animation: any moment will do, this one has swellings spread across the card
