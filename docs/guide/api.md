@@ -30,7 +30,7 @@ createApp(App).use(createEos({ locale: "en-CA", currency: "CAD", theme: { brand:
 | `icons` | `IconsConfig` | `{}` | Where icons come from. See [Icons](/guide/icons) |
 | `portalTarget` | `string \| HTMLElement` | `"body"` | Where menus, dialogs, tooltips and toasts render |
 | `theme` | `Theme \| ThemeInput` | None | A theme from `defineTheme()`, or the same options. Left out, nothing is applied: `style.css` already carries the default theme |
-| `themeTarget` | `HTMLElement \| null` | `document.documentElement` | The element the theme is applied to |
+| `themeTarget` | `HTMLElement \| null` | `document.documentElement` | The element the theme, `lang` and `dir` are applied to. `null` applies nothing to the document: no theme stylesheet, `lang` or `dir` |
 | `applyTheme` | `boolean` | `true` | Adds the theme to the document as a stylesheet scoped to `themeTarget`, in the `e.tokens` layer, so your own CSS still wins and the theme's light, dark and contrast variants follow the visitor. Turn it off when the page ships the theme as CSS itself (`themeCss()` in a `<style>`, or a stylesheet of its own). `lang` and `dir` are still set |
 | `warnOnContrast` | `boolean` | `true` outside production | Warns in the console when the theme fails a contrast pair |
 
@@ -97,7 +97,7 @@ The `to` for a `Teleport` in your own floating part, so it inherits a scoped the
 function useDir(): ComputedRef<"ltr" | "rtl">;
 ```
 
-The direction to use: `dir` from `createEos()` when set, otherwise the one the locale is written in. Give it to anything you build on a library that assumes left to right, such as Reka UI's `ConfigProvider`.
+The direction to use: `dir` from `createEos()` when set; otherwise, once mounted, the direction of the page around the component (on the server, the one the locale is written in). It replaces the `dir` that `useLocale()` used to return. Give it to anything you build on a library that assumes left to right, such as Reka UI's `ConfigProvider`.
 
 ### `useLogicalSide(side)`
 
@@ -266,7 +266,6 @@ interface CopyState {
 ```ts
 function useLocale(): {
   locale: ComputedRef<string>;
-  dir: ComputedRef<"ltr" | "rtl">;
   months: ComputedRef<string[]>;
   monthsShort: ComputedRef<string[]>;
   weekdays: ComputedRef<string[]>; // Sunday first
@@ -318,6 +317,22 @@ type DescribedBy = string | false | null | undefined;
 ```
 
 [Guide](/guide/composables#smaller-helpers)
+
+### `useFormField(entry)`
+
+```ts
+function useFormField(entry: FormFieldEntry): void;
+interface FormFieldEntry {
+  id: () => string; // the control's id, which the error summary links to
+  label: () => string;
+  error: () => string | undefined; // the error prop
+  check?: () => string | undefined; // a check of the control's own, read from reactive state
+}
+```
+
+Joins a control of yours to the `EForm` around it, so a failed submit lists it in the error summary. Call it in setup. Outside a form it does nothing.
+
+[Guide](/guide/forms#your-own-control)
 
 ### `useQuietFocus(open, inside)`
 

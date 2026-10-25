@@ -9,18 +9,46 @@ Before 1.0 a minor version can change the API: an old name is removed outright, 
 
 ## 0.18 (next release)
 
-These changes are on the library's main branch and not released yet. See the [changelog](/changelog) once 0.18 is out for the full list.
+These changes are on the library's main branch and not released yet. See the [changelog](/changelog) once 0.18 is out for the new features and fixes.
 
-- `EDefinition` is renamed `EToggletip`. `EDefinition` still works in 0.18 as a deprecated alias that warns in development.
-- `ETable` `size="sm"` is the boolean `dense`, which `EDataGrid` takes too. `EDataGrid` `cards` is opt-in: pass `cards` to keep rows turning into cards below 40rem.
-- `EContainer` `size` is renamed `width`.
-- `ESurface` `size` is removed: set `padding` (`size="lg"` was `padding="section"`).
-- `EAvatar` `as="button"` is the boolean `interactive`.
-- `EText` and `EMetric` take `tone="muted"` for the quieter colour; `tone="neutral"` still renders muted in 0.18 and warns, and will mean the default ink.
+**Renamed and removed props**
+
+| Was | Now |
+| --- | --- |
+| `EDefinition` | `EToggletip` (class `e-definition-term` is `e-toggletip-term`). The old name is gone |
+| `EText`, `EMetric` `tone="neutral"` | `tone="muted"` for the quieter colour; leave `tone` out for the default ink |
+| `ESegmented` `showLabel` | Removed: the label now shows by default. Add `hideLabel` to keep it for screen readers only, the old default |
+| `ETable` `size="sm"` | `dense`, which `EDataGrid` takes too |
+| `EDataGrid` (cards by default) | `cards` is opt-in: pass it to keep rows turning into cards below 40rem |
+| `EContainer` `size` | `width` |
+| `ESurface` `size` | `padding` (`size="lg"` was `padding="section"`, `size="sm"` was `padding="var(--e-gap-base) var(--e-pad-card)"`) |
+| `EAvatar` `as="button"` | `interactive` |
+| `EToast` `live` | `role` (`"alert"`, `"status"` or `false`); `:live="false"` is `:role="false"` |
+| `ENavList` `marker` | Removed: the current item is always the place tint with a primary edge |
+| `ESlider` `format` | `valueText` |
+| `EPhoneField` `format`, `valueFormat` | `display`, `modelAs` |
+| `EOtpField` `inputmode`, `autoFocus` | `charset` (`"text"` is `"alphanumeric"`), `autofocus` |
+| `EFieldset` `bare`, `section` | `variant="plain"`, `variant="section"` |
+| `ECheckbox` `bare` | `hideLabel`, which keeps the hint or error visible |
+| `ETextField` `submitValue` | Removed (it was internal) |
+| `ETabs` with no `items`, `ENavList` with neither `items` nor `sections` | Required now |
+
+**Behaviour and API**
+
+- `useLocale()` no longer returns `dir`: use `useDir()`, which with no `dir` set follows the page's direction once mounted.
+- `createEos()` without a `theme` applies nothing (`style.css` carries the default), and with one adds it as a stylesheet in the `e.tokens` layer instead of inline custom properties, so your own CSS wins. `themeTarget: null` applies nothing to the document (no theme, `lang` or `dir`); it used to fall back to `<html>`.
+- `success` and `success-soft` are their own colours, from a new `success` input of `defineTheme()`. `accent` now recolours only the secondary action: a theme that set `accent` to change success states sets `success` instead.
+- `EConfigProvider` renders menus, dialogs, tooltips and toasts inside itself only when it sets a `theme` or `scheme` (`portal` was on by default).
+- `ESpinner`, a labelled `ESkeleton` and a standalone `EToast` no longer carry `role="status"` or `role="alert"`; they announce through `useAnnouncer`. `ENotice` `role` is typed `"alert" | "status" | false`.
+- `EAppShell`'s `main` no longer has a permanent `tabindex="-1"`.
+- Types: `RadioOption` and `CheckboxOption` are one `ChoiceOption`. `ECombobox` is generic in its option values.
 - The message `codeCopied` is renamed `copied`.
-- `success` and `success-soft` are their own colours, from a new `success` input of `defineTheme()`. A theme that set `accent` to change success states sets `success` instead.
-- `createEos()` without a `theme` applies nothing (`style.css` carries the default), and with one adds it as a stylesheet in the `e.tokens` layer instead of inline custom properties.
-- `EConfigProvider` renders menus, dialogs, tooltips and toasts inside itself only when it sets a `theme` or `scheme`.
+
+**CSS and tokens**
+
+- Classes: `.e-combo-btn` is `.e-input-btn`, `.e-choice--bare` is `.e-choice--label-hidden`, `.e-nav-count` is `.e-count`, `e-table-wrap--striped` and `--dense` are `e-table--striped` and `--dense` on the `table`, `e-gridtable--busy` is `e-table--busy`, and `e-surface--pad-*` is gone. The disclosure chevron is `.e-details-chevron`, not `summary::after`. The private `--e-ring` of fields is `--_ring`.
+- Removed tokens: `slab-edge`, `tracking-snug` and `tracking-wide` (use `tracking-label`, or none). `tokens.json` drops the top-level `name`, `version`, `color.themes` and `type.fonts`.
+- The layer order gains `e.state` after `e.page`. If you declare the order yourself, add it.
 
 ## 0.17
 
@@ -83,7 +111,7 @@ The big clean-up: every old spelling was removed.
 **Imports**
 
 - Global component types moved to `@eos-ui/vue/globals`: add `import type {} from "@eos-ui/vue/globals"` if you register components globally.
-- `useSize`, `useDetails`, `useFieldControl`, `useFormField`, `FORM_KEY`, `isApple` and `localeDirection` are no longer exported.
+- `useSize`, `useDetails`, `useFieldControl`, `useFormField`, `FORM_KEY`, `isApple` and `localeDirection` are no longer exported. (`useFormField` is exported again from 0.18, for a custom control that joins an `EForm`.)
 - The package root registers the built-in icons. An app that imports only per-component paths adds `import "@eos-ui/vue/icons/builtin"` once.
 
 ## 0.12

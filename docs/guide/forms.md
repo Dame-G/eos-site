@@ -28,7 +28,7 @@ A visible label is the default and the better choice: it stays on screen while t
 <ETextField v-model="amount" label="Amount" prefix="$" hide-label />
 ```
 
-A table cell uses `bare` on a checkbox in the same way. More on labels and keys: [Accessibility](/guide/accessibility).
+A checkbox in a table cell uses `hideLabel` in the same way; its hint or error stays visible. More on labels and keys: [Accessibility](/guide/accessibility).
 
 ## Checking a form
 
@@ -85,6 +85,14 @@ Build the summary yourself only when it must look or behave differently, such as
 ```
 
 For a text-like control, use `useFieldAttrs()` with `inheritAttrs: false`: `class` and `style` stay on the wrapper, the rest goes to the input.
+
+A control that is not inside an `EField` joins the form with `useFormField()`, called in its setup with getters for its id, label and error. A failed submit then lists it in the error summary, linked to its id:
+
+```ts
+import { useFormField } from "@eos-ui/vue";
+
+useFormField({ id: () => props.id, label: () => props.label, error: () => props.error });
+```
 
 Controls with a `name` submit with the form, including Select, which carries its value in a hidden input.
 

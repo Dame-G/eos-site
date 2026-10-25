@@ -45,7 +45,7 @@ A small label above a value or a section, in the mono face and upper case: "Bill
 
 ## Tone
 
-Meaning carried by a colour: `neutral`, `info`, `success`, `warning` or `danger`, on `ENotice`, `EToast`, `EStamp`, `ETag` and `EText`. A tone is never a look; `variant` is the look. `neutral` means no tone, the default look; on `EText` and `EMetric`, `muted` is the quieter secondary colour. One word is in both: `danger` is a `variant` on `EButton` (a destructive action) and a `tone` everywhere else (something went wrong). See [Tone, variant and status](/guide/design-principles#tone-variant-and-status).
+Meaning carried by a colour: `neutral`, `info`, `success`, `warning` or `danger`, on `ENotice`, `EToast`, `EStamp` and `ETag` (`EText` takes all but `neutral`). A tone is never a look; `variant` is the look. `neutral` means no tone, the default look; `EText` and `EMetric` leave `tone` out for that, and take `muted` for the quieter secondary colour. One word is in both: `danger` is a `variant` on `EButton` (a destructive action) and a `tone` everywhere else (something went wrong). See [Tone, variant and status](/guide/design-principles#tone-variant-and-status).
 
 ## Status
 
@@ -73,7 +73,7 @@ The smallest area a finger can press reliably: `--e-tap`, 44px. No control is sm
 
 ## Toggletip
 
-A small panel that opens on a press (a click, Enter or Space), not on hover, and holds a short explanation, sometimes with a button. [`EToggletip`](/components/Toggletip) is one: a term in running text that opens its explanation in a non-modal panel. It was called `EDefinition` before 0.18, and that name still works for one minor. A tooltip (`ETooltip`) only names a control and never holds anything to read or click.
+A small panel that opens on a press (a click, Enter or Space), not on hover, and holds a short explanation, sometimes with a button. [`EToggletip`](/components/Toggletip) is one: a term in running text that opens its explanation in a non-modal panel. It was called `EDefinition` before 0.18. A tooltip (`ETooltip`) only names a control and never holds anything to read or click.
 
 ## Scoped theme
 

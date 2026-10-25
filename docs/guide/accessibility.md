@@ -66,7 +66,7 @@ These are documented on the component pages:
 
 - [AvatarGroup](/components/AvatarGroup): the avatars inside are not announced one by one. Put a list of links or buttons beside the group when each person must be reachable.
 - [SignaturePad](/components/SignaturePad): drawing needs a pointer. Offer a typed signature as well, as [SignatureField](/components/SignatureField) does with `both`.
-- [Slider](/components/Slider): tick marks are decoration, so do not rely on them to convey a value. Pass `format` so screen readers hear "$40" and not "40".
+- [Slider](/components/Slider): tick marks are decoration, so do not rely on them to convey a value. Pass `valueText` so screen readers hear "$40" and not "40".
 - [Textarea](/components/Textarea): the resize handle is a pointer control. Give people room with `rows` instead.
 - [Tabs](/components/Tabs): tabs wider than the space scroll sideways with no scrollbar, so keep the labels short.
 - [CurrencyField](/components/CurrencyField): the currency symbol is hidden from screen readers, so the label must say what the amount is.

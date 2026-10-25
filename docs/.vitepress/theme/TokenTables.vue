@@ -101,7 +101,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 
     <template v-else-if="section === 'colour'">
       <EGrid as="ul" min="22rem" :gap="4" class="swatches">
-        <ESurface v-for="c in data.colours" :id="`color-${c.name}`" :key="c.name" as="li" size="sm" class="swatch">
+        <ESurface v-for="c in data.colours" :id="`color-${c.name}`" :key="c.name" as="li" padding="var(--e-gap-base) var(--e-pad-card)" class="swatch">
           <div
             class="chip"
             :style="{ background: `var(--e-${c.name})`, color: c.partners[0] ? `var(--e-${c.partners[0].name})` : 'inherit' }"
@@ -114,8 +114,8 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
             <p class="name">
               <TokenName :name="c.name" /> <ColorValue :value="shownHex(c)" />
             </p>
-            <EText size="sm" tone="neutral" class="usage">{{ c.usage }}</EText>
-            <EText size="sm" tone="neutral" class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
+            <EText size="sm" tone="muted" class="usage">{{ c.usage }}</EText>
+            <EText size="sm" tone="muted" class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
             <ul v-if="c.partners.length" class="pairs">
               <li v-for="p in c.partners" :key="p.name">
                 <strong>{{ ratioOf(c.name, p) }}:1</strong> with <EHighlight code>{{ p.name }}</EHighlight>
@@ -132,7 +132,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       <EStack>
         <EText>
           Two families. <strong>Sans</strong> for reading, <strong>mono</strong> for kickers, chips, stamps and every amount, number and date. Fonts are
-          never bundled: load them yourself or import <EHighlight code>@eos-ui/vue/fonts.css</EHighlight>.
+          not part of <EHighlight code>style.css</EHighlight>: import <EHighlight code>@eos-ui/vue/fonts-self-hosted.css</EHighlight> or <EHighlight code>@eos-ui/vue/fonts.css</EHighlight>, or load them yourself.
         </EText>
         <PlainTable
           caption="Font families"

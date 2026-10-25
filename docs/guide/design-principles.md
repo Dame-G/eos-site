@@ -60,7 +60,7 @@ Three props that are easy to mix up. Each means one thing across the library.
 
 | Word | Means | Values | Where |
 | --- | --- | --- | --- |
-| [`tone`](/guide/glossary#tone) | Meaning in a colour. Never a look | `neutral`, `info`, `success`, `warning`, `danger`; `EText` and `EMetric` also take `muted`, the quieter secondary colour | `ENotice`, `EToast`, `EStamp`, `ETag`, `EText`, and a subset on `EMetric` and `EEmptyState` |
+| [`tone`](/guide/glossary#tone) | Meaning in a colour. Never a look | `neutral`, `info`, `success`, `warning`, `danger`; `EText` and `EMetric` take `muted`, the quieter secondary colour, in place of `neutral` | `ENotice`, `EToast`, `EStamp`, `ETag`, `EText`, and a subset on `EMetric` and `EEmptyState` |
 | `variant` | Visual weight: how loudly something speaks, or what it is drawn as | `primary`, `secondary`, `outline`, `danger`, `quiet` on a button; `paper`, `raised`, `outline`, `tinted` on a surface | `EButton`, `EMenu`, `ESurface` |
 | `status` | A preset word that sets the tone and the text together | `paid`, `due`, `overdue`, `scheduled` and more | `EStamp`, and `stamp` on `EDescriptionList` items |
 
