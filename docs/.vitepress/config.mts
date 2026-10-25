@@ -4,8 +4,8 @@ import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { isColor, withSwatches, withSwatchesInMarkup } from "./color.mjs";
 import { collectScriptHashes, headersFile, redirectsFile } from "./csp.mjs";
-import { GROUPS, groupedComponents, libraryBuildInfo, licenseText, listComponents, componentModified } from "./eos-source.mjs";
-import { GROUP_OF } from "./groups.mjs";
+import { groupedComponents, libraryBuildInfo, licenseText, listComponents, componentModified } from "./eos-source.mjs";
+import { checkGrouped, groupComponents } from "./groups.mjs";
 import { PATTERN_EXTRAS, guideSections, patternSections } from "./pages.mjs";
 import { areaOf, renderForSearch, searchBuildOptions, searchOptions } from "./search";
 import { SHIKI_THEME, snippetLang } from "./shiki";
@@ -242,6 +242,8 @@ export default defineConfig({
       { text: "Components", link: "/components/", activeMatch: "/components/" },
       { text: "Patterns", link: "/patterns/", activeMatch: "/patterns/" },
       { text: "Playground", link: "/playground" },
+      // The library version the site documents, linking to its release notes.
+      { text: `v${libraryBuildInfo.version}`, link: "/changelog" },
     ],
     sidebar: {
       "/guide/": guide,
