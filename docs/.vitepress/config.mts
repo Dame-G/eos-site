@@ -11,6 +11,7 @@ import { areaOf, renderForSearch, searchBuildOptions, searchOptions } from "./se
 import { SHIKI_THEME, snippetLang } from "./shiki";
 import { BOOT_SCRIPT, THEME_COLOR, darkCss } from "./scheme";
 import { vitepressInLayer } from "./vitepress-layer";
+import { leanThemeChunk } from "./lean-theme-chunk";
 
 const SITE = "https://eos.dame.gg";
 const IMAGE = SITE + "/og.png";
@@ -107,10 +108,10 @@ export default defineConfig({
       ["meta", { name: "twitter:image", content: IMAGE }],
       ["meta", { name: "twitter:image:alt", content: IMAGE_ALT }],
     ];
-    // The title's face is in the header on every page, so it loads with the body face rather than swapping in late.
-    const titleFont = assets.find((a) => /\/outfit-latin-wght-normal\.[^/]*\.woff2$/.test(a));
+    // The wordmark's face is in the header on every page, so it loads with the body face rather than swapping in late. It is only the three letters the mark draws, under 1 KB.
+    const titleFont = assets.find((a) => /\/outfit-eos\.[^/]*\.woff2$/.test(a));
     if (titleFont) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: titleFont, crossorigin: "" }]);
-    const font = assets.find((a) => /\/bricolage-grotesque-latin-wght-normal\.[^/]*\.woff2$/.test(a));
+    const font = assets.find((a) => /\/bricolage-grotesque-latin-opsz-normal\.[^/]*\.woff2$/.test(a));
     if (font) head.push(["link", { rel: "preload", as: "font", type: "font/woff2", href: font, crossorigin: "" }]);
     // A renamed font file would silently drop the preload and bring the late font swap back, so say so once.
     else if (!warnedFont) {
@@ -230,7 +231,8 @@ export default defineConfig({
         const escaped = md.utils.escapeHtml(content);
         const braces = (s: string) => s.replace(/[{}]/g, (c) => (c === "{" ? "&#123;" : "&#125;"));
         if (isColor(content)) return `<EHighlight code swatch="${escaped.trim()}">${braces(escaped)}</EHighlight>`;
-        return `<EHighlight code>${braces(withSwatches(escaped))}</EHighlight>`;
+        // Otherwise it is the markup EHighlight renders for `code`, which the library documents as a stable static form, so Vue hoists it as plain HTML instead of a component call per snippet.
+        return `<code class="e-highlight e-highlight--code">${braces(withSwatches(escaped))}</code>`;
       };
       const fence = md.renderer.rules.fence!;
       md.renderer.rules.fence = (...args) => {
@@ -261,13 +263,14 @@ export default defineConfig({
     search: { provider: "local", options: { miniSearch: { options: searchBuildOptions, searchOptions }, _render: renderForSearch } },
   },
   vite: {
-    plugins: [vitepressInLayer()],
+    plugins: [vitepressInLayer(), leanThemeChunk()],
     define: { __EOS_BUILD__: JSON.stringify(libraryBuildInfo), __EOS_INSTALL_HTML__: JSON.stringify(installHtml), __EOS_LICENSE__: JSON.stringify(licenseText) },
     resolve: {
       dedupe: ["vue"],
     },
     ssr: { noExternal: ["@eos-ui/vue", "@eos-ui/tokens", "reka-ui", "@vueuse/core", "@vueuse/shared", "@internationalized/date", "@floating-ui/vue"] },
     server: { fs: { allow: ["../.."] } },
-    build: { chunkSizeWarningLimit: 650 },
+    // A font inlined as a data: URL would be blocked by the policy's font-src 'self', so fonts stay files however small they are.
+    build: { assetsInlineLimit: (file: string) => (file.endsWith(".woff2") ? false : undefined) },
   },
 });

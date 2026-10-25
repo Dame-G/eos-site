@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
-import {
-  EButton,
-  EColorField,
-  EDrawer,
-  EGrid,
-  EKicker,
-  ENumberField,
-  ESegmented,
-  ESelect,
-  EStack,
-  ESwitch,
-  ETabs,
-  EText,
-  ETextField,
-  EVisuallyHidden,
-} from "@eos-ui/vue";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { EColorField } from "@eos-ui/vue/components/EColorField";
+import { EDrawer } from "@eos-ui/vue/components/EDrawer";
+import { EGrid } from "@eos-ui/vue/components/EGrid";
+import { EKicker } from "@eos-ui/vue/components/EKicker";
+import { ENumberField } from "@eos-ui/vue/components/ENumberField";
+import { ESegmented } from "@eos-ui/vue/components/ESegmented";
+import { ESelect } from "@eos-ui/vue/components/ESelect";
+import { EStack } from "@eos-ui/vue/components/EStack";
+import { ESwitch } from "@eos-ui/vue/components/ESwitch";
+import { ETabs } from "@eos-ui/vue/components/ETabs";
+import { EText } from "@eos-ui/vue/components/EText";
+import { ETextField } from "@eos-ui/vue/components/ETextField";
+import { EVisuallyHidden } from "@eos-ui/vue/components/EVisuallyHidden";
 import { groups } from "@eos-ui/tokens";
 import HighlightedCode from "./HighlightedCode.vue";
 import ControlsDock from "./playground/ControlsDock.vue";

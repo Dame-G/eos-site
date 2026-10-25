@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { ECodeBlock } from "@eos-ui/vue";
+import { ECodeBlock } from "@eos-ui/vue/components/ECodeBlock";
 
 // `note` is shown after the code as a comment, but is not part of what the copy button copies.
 const props = defineProps<{ code: string; lang: string; copyLabel?: string; note?: string }>();

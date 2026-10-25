@@ -3,7 +3,7 @@ import localSearchIndex from "@localSearchIndex";
 import MiniSearch from "minisearch";
 import { computed, shallowRef, watch } from "vue";
 import { useRouter } from "vitepress";
-import { ECommandPalette } from "@eos-ui/vue";
+import { ECommandPalette } from "@eos-ui/vue/components/ECommandPalette";
 import type { CommandItem } from "@eos-ui/vue";
 import {
   areaOf,

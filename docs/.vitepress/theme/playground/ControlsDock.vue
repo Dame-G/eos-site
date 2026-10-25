@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EVisuallyHidden } from "@eos-ui/vue";
+import { EVisuallyHidden } from "@eos-ui/vue/components/EVisuallyHidden";
 </script>
 
 <template>

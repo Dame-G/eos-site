@@ -17,7 +17,6 @@ import { ESkipLink } from "@eos-ui/vue/components/ESkipLink";
 import { EText } from "@eos-ui/vue/components/EText";
 import { EVisuallyHidden } from "@eos-ui/vue/components/EVisuallyHidden";
 import type { NavItem } from "@eos-ui/vue";
-import HomePage from "./HomePage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
 import { cleanPath, flatten, sidebarFor, toSections } from "./nav";
 import { MonitorIcon, MoonIcon, SunIcon } from "./SchemeIcons";
@@ -193,6 +192,9 @@ function showCurrent() {
   if (top >= 0 && top + here.offsetHeight <= side.clientHeight) return;
   side.scrollTop = Math.max(0, here.offsetTop - side.clientHeight / 3);
 }
+
+// The home page (and its flowing lines) is only on the home page, so it loads with it and stays out of the chunk every page loads.
+const HomePage = defineAsyncComponent(() => import("./HomePage.vue"));
 
 // The search code and its index load once the browser is idle after mount, or at once when search is opened first, so they are not part of the first load.
 const SiteSearch = defineAsyncComponent(() => import("./SiteSearch.vue"));

@@ -1,40 +1,38 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import type { Theme } from "@eos-ui/tokens";
-import {
-  EButton,
-  EConfigProvider,
-  ECalendar,
-  ECheckbox,
-  EDataGrid,
-  EDefinition,
-  EDialog,
-  EDisclosure,
-  EHeading,
-  EIconButton,
-  EInline,
-  EKicker,
-  ELink,
-  EMenu,
-  EMetric,
-  ENavList,
-  ENotice,
-  ENumberField,
-  EPagination,
-  EProgress,
-  ERadioGroup,
-  ESegmented,
-  ESelect,
-  EStack,
-  EStamp,
-  EStepper,
-  ESurface,
-  ESwitch,
-  ETabs,
-  EText,
-  ETextField,
-  ETooltip,
-} from "@eos-ui/vue";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { ECalendar } from "@eos-ui/vue/components/ECalendar";
+import { ECheckbox } from "@eos-ui/vue/components/ECheckbox";
+import { EConfigProvider } from "@eos-ui/vue/components/EConfigProvider";
+import { EDataGrid } from "@eos-ui/vue/components/EDataGrid";
+import { EDefinition } from "@eos-ui/vue/components/EDefinition";
+import { EDialog } from "@eos-ui/vue/components/EDialog";
+import { EDisclosure } from "@eos-ui/vue/components/EDisclosure";
+import { EHeading } from "@eos-ui/vue/components/EHeading";
+import { EIconButton } from "@eos-ui/vue/components/EIconButton";
+import { EInline } from "@eos-ui/vue/components/EInline";
+import { EKicker } from "@eos-ui/vue/components/EKicker";
+import { ELink } from "@eos-ui/vue/components/ELink";
+import { EMenu } from "@eos-ui/vue/components/EMenu";
+import { EMetric } from "@eos-ui/vue/components/EMetric";
+import { ENavList } from "@eos-ui/vue/components/ENavList";
+import { ENotice } from "@eos-ui/vue/components/ENotice";
+import { ENumberField } from "@eos-ui/vue/components/ENumberField";
+import { EPagination } from "@eos-ui/vue/components/EPagination";
+import { EProgress } from "@eos-ui/vue/components/EProgress";
+import { ERadioGroup } from "@eos-ui/vue/components/ERadioGroup";
+import { ESegmented } from "@eos-ui/vue/components/ESegmented";
+import { ESelect } from "@eos-ui/vue/components/ESelect";
+import { EStack } from "@eos-ui/vue/components/EStack";
+import { EStamp } from "@eos-ui/vue/components/EStamp";
+import { EStepper } from "@eos-ui/vue/components/EStepper";
+import { ESurface } from "@eos-ui/vue/components/ESurface";
+import { ESwitch } from "@eos-ui/vue/components/ESwitch";
+import { ETabs } from "@eos-ui/vue/components/ETabs";
+import { EText } from "@eos-ui/vue/components/EText";
+import { ETextField } from "@eos-ui/vue/components/ETextField";
+import { ETooltip } from "@eos-ui/vue/components/ETooltip";
 import { variantProps } from "./build";
 import { DEFAULT_VARIANTS, type Variants } from "./model";
 
