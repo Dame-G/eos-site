@@ -109,7 +109,7 @@ export default defineConfig({
     // A renamed font file would silently drop the preload and bring the late font swap back, so say so once.
     else if (!warnedFont) {
       warnedFont = true;
-      console.warn("[eos-site] No Bricolage Grotesque latin woff2 among the page assets, so the font preload was skipped. Check the file name in docs/.vitepress/theme/fonts.css against the pattern in config.mts.");
+      console.warn("[eos-site] No Bricolage Grotesque latin woff2 among the page assets, so the font preload was skipped. Check the file names in @eos-ui/vue/fonts-self-hosted.css against the pattern in config.mts.");
     }
     const component = /^components\/([^/]+)\.md$/.exec(pageData.relativePath)?.[1];
     if (component) {

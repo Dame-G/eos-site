@@ -1,68 +1,9 @@
 /*
- * The library's two faces, self-hosted from @fontsource-variable (OFL 1.1), and the eos wordmark's face.
- * The library may ship a self-hosted fonts entry; until then the site declares them here under the names the
- * library's --e-font-sans and --e-font-mono stacks ask for.
+ * The library's two faces, self-hosted from the library's own entry: Bricolage Grotesque with its optical size axis and
+ * Geist Mono, from woff2 files in @eos-ui/vue (OFL 1.1), with their metric-matched fallback faces. No request leaves
+ * the site. The eos wordmark's face follows.
  */
-
-/* Bricolage Grotesque with its optical size axis (12 to 96) and weight, as the library asks for. */
-@font-face {
-  font-family: "Bricolage Grotesque";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 200 800;
-  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-@font-face {
-  font-family: "Bricolage Grotesque";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 200 800;
-  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-opsz-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("@fontsource-variable/geist-mono/files/geist-mono-latin-ext-wght-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-/*
- * Copied from the library (packages/vue/src/styles/fonts.css): what the browser shows while the real faces load,
- * scaled to their metrics so the swap moves almost nothing. The library's default stacks name them right after the
- * real family.
- */
-@font-face {
-  font-family: "Bricolage Grotesque Fallback";
-  src: local("Arial"), local("Helvetica"), local("Liberation Sans");
-  size-adjust: 105.4%;
-  ascent-override: 88.2%;
-  descent-override: 25.6%;
-  line-gap-override: 0%;
-}
-
-@font-face {
-  font-family: "Geist Mono Fallback";
-  src: local("Courier New"), local("Courier"), local("Liberation Mono");
-  size-adjust: 100%;
-  ascent-override: 100.5%;
-  descent-override: 29.5%;
-  line-gap-override: 0%;
-}
+@import "@eos-ui/vue/fonts-self-hosted.css";
 
 /*
  * The eos wordmark's face (BubbleTitle.vue): Outfit SemiBold, cut down to the three letters it draws (e, o, s) at
