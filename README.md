@@ -19,7 +19,7 @@ In CI the library ref is chosen like this:
 
 - **Production** (the push-to-main deploy, and the deploy the library's release workflow starts) builds against the latest released library: the highest `@eos-ui/vue@x.y.z` tag in `Dame-G/eos`, looked up when the workflow runs. If no such tag can be found the job fails with a message. It never falls back to `main`.
 - A manual run of the Deploy workflow with `eos_ref` uses that branch, tag or commit instead. Failing that, the repository variable `EOS_REF` is used. Set `EOS_REF` only to pin production to something other than the latest release, and clear it afterwards.
-- **Pull requests** build against the library's `main` (or `EOS_REF` when set), so a site change that needs unreleased library code is caught before it merges.
+- **Pull requests** build against the library branch with the same name as the pull request's branch when there is one, so a change made in both repositories together is checked as a pair. Otherwise they build against the library's `main` (or `EOS_REF` when set), so a site change that needs unreleased library code is caught before it merges.
 
 This means documentation for unreleased library code appears only in pull request builds and local dev. It reaches eos.dame.gg once the library is released and the site is redeployed.
 
