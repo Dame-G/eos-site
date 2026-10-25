@@ -246,8 +246,6 @@ export default defineConfig({
       { text: "Components", link: "/components/", activeMatch: "/components/" },
       { text: "Patterns", link: "/patterns/", activeMatch: "/patterns/" },
       { text: "Playground", link: "/playground" },
-      // The library version the site documents, linking to its release notes.
-      { text: `v${libraryVersion}`, link: "/changelog" },
     ],
     sidebar: {
       "/guide/": guide,
