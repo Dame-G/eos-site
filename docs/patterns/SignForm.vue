@@ -76,7 +76,8 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
 
 .sign-row {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) 7rem;
+  /* The stamp's column is as wide as the stamp, so a longer status never runs out of it. */
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--e-space-1) var(--e-space-3);
   padding: var(--e-space-3) 0;
