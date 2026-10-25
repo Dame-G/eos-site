@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import {
   EActions,
   EButton,
   EDatePicker,
   EDescriptionList,
   EFieldset,
+  EForm,
   ENotice,
   EPhoneField,
   ERadioGroup,
@@ -21,7 +22,9 @@ import {
 const STEPS = ["Your details", "How you will pay", "Forms", "Review"];
 const step = ref(0);
 const done = ref(false);
-const submitted = ref(false);
+const form = ref<InstanceType<typeof EForm> | null>(null);
+// Set by the first submit of a step, so its errors appear only once someone has tried.
+const tried = ref(false);
 
 const first = ref("");
 const last = ref("");
@@ -43,31 +46,29 @@ const stepper = computed(() =>
   })),
 );
 
-const errors = computed(() => {
-  if (!submitted.value || step.value !== 0) return [];
-  const list: { id: string; field: string; message: string }[] = [];
-  if (!first.value.trim()) list.push({ id: "reg-first", field: "First name", message: "Enter your first name" });
-  if (!last.value.trim()) list.push({ id: "reg-last", field: "Last name", message: "Enter your last name" });
-  if (phone.value.replace(/\D/g, "").length < 10) list.push({ id: "reg-phone", field: "Mobile phone", message: "Enter a mobile number with 10 digits" });
-  return list;
-});
-const errorOf = (id: string) => errors.value.find((e) => e.id === id)?.message;
+// Only the first step has rules of its own. EForm checks whatever step is on screen.
+const firstError = computed(() => (tried.value && !first.value.trim() ? "Enter your first name" : undefined));
+const lastError = computed(() => (tried.value && !last.value.trim() ? "Enter your last name" : undefined));
+const bornError = computed(() => (tried.value && !born.value ? "Enter your date of birth" : undefined));
+const phoneError = computed(() => (tried.value && phone.value.replace(/\D/g, "").length < 10 ? "Enter a mobile number with 10 digits" : undefined));
 
-function next() {
-  submitted.value = true;
-  if (step.value === 0 && errors.value.length) return;
-  submitted.value = false;
+async function next() {
+  // The browser's own checks passed. Turn on the errors and check again, for the rules only this code knows.
+  tried.value = true;
+  await nextTick();
+  if (!form.value?.validate()) return;
+  tried.value = false;
   if (step.value < STEPS.length - 1) step.value++;
   else done.value = true;
 }
 function back() {
-  submitted.value = false;
+  tried.value = false;
   if (step.value > 0) step.value--;
 }
 </script>
 
 <template>
-  <form novalidate class="pattern-narrow" @submit.prevent="next">
+  <EForm ref="form" class="pattern-narrow" @invalid="tried = true" @submit.prevent="next">
     <EStack gap="section">
       <EStepper label="Registration" :steps="stepper" />
 
@@ -75,10 +76,10 @@ function back() {
 
       <template v-else>
         <EFieldset v-if="step === 0" section legend="Your details" hint="We use these to find your account and send reminders.">
-          <ETextField id="reg-first" v-model="first" label="First name" required autocomplete="given-name" :error="errorOf('reg-first')" />
-          <ETextField id="reg-last" v-model="last" label="Last name" required autocomplete="family-name" :error="errorOf('reg-last')" />
-          <EDatePicker v-model="born" label="Date of birth" required :max="new Date(2026, 9, 18, 12)" hint="Type it or choose from the calendar." />
-          <EPhoneField id="reg-phone" v-model="phone" label="Mobile phone" required hint="We will text a code to confirm it." :error="errorOf('reg-phone')" />
+          <ETextField id="reg-first" v-model="first" label="First name" required autocomplete="given-name" :error="firstError" />
+          <ETextField id="reg-last" v-model="last" label="Last name" required autocomplete="family-name" :error="lastError" />
+          <EDatePicker v-model="born" label="Date of birth" required :max="new Date(2026, 9, 18, 12)" hint="Type it or choose from the calendar." :error="bornError" />
+          <EPhoneField id="reg-phone" v-model="phone" label="Mobile phone" required hint="We will text a code to confirm it." :error="phoneError" />
           <EFieldset legend="Home address">
             <ETextField v-model="street" label="Street" autocomplete="address-line1" />
             <ETextField v-model="city" label="City" autocomplete="address-level2" />
@@ -130,5 +131,5 @@ function back() {
         </EActions>
       </template>
     </EStack>
-  </form>
+  </EForm>
 </template>

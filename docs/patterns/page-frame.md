@@ -5,7 +5,7 @@ aside: false
 ---
 
 <script setup>
-import Pattern from "./AppFrame.vue";
+import Pattern from "./PageFrame.vue";
 </script>
 
 # Page frame
@@ -29,8 +29,8 @@ Built from: [`EAppShell`](/components/AppShell), [`EAppHeader`](/components/AppH
 - **`ENavList`, not `ETabs`.** Tabs switch panels on one page. Moving between pages is a list of links.
 - **Cards as a list.** `EGrid as="ul"` with `ESurface as="li"` gives screen readers a count. Swap it for `ETable` or `EDataGrid` once the items have columns.
 
-<EDisclosure title="AppFrame.vue">
+<EDisclosure title="PageFrame.vue">
 
-<<< @/patterns/AppFrame.vue
+<<< @/patterns/PageFrame.vue
 
 </EDisclosure>

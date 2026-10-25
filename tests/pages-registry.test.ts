@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { GUIDE, GUIDE_GROUPS, PATTERNS, PATTERN_EXTRAS, PATTERN_GROUPS, guideSections, patternSections } from "../docs/.vitepress/pages.mjs";
+import { GUIDE, GUIDE_GROUPS, PATTERNS, PATTERN_EXTRAS, PATTERN_GROUPS, PATTERN_MOVES, guideSections, patternSections } from "../docs/.vitepress/pages.mjs";
 import { builtFrom, frontMatter, section } from "../docs/data/patterns-source.js";
 
 declare const __COMPONENTS__: string[];
@@ -8,6 +8,8 @@ const patternPages = import.meta.glob("../docs/patterns/*.md", { query: "?raw", 
 const patternSources = import.meta.glob("../docs/patterns/*.vue", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 const guidePages = import.meta.glob("../docs/guide/*.md", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 
+/** The demos a pattern page imports: one, or several for a page that shows more than one. */
+const demosOf = (markdown: string) => [...markdown.matchAll(/import \w+ from "\.\/(\w+)\.vue"/g)].map((m) => m[1]!);
 const nameOf = (path: string) => path.split("/").pop()!.replace(/\.(md|vue)$/, "");
 const pages = new Map(Object.entries(patternPages).map(([path, text]) => [nameOf(path), text]));
 const sources = new Map(Object.entries(patternSources).map(([path, text]) => [nameOf(path), text]));
@@ -21,9 +23,10 @@ describe("guide pages", () => {
 
   it("groups the sidebar and leaves no group empty", () => {
     const sections = guideSections();
-    expect(sections.map((s) => s.title)).toEqual(["Start", "Build", "Style", "Platform", "Reference"]);
+    expect(sections.map((s) => s.title)).toEqual(GUIDE_GROUPS);
     for (const s of sections) expect(s.pages.length, `${s.title} has pages`).toBeGreaterThan(0);
-    expect(sections.flatMap((s) => s.pages)).toHaveLength(GUIDE.length);
+    expect(sections.flatMap((s) => s.pages.filter((p) => p.link.startsWith("/guide/")))).toHaveLength(GUIDE.length);
+    expect(sections.flatMap((s) => s.pages).map((p) => p.link), "the changelog sits in the guide sidebar").toContain("/changelog");
   });
 
   it("names each guide page in the sidebar as its title", () => {
@@ -45,9 +48,9 @@ describe("pattern pages", () => {
     const files = [...pages.keys()].filter((n) => n !== "index" && !extras.includes(n)).sort();
     expect(files, "docs/patterns/*.md against PATTERNS").toEqual(listed);
     for (const slug of listed) {
-      const demo = /import \w+ from "\.\/(\w+)\.vue"/.exec(pages.get(slug)!)?.[1];
-      expect(demo, `${slug}.md imports its demo`).toBeTruthy();
-      expect(sources.has(demo!), `docs/patterns/${demo}.vue exists`).toBe(true);
+      const demos = demosOf(pages.get(slug)!);
+      expect(demos.length, `${slug}.md imports its demo`).toBeGreaterThan(0);
+      for (const demo of demos) expect(sources.has(demo), `docs/patterns/${demo}.vue exists`).toBe(true);
     }
   });
 
@@ -68,6 +71,14 @@ describe("pattern pages", () => {
     for (const p of [...PATTERNS, ...PATTERN_EXTRAS]) expect(frontMatter(pages.get(p.slug)!, "title"), p.slug).toBe(p.name);
   });
 
+  it("sends every moved pattern address to a pattern that exists, and lists no moved address as a page", () => {
+    const live = PATTERNS.map((p) => `/patterns/${p.slug}`);
+    for (const [from, to] of Object.entries(PATTERN_MOVES)) {
+      expect(live, `${from} is gone`).not.toContain(from);
+      expect(live, `${from} goes to a page`).toContain(to);
+    }
+  });
+
   it.each(PATTERNS.map((p) => [p.slug] as const))("%s names what it is built from and why", (slug) => {
     const text = pages.get(slug)!;
     expect(frontMatter(text, "description"), "front matter description").not.toBe("");
@@ -81,9 +92,9 @@ describe("pattern pages", () => {
 
   it.each(PATTERNS.map((p) => [p.slug] as const))("%s imports every component it says it is built from", (slug) => {
     const text = pages.get(slug)!;
-    const demo = /import \w+ from "\.\/(\w+)\.vue"/.exec(text)![1]!;
-    const source = sources.get(demo)!;
+    const demos = demosOf(text);
+    const source = demos.map((d) => sources.get(d)!).join("\n");
     const missing = builtFrom(text).filter((c) => !new RegExp("\\bE" + c + "\\b").test(source));
-    expect(missing, `components in "Built from" that ${demo}.vue never uses`).toEqual([]);
+    expect(missing, `components in "Built from" that ${demos.join(" and ")} never use`).toEqual([]);
   });
 });
