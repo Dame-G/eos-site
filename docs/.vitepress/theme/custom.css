@@ -374,6 +374,13 @@ body {
   min-height: calc(100svh - var(--site-header) - var(--site-footer) - var(--e-space-8) * 2);
 }
 
+/* On a phone the hero buttons stack at full width, so none sits alone on a second row. EActions' stack="narrow" measures the group's own width (32rem), which the hero never reaches, so it would stack them on a desktop too; the home layout stays as it is. */
+@media (max-width: 32rem) {
+  .home-actions > .e-btn {
+    flex: 1 1 100%;
+  }
+}
+
 /* A restrained entrance for the title and the hero: a short rise and fade, once. These are the wordmark's entrance as it has always been, so they stay as they are. */
 @media (prefers-reduced-motion: no-preference) {
   .home-top .home-heading,
