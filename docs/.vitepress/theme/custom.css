@@ -42,7 +42,7 @@ body {
   min-height: 100vh;
 }
 
-/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it. The word takes the link's colours, which are the library's. The word is sized from the tile, in the proportion of the library's own lockup (brand/logo.svg, which the share image uses as it is): there its letters are 31.43 of the tile's 64 units tall, and Outfit's are 0.51 of the font size, so the font size is 0.963 of the tile. */
+/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's primary) and the wordmark beside it. The word takes the link's colours, which are the library's. The word is sized from the tile, in the proportion of the library's own lockup (brand/logo.svg, which the share image uses as it is): there its letters are 31.43 of the tile's 64 units tall, and Outfit's are 0.51 of the font size, so the font size is 0.963 of the tile. */
 .site-logo {
   display: block;
   width: var(--site-logo);

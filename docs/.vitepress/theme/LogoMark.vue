@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// The eos mark drawn inline, so it takes the theme: the tile is built like an EButton (the face set into its slab, the bottom edge thicker) in the theme's brand colour, the pastel lavender by default, and the e is that colour's deep shade. A theme with another brand recolours it with everything else.
+// The eos mark drawn inline, so it takes the theme: the tile is built like a primary EButton (the face set into its slab, the bottom edge thicker), and the e is the colour that goes on primary. A new theme, or the dark scheme, recolours it with everything else.
 // The shapes are the library's brand/mark.svg, which is also docs/public/favicon.svg; regenerate this e from there if the mark changes.
 const E = "M33.11 46.25L33.11 46.25Q28.14 46.25 24.27 44.13Q20.41 42.00 18.15 38.27Q15.89 34.53 15.89 29.75L15.89 29.75Q15.89 25.04 18.09 21.34Q20.28 17.64 24.08 15.45Q27.87 13.25 32.52 13.25L32.52 13.25Q37.11 13.25 40.61 15.32Q44.11 17.38 46.11 20.95Q48.11 24.52 48.11 29.03L48.11 29.03Q48.11 29.89 48.01 30.77Q47.91 31.65 47.65 32.77L47.65 32.77L24.54 32.83Q24.80 33.81 25.26 34.60L25.26 34.60Q26.30 36.76 28.33 37.91Q30.36 39.05 33.05 39.05L33.05 39.05Q35.47 39.05 37.43 38.23Q39.40 37.42 40.84 35.78L40.84 35.78L45.88 40.82Q43.59 43.50 40.28 44.88Q36.98 46.25 33.11 46.25ZM24.54 26.42L24.54 26.42L39.86 26.35Q39.59 25.24 39.20 24.32L39.20 24.32Q38.29 22.42 36.62 21.41Q34.95 20.39 32.52 20.39L32.52 20.39Q29.97 20.39 28.07 21.54Q26.17 22.68 25.19 24.71L25.19 24.71Q24.80 25.50 24.54 26.42Z";
 </script>
@@ -14,14 +14,14 @@ const E = "M33.11 46.25L33.11 46.25Q28.14 46.25 24.27 44.13Q20.41 42.00 18.15 38
 
 <style scoped>
 .logo-slab {
-  fill: color-mix(in srgb, var(--e-brand), black 30%);
+  fill: var(--e-primary-slab);
 }
 
 .logo-face {
-  fill: var(--e-brand);
+  fill: var(--e-primary);
 }
 
 .logo-glyph {
-  fill: color-mix(in srgb, var(--e-brand), black 65%);
+  fill: var(--e-on-primary);
 }
 </style>
