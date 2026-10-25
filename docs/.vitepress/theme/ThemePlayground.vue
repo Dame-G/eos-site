@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
 const GROUND = [
   ["background", "Background", "The page: sets background."],
   ["surface", "Surface", "Cards and fields: sets surface, its tint and the status tints."],
-  ["foreground", "Foreground", "Text and lines: sets ink, secondary text and edges."],
+  ["foreground", "Foreground (ink)", "Text and lines: sets ink, secondary text and edges."],
 ] as const;
 const TONES = [
   ["brand", "Brand", "Sets primary and the tinted ground."],
@@ -152,7 +152,9 @@ function followAgain(name: string) {
 function followTab(tab: keyof typeof LISTS) {
   for (const { name } of LISTS[tab]) delete s.t[name];
 }
-function setScheme(v: string) {
+// The segmented controls emit undefined only when nothing is chosen, which these never allow.
+function setScheme(v: string | undefined) {
+  if (!v) return;
   s.scheme = v as State["scheme"];
   Object.assign(s, groundOf(s.scheme));
   resetColours();
@@ -163,7 +165,7 @@ function setGround(name: "background" | "surface" | "foreground", v: string) {
 }
 const schemeOptions = computed(() => [
   { value: "light", label: "Light" },
-  { value: "paper", label: "Paper" },
+  { value: "paper", label: "Warm" },
   { value: "dark", label: "Dark" },
   { value: "contrast", label: "Contrast" },
   ...(s.scheme === "custom" ? [{ value: "custom", label: "Custom" }] : []),
@@ -175,15 +177,18 @@ function setField(field: keyof typeof FALLBACK, v: number | null) {
   if (field === "textScale") followTab("type");
   if (field === "spaceScale") for (const { name } of LISTS.space) if (name.startsWith("space-")) delete s.t[name];
 }
-function setRadius(v: string) {
+function setRadius(v: string | undefined) {
+  if (!v) return;
   s.radius = v as State["radius"];
   for (const k of ["radius-sm", "radius-md", "radius-lg"]) delete s.t[k];
 }
-function setElevation(v: string) {
+function setElevation(v: string | undefined) {
+  if (!v) return;
   s.elevation = v as State["elevation"];
   for (const k of ["frame", "well", "float"]) delete s.t[k];
 }
-function setMotion(v: string) {
+function setMotion(v: string | undefined) {
+  if (!v) return;
   s.motion = v as State["motion"];
   followTab("motion");
 }
@@ -191,7 +196,8 @@ const VARIANT_FIELDS: { key: VariantKey; label: string; hint: string; options: {
   { key: "size", label: "Surface padding", hint: "ESurface size.", options: [{ value: "sm", label: "Small" }, { value: "md", label: "Medium" }, { value: "lg", label: "Large" }] },
   { key: "gap", label: "Gaps", hint: "EStack, EInline and EGrid gap.", options: [{ value: "tight", label: "Tight" }, { value: "default", label: "Default" }, { value: "roomy", label: "Roomy" }] },
 ];
-function setVariant(key: VariantKey, v: string) {
+function setVariant(key: VariantKey, v: string | undefined) {
+  if (!v) return;
   (s.variants as Record<string, string>)[key] = v;
 }
 const variantTags = computed(() => variantCode(s.variants));
@@ -221,7 +227,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
 <template>
   <div class="playground eos-live">
-    <section class="bar" aria-label="Presets">
+    <section class="bar" aria-label="Example themes">
       <PresetPicker class="bar-presets" :model-value="s.preset" :tokens="tokens" @select="usePreset" @random="useRandom" />
       <div class="bar-actions">
         <ESwitch v-model="wholePage" label="Apply to the whole page" />
@@ -239,7 +245,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
         <ETabs v-model="controlTab" :items="controlItems" fill class="groups">
           <template #colour>
             <EStack :gap="4">
-              <ESegmented :model-value="s.scheme" label="Scheme" :options="schemeOptions" @update:model-value="setScheme" />
+              <ESegmented :model-value="s.scheme" label="Colour set" hint="Sets the three ground colours below." :options="schemeOptions" @update:model-value="setScheme" />
               <EStack :gap="2">
                 <ESwitch v-model="s.autoScheme" label="Follow light and dark" />
                 <ESwitch v-model="s.autoContrast" label="Follow high contrast" :disabled="s.scheme === 'contrast'" />
@@ -259,18 +265,18 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
           <template #shape>
             <EStack :gap="4">
-              <ESegmented :model-value="s.radius" label="Corners" :options="[{ value: 'sharp', label: 'Sharp' }, { value: 'default', label: 'Default' }, { value: 'round', label: 'Round' }]" @update:model-value="setRadius" />
+              <ESegmented :model-value="s.radius" label="Radius" :options="[{ value: 'sharp', label: 'Sharp' }, { value: 'default', label: 'Default' }, { value: 'round', label: 'Round' }]" @update:model-value="setRadius" />
               <ESegmented :model-value="s.elevation" label="Elevation" :options="[{ value: 'outline', label: 'Outline' }, { value: 'lifted', label: 'Lifted' }, { value: 'bold', label: 'Bold' }]" hint="Edges are rings of the card edge colour." @update:model-value="setElevation" />
               <ESelect
                 v-model="s.themePreset"
-                label="Theme preset"
+                label="Preset"
                 :options="[{ value: 'none', label: 'None' }, { value: 'paper', label: 'Paper' }, { value: 'ink', label: 'Ink' }, { value: 'quiet', label: 'Quiet' }]"
                 hint="Sets elevation, strokes, radius and motion together. Corners, elevation and motion you change here win over it."
               />
               <EKicker>Strokes</EKicker>
               <EGrid min="8rem" :gap="3">
-                <ENumberField label="Hairline" hint="Dividers, edges" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.hair" @update:model-value="setField('hair', $event)" />
-                <ENumberField label="Focus outline" hint="At least 2" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.focus" @update:model-value="setField('focus', $event)" />
+                <ENumberField label="Hair stroke" hint="strokes.hair: dividers, edges" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.hair" @update:model-value="setField('hair', $event)" />
+                <ENumberField label="Focus stroke" hint="strokes.focus: at least 2" suffix="px" :step="0.5" :min="0.5" :max="8" :model-value="s.focus" @update:model-value="setField('focus', $event)" />
               </EGrid>
               <EKicker>Spacing</EKicker>
               <EText size="sm" tone="neutral">Component props, not tokens. They are not part of defineTheme.</EText>
@@ -282,12 +288,12 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
           <template #type>
             <EStack :gap="4">
               <EGrid min="9rem" :gap="3">
-                <ESelect v-model="s.sans" label="Text font" :options="sansOptions" />
-                <ESelect v-model="s.mono" label="Label font" :options="monoOptions" />
+                <ESelect v-model="s.sans" label="Sans font" hint="fonts.sans: reading text" :options="sansOptions" />
+                <ESelect v-model="s.mono" label="Mono font" hint="fonts.mono: labels and numbers" :options="monoOptions" />
               </EGrid>
-              <ETextField v-if="s.sans === 'custom'" v-model="s.sansCustom" label="Font stack" placeholder='"Inter", system-ui, sans-serif' spellcheck="false" hint="Fonts are never bundled: install or load them yourself." />
+              <ETextField v-if="s.sans === 'custom'" v-model="s.sansCustom" label="Sans stack" placeholder='"Inter", system-ui, sans-serif' spellcheck="false" hint="Fonts are never bundled: install or load them yourself." />
               <ETextField v-if="s.mono === 'custom'" v-model="s.monoCustom" label="Mono stack" placeholder='"JetBrains Mono", monospace' spellcheck="false" />
-              <ENumberField label="Text size" hint="Percent of the default scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.textScale" @update:model-value="setField('textScale', $event)" />
+              <ENumberField label="Text scale" hint="Percent of the default type scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.textScale" @update:model-value="setField('textScale', $event)" />
               <EKicker>Language</EKicker>
               <EGrid min="9rem" :gap="3">
                 <ESelect v-model="s.locale" label="Language and region" :options="LOCALES" />
@@ -307,7 +313,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
                 @update:model-value="s.density = $event as State['density']"
               />
               <EGrid min="8rem" :gap="3">
-                <ENumberField label="Spacing" hint="Percent of the default scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.spaceScale" @update:model-value="setField('spaceScale', $event)" />
+                <ENumberField label="Space scale" hint="Percent of the default spacing scale" suffix="%" :step="5" :min="50" :max="200" :model-value="s.spaceScale" @update:model-value="setField('spaceScale', $event)" />
                 <ENumberField label="Control height" hint="Buttons, inputs" suffix="px" :min="32" :max="72" :model-value="s.controlHeight" @update:model-value="setField('controlHeight', $event)" />
               </EGrid>
               <TokenOverrides title="All space tokens" :items="LISTS.space" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
@@ -316,7 +322,7 @@ const changedCount = computed(() => Object.keys(built.value.extra).length + Obje
 
           <template #motion>
             <EStack :gap="4">
-              <ESegmented :model-value="s.motion" label="Feel" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
+              <ESegmented :model-value="s.motion" label="Motion" :options="[{ value: 'default', label: 'Default' }, { value: 'snappy', label: 'Snappy' }, { value: 'gentle', label: 'Gentle' }]" :hint="`Tap ${tokens['duration-tap']}, move ${tokens['duration-move']}`" @update:model-value="setMotion" />
               <EText size="sm" tone="neutral">Try it with Replay in the preview. Everything stops under reduced motion.</EText>
               <TokenOverrides title="All motion tokens" :items="LISTS.motion" :tokens="tokens" :overridden="s.t" @set="setToken" @follow="followAgain" />
             </EStack>

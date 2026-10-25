@@ -71,7 +71,7 @@ describe("Upload flow", () => {
     await userEvent.upload(input, new File(["%PDF"], "card.pdf", { type: "application/pdf" }));
     await expect.element(page.getByRole("button", { name: "Send 1 document" })).toBeVisible();
     await page.getByRole("button", { name: "Send 1 document" }).click();
-    await expect.element(page.getByText("Documents sent")).toBeVisible({ timeout: 3000 });
+    await expect.element(page.getByText("Documents sent"), { timeout: 3000 }).toBeVisible();
     await expect.element(page.getByText(/We received 1 document\./)).toBeVisible();
     await expectNoViolations(document.body);
     console_.expectQuiet();
@@ -110,17 +110,17 @@ describe("Loading and paging", () => {
   it("shows skeletons, then rows, fails page 3 once and recovers", async () => {
     await mount(PagedList);
     await expect.element(page.getByRole("list", { name: "Statements" })).toHaveAttribute("aria-busy", "true");
-    await expect.element(page.getByText("Showing 1 to 5 of 23")).toBeVisible({ timeout: 3000 });
+    await expect.element(page.getByText("Showing 1 to 5 of 23"), { timeout: 3000 }).toBeVisible();
     await expectNoViolations(document.body);
 
     await page.getByRole("button", { name: /Next/ }).click();
-    await expect.element(page.getByText("Showing 6 to 10 of 23")).toBeVisible({ timeout: 3000 });
+    await expect.element(page.getByText("Showing 6 to 10 of 23"), { timeout: 3000 }).toBeVisible();
     await page.getByRole("button", { name: /Next/ }).click();
-    await expect.element(page.getByText("Page did not load")).toBeVisible({ timeout: 3000 });
+    await expect.element(page.getByText("Page did not load"), { timeout: 3000 }).toBeVisible();
     await expectNoViolations(document.body);
 
     await page.getByRole("button", { name: "Try again" }).click();
-    await expect.element(page.getByText("Showing 11 to 15 of 23")).toBeVisible({ timeout: 3000 });
+    await expect.element(page.getByText("Showing 11 to 15 of 23"), { timeout: 3000 }).toBeVisible();
     console_.expectQuiet();
   });
 });

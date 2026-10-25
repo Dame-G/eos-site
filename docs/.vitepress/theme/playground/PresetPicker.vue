@@ -47,7 +47,7 @@ onBeforeUnmount(() => clearTimeout(timer));
 
 <template>
   <div class="presets">
-    <ESelect class="presets-select" :model-value="modelValue" label="Preset" :options="options" @update:model-value="choose(String($event))" />
+    <ESelect class="presets-select" :model-value="modelValue" label="Example theme" :options="options" @update:model-value="choose(String($event))" />
     <EButton variant="outline" :icon="random" @click="randomize">Randomize</EButton>
     <div role="status"><EVisuallyHidden>{{ announced }}</EVisuallyHidden></div>
   </div>

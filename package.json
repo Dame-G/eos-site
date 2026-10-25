@@ -19,7 +19,8 @@
     "knip": "knip",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@eos-ui/tokens": "link:../eos/packages/tokens",
@@ -29,17 +30,20 @@
   "devDependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
+    "@types/node": "^22.20.5",
     "@vitejs/plugin-vue": "^6.0.10",
     "@vitest/browser-playwright": "^5.0.5",
     "axe-core": "^4.14.0",
     "knip": "^6.42.1",
     "minisearch": "^7.2.0",
     "playwright": "^1.64.1",
-    "shiki": "^4.5.0",
+    "shiki": "^2.5.0",
+    "typescript": "^6.0.3",
     "vite": "^8.3.4",
     "vitepress": "^1.6.4",
     "vitest": "^5.0.5",
     "vitest-browser-vue": "^3.1.0",
+    "vue-tsc": "^3.3.13",
     "wrangler": "^4.151.1"
   }
 }

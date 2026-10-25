@@ -79,6 +79,12 @@ runs:
       working-directory: eos-site
       run: pnpm knip
 
+    - name: Type-check
+      if: inputs.full == 'true'
+      shell: bash
+      working-directory: eos-site
+      run: pnpm typecheck
+
     - name: Build the docs
       shell: bash
       working-directory: eos-site
