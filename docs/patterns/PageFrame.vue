@@ -8,7 +8,6 @@ import {
   EButton,
   EGrid,
   EInline,
-  ELink,
   ENavList,
   EPageHeader,
   EStack,
@@ -39,8 +38,7 @@ const items = () => [
       <div class="frame">
         <EAppShell main-id="frame-main" sidebar-label="Account">
           <template #header>
-            <EAppHeader>
-              <template #logo><ELink href="#home">Elm Street Health</ELink></template>
+            <EAppHeader brand="Elm Street Health" brand-href="#home">
               <template #actions><EButton variant="outline" icon="user">Maria</EButton></template>
             </EAppHeader>
           </template>

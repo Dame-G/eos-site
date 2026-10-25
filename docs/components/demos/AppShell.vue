@@ -6,7 +6,7 @@ import { EAppFooter, EAppHeader, EAppShell, EBreadcrumb, ENavList, EPageHeader, 
   <div class="frame">
     <EAppShell main-id="demo-main" sidebar-label="Account">
       <template #header>
-        <EAppHeader><template #logo><a href="#home">Elm Street Health</a></template></EAppHeader>
+        <EAppHeader brand="Elm Street Health" brand-href="#home" />
       </template>
       <template #sidebar>
         <ENavList

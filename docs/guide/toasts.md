@@ -11,7 +11,7 @@ import ToastsAndNotices from "./examples/ToastsAndNotices.vue";
 
 ## Toast or Notice
 
-| Compared | [`useToast()`](/guide/api#usetoast) | [`ENotice`](/components/Notice) |
+| | A toast, from [`useToast()`](/guide/api#usetoast) | [`ENotice`](/components/Notice) |
 | --- | --- | --- |
 | Goes away | by itself, after 5 seconds (a danger toast or one with an action stays) | when the problem is dealt with, or the person closes it |
 | Dismiss button | on by default; `closable: false` hides it on a toast that goes by itself | off by default, `closable` shows it |
@@ -27,7 +27,7 @@ If the person must read it before going on, it is a Notice. If it confirms what 
 
 ## Set up
 
-Mount one [`EToastProvider`](/components/ToastProvider) near the root of the app. With `createEos()` installed, `useToast()` then works from any component, and from code outside components such as a router guard or a store.
+`createEos()` gives the whole app one toast store, so `useToast()` works in any component. Mount one [`EToastProvider`](/components/ToastProvider) near the root of the app: it is where the toasts appear. [Getting started](/guide/getting-started#_3-add-the-toast-region-to-app-vue) shows both.
 
 ```vue
 <!-- App.vue -->
@@ -43,7 +43,7 @@ toast.dismiss(id);
 toast.clear();
 ```
 
-Without the plugin, the `EToastProvider` makes its own store and `useToast()` works only inside it. Elsewhere it throws. To use it elsewhere without the plugin, provide a store: `app.provide(TOAST_KEY, createToasts())`.
+Without the plugin, the `EToastProvider` makes its own store and `useToast()` works only in components inside it. Elsewhere it throws. To use it elsewhere without the plugin, such as in a router guard or a store, provide a store yourself: `app.provide(TOAST_KEY, createToasts())`.
 
 ## Options
 
