@@ -13,10 +13,12 @@ import "@eos-ui/vue/style.css";
 import "./custom.css";
 import Layout from "./Layout.vue";
 import PlaygroundSkeleton from "./playground/PlaygroundSkeleton.vue";
+import { ComponentDemo } from "./demo-loading";
+import { preloadDemos } from "./preload";
 
 export default {
   Layout,
-  enhanceApp({ app }) {
+  enhanceApp({ app, router }) {
     // The page ships both themes as CSS: the default tokens in style.css and the dark ones under [data-scheme="dark"], which the boot script sets before the first paint. Inline tokens would override that.
     app.use(createEos({ locale: "en-US", currency: "USD", applyTheme: false }));
     app.component("ECodeBlock", ECodeBlock);
@@ -24,7 +26,8 @@ export default {
     app.component("EHighlight", EHighlight);
     // Only some pages use these, so they load with those pages and stay out of the chunk every page loads.
     app.component("ENotice", defineAsyncComponent(() => import("@eos-ui/vue/components/ENotice").then((m) => m.ENotice)));
-    app.component("ComponentDemo", defineAsyncComponent(() => import("./ComponentDemo.vue")));
+    app.component("ComponentDemo", ComponentDemo);
+    if (typeof window !== "undefined") preloadDemos(router);
     app.component("ComponentIndex", defineAsyncComponent(() => import("./ComponentIndex.vue")));
     app.component("ContrastTable", defineAsyncComponent(() => import("./ContrastTable.vue")));
     app.component("TokenTables", defineAsyncComponent(() => import("./TokenTables.vue")));

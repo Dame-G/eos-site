@@ -629,6 +629,15 @@ body {
   color: var(--e-ink);
 }
 
+/* A demo's skeleton (DemoSkeleton.vue) takes the room the demo took when it last rendered at this width, and a usual height before that. The bar holds one block the height of the real bar's controls. */
+.demo-skeleton {
+  height: calc(18rem - 2 * var(--e-space-4));
+}
+
+.demo-skeleton-bar {
+  min-height: 57px;
+}
+
 .demo-missing {
   padding: var(--e-space-4);
   color: var(--e-muted);
@@ -667,17 +676,18 @@ body {
   gap: var(--e-gap-section);
 }
 
-/* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It sits over the section, a little outside it, and lets every click through. */
+/* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It lies under the section's content, a little outside it, like a highlighter's ink: each section is its own stacking context, so the wash sits above the page and below everything in the section. */
 .doc-section {
   position: relative;
+  isolation: isolate;
 }
 
 .flash-section {
   position: absolute;
   inset: calc(-1 * var(--e-space-3));
-  z-index: 1;
+  z-index: -1;
   border-radius: var(--e-radius-md);
-  /* The library's hover wash: over the surface it is exactly `surface-tint`, the ground beside the page, and it is translucent, so the section's text stays readable (and over an already-tinted row it goes one step deeper). */
+  /* The library's hover wash: over the surface it is exactly `surface-tint`, and it is translucent, so where the content has no ground of its own the page shows through it. */
   background: var(--e-wash-hover);
   pointer-events: none;
   animation: flash-section var(--site-flash) var(--e-easing-out) forwards;
@@ -692,5 +702,34 @@ body {
 
   100% {
     opacity: 0;
+  }
+}
+
+/* Paper. The library prints its own components (colours, page breaks, links, tables); the site leaves off what only
+   works on a screen: the nav lists, the outline, the pager, the edit link, the footer's links, the demo's preview
+   options and its source (which would print open), and the header's search, scheme and menu. A component page prints
+   as its text, its demo and its tables. Each rule here is unlayered, so it wins over the site's own screen rules. */
+@media print {
+  .site-rail,
+  .site-topnav,
+  .site-scheme,
+  .site-menu-button,
+  .site-search-button,
+  .site-pager,
+  .site-edit,
+  .site-footer-links,
+  .demo-bar,
+  .demo + .e-disclosure,
+  .flash-section {
+    display: none;
+  }
+
+  .site-body {
+    padding-inline: 0;
+    border: 0;
+  }
+
+  .site-body > * {
+    padding-block: 0;
   }
 }
