@@ -18,7 +18,6 @@ export const GUIDE = [
   { group: "Accessibility", slug: "accessibility", name: "Accessibility", note: "The target, contrast table, keyboard, how it is tested, known limitations and how to report an issue" },
   { group: "Platform", slug: "ssr", name: "Nuxt and SSR", note: "Server rendering, the theme in the head without a flash, and Nuxt setup" },
   { group: "Platform", slug: "versioning", name: "Versioning and support", note: "Pre-1.0 stability, semver, version ranges, supported Vue and browsers" },
-  { group: "Platform", slug: "upgrading", name: "Upgrading", note: "The changes that need code changes, minor by minor" },
   { group: "Reference", slug: "api", name: "API reference", note: "createEos options, config, themes, messages, icons and the signature of every composable" },
   { group: "Reference", slug: "composables", name: "Composables", note: "useAnnouncer, useShortcuts, useCopy and the smaller helpers: when to reach for each one" },
   { group: "Reference", slug: "tokens", name: "Token reference", note: "The tokens you will use most, the theme inputs, then every colour, size, radius, shadow and motion token with usage notes and contrast" },

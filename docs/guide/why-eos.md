@@ -38,4 +38,4 @@ Components render with `renderToString`, with ids that match between server and 
 - **No charts, rich-text editor or payment-card fields.** There are no components for these. Pair eos with a library that does them, and use the [tokens](/guide/tokens) for its colours.
 - **No margins on components.** Spacing comes from layout components and colours from the theme. For anything else your own CSS wins over the library's [cascade layers](/guide/tailwind-and-css#layer-order) without `!important`.
 
-eos is pre-1.0 and run by one maintainer. Minor versions can change the API; every change is in the [changelog](/changelog) and summarised under [Upgrading](/guide/upgrading).
+eos is pre-1.0 and run by one maintainer. Minor versions can change the API; every change is in the [changelog](/changelog), with the ones that need a code change listed under **Breaking**.

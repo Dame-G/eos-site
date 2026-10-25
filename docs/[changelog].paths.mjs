@@ -34,7 +34,7 @@ export default {
     const notes = found ? changelogBody(readFileSync(changelogFile, "utf8"), { dates: releaseDates() }) : "The library has no CHANGELOG.md in this checkout.";
     const content = [
       "# Changelog",
-      "Release notes for `@eos-ui/vue`, newest first. `@eos-ui/tokens` shares the version. Before 1.0 a minor version can change the API: each release lists what may need a change in your code under **Breaking**, and [Upgrading](/guide/upgrading) summarises them. See [Versioning and support](/guide/versioning).",
+      "Release notes for `@eos-ui/vue`, newest first. `@eos-ui/tokens` shares the version. Before 1.0 a minor version can change the API: each release lists what may need a change in your code under **Breaking**. See [Versioning and support](/guide/versioning).",
       notes,
     ].join("\n\n");
     return [{ params: { changelog: "changelog", description: "Every release of @eos-ui/vue, newest first, with its date and breaking changes." }, content }];

@@ -47,7 +47,7 @@ There is no script-tag or CommonJS build: eos is ES modules only. Use a bundler,
 
 ## Will updating break my app?
 
-Before 1.0 a minor version can change the API, and a patch never does. npm's default caret range (`^0.17.1`) stays inside one minor before 1.0. See [Versioning and support](/guide/versioning) and [Upgrading](/guide/upgrading).
+Before 1.0 a minor version can change the API, and a patch never does. npm's default caret range (`^0.17.1`) stays inside one minor before 1.0. See [Versioning and support](/guide/versioning), and each release's **Breaking** list in the [changelog](/changelog).
 
 ## Where do I ask a question or report a bug?
 
