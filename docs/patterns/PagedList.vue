@@ -59,19 +59,19 @@ const range = computed(() => `${(page.value - 1) * PAGE_SIZE + 1} to ${Math.min(
 
 <template>
   <div class="pattern-md">
-    <EStack :gap="4">
+    <EStack gap="loose">
       <EPageHeader :heading-level="2" title="Statements" description="Every bill, newest first." />
 
-      <EStack :aria-busy="state === 'loading'" :gap="2" as="ul" aria-label="Statements" class="paged-list">
+      <EStack :aria-busy="state === 'loading'" gap="snug" as="ul" aria-label="Statements" class="paged-list">
         <template v-if="state === 'loading'">
           <li v-for="n in PAGE_SIZE" :key="n"><ESkeleton :height="64" /></li>
         </template>
         <template v-else-if="state === 'ready'">
           <li v-for="s in rows" :key="s.id">
             <ESurface>
-              <EStack :gap="2">
+              <EStack gap="snug">
                 <EText>{{ s.title }}</EText>
-                <EText size="sm" tone="neutral">Statement {{ s.id }}</EText>
+                <EText size="sm" tone="muted">Statement {{ s.id }}</EText>
                 <EStamp :status="s.status" size="sm" />
               </EStack>
             </ESurface>
@@ -84,7 +84,7 @@ const range = computed(() => `${(page.value - 1) * PAGE_SIZE + 1} to ${Math.min(
         <template #actions><EButton variant="outline" @click="load">Try again</EButton></template>
       </ENotice>
 
-      <EText v-if="state === 'ready'" size="sm" tone="neutral">Showing {{ range }}</EText>
+      <EText v-if="state === 'ready'" size="sm" tone="muted">Showing {{ range }}</EText>
       <EPagination v-model="page" :page-count="pageCount" label="Statement pages" />
     </EStack>
   </div>

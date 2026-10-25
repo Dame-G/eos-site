@@ -17,7 +17,7 @@ function cancel() {
 <template>
   <EStack>
     <EButton variant="outline" @click="open = true">Cancel appointment</EButton>
-    <EText size="sm" tone="neutral">{{ cancelled ? "Your Oct 22, 2026 visit was cancelled." : "Your visit on Oct 22, 2026 is booked." }}</EText>
+    <EText size="sm" tone="muted">{{ cancelled ? "Your Oct 22, 2026 visit was cancelled." : "Your visit on Oct 22, 2026 is booked." }}</EText>
 
     <EDialog v-model:open="open" dismissible title="Cancel this appointment?">
       You can book again at any time.
@@ -36,7 +36,7 @@ function cancel() {
       </template>
     </EDialog>
 
-    <ESegmented v-model="state" label="Preview state" :options="['Ready', 'Paying', 'Failed']" />
+    <ESegmented v-model="state" label="Preview state" hide-label :options="['Ready', 'Paying', 'Failed']" />
 
     <EDialog v-if="state === 'Ready'" inline :open="true" title="Pay $162.40?">
       The amount is taken from your card ending 4242.

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { EButton, EColorField, EDisclosure, EStack, EText, ETextField } from "@eos-ui/vue";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { EColorField } from "@eos-ui/vue/components/EColorField";
+import { EDisclosure } from "@eos-ui/vue/components/EDisclosure";
+import { EStack } from "@eos-ui/vue/components/EStack";
+import { EText } from "@eos-ui/vue/components/EText";
+import { ETextField } from "@eos-ui/vue/components/ETextField";
 import type { DerivedToken } from "./build";
 import { resolve } from "./contrast";
 
@@ -21,7 +26,7 @@ const hexOf = (name: string) => {
 <template>
   <EDisclosure :title="title">
     <EStack :gap="4">
-      <EText size="sm" tone="neutral">Each follows the input named under it. Set one by hand and it stops following.</EText>
+      <EText size="sm" tone="muted">Each follows the input named under it. Set one by hand and it stops following.</EText>
       <div v-for="item in items" :key="item.name" class="row">
         <EColorField
           v-if="colour && hexOf(item.name)"

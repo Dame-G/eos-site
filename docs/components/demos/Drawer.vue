@@ -44,7 +44,7 @@ const state = ref("Ready");
       <template #actions><EButton variant="outline" @click="long = false">Close</EButton></template>
     </EDrawer>
 
-    <ESegmented v-model="state" label="Preview state" :options="['Ready', 'Paying', 'Failed']" />
+    <ESegmented v-model="state" label="Preview state" hide-label :options="['Ready', 'Paying', 'Failed']" />
 
     <EDrawer v-if="state === 'Ready'" inline :open="true" title="September receipt">Paid $98.00 on Sep 24, 2026.</EDrawer>
 

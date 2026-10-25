@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, h, onBeforeUnmount, ref, type FunctionalComponent } from "vue";
-import { EButton, ESelect, EVisuallyHidden } from "@eos-ui/vue";
+import { EButton } from "@eos-ui/vue/components/EButton";
+import { ESelect } from "@eos-ui/vue/components/ESelect";
+import { EVisuallyHidden } from "@eos-ui/vue/components/EVisuallyHidden";
 import PresetSwatch from "./PresetSwatch.vue";
 import { build } from "./build";
 import { initialState } from "./model";
@@ -45,7 +47,7 @@ onBeforeUnmount(() => clearTimeout(timer));
 
 <template>
   <div class="presets">
-    <ESelect class="presets-select" :model-value="modelValue" label="Preset" :options="options" @update:model-value="choose(String($event))" />
+    <ESelect class="presets-select" :model-value="modelValue" label="Example theme" :options="options" @update:model-value="choose(String($event))" />
     <EButton variant="outline" :icon="random" @click="randomize">Randomize</EButton>
     <div role="status"><EVisuallyHidden>{{ announced }}</EVisuallyHidden></div>
   </div>

@@ -9,7 +9,7 @@ const blocks = [
   {
     id: "long",
     lang: "ts",
-    code: 'createApp(App).use(createEos({ locale: "en-CA", currency: "CAD", theme: { brand: "#bfa8f5", accent: "#9ad9b4" } })).mount("#app");',
+    code: 'createApp(App).use(createEos({ locale: "en-CA", currency: "CAD", theme: { brand: "#2c95b4", accent: "#72c451" } })).mount("#app");',
     copyLabel: undefined,
   },
 ];

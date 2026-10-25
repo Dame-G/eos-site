@@ -12,7 +12,7 @@ Everything below is exported from `@eos-ui/vue`. The components have [their own 
 ### `createEos(options?)`
 
 ```ts
-function createEos(options?: EosOptions): eos;
+function createEos(options?: EosOptions): Eos;
 ```
 
 Provides the config and a toast store, and applies the theme in a browser. Install it with `app.use()`.
@@ -29,22 +29,22 @@ createApp(App).use(createEos({ locale: "en-CA", currency: "CAD", theme: { brand:
 | `messages` | `Record<string, MessageValue>` | `{}` | Overrides for any word, by key. See [Words and language](/guide/language) |
 | `icons` | `IconsConfig` | `{}` | Where icons come from. See [Icons](/guide/icons) |
 | `portalTarget` | `string \| HTMLElement` | `"body"` | Where menus, dialogs, tooltips and toasts render |
-| `theme` | `Theme \| ThemeInput` | the light theme | A theme from `defineTheme()`, or the same options |
-| `themeTarget` | `HTMLElement \| null` | `document.documentElement` | The element the theme is applied to |
-| `applyTheme` | `boolean` | `true` | Sets the theme's tokens on `themeTarget` as inline custom properties. Turn it off when the page ships the theme as CSS itself (`themeCss()` in a `<style>`, or a stylesheet with a dark variant), so inline tokens never override it. `lang` and `dir` are still set |
+| `theme` | `Theme \| ThemeInput` | None | A theme from `defineTheme()`, or the same options. Left out, nothing is applied: `style.css` already carries the default theme |
+| `themeTarget` | `HTMLElement \| null` | `document.documentElement` | The element the theme, `lang` and `dir` are applied to. `null` applies nothing to the document: no theme stylesheet, `lang` or `dir` |
+| `applyTheme` | `boolean` | `true` | Adds the theme to the document as a stylesheet scoped to `themeTarget`, in the `e.tokens` layer, so your own CSS still wins and the theme's light, dark and contrast variants follow the visitor. Turn it off when the page ships the theme as CSS itself (`themeCss()` in a `<style>`, or a stylesheet of its own). `lang` and `dir` are still set |
 | `warnOnContrast` | `boolean` | `true` outside production | Warns in the console when the theme fails a contrast pair |
 
-It returns an `eos`:
+It returns an `Eos`:
 
 ```ts
-interface eos {
+interface Eos {
   install(app: App): void;
   config: EosConfig; // reactive: change config.locale or config.messages and components follow
   theme: Theme;
 }
 ```
 
-`createEos()` does not touch `document` or `window` on the server.
+`createEos()` does not touch `document` or `window` on the server. Unmounting the app removes the theme it added. `theme` on the returned object is the theme you passed, built, or the default theme `style.css` carries.
 
 ### `themeCss(theme?, selector?)`
 
@@ -52,7 +52,7 @@ interface eos {
 function themeCss(theme?: Theme | ThemeInput, selector?: string): string;
 ```
 
-The theme as CSS, for rendering into `<head>` on the server. `selector` defaults to `:root`. See [Nuxt and SSR](/guide/ssr).
+The theme as CSS, for rendering into `<head>` on the server. `selector` defaults to `:root`. With no theme it returns the default theme that `style.css` carries. See [Nuxt and SSR](/guide/ssr).
 
 ## Config
 
@@ -97,7 +97,7 @@ The `to` for a `Teleport` in your own floating part, so it inherits a scoped the
 function useDir(): ComputedRef<"ltr" | "rtl">;
 ```
 
-The direction to use: `dir` from `createEos()` when set, otherwise the one the locale is written in. Give it to anything you build on a library that assumes left to right, such as Reka UI's `ConfigProvider`.
+The direction to use: `dir` from `createEos()` when set; otherwise, once mounted, the direction of the page around the component (on the server, the one the locale is written in). It replaces the `dir` that `useLocale()` used to return. Give it to anything you build on a library that assumes left to right, such as Reka UI's `ConfigProvider`.
 
 ### `useLogicalSide(side)`
 
@@ -167,7 +167,7 @@ A `Theme` has:
 | `warnings` | Inputs that were ignored or adjusted, and contrast pairs that could not be evaluated, as sentences |
 | `explain(token)` | Where a token's value comes from: its value, the inputs that drive it, which of them you gave, and its usage note |
 | `css({ selector?, layer?, header? })` | The theme as CSS custom properties, media queries included. `layer: false` writes them outside `@layer e.tokens` |
-| `apply(el?)` | Sets the tokens on an element as inline custom properties, and follows the media queries. Browser only |
+| `apply(el?)` | Sets the tokens on an element as inline custom properties, follows the media queries, and returns a function that removes them again. Browser only |
 | `dtcg()` | The tokens as W3C Design Tokens JSON |
 
 See [Theming](/guide/theming) and the [Token reference](/guide/tokens). Types: `Theme`, `ThemeInput`.
@@ -266,7 +266,6 @@ interface CopyState {
 ```ts
 function useLocale(): {
   locale: ComputedRef<string>;
-  dir: ComputedRef<"ltr" | "rtl">;
   months: ComputedRef<string[]>;
   monthsShort: ComputedRef<string[]>;
   weekdays: ComputedRef<string[]>; // Sunday first
@@ -279,10 +278,12 @@ function useLocale(): {
   parseDate(s: string): Date | null;
   formatLong(d: Date): string;
   formatMoney(n: number, options?: { locale?: string; currency?: string }): string;
+  formatNumber(n: number): string; // "1,234.5" in en-US, "1.234,5" in de-DE
+  formatList(items: string[], type?: "conjunction" | "disjunction"): string; // "Ada, Grace and Mary"
 };
 ```
 
-Reads the configured locale, so changing it re-renders everything that uses it. `formatMoney` always shows two decimals.
+Reads the configured locale, so changing it re-renders everything that uses it. `formatMoney` uses the currency's own decimals: "$162.40", "¥1,000".
 
 [Guide](/guide/composables#smaller-helpers)
 
@@ -316,6 +317,22 @@ type DescribedBy = string | false | null | undefined;
 ```
 
 [Guide](/guide/composables#smaller-helpers)
+
+### `useFormField(entry)`
+
+```ts
+function useFormField(entry: FormFieldEntry): void;
+interface FormFieldEntry {
+  id: () => string; // the control's id, which the error summary links to
+  label: () => string;
+  error: () => string | undefined; // the error prop
+  check?: () => string | undefined; // a check of the control's own, read from reactive state
+}
+```
+
+Joins a control of yours to the `EForm` around it, so a failed submit lists it in the error summary. Call it in setup. Outside a form it does nothing.
+
+[Guide](/guide/forms#your-own-control)
 
 ### `useQuietFocus(open, inside)`
 

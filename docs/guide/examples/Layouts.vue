@@ -9,7 +9,7 @@ const visits = [
 </script>
 
 <template>
-  <EStack :gap="6">
+  <EStack gap="section">
     <EInline justify="between">
       <EHeading :level="3" as="h2">Visits</EHeading>
       <EInline>
@@ -20,10 +20,10 @@ const visits = [
 
     <EGrid min="14rem" as="ul" class="layout-list">
       <ESurface v-for="v in visits" :key="v.id" as="li">
-        <EStack :gap="2">
+        <EStack gap="snug">
           <EStamp :status="v.status" size="sm" />
           <EText>{{ v.title }}</EText>
-          <EText size="sm" tone="neutral">{{ v.when }}</EText>
+          <EText size="sm" tone="muted">{{ v.when }}</EText>
         </EStack>
       </ESurface>
     </EGrid>

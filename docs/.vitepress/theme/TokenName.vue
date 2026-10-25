@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ECopyButton, EHighlight } from "@eos-ui/vue";
+import { ECopyButton } from "@eos-ui/vue/components/ECopyButton";
+import { EHighlight } from "@eos-ui/vue/components/EHighlight";
 
 // A token's CSS name with a button that copies it, so it can be pasted straight into a stylesheet.
 defineProps<{ name: string }>();
@@ -8,7 +9,7 @@ defineProps<{ name: string }>();
 <template>
   <span class="token-name">
     <EHighlight code>--e-{{ name }}</EHighlight>
-    <ECopyButton :text="`--e-${name}`" :label="`Copy --e-${name}`" class="token-copy" />
+    <ECopyButton :text="`--e-${name}`" :label="`Copy --e-${name}`" size="sm" />
   </span>
 </template>
 
@@ -17,8 +18,5 @@ defineProps<{ name: string }>();
   display: inline-flex;
   align-items: center;
   gap: var(--e-space-1);
-}
-.token-copy {
-  --e-control-height: 1.75rem;
 }
 </style>

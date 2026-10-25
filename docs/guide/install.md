@@ -9,17 +9,23 @@ description: "Self-hosted fonts, auto-import, TypeScript and global component ty
 
 ## Fonts
 
-`@eos-ui/vue/fonts.css` is one `@import` of Bricolage Grotesque and Geist Mono from `fonts.googleapis.com`. It is optional. Importing it makes your visitors' browsers contact Google, and the font files come from Google's servers too.
+The default stacks ask for Bricolage Grotesque and Geist Mono. Load them one of three ways, or not at all.
+
+To serve them from your own site, import `@eos-ui/vue/fonts-self-hosted.css`. It declares both faces (Bricolage Grotesque with its optical size axis) from woff2 files inside the package, which your bundler copies with the CSS, so no request goes to a third party:
+
+```ts
+import "@eos-ui/vue/fonts-self-hosted.css";
+```
+
+`@eos-ui/vue/fonts.css` is one `@import` of the same two faces from `fonts.googleapis.com`. Importing it makes your visitors' browsers contact Google, and the font files come from Google's servers too.
 
 ```ts
 import "@eos-ui/vue/fonts.css";
 ```
 
-To serve the fonts yourself, skip `fonts.css` and install them from [Fontsource](https://fontsource.org). Their variable fonts register the families as "Bricolage Grotesque Variable" and "Geist Mono Variable", so pass those names to the theme:
+Both files also declare "Bricolage Grotesque Fallback" and "Geist Mono Fallback": local fonts scaled to the real faces' metrics, which the default stacks name next, so the text barely moves when the fonts arrive. If you serve the fonts some other way under the same family names, import `@eos-ui/vue/fonts-fallback.css` for those two faces alone.
 
-```bash
-npm install @fontsource-variable/bricolage-grotesque @fontsource-variable/geist-mono
-```
+To use other fonts, or Fontsource's variable packages (which register "Bricolage Grotesque Variable" and "Geist Mono Variable"), pass the stacks to the theme:
 
 ```ts
 import "@fontsource-variable/bricolage-grotesque";
@@ -37,7 +43,7 @@ createApp(App).use(
 );
 ```
 
-`fonts.sans` and `fonts.mono` are full CSS `font-family` stacks and set `--e-font-sans` and `--e-font-mono`. They work with any font you load. eos never bundles fonts. Without any font loaded, the stack falls back to `system-ui`.
+`fonts.sans` and `fonts.mono` are full CSS `font-family` stacks and set `--e-font-sans` and `--e-font-mono`. They work with any font you load. Fonts are never part of `style.css`: with none of these imported, the stack falls back to `system-ui`.
 
 ## Import only what you use
 

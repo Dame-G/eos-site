@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EVisuallyHidden } from "@eos-ui/vue";
+import { EVisuallyHidden } from "@eos-ui/vue/components/EVisuallyHidden";
 </script>
 
 <template>
@@ -31,7 +31,8 @@ import { EVisuallyHidden } from "@eos-ui/vue";
     display: flex;
     flex-direction: column;
     min-height: 0;
-    max-height: calc(100dvh - var(--site-header) - var(--e-space-8));
+    /* A set height, not a cap: the tabs inside stretch to it, which needs a height to fill. */
+    height: calc(100dvh - var(--site-header) - var(--e-space-8));
     position: sticky;
     top: calc(var(--site-header) + var(--e-space-4));
     padding-block-end: var(--e-space-4);

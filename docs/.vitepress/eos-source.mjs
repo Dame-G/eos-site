@@ -2,35 +2,20 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { GROUP_OF } from "./groups.mjs";
+import { groupComponents } from "./groups.mjs";
 import { plainText } from "./plain-text.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const siteRoot = resolve(here, "../..");
-const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
-/** The published version of the library the site is built against. */
-const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
-/** The library version, which the home page pins the install command to. */
-/** The library licence, shown in the footer. */
-export const licenseText = readFileSync(join(eosRoot, "LICENSE"), "utf8").replace(/\r\n/g, "\n").trim();
-export const libraryBuildInfo = { version: libraryVersion };
+export const eosRoot = resolve(process.env.EOS_DIR || join(siteRoot, "../eos"));
+/** The published version of the library the site is built against, which the home page pins the install command to. */
+export const libraryVersion = JSON.parse(readFileSync(join(eosRoot, "packages/vue/package.json"), "utf8")).version;
 
-/** The library changelog, published as the /changelog page. */
-/** The built library package, where llms-full.txt lands after a library build. */
+/** The built library package, where the library's llms files land after a library build. */
 export const libraryDist = join(eosRoot, "packages/vue/dist");
+/** The library changelog, published as the /changelog page. */
 export const changelogFile = join(eosRoot, "packages/vue/CHANGELOG.md");
 export const componentsDir = join(eosRoot, "packages/vue/src/components");
-
-/** The groups, in the order the sidebar shows them. */
-export const GROUPS = [
-  { id: "layout", title: "Layout" },
-  { id: "content", title: "Content" },
-  { id: "actions", title: "Actions" },
-  { id: "forms", title: "Forms" },
-  { id: "navigation", title: "Navigation" },
-  { id: "feedback", title: "Feedback" },
-  { id: "overlays", title: "Overlays" },
-];
 
 /** Folder names of every component in the library, sorted. Adding a folder to the library adds a page here. */
 export function listComponents() {
@@ -40,12 +25,9 @@ export function listComponents() {
     .sort((a, b) => a.localeCompare(b));
 }
 
-/** The components by sidebar group, those without a group last under "More". Empty groups are left out. */
+/** The library's components by group ([{ id, title, names }]), those without a group last under "More". The groups are in groups.mjs. */
 export function groupedComponents() {
-  const names = listComponents();
-  return [...GROUPS, { id: "more", title: "More" }]
-    .map((g) => ({ ...g, names: names.filter((n) => (GROUP_OF[n] ?? "more") === g.id) }))
-    .filter((g) => g.names.length);
+  return groupComponents(listComponents());
 }
 
 /** The date of the last library commit that touched a component, as an ISO string, or undefined when git history is not there. */
@@ -82,17 +64,4 @@ export function firstParagraph(markdown) {
 /** The first sentence of the description paragraph. */
 export function summaryOf(markdown) {
   return firstParagraph(markdown).split(/(?<=\.)\s/)[0] ?? "";
-}
-
-/** Rows of the first "## Props" table (| Prop | Type | Default | Notes |): [{ prop, type, def, notes }]. */
-export function propsTable(markdown) {
-  const m = /^## Props\s*\n([\s\S]*?)(?=\n## |(?![\s\S]))/m.exec(markdown);
-  if (!m) return [];
-  const rows = m[1].split("\n").filter((l) => l.trim().startsWith("|"));
-  const cells = (l) => l.trim().replace(/^[|]|[|]$/g, "").split(/(?<![\\])[|]/).map((c) => c.trim().replace(/[\\][|]/g, "|"));
-  return rows
-    .slice(2)
-    .map(cells)
-    .filter((c) => c.length >= 2)
-    .map(([prop, type, def, notes]) => ({ prop: prop.replace(/`/g, ""), type: (type ?? "").replace(/`/g, ""), def: (def ?? "").replace(/[`*]/g, ""), notes: (notes ?? "").replace(/`/g, "") }));
 }

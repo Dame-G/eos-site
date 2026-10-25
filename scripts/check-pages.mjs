@@ -1,9 +1,11 @@
 import { chromium } from "playwright";
 import { createRequire } from "node:module";
-import { readFileSync, mkdirSync } from "node:fs";
+import { existsSync, readFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { listComponents } from "../docs/.vitepress/eos-source.mjs";
 import { STATIC_PATHS } from "../docs/.vitepress/pages.mjs";
+import { policyOf } from "../docs/.vitepress/csp.mjs";
+import { launchOptions } from "./browser.mjs";
 
 const args = process.argv.slice(2);
 const base = args.find((a) => a.startsWith("http")) ?? "http://localhost:4173";
@@ -32,11 +34,19 @@ const pages = [
 
 const ALLOWED = {
   "/components/AppShell": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
-  "/patterns/app-shell": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
-  "/components/Definition": ["landmark-no-duplicate-banner", "landmark-unique"],
+  "/patterns/page-frame": ["landmark-main-is-top-level", "landmark-no-duplicate-main", "landmark-unique", "landmark-no-duplicate-banner"],
+  "/components/Toggletip": ["landmark-no-duplicate-banner", "landmark-unique"],
 };
 
-const browser = await chromium.launch(process.env.CI ? {} : { channel: "msedge" });
+// The preview server does not send the headers Cloudflare will, so the build's Content-Security-Policy is put on every page here and any violation fails the page.
+const headersPath = new URL("../docs/.vitepress/dist/_headers", import.meta.url);
+const csp = existsSync(headersPath) ? policyOf(readFileSync(headersPath, "utf8")) : undefined;
+if (!csp) {
+  console.error("No Content-Security-Policy in docs/.vitepress/dist/_headers. Run pnpm docs:build first.");
+  process.exit(1);
+}
+
+const browser = await chromium.launch(launchOptions());
 if (shots) mkdirSync(shots, { recursive: true });
 let failures = 0;
 let total = 0;
@@ -59,7 +69,8 @@ async function check(context, viewport, scheme, path) {
   });
   if (overflow.scroll > overflow.client) problems.push(`the page scrolls sideways: ${overflow.scroll}px of content in ${overflow.client}px`);
   if (viewport.axe) {
-    await page.addScriptTag({ content: axeSource });
+    // Evaluated by the browser tools, not added as a script tag, which the page policy would rightly block.
+    await page.evaluate(axeSource);
     const violations = await page.evaluate(async () => {
       // @ts-ignore axe is injected above
       const r = await axe.run(document, { resultTypes: ["violations"] });
@@ -81,7 +92,13 @@ for (const scheme of schemes) {
       try {
         localStorage.setItem("eos-scheme", value);
       } catch {}
+      document.addEventListener("securitypolicyviolation", (e) => console.error(`Content-Security-Policy: ${e.violatedDirective} blocked ${e.blockedURI || "an inline script or style"}`));
     }, scheme);
+    await context.route("**/*", async (route) => {
+      if (route.request().resourceType() !== "document" || !route.request().url().startsWith(base)) return route.continue();
+      const response = await route.fetch();
+      await route.fulfill({ response, headers: { ...response.headers(), "content-security-policy": csp } });
+    });
     const queue = [...pages];
     await Promise.all(
       Array.from({ length: jobs }, async () => {

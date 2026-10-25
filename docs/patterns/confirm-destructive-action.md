@@ -16,18 +16,17 @@ Built from: [`EDialog`](/components/Dialog), [`EButton`](/components/Button), [`
   <Pattern />
 </div>
 
-- Press Remove to open the confirmation. Focus moves to the dialog and returns to Remove when it closes. Escape and Keep card cancel.
-- The question names the thing ("Remove Visa ending 4242?"), and the red button repeats the verb ("Remove card"). "OK" and "Yes" make people read the question again.
-- The dialog has `role="alertdialog"`, so a screen reader reads the description straight away.
-- After the removal a toast says what happened and offers Undo. Use Undo when putting the thing back is cheap. When it is not, say so in the dialog description and skip Undo.
-- Do not ask twice. A confirmation for every row of a bulk action trains people to click through. See the [bulk version](/patterns/data-table).
+- Press Remove: focus moves to the dialog. Press Escape or Keep card, and focus returns to Remove.
+- Confirm, then press Undo in the toast to put the card back.
 
 ## Decisions
 
-- **`EDialog` with `role="alertdialog"`, not `ENotice`.** A notice stays on the page and can be ignored. A removal needs an answer, and the dialog keeps focus until it gets one.
+- **`EDialog` with `role="alertdialog"`, not `ENotice`.** A notice stays on the page and can be ignored. A removal needs an answer, and the dialog keeps focus until it gets one. A screen reader reads its description straight away.
+- **Name the thing and the verb.** The question names it ("Remove Visa ending 4242?") and the red button repeats the verb ("Remove card"). "OK" and "Yes" make people read the question again.
+- **Ask once.** A confirmation for every row of a bulk action trains people to click through. See the [bulk version](/patterns/data-table).
 - **Not a browser `confirm()`.** It cannot be styled, translated or named for the action, and it blocks the page.
 - **The danger button comes first and says the verb.** Swap `variant="danger"` for the default button when the action is reversible and you only want a pause.
-- **Undo in a toast, not a second dialog.** A toast with an action sits where the eye already is and goes by itself. Swap it for `ENotice` when the message must stay until it is read.
+- **Undo in a toast, not a second dialog.** A toast with an action sits where the eye already is. Offer Undo when putting the thing back is cheap; when it is not, say so in the dialog description and skip it. Swap the toast for `ENotice` when the message must stay until it is read.
 
 <EDisclosure title="ConfirmDestructive.vue">
 

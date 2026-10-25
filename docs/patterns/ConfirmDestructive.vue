@@ -45,11 +45,11 @@ function remove() {
 <template>
   <div class="pattern-md">
     <EToastProvider>
-      <EStack :gap="4">
+      <EStack gap="loose">
         <EPageHeader :heading-level="2" title="Payment methods" description="Cards you can pay with." />
-        <EText v-if="!cards.length" tone="neutral">No cards saved. Add one when you pay your next bill.</EText>
+        <EText v-if="!cards.length" tone="muted">No cards saved. Add one when you pay your next bill.</EText>
         <ESurface v-for="card in cards" :key="card.id">
-          <EStack :gap="3">
+          <EStack gap="base">
             <EDescriptionList
               :items="[
                 { label: card.brand, text: `Ending ${card.last4}` },

@@ -1,6 +1,6 @@
 ---
 title: Patterns
-description: "Fifteen whole pages and flows built only from eos components, with source."
+description: "Whole pages and flows built only from eos components, with source, and small recipes for the pieces that are not components."
 ---
 
 # Patterns
@@ -22,15 +22,14 @@ Whole tasks built only from eos components, with source. If a pattern needs a cu
 - [Statements](/patterns/statements): search, filter and page a list of expandable rows.
 - [Search with filters](/patterns/search-filters): results with a segmented filter, a select and a count.
 - [Data table with bulk actions](/patterns/data-table): a DataGrid with selection, a confirm dialog and a toast.
-- [Loading and paging](/patterns/loading-and-paging): skeletons while a server answers, an error with a retry and a pager.
+- [Loading, empty and error](/patterns/loading-empty-and-error): every state of a list, then a paged list from a server with skeletons, a retry and a pager.
 
-## Pages and states
+## Pages
 
-- [Page frame](/patterns/app-shell): skip link, header, side navigation, main and footer around a page header.
+- [Page frame](/patterns/page-frame): skip link, header, side navigation, main and footer around a page header.
 - [Command palette](/patterns/command-palette): reach any page or action from the keyboard.
 - [Dashboard overview](/patterns/dashboard): a notice, key figures and recent activity.
-- [Empty and error states](/patterns/empty-and-error): loading, error, empty and loaded versions of one list.
 
 ## Small recipes
 
-A toggle button, a button group, a back link and a panel are a few lines of the components eos already has, so they are not components of their own. They are on [Small recipes](/patterns/recipes).
+A toggle button, a group of actions, a back link, a panel and a light, dark or system theme switch are a few lines of what eos already has, so they are not components of their own. They are on [Small recipes](/patterns/recipes).

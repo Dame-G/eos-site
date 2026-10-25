@@ -29,7 +29,7 @@ function undo() {
         <EButton variant="outline" @click="undo">Remove statement</EButton>
         <EButton variant="quiet" @click="toasts.clear()">Clear all</EButton>
       </EInline>
-      <EText size="sm" tone="neutral">Success and information go after five seconds. Errors and toasts with an action stay until dismissed.</EText>
+      <EText size="sm" tone="muted">Success and information go after five seconds. Errors and toasts with an action stay until dismissed.</EText>
     </EStack>
   </EToastProvider>
 </template>

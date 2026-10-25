@@ -36,6 +36,13 @@ afterEach(() => {
 });
 
 describe("site chrome", () => {
+  it("links a guide page to its source in the site's repository to edit", async () => {
+    await mount(Layout);
+    const edit = page.getByRole("link", { name: /Edit this page on GitHub/ });
+    await expect.element(edit).toBeVisible();
+    expect(edit.element().getAttribute("href")).toBe("https://github.com/Dame-G/eos-site/edit/main/docs/guide/theming.md");
+  });
+
   it("the skip link is the first stop and moves focus to the main content", async () => {
     await mount(Layout);
     await userEvent.tab();
@@ -54,9 +61,10 @@ describe("site chrome", () => {
     expect(document.activeElement).toBe(box.element());
     await userEvent.keyboard("dropdown");
     await settle(150);
-    // Every result names where it lives.
-    await expect.element(page.getByText("Components › Form controls")).toBeVisible();
-    await expect.element(page.getByText("ESelect")).toBeVisible();
+    // Every result names where it lives, and the component page itself comes before its sections.
+    const first = page.getByRole("option").first();
+    await expect.element(first).toBeVisible();
+    expect(first.element().textContent).toMatch(/^ESelect\s*Components$/);
     await userEvent.keyboard("{Enter}");
     expect(go).toHaveBeenCalledWith("/components/Select");
 

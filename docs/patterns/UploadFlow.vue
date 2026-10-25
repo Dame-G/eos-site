@@ -52,7 +52,7 @@ onBeforeUnmount(() => clearInterval(timer));
 
 <template>
   <div class="pattern-md">
-    <EStack :gap="4">
+    <EStack gap="loose">
       <EPageHeader :heading-level="2" title="Send documents" description="Your insurance card and any referral letters." />
 
       <ENotice v-if="phase === 'done'" tone="success" title="Documents sent" :heading-level="3">
@@ -61,7 +61,7 @@ onBeforeUnmount(() => clearInterval(timer));
       </ENotice>
 
       <form v-else novalidate @submit.prevent="send">
-        <EStack :gap="4">
+        <EStack gap="loose">
           <EUpload
             v-model="files"
             label="Documents"

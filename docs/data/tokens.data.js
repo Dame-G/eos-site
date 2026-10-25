@@ -1,10 +1,9 @@
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { constants, contrast, defaults, defineTheme, derivedFrom } from "@eos-ui/tokens";
+import { constants, contrast, defaults, defineTheme, derivedFrom, themeInputs as THEME_INPUTS } from "@eos-ui/tokens";
 
 import { INPUT_NOTES, NOT_INPUTS } from "./theme-inputs.js";
-import { firstSentence, interfaceMembers } from "./theme-source.js";
+import { firstSentence } from "./theme-source.js";
 
 const require = createRequire(import.meta.url);
 const file = require.resolve("@eos-ui/tokens/tokens.json");
@@ -17,12 +16,13 @@ const PARTNERS = {
     ["surface", "Links and small primary text"],
   ],
   "on-primary": [["primary", "Primary button label"]],
-  secondary: [
-    ["on-secondary", "Secondary button label"],
-    ["secondary-soft", "Success notice text"],
-  ],
+  secondary: [["on-secondary", "Secondary button label"]],
   "on-secondary": [["secondary", "Secondary button label"]],
-  "secondary-soft": [["secondary", "Success notice text"]],
+  success: [
+    ["surface", "Success text"],
+    ["success-soft", "Success notice text"],
+  ],
+  "success-soft": [["success", "Success notice text"]],
   danger: [
     ["on-danger", "Danger button label"],
     ["surface", "Error text"],
@@ -30,8 +30,8 @@ const PARTNERS = {
   ],
   "on-danger": [["danger", "Danger button label"]],
   "danger-soft": [["danger", "Danger notice text"]],
-  "warning-strong": [["warning-soft", "Warning notice text"]],
-  "warning-soft": [["warning-strong", "Warning notice text"]],
+  warning: [["warning-soft", "Warning notice text"]],
+  "warning-soft": [["warning", "Warning notice text"]],
   background: [
     ["ink", "Text on the page"],
     ["muted", "Secondary text on the page"],
@@ -65,10 +65,9 @@ function level(ratio, nonText) {
   return "Fails";
 }
 
-/** The inputs come from ThemeInput in the tokens package, so a new input appears here without an edit. */
+/** The inputs come from the tokens package's own list of ThemeInput (`themeInputs`), so a new input appears here without an edit. */
 function themeInputs() {
-  const source = readFileSync(join(dirname(file), "theme.ts"), "utf8");
-  return interfaceMembers(source, "ThemeInput")
+  return THEME_INPUTS
     .filter((m) => !NOT_INPUTS.includes(m.name))
     .map((m) => {
       const note = INPUT_NOTES[m.name];
@@ -114,8 +113,8 @@ export default {
       ["on-danger", "danger", 4.5, "Danger button label"],
       ["danger", "surface", 4.5, "Error text"],
       ["danger", "danger-soft", 4.5, "Danger chip, stamp and notice text"],
-      ["warning-strong", "warning-soft", 4.5, "Warning chip, stamp and notice text"],
-      ["secondary", "secondary-soft", 4.5, "Success chip, stamp and notice text"],
+      ["warning", "warning-soft", 4.5, "Warning chip, stamp and notice text"],
+      ["success", "success-soft", 4.5, "Success chip, stamp and notice text"],
       ["border", "surface", 3, "Card outline (non-text)"],
       ["border-strong", "surface", 3, "Control edge (non-text)"],
       ["ink", "background", 7, "Text on the page"],
@@ -149,6 +148,8 @@ export default {
       fontSize: scale("fontSize"),
       size: scale("size"),
       stroke: scale("stroke"),
+      // The slab dimension: depth, depth-thin and depth-bold, a group of its own since they left stroke.
+      depth: json.depth ? scale("depth") : [],
       // Newer token groups: the semantic spacing roles (gap, pad, gutter) and the type rhythm. Empty against an older tokens package.
       layout: json.layout ? scale("layout") : [],
       tracking: json.tracking ? scale("tracking") : [],

@@ -10,7 +10,7 @@ const copies = ref<number | null>(null);
 <template>
   <EStack>
     <ENumberField v-model="visits" label="Visits" :min="0" :max="10" hint="Between 0 and 10." />
-    <EText size="sm" tone="neutral">Booked: {{ visits ?? "none" }}</EText>
+    <EText size="sm" tone="muted">Booked: {{ visits ?? "none" }}</EText>
     <ENumberField v-model="hours" label="Hours" :step="0.25" suffix="h" />
     <ENumberField v-model="copies" label="Copies of statement" prefix="x" optional />
     <ENumberField label="Guests" :model-value="9" :max="8" error="Up to 8 guests per booking." />

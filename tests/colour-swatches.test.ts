@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isColor, withSwatches, withSwatchesInMarkup } from "../docs/.vitepress/color.mjs";
+import { isColor, withSwatches, withSwatchesInMarkup } from "../docs/.vitepress/color";
 
 describe("colour swatches", () => {
   it("recognises a literal colour as a whole value", () => {

@@ -15,7 +15,7 @@ export const PRESETS: Preset[] = [
   { id: "eos", label: "eos", note: "The library defaults.", set: {} },
   {
     id: "paper",
-    label: "Paper",
+    label: "Letterpress",
     note: "Warm ground, serif text, round corners, soft lifted cards.",
     set: {
       brand: "#b4642c",
@@ -30,7 +30,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 110,
       controlHeight: 52,
       motion: "gentle",
-      variants: { size: "lg", disclosure: "card", gap: "roomy" },
+      variants: { size: "lg", gap: "roomy" },
     },
   },
   {
@@ -44,7 +44,6 @@ export const PRESETS: Preset[] = [
       ...withGround("dark"),
       elevation: "lifted",
       sans: "system",
-      variants: { surface: "tint", disclosure: "card" },
     },
   },
   {
@@ -168,7 +167,7 @@ export const PRESETS: Preset[] = [
       spaceScale: 112,
       controlHeight: 52,
       motion: "gentle",
-      variants: { size: "lg", surface: "tint", disclosure: "card", gap: "roomy" },
+      variants: { size: "lg", gap: "roomy" },
     },
   },
 ];

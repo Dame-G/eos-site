@@ -15,7 +15,7 @@ eos components render on the server with `renderToString`:
 
 ## Theme without a flash
 
-`theme.apply()` runs in the browser only. On the server, render the theme into `<head>`. The default theme needs nothing, because `style.css` contains it.
+`createEos()` adds the theme only in the browser. On the server, render the theme into `<head>`. The default theme needs nothing, because `style.css` contains it.
 
 ```ts
 import { themeCss } from "@eos-ui/vue";
@@ -24,16 +24,18 @@ const css = themeCss({ brand: "#8a2be2" });
 const head = `<style>${css}</style>`;
 ```
 
-`themeCss(theme, selector?)` needs no `document`. It returns the tokens inside `@layer e.tokens`. Pass a selector to theme a subtree only. Inline it before first paint. The client then applies the same tokens, which changes nothing visible. If the page ships the theme as CSS and switches it itself, for example a dark variant under an attribute, pass `createEos({ applyTheme: false })` so the client sets no inline tokens over it. This site does that.
+`themeCss(theme, selector?)` needs no `document`. It returns the tokens inside `@layer e.tokens`. Pass a selector to theme a subtree only. Inline it before first paint. In the browser, `createEos({ theme })` then adds the same theme as a stylesheet, which changes nothing visible. If the page ships the theme as CSS and switches it itself, for example a dark variant under an attribute, pass `createEos({ applyTheme: false })` so the client adds nothing of its own. This site does that.
 
 ## Nuxt
 
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  css: ["@eos-ui/vue/style.css", "@eos-ui/vue/fonts.css"],
+  css: ["@eos-ui/vue/style.css"],
 });
 ```
+
+Add `"@eos-ui/vue/fonts.css"` to the list only if you accept that it loads the fonts from Google, which sends your visitors' IP addresses there. [Install options](/guide/install#fonts) shows how to self-host them instead.
 
 ```ts
 // plugins/eos.ts

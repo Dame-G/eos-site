@@ -4,7 +4,7 @@ import { EIconButton, EInline, ELink, EStack, ETooltip, EText } from "@eos-ui/vu
 
 <template>
   <EStack>
-    <EText size="sm" tone="neutral">Hover or focus a control to see its tooltip.</EText>
+    <EText size="sm" tone="muted">Hover or focus a control to see its tooltip.</EText>
     <EInline>
       <ETooltip label="Download receipt">
         <EIconButton icon="download" label="Download receipt" />

@@ -1,0 +1,21 @@
+{
+  // Type-checks the site's own code: the theme, the config, the tests and the build helpers (`pnpm typecheck`).
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node", "vitepress/client", "@vitest/browser-playwright"]
+  },
+  "include": ["docs/.vitepress/**/*.ts", "docs/.vitepress/**/*.mts", "docs/.vitepress/**/*.vue", "docs/**/*.vue", "tests/**/*.ts", "vitest.config.ts", "env.d.ts"],
+  "exclude": ["node_modules", "docs/.vitepress/dist", "docs/.vitepress/cache"]
+}

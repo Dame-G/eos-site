@@ -29,18 +29,19 @@ app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be
 | Input | Type | Derives |
 | --- | --- | --- |
 | `brand`, `accent` | colour | `primary`, `secondary`, their tints and `surface-tint`. `brand` and `brand-accent` keep the colours as given, for decoration |
-| `danger`, `warning` | colour | `danger`, `on-danger`, `danger-soft`, `warning-strong`, `warning-soft` |
+| `danger`, `warning`, `success` | colour | `danger`, `on-danger`, `danger-soft`, `warning`, `warning-soft`, `success`, `success-soft`. `accent` does not change the success tone: `success` does |
 | `background`, `surface`, `foreground` | colour | The grounds, `ink`, `muted`, `border` and `border-strong`. A dark surface lifts the action colours |
 | `fonts` | `{ sans?, mono?, script? }` | `font-sans`, `font-mono`, `font-script` (signatures). Full `font-family` stacks; nothing is bundled |
 | `radius` | `"sharp" | "default" | "round" | number | { sm?, md?, lg? }` | `radius-sm` to `radius-lg` and `radius-row`. A number is `radius-md` in px, with `sm` half of it and `lg` double |
 | `textScale`, `spaceScale` | `number` | `text-xs` to `text-4xl` plus the icon, checkbox and avatar boxes (`textScale`, on top of the visitor's own browser font size, since these tokens are in rem), and `space-1` to `space-16` with the `gap-*`, `pad-*` and `gutter` tokens that reference them (`spaceScale`). 1 is the default |
-| `strokes` | `{ hair?, focus? }` | `stroke-hair`, `stroke-focus` (the width of the focus outline and its gap), and from them `stroke-edge` (1.5 times `hair`), `stroke-card` (`hair`, 2px on a bold elevation) and `focus-gap-field`. To pin `stroke-edge` or `stroke-card`, set it in `tokens` |
+| `strokes` | `{ hair?, focus? }` | `stroke-hair`, `stroke-focus` (the width of the focus outline and its gap), and from them `stroke-edge` (1.5 times `hair`), `stroke-card` (`hair`, 2px on a bold elevation) and `stroke-focus-gap-field`. To pin `stroke-edge` or `stroke-card`, set it in `tokens` |
 | `contrast` | `"standard" | "high" | "auto"` | With `high`, `border` and `border-strong` become `ink`, `muted` holds 15:1, `surface-tint` is neutral grey and `scrim` is darker. `auto` stays standard and switches to `high` under `prefers-contrast: more` |
-| `scheme`, `dark` | `"light" | "dark" | "auto"`, `ThemeVariant` | `auto` keeps the theme light and applies `dark` (a dark surface of `#15121b` unless you give one) when the visitor prefers a dark page. The grounds are never inherited. See [Light and dark](#light-and-dark) |
+| `scheme`, `dark` | `"light" | "dark" | "auto"`, `ThemeVariant` | `auto` keeps the theme light and applies `dark` (a dark surface of `#10151a` unless you give one) when the visitor prefers a dark page. The grounds are never inherited. See [Light and dark](#light-and-dark) |
 | `density` | `"comfortable" | "compact"` | `compact` scales the space scale by 0.75 (the `gap-*`, `pad-*` and `gutter` tokens follow) and makes controls exactly the 44px tap target. A smaller `controlHeight` is raised to 44 and reported in `warnings` |
-| `preset` | `"paper" | "ink" | "quiet"` | `elevation`, `strokes`, `radius` and `motion` together. Your own entries win. See [Presets](#presets) |
+| `preset` | `"paper" | "ink" | "quiet"` | `elevation`, `strokes`, `radius`, `depth` and `motion` together. Your own entries win. See [Presets](#presets) |
 | `motion` | `"default" | "snappy" | "gentle"` | `duration-tap`, `duration-fade`, `duration-move`, `easing-out`. Every theme already stops moving under `prefers-reduced-motion`; to zero the durations anyway, set them in `tokens` |
-| `elevation` | `"outline" | "lifted" | "bold"` | `frame`, `well`, `float` and `paper`. The shadow tint follows `background` |
+| `elevation` | `"outline" | "lifted" | "bold"` | `shadow-frame`, `shadow-well`, `shadow-float` and `shadow-paper`. Floating panels are slabs lifted off the page; `lifted` also stands cards on a slab and `bold` draws 2px rings and deeper wells. Every shadow is drawn in one shade |
+| `depth` | `number` | `depth` (px, 2 by default), and from it `depth-thin` (half, at least 1px) and `depth-bold` (double): how far every raised face, tone edge and floating panel reaches |
 | `controlHeight` | `number` | `control-height` (the number is px) and `chip-height` |
 | `name` | `string` | Not a token: the value of `data-e-theme` when the theme is applied to an element |
 | `tokens` | `Record<string, string>` | Any token by name. Wins over everything derived and is not contrast-corrected. A name that is not a token adds a warning, and only adds a custom property |
@@ -50,13 +51,13 @@ The [token reference](/guide/tokens) lists each token with the input it follows.
 
 ## Presets
 
-`preset` is a starting look: one word that sets `elevation`, `strokes`, `radius` and `motion` together. Anything you set yourself wins, and `strokes` merges entry by entry. Fonts and colours are never part of a preset.
+`preset` is a starting look (see [preset](/guide/glossary#preset) in the glossary): one word that sets `elevation`, `strokes`, `radius`, `depth` and `motion` together. Anything you set yourself wins, and `strokes` merges entry by entry. Fonts and colours are never part of a preset.
 
 | Preset | Look |
 | --- | --- |
 | `"paper"` | The default: flat outlines, default corners and motion |
-| `"ink"` | Bold elevation, heavier lines (`hair: 2`, `focus: 3`), sharp corners and snappy motion |
-| `"quiet"` | Lifted elevation, round corners and gentle motion |
+| `"ink"` | Bold elevation, heavier lines (`hair: 2`, `focus: 3`), sharp corners, snappy motion and a 3px slab |
+| `"quiet"` | Outline elevation on a quiet 1px slab, round corners and gentle motion |
 
 ```ts
 defineTheme({ preset: "ink", brand: "#8a2be2" });
@@ -96,13 +97,13 @@ theme.explain("primary");
 
 ## Background, surface and foreground
 
-Three colours set the neutrals. Everything else follows from them.
+Three colours set the neutrals: the two [grounds](/guide/glossary#ground) and the [ink](/guide/glossary#ink). Everything else follows from them.
 
 | Input | Token it sets | What it derives |
 | --- | --- | --- |
 | `background` | `--e-background`, painted by [`EAppShell`](/components/AppShell) | The tint of shadows. Checked against ink, muted text, primary and the border |
-| `surface` | `--e-surface` | `--e-surface-tint`, the second ground (wells, hovered rows, table headers): its lightness moved 0.045 toward the foreground, in the brand hue, or 0.06 the other way on a dark surface. Also `--e-secondary-soft`, `--e-danger-soft` and `--e-warning-soft`, at the same offset from the surface |
-| `foreground` | `--e-ink` | `--e-muted`: ink softened toward the surface until it holds 7:1 (never below 4.5). `--e-border` at 3.4:1 and `--e-border-strong` at 4.5:1 on the surface. The focus ring and the hover and press washes follow ink |
+| `surface` | `--e-surface` | `--e-surface-tint`, the second ground (wells, hovered rows, table headers): the surface darkened by 0.1 in OKLCH lightness (lightened by 0.06 on a dark surface), with a light touch of the brand hue (chroma at most 0.02). Also `--e-secondary-soft`, `--e-danger-soft` and `--e-warning-soft`, each at its own lightness offset from the surface. The hover and press washes are made from `--e-surface-tint` |
+| `foreground` | `--e-ink` | `--e-muted`: ink softened toward the surface until it holds 7:1 (never below 4.5). `--e-border` at 3.4:1 and `--e-border-strong` at 4.5:1 on the surface. The focus ring follows ink |
 
 When the surface is dark (relative luminance under 0.179), `defineTheme` also switches the filled action colours (`primary`, `secondary`, `danger`) to light variants with black `on-*` text, lifts the warning text, and darkens the scrim and wells, so every contrast pair still holds. A surface without a foreground picks black or white for you.
 
@@ -119,11 +120,11 @@ const midnight = defineTheme({
 midnight.issues; // []
 ```
 
-The [playground](/playground) has these three as its Ground colours, with Light, Paper, Dark and Contrast as presets.
+In the [playground](/playground) these three are the page, surface and text colours, and its example themes start you from a finished look, dark and high-contrast ones included.
 
 ## Light and dark
 
-Set `scheme: "auto"` and the theme follows the visitor's `prefers-color-scheme`. The base tokens are the light theme. The dark variant is derived the same way, so its contrast is checked too, and only the tokens that differ are written inside `@media (prefers-color-scheme: dark)`. `color-scheme` becomes `light dark`, so native controls follow. Nothing to wire up: `createEos()` applies it and repaints when the preference changes.
+Set `scheme: "auto"` and the theme follows the visitor's `prefers-color-scheme`. The base tokens are the light theme. The dark variant is derived the same way, so its contrast is checked too, and only the tokens that differ are written inside `@media (prefers-color-scheme: dark)`. `color-scheme` becomes `light dark`, so native controls follow. Nothing to wire up: `createEos({ theme })` adds the theme to the page as a stylesheet with those media queries, so it follows the preference as it changes.
 
 ```ts
 const clinic = defineTheme({
@@ -140,54 +141,7 @@ clinic.alternates; // [{ media: "(prefers-color-scheme: dark)", scheme: "dark", 
 
 `contrast: "auto"` works the same way for `prefers-contrast: more`, and the two combine. `theme.alternates` lists every variant in cascade order, the last match wins. On the server, `theme.css()` writes the media queries, so the first paint is already right.
 
-To let people choose "system", "light" or "dark" themselves, use a fixed theme per choice instead of `scheme: "auto"`. A fixed theme with a dark `surface` is a dark theme: `defineTheme` lifts the action colours for it.
-
-```ts
-const light = defineTheme({ name: "light" });
-const dark = defineTheme({ name: "dark", background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" });
-```
-
-Save only "light" and "dark", so no saved value means follow the system. To avoid a flash of the wrong theme, set the scheme before the first paint with a small script in `<head>`, and render the dark tokens under the attribute it sets. This site does it that way (`docs/.vitepress/scheme.ts` and `theme/site-theme.ts` in the [repository](https://github.com/Dame-G/eos-site)).
-
-```html
-<script>
-  (function () {
-    try {
-      var saved = localStorage.getItem("my-scheme");
-      var dark = saved === "dark" || (saved !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
-      document.documentElement.dataset.scheme = dark ? "dark" : "light";
-      document.documentElement.style.colorScheme = dark ? "dark" : "light";
-    } catch (e) {}
-  })();
-</script>
-<style>
-  /* dark.css({ selector: ':root[data-scheme="dark"]', layer: false }) */
-</style>
-```
-
-`layer: false` writes the tokens outside `@layer e.tokens`, so they win over the library's default tokens wherever the style sits in the head.
-
-Once the app has mounted, apply the theme that matches and keep it up to date. `apply()` sets every token inline, so one call replaces the other theme completely.
-
-```ts
-function paint(isDark: boolean) {
-  (isDark ? dark : light).apply(document.documentElement);
-  document.documentElement.dataset.scheme = isDark ? "dark" : "light";
-}
-
-const query = matchMedia("(prefers-color-scheme: dark)");
-query.addEventListener("change", (e) => {
-  if (!localStorage.getItem("my-scheme")) paint(e.matches);
-});
-
-function choose(choice: "system" | "light" | "dark") {
-  if (choice === "system") localStorage.removeItem("my-scheme");
-  else localStorage.setItem("my-scheme", choice);
-  paint(choice === "dark" || (choice === "system" && query.matches));
-}
-```
-
-Wrap `localStorage` in `try` as the script does, since storage can be blocked. Both themes should have an empty `issues` list.
+To let people choose "system", "light" or "dark" themselves, with no flash of the wrong theme, see the [Light, dark or system](/patterns/recipes#light-dark-or-system) recipe.
 
 ## Plain CSS
 
@@ -206,7 +160,7 @@ To use the default tokens without JavaScript, import `@eos-ui/tokens/tokens.css`
 
 ## Scoped themes
 
-For one part of a page, such as a preview in another theme or a dark panel on a light page, wrap it in [`EConfigProvider`](/components/ConfigProvider). It sets the theme's tokens on its element, in the server-rendered HTML too, renders the menus, dialogs and tooltips opened inside into itself, and inherits everything else (words, icons, locale) from the plugin.
+For one part of a page, such as a preview in another theme or a dark panel on a light page, wrap it in [`EConfigProvider`](/components/ConfigProvider). It sets the theme's tokens on its element, in the server-rendered HTML too, renders the menus, dialogs and tooltips opened inside into itself (when it sets a `theme` or `scheme`; `portal` overrides that), and inherits everything else (words, icons, locale) from the plugin.
 
 ```vue
 <EConfigProvider :theme="clinic" scheme="dark">
@@ -227,8 +181,6 @@ createEos({ theme: clinic, themeTarget: el, portalTarget: el }); // portalTarget
 ```
 
 On the server, give `themeCss(theme, selector)` the same scope.
-
-Every menu, option list and tooltip leaves an empty wrapper in the portal target after it opens. Do not make that element a grid or flex container with a `gap`, or each wrapper adds a gap and the container grows a little every time something opens. Plain block flow (or `display: flow-root`) is safe.
 
 ## Cascade layers
 

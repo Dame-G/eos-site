@@ -9,7 +9,7 @@ const visit = ref<Date | null>(new Date(2026, 9, 22));
   <EStack>
     <EConfigProvider :theme="{ brand: '#8a2be2' }" scheme="dark">
       <ESurface>
-        <EStack :gap="3">
+        <EStack gap="base">
           <EText>A dark panel in another brand colour, on whatever page it sits on.</EText>
           <EButton>Pay $162.40</EButton>
         </EStack>

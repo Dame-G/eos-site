@@ -51,6 +51,6 @@ const sort = ref<{ key: string; dir: "asc" | "desc" } | null>({ key: "date", dir
       <template #cell-amount="{ row }">{{ formatMoney(row.amount) }}</template>
       <template #bulk-actions><EButton variant="outline" icon="download">Download receipts</EButton></template>
     </EDataGrid>
-    <EText size="sm" tone="neutral">Selected: {{ selected.length ? selected.join(", ") : "none" }}</EText>
+    <EText size="sm" tone="muted">Selected: {{ selected.length ? selected.join(", ") : "none" }}</EText>
   </EStack>
 </template>

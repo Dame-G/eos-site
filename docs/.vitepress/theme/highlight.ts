@@ -26,5 +26,5 @@ async function load(lang: string) {
 export async function highlight(code: string, written: string): Promise<string> {
   const lang = snippetLang(code, written);
   const h = await load(lang);
-  return h.codeToHtml(code, { lang: h.getLoadedLanguages().includes(lang) ? lang : "text", theme: SHIKI_THEME.name });
+  return h.codeToHtml(code, { lang: h.getLoadedLanguages().includes(lang) ? lang : "text", theme: SHIKI_THEME.name! });
 }

@@ -36,6 +36,11 @@ describe("share link codec", () => {
     expect(s.t).toEqual({ primary: "#123456" });
   });
 
+  it("reads a token override saved under a name the library has since renamed", () => {
+    const s = decode(btoa(JSON.stringify({ t: { "text-link": "#123456", "warning-strong": "#654321" } })))!;
+    expect(s.t).toEqual({ link: "#123456", warning: "#654321" });
+  });
+
   it("still loads links made with motion none and the surface pad variant", () => {
     const s = decode(btoa(JSON.stringify({ motion: "none", variants: { pad: "lg" } })))!;
     expect(s.motion).toBe("snappy");

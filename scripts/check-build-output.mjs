@@ -21,7 +21,7 @@ function htmlFiles(dir) {
 
 const count = (html, pattern) => (html.match(pattern) ?? []).length;
 // These component pages show a demo that is itself a page or a page header, so they hold a second main or h1 by design.
-const DEMO_LANDMARKS = { "components/AppShell.html": { main: 2 }, "patterns/app-shell.html": { main: 2 }, "components/Heading.html": { h1: 2 }, "components/PageHeader.html": { h1: 2 } };
+const DEMO_LANDMARKS = { "components/AppShell.html": { main: 2 }, "patterns/page-frame.html": { main: 2 }, "components/Heading.html": { h1: 2 }, "components/PageHeader.html": { h1: 2 } };
 const problems = [];
 const files = htmlFiles(dist);
 

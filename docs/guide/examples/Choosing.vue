@@ -9,7 +9,7 @@ const clinic = ref("");
 </script>
 
 <template>
-  <EStack :gap="6">
+  <EStack gap="section">
     <ERadioGroup
       v-model="radio"
       label="Pay with"

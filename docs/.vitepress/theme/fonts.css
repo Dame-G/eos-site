@@ -1,45 +1,21 @@
-@font-face {
-  font-family: "Bricolage Grotesque";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("../../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
+/*
+ * The library's two faces, self-hosted from the library's own entry: Bricolage Grotesque with its optical size axis and
+ * Geist Mono, from woff2 files in @eos-ui/vue (OFL 1.1), with their metric-matched fallback faces. No request leaves
+ * the site. The eos wordmark's face follows.
+ */
+@import "@eos-ui/vue/fonts-self-hosted.css";
 
-@font-face {
-  font-family: "Bricolage Grotesque";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("../../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-wght-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("../../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("../../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-ext-wght-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-/* The eos wordmark's face, for the title only (BubbleTitle.vue). It draws three lowercase letters, so the latin file is the only one. */
+/*
+ * The eos wordmark's face (BubbleTitle.vue): Outfit SemiBold, cut down to the three letters it draws (e, o, s) at
+ * weight 600 by subset-font from @fontsource-variable/outfit 5.3.0. Under 1 KB, against 32 KB for the whole latin
+ * file. Outfit is under the SIL Open Font License 1.1, copied beside the file (fonts/OUTFIT-OFL.txt).
+ * To rebuild it: subsetFont(outfit-latin-wght-normal.woff2, "eos", { targetFormat: "woff2", variationAxes: { wght: 600 } }).
+ */
 @font-face {
   font-family: "Outfit";
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("../../../node_modules/@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  font-weight: 600;
+  src: url("./fonts/outfit-eos.woff2") format("woff2");
+  unicode-range: U+0065, U+006F, U+0073;
 }

@@ -8,7 +8,6 @@ import {
   EButton,
   EGrid,
   EInline,
-  ELink,
   ENavList,
   EPageHeader,
   EStack,
@@ -29,8 +28,8 @@ const items = () => [
 
 <template>
   <div class="pattern-lg">
-    <EStack :gap="3">
-      <EText size="sm" tone="neutral">The frame below stands in for a whole page. Switch the page to see the current item move.</EText>
+    <EStack gap="base">
+      <EText size="sm" tone="muted">The frame below stands in for a whole page. Switch the page to see the current item move.</EText>
       <EInline>
         <EButton variant="outline" :aria-pressed="page === 'home'" @click="page = 'home'">Home</EButton>
         <EButton variant="outline" :aria-pressed="page === 'statements'" @click="page = 'statements'">Statements</EButton>
@@ -39,14 +38,13 @@ const items = () => [
       <div class="frame">
         <EAppShell main-id="frame-main" sidebar-label="Account">
           <template #header>
-            <EAppHeader>
-              <template #logo><ELink href="#home">Elm Street Health</ELink></template>
+            <EAppHeader brand="Elm Street Health" brand-href="#home">
               <template #actions><EButton variant="outline" icon="user">Maria</EButton></template>
             </EAppHeader>
           </template>
           <template #sidebar><ENavList label="Account" :items="items()" /></template>
 
-          <EStack :gap="6">
+          <EStack gap="section">
             <EPageHeader
               v-if="page === 'statements'"
               :heading-level="2"
@@ -62,13 +60,13 @@ const items = () => [
 
             <EGrid min="12rem" as="ul">
               <ESurface as="li">
-                <EStack :gap="2">
+                <EStack gap="snug">
                   <EStamp status="due" size="sm" />
                   <EText>October statement, $162.40</EText>
                 </EStack>
               </ESurface>
               <ESurface as="li">
-                <EStack :gap="2">
+                <EStack gap="snug">
                   <EStamp status="paid" size="sm" />
                   <EText>September statement, $84.00</EText>
                 </EStack>

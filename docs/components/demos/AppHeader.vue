@@ -3,8 +3,7 @@ import { EAppHeader, EButton, ENavList } from "@eos-ui/vue";
 </script>
 
 <template>
-  <EAppHeader>
-    <template #logo><a href="#home">Elm Street Health</a></template>
+  <EAppHeader brand="Elm Street Health" brand-href="#home">
     <template #actions><EButton variant="outline">Sign out</EButton></template>
     <ENavList
       label="Sections"

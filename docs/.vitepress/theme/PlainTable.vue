@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ETable } from "@eos-ui/vue";
+import { ETable } from "@eos-ui/vue/components/ETable";
 
 // A short static table from columns and rows, drawn by ETable. Each column's cells can be filled with a `cell-<key>` slot, as in EDataGrid.
 defineProps<{ caption: string; columns: { key: string; label: string }[]; rows: Record<string, unknown>[] }>();

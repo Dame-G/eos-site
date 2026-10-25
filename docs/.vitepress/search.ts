@@ -1,3 +1,5 @@
+import { plainText } from "./plain-text.mjs";
+
 const COMPONENT_TITLE = /^E([A-Z][A-Za-z0-9]*)$/;
 
 /**
@@ -43,7 +45,7 @@ export const SYNONYMS: Record<string, string> = {
   Highlight: "mark inline code",
   Divider: "separator rule hr",
   Segmented: "segmented control button group toggle group",
-  Definition: "glossary term tooltip",
+  Toggletip: "definition glossary term toggletip tooltip popover",
   CurrencyField: "money amount price",
   PhoneField: "telephone phone number",
   SignaturePad: "signature draw sign",
@@ -54,7 +56,9 @@ export const SYNONYMS: Record<string, string> = {
   Tooltip: "hint popover",
   Tabs: "tab bar tab panel",
   Icon: "glyph symbol",
-  Stamp: "badge tag chip status label",
+  // A badge shows where something stands (Stamp); a chip or pill labels and categorises, and can be removed (Tag).
+  Stamp: "badge status indicator label",
+  Tag: "chip pill label category filter removable token",
   Surface: "card panel",
   AppShell: "layout page frame",
   AppHeader: "navbar top bar header",
@@ -71,26 +75,61 @@ function componentWords(title: string): string {
   return [words === name ? name : `${words} ${name}`, SYNONYMS[name]].filter(Boolean).join(" ");
 }
 
+/** The fields of VitePress's page index (one entry per page section), which the site's search loads as it is. */
 export const searchBuildOptions = {
   fields: ["title", "titles", "text"],
   storeFields: ["title", "titles"],
 };
 
+/** A component page's own entry (its title section, `/components/Select#eselect`). */
+const COMPONENT_PAGE = /^\/components\/[A-Z][A-Za-z0-9]*(?:\.html)?(?:#[^#]*)?$/;
+
+/** One index for everything: a title counts most, and a component page's own entry, which carries the component's other names, is lifted over the pages that only mention it. */
 export const searchOptions = {
   fuzzy: 0.2,
   prefix: true,
   boost: { title: 6, titles: 1, text: 1 },
+  boostDocument: (id: string, _term: string, stored?: Record<string, unknown>) =>
+    COMPONENT_PAGE.test(id) && Array.isArray(stored?.["titles"]) && (stored["titles"] as unknown[]).length === 0 ? 3 : 1,
 };
 
-export function renderForSearch(
-  src: string,
-  env: { relativePath?: string },
-  md: { render: (src: string, env: unknown) => string },
-): string {
-  const html = md.render(src, env);
-  const name = /^components\/([A-Za-z0-9]+)\.md$/.exec(env.relativePath ?? "")?.[1];
-  const words = name && name !== "index" ? componentWords(`E${name}`) : "";
-  return words ? `${html}<p>${words}</p>` : html;
+/** One entry of VitePress's page index: the section's anchor, the headings down to its own (its title last), and its words. */
+export interface SearchSection {
+  anchor: string;
+  titles: string[];
+  text: string;
+}
+
+/** The heading ids VitePress gives (its slugify), so a section's anchor lands on its heading. */
+function slugify(text: string): string {
+  return text
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0000-\u001f]/g, "")
+    .replace(/[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'“”‘’<>,.?/]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/^(\d)/, "_$1")
+    .toLowerCase();
+}
+
+/**
+ * The index entries for a component page. VitePress indexes only markdown files that exist, and every component page
+ * comes from the one `components/[name].md` route, so the site builds these from the component's README. The page's
+ * own entry carries the component's name in words and the names other libraries use for it (SYNONYMS), so "dropdown"
+ * finds ESelect itself; each "##" section of the README is an entry under it.
+ */
+export function componentSections(name: string, readme: string): SearchSection[] {
+  const title = `E${name}`;
+  const [head = "", ...parts] = readme.replace(/\r\n/g, "\n").split(/^## /m);
+  const intro = plainText(head.replace(/^# .*$/m, "").replace(/```[\s\S]*?```/g, ""));
+  const sections: SearchSection[] = [{ anchor: slugify(title), titles: [title], text: `${componentWords(title)} ${intro}`.trim() }];
+  for (const part of parts) {
+    const [heading = "", ...body] = part.split("\n");
+    const text = plainText(body.join("\n").replace(/```[\s\S]*?```/g, "").replace(/^#+ /gm, ""));
+    if (heading.trim()) sections.push({ anchor: slugify(heading.trim()), titles: [title, heading.trim()], text });
+  }
+  return sections;
 }
 
 export function titleRank(title: string, query: string): number {
@@ -99,29 +138,6 @@ export function titleRank(title: string, query: string): number {
   if (name === q) return 0;
   if (name.startsWith(q)) return 1;
   return 2;
-}
-
-export const componentSearchOptions = {
-  fields: ["title", "names", "text"],
-  storeFields: ["title", "titles"],
-  searchOptions: { fuzzy: 0.2, prefix: true, boost: { names: 12, title: 6, text: 1 } },
-};
-
-export interface ComponentGroup {
-  title: string;
-  items: { name: string; summary: string }[];
-}
-
-export function componentDocs(groups: ComponentGroup[]) {
-  return groups.flatMap((g) =>
-    g.items.map((c) => ({
-      id: `/components/${c.name}`,
-      title: `E${c.name}`,
-      titles: [g.title],
-      names: componentWords(`E${c.name}`),
-      text: c.summary,
-    })),
-  );
 }
 
 /** The area of the site a page id belongs to, used as the first step of the breadcrumb line under a result. */

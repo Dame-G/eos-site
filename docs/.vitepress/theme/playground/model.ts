@@ -15,7 +15,7 @@ export const VARIANT_VALUES = {
   gap: ["tight", "default", "roomy"],
 } as const;
 
-export type Variants = { [K in keyof typeof VARIANT_VALUES]: (typeof VARIANT_VALUES)[K][number] };
+export type Variants = { -readonly [K in keyof typeof VARIANT_VALUES]: (typeof VARIANT_VALUES)[K][number] };
 export type VariantKey = keyof Variants;
 
 export const VARIANT_KEYS = Object.keys(VARIANT_VALUES) as VariantKey[];
@@ -29,6 +29,7 @@ export interface State {
   accent: string;
   danger: string;
   warning: string;
+  success: string;
   /** The page ground: the colour behind everything. */
   background: string;
   /** What sits on the page: cards, fields, popovers, panels. */
@@ -73,7 +74,8 @@ export interface State {
 export const DEFAULT_BRAND = defaults["brand"];
 export const DEFAULT_ACCENT = defaults["brand-accent"];
 export const DEFAULT_DANGER = defaults["danger"];
-export const DEFAULT_WARNING = defaults["warning-strong"];
+export const DEFAULT_WARNING = defaults["warning"];
+export const DEFAULT_SUCCESS = defaults["success"];
 export const NEUTRAL = { hair: 1, focus: 2, controlHeight: 48 } as const;
 export const DEFAULT_GROUND = { background: defaults["background"], surface: defaults["surface"], foreground: defaults["ink"] };
 
@@ -86,7 +88,7 @@ export interface Ground {
 const SCHEMES: Record<Exclude<Scheme, "custom">, Ground> = {
   light: { ...DEFAULT_GROUND },
   paper: { background: "#f7f0e3", surface: "#fffdf7", foreground: "#1f1a14" },
-  dark: { background: "#0d0a12", surface: "#14111a", foreground: "#ffffff" },
+  dark: { background: "#0a0e11", surface: "#0f1418", foreground: "#ffffff" },
   contrast: { ...DEFAULT_GROUND },
 };
 
@@ -132,8 +134,10 @@ export const COLOUR_KEYS = [
   "danger",
   "danger-soft",
   "on-danger",
-  "warning-strong",
+  "warning",
   "warning-soft",
+  "success",
+  "success-soft",
   "primary",
   "on-primary",
   "secondary",
@@ -151,6 +155,7 @@ export function initialState(): State {
     accent: DEFAULT_ACCENT,
     danger: DEFAULT_DANGER,
     warning: DEFAULT_WARNING,
+    success: DEFAULT_SUCCESS,
     ...DEFAULT_GROUND,
     scheme: "light",
     radius: "default",

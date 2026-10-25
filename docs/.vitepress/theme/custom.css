@@ -1,71 +1,37 @@
-:root {
-  --vp-font-family-base: var(--e-font-sans);
-  --vp-font-family-mono: var(--e-font-mono);
-
-  --vp-c-white: var(--e-surface);
-  --vp-c-black: var(--e-ink);
-  --vp-c-bg: var(--e-surface);
-  --vp-c-bg-alt: var(--e-surface-tint);
-  --vp-c-bg-elv: var(--e-surface);
-  --vp-c-bg-soft: var(--e-surface-tint);
-
-  --vp-c-text-1: var(--e-ink);
-  --vp-c-text-2: var(--e-muted);
-  --vp-c-text-3: var(--e-muted);
-
-  --vp-c-divider: var(--e-border);
-  --vp-c-border: var(--e-border);
-  --vp-c-gutter: var(--e-border);
-
-  --vp-c-brand-1: var(--e-primary);
-  --vp-c-brand-2: color-mix(in srgb, var(--e-primary) 88%, var(--e-ink));
-  --vp-c-brand-3: var(--e-primary);
-  --vp-c-brand-soft: color-mix(in srgb, var(--e-primary) 10%, transparent);
-
-  --vp-c-default-1: var(--e-border);
-  --vp-c-default-2: var(--e-surface-tint);
-  --vp-c-default-3: var(--e-surface-tint);
-  --vp-c-default-soft: var(--e-surface-tint);
-
-  --vp-c-tip-1: var(--e-primary);
-  --vp-c-tip-soft: var(--e-surface-tint);
-  --vp-c-warning-1: var(--e-warning-strong);
-  --vp-c-warning-soft: var(--e-warning-soft);
-  --vp-c-danger-1: var(--e-danger);
-  --vp-c-danger-soft: var(--e-danger-soft);
-
-  --vp-code-block-bg: var(--e-surface);
-  --vp-code-line-highlight-color: var(--e-surface-tint);
-  --vp-code-color: var(--e-primary);
-  --vp-code-font-size: var(--e-text-sm);
-}
+/* The site's own layout and prose. Everything else on the page is the library's, from @eos-ui/vue/style.css. VitePress's theme CSS is not loaded at all. */
 
 :root {
-  --site-header: 4rem;
+  /* The sticky EAppHeader's height, which it writes on the root as --e-header-height once it runs. Until then (the server-rendered first paint) its usual height: the control height and a loose gap. */
+  --site-header: var(--e-header-height, 4rem);
+  /* EAppFooter's height on one row: its padding (gap-section above and below), the tap-height link row and its top rule. A footer that wraps on a narrow window is taller. */
+  --site-footer: calc(2 * var(--e-gap-section) + var(--e-tap) + var(--e-stroke-hair));
   --site-wide: 90rem;
   --site-prose: 60rem;
   --site-side: 17rem;
   --site-outline: 13rem;
-  --site-tap: 2.75rem;
-  --site-footer: 6rem;
   --site-install: 44rem;
   --site-display: clamp(7.5rem, 32vw, 8rem);
   --site-table-min: 34rem;
   --site-pattern-md: 46rem;
   --site-pattern-lg: 56rem;
+  /* The site's flourishes run longer than a control's state change, as multiples of the library's durations, so they follow the theme's motion and stop under reduced motion with them. */
+  --site-flow-in: calc(var(--e-duration-move) * 5.5);
+  --site-flash: calc(var(--e-duration-move) * 11);
 }
 
 html {
   scroll-padding-top: calc(var(--site-header) + var(--e-space-4));
   /* The home page fits the window and the other pages scroll. Keeping the scrollbar space on every page stops the sheet and its borders shifting sideways between them. */
   scrollbar-gutter: stable;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   background: var(--e-surface);
   color: var(--e-ink);
-  font-family: var(--e-font-sans);
+  font: var(--e-type-body);
 }
 
 .site {
@@ -76,12 +42,7 @@ body {
   min-height: 100vh;
 }
 
-/* The brand link already sits a gap before the search button; the library's extra end margin doubled it. */
-.site .e-appheader-brand:not(:last-child) {
-  margin-inline-end: 0;
-}
-
-/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's brand colour) and the wordmark beside it. The word takes the link's colours, which are the library's. The word is sized from the tile, in the proportion of the library's own lockup (brand/logo.svg, which the share image uses as it is): there its letters are 31.43 of the tile's 64 units tall, and Outfit's are 0.51 of the font size, so the font size is 0.963 of the tile. */
+/* The eos logo in the header's brand link: the tile (LogoMark.vue, in the theme's primary) and the wordmark beside it. The word takes the link's colours, which are the library's. The word is sized from the tile, in the proportion of the library's own lockup (brand/logo.svg, which the share image uses as it is): there its letters are 31.43 of the tile's 64 units tall, and Outfit's are 0.51 of the font size, so the font size is 0.963 of the tile. */
 .site-logo {
   display: block;
   width: var(--site-logo);
@@ -92,7 +53,7 @@ body {
 /* Lowercase letters have no ascenders, so their ink sits low in the line box. Lifted by that much (0.175em, measured), the middle of the letters is on the middle of the tile's e, as in the lockup. */
 .site-mark {
   font-size: calc(var(--site-logo) * 0.963);
-  line-height: 1;
+  line-height: var(--e-leading-none);
   transform: translateY(-0.175em);
 }
 
@@ -127,6 +88,12 @@ body {
 @media (max-width: 30rem) {
   .site-search-button {
     padding-inline: var(--e-pad-control-sm);
+  }
+}
+
+@media (max-width: 63.99rem), (pointer: coarse) {
+  .site-search-key {
+    display: none;
   }
 }
 
@@ -212,49 +179,6 @@ body {
   }
 }
 
-/* The side lists, and the same lists in the phone menu, are plain rows: no rule between them, and short enough to show a whole group. A touch screen gets a little more height per row so a finger still lands on one. */
-.site-side .e-nav li + li::before,
-.site-outline .e-nav li + li::before,
-.site-drawer .e-nav li + li::before {
-  content: none;
-}
-
-.site-side .e-nav,
-.site-outline .e-nav,
-.site-drawer .e-nav {
-  --e-control-height: 2rem;
-}
-
-/* With no rule between them, a small gap keeps the rows from touching. */
-.site-side .e-nav ul,
-.site-outline .e-nav ul,
-.site-drawer .e-nav ul {
-  gap: var(--e-space-1);
-}
-
-@media (pointer: coarse) {
-  .site-side .e-nav,
-  .site-outline .e-nav,
-  .site-drawer .e-nav {
-    --e-control-height: 2.5rem;
-  }
-}
-
-/* A heading too long for the rail wraps onto a second line inside its row. */
-.site-outline .e-nav-item {
-  height: auto;
-  min-height: var(--e-control-height);
-  padding-block: var(--e-space-1);
-  line-height: 1.3;
-}
-
-/* The header's current section and the sidebar's current page both take the library's raised row: you are in Components and on EAppHeader. The outline's current heading is marked by colour and weight alone, because it moves as you scroll. */
-.site-outline .e-nav-item[aria-current="page"] {
-  --_slab: transparent;
-  --_lift: 0px;
-  background-color: transparent;
-}
-
 .site-main {
   min-width: 0;
   max-width: var(--site-prose);
@@ -277,6 +201,10 @@ body {
   margin: 0 0 var(--e-space-3);
 }
 
+.site-edit {
+  margin: var(--e-space-8) 0 0;
+}
+
 .site-pager {
   display: flex;
   flex-wrap: wrap;
@@ -290,12 +218,46 @@ body {
   margin-inline-start: auto;
 }
 
+.site-drawer-scheme {
+  margin-bottom: var(--e-space-3);
+}
+
 .site-drawer-pages {
   margin: var(--e-space-2) 0 var(--e-space-3) calc(var(--e-space-4) + var(--e-space-1));
   padding-inline-start: var(--e-space-3);
   border-inline-start: var(--e-stroke-edge) solid var(--e-border);
 }
 
+/* The footer: the licence, then the links. */
+.site-footer-about {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-1) var(--e-space-4);
+}
+
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: var(--e-tap);
+  gap: var(--e-space-2) var(--e-space-4);
+  font-size: var(--e-text-sm);
+}
+
+.site-footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-space-2);
+}
+
+.site-footer-mark {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+/* The home page is a stage, not a document: pressing on it should play with the pattern, not select the title. The install command stays selectable. */
 .home {
   display: grid;
   flex: 1;
@@ -309,10 +271,6 @@ body {
   position: relative;
   z-index: 1;
   background: var(--e-surface);
-}
-
-/* The home page is a stage, not a document: pressing on it should play with the pattern, not select the title. The install command stays selectable. */
-.home {
   -webkit-user-select: none;
   user-select: none;
 }
@@ -331,7 +289,7 @@ body {
   overflow: hidden;
   container-type: size;
   pointer-events: none;
-  animation: flow-in 1.2s ease-out both;
+  animation: flow-in var(--site-flow-in) var(--e-easing-enter) both;
 }
 
 .flow-layer {
@@ -383,7 +341,7 @@ body {
   text-align: center;
   color: var(--e-primary);
   font-size: var(--site-display);
-  line-height: 1;
+  line-height: var(--e-leading-none);
 }
 
 /* The margins make the space above the line (from the title's slab to the top of the capitals) match the space below it (from the baseline to the install block), measured on the letters rather than the boxes. */
@@ -392,8 +350,8 @@ body {
   text-align: center;
   color: var(--e-ink);
   font-size: var(--e-text-xl);
-  font-weight: 500;
-  line-height: 1.3;
+  font-weight: var(--e-weight-medium);
+  line-height: var(--e-leading-snug);
 }
 
 .home-install {
@@ -408,37 +366,149 @@ body {
   max-width: min(100%, var(--site-install));
 }
 
-@scope (.vp-doc) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-details) {
-  :scope {
-    font-family: var(--e-font-sans);
+/* The first screen of the home page. */
+.home-top {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-height: calc(100svh - var(--site-header) - var(--site-footer) - var(--e-space-8) * 2);
+}
+
+/* On a phone the hero buttons stack at full width, so none sits alone on a second row. EActions' stack="narrow" measures the group's own width (32rem), which the hero never reaches, so it would stack them on a desktop too; the home layout stays as it is. */
+@media (max-width: 32rem) {
+  .home-actions > .e-btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* A restrained entrance for the title and the hero: a short rise and fade, once. These are the wordmark's entrance as it has always been, so they stay as they are. */
+@media (prefers-reduced-motion: no-preference) {
+  .home-top .home-heading,
+  .home-top .home-hero {
+    animation: home-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  :scope h1,
-  :scope h2,
-  :scope h3,
-  :scope h4 {
-    font-weight: 500;
-    letter-spacing: 0;
+  .home-top .home-hero {
+    animation-delay: 0.12s;
+  }
+
+  @keyframes home-rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+  }
+}
+
+/* On a narrow phone the install line is wider than the block. Wrap it rather than scroll sideways behind the copy button. */
+@media (max-width: 24rem) {
+  .home-install pre,
+  .home-install code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+/*
+ * The prose of a page: the markdown, in the library's type. It stops at the demos, the patterns, the live
+ * components and the library's code blocks, disclosures and notices, which bring their own styles.
+ */
+@scope (.site-prose) to (.demo-stage, .pattern-stage, .eos-live, .e-code, .e-details, .e-notice) {
+  :scope {
+    overflow-wrap: break-word;
+  }
+
+  :scope :is(h1, h2, h3, h4) {
+    position: relative;
   }
 
   :scope h1 {
     margin: 0 0 var(--e-space-4);
-    font-size: var(--e-text-4xl);
-    line-height: 1.15;
+    font: var(--e-type-h1);
   }
 
-  :scope h2 .header-anchor {
-    /* VitePress drops the # by the heading's old 24px of top padding; the heading has none now. */
-    top: 0;
-  }
-
+  /* The divider above a section is its own element (.doc-divider), not the heading's border. */
   :scope h2 {
-    /* The divider above a section is its own element (.doc-divider), not the heading's border. */
     margin: 0 0 var(--e-space-4);
-    border-top: 0;
-    padding-top: 0;
-    font-size: var(--e-text-2xl);
-    scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
+    font: var(--e-type-h2);
+  }
+
+  :scope h3 {
+    margin: var(--e-space-8) 0 0;
+    font: var(--e-type-h3);
+  }
+
+  :scope h4 {
+    margin: var(--e-space-6) 0 0;
+    font: var(--e-type-h4);
+  }
+
+  :scope :is(p, summary) {
+    margin: var(--e-space-4) 0;
+  }
+
+  :scope :is(ul, ol) {
+    margin: var(--e-space-4) 0;
+    padding-inline-start: var(--e-space-5);
+  }
+
+  :scope li + li {
+    margin-top: var(--e-space-2);
+  }
+
+  :scope li > :is(ul, ol) {
+    margin: var(--e-space-2) 0 0;
+  }
+
+  :scope blockquote {
+    margin: var(--e-space-4) 0;
+    padding-inline-start: var(--e-space-4);
+    border-inline-start: var(--e-stroke-edge) solid var(--e-border);
+    color: var(--e-muted);
+  }
+
+  :scope hr {
+    margin: var(--e-space-4) 0;
+    border: 0;
+    border-top: var(--e-stroke-hair) solid var(--e-border);
+  }
+
+  :scope strong {
+    font-weight: var(--e-weight-strong);
+  }
+
+  :scope img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* The # after each heading, shown on hover and focus, at the end of the heading's row. */
+  :scope .header-anchor {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    padding-inline: var(--e-space-2);
+    color: var(--e-link);
+    font-weight: var(--e-weight-medium);
+    text-decoration: none;
+    opacity: 0;
+    user-select: none;
+    transition: opacity var(--e-duration-fade) var(--e-easing-out);
+  }
+
+  :scope .header-anchor::before {
+    content: "#";
+  }
+
+  :scope :is(h1, h2, h3, h4):hover .header-anchor,
+  :scope .header-anchor:focus-visible {
+    opacity: 1;
+  }
+
+  :scope a:focus-visible,
+  :scope summary:focus-visible {
+    outline: var(--e-stroke-focus) solid var(--e-focus-ring);
+    outline-offset: var(--e-stroke-focus);
   }
 
   /* A section is its heading and what follows it, up to the next divider, and starts at the title. All the space between two sections belongs to the divider. */
@@ -447,25 +517,12 @@ body {
     border-top: var(--e-stroke-hair) solid var(--e-border);
   }
 
-  :scope h3 {
-    scroll-margin-top: calc(var(--site-header) + var(--e-space-4));
-  }
-
-  :scope a:focus-visible,
-  :scope summary:focus-visible {
-    outline: var(--e-stroke-focus) solid var(--e-focus-ring);
-    outline-offset: var(--e-focus-gap);
-  }
-
-  .e-table-wrap {
+  :scope .e-table-wrap {
     margin: var(--e-space-4) 0;
   }
 
   :scope .e-table-wrap table {
-    display: table;
-    width: 100%;
     min-width: var(--site-table-min);
-    margin: 0;
   }
 
   :scope .e-table-wrap :is(th, td) {
@@ -476,30 +533,109 @@ body {
     white-space: nowrap;
   }
 
-  :scope th {
-    font: 600 var(--e-text-xs) / 1.2 var(--e-font-mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--e-muted);
+  /* Numbered steps: a list written straight into a page counts its items in the mono face, like the kickers. */
+  :scope > div > ol {
+    padding-inline-start: 0;
+    list-style: none;
+    counter-reset: step;
   }
 
-  :scope div[class*="language-"] {
-    border: var(--e-stroke-hair) solid var(--e-border);
-    border-radius: var(--e-radius-md);
+  :scope > div > ol > li {
+    position: relative;
+    counter-increment: step;
+    padding-inline-start: var(--e-space-8);
   }
+
+  :scope > div > ol > li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0.15em;
+    font: var(--e-weight-strong) var(--e-text-sm) / var(--e-leading-normal) var(--e-font-mono);
+    letter-spacing: var(--e-tracking-label);
+    color: var(--e-primary);
+  }
+}
+
+/* The library's code blocks in the prose (the scope above stops at them, so these sit outside it). */
+.site-prose .e-code {
+  margin: var(--e-space-4) 0;
+}
+
+/* Stacked code blocks sit flush: the component overlaps their rings into one seam. */
+.site-prose .e-code + .e-code {
+  margin-top: 0;
+}
+
+.site-prose .e-code:has(+ .e-code) {
+  margin-bottom: 0;
+}
+
+/* The Source panel closes the demo's section. The divider that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
+.site-article .doc-section > .e-details:last-child {
+  margin-bottom: calc(-1 * var(--e-space-6));
 }
 
 .demo {
   margin-block: var(--e-space-4);
 }
 
+/* The frame every demo shares: a bar with the preview options, then the stage. */
+.demo-frame {
+  position: relative;
+  border-radius: var(--e-radius-md);
+  overflow: clip;
+  background: var(--e-surface);
+}
+
+/* The edge is drawn over the content, not around it: the bar's tint and the stage run to the frame's outer curve, and the line sits on top. With a border of its own, the clip's soft edge let a sliver of the frame's background through between the tint and the border at the top corners. */
+.demo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--e-stroke-edge) solid var(--e-border);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* The bar's controls are the small size of ESegmented and ESelect (ComponentDemo.vue). */
+.demo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-space-2) var(--e-space-4);
+  padding: var(--e-space-2) var(--e-space-3);
+  border-bottom: var(--e-stroke-hair) solid var(--e-border);
+  background: var(--e-surface-tint);
+}
+
+/* One row at every width: two short toggles and the text size as a compact select. */
+.demo-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--e-space-2);
+  min-width: 0;
+}
+
+.demo-size {
+  flex: none;
+  width: 6.5rem;
+}
+
 .demo-stage {
   padding: var(--e-space-4);
   background: var(--e-surface);
-  font-family: var(--e-font-sans);
-  font-size: var(--e-text-md);
-  line-height: 1.5;
+  font: var(--e-type-body);
   color: var(--e-ink);
+}
+
+/* A demo's skeleton (DemoSkeleton.vue) takes the room the demo took when it last rendered at this width, and a usual height before that. The bar holds one block the height of the real bar's controls. */
+.demo-skeleton {
+  height: calc(18rem - 2 * var(--e-space-4));
+}
+
+.demo-skeleton-bar {
+  min-height: 57px;
 }
 
 .demo-missing {
@@ -529,178 +665,6 @@ body {
   margin-top: var(--e-space-4);
 }
 
-@media (max-width: 639px) {
-  .vp-doc div[class*="language-"],
-  .vp-doc .vp-code-group .tabs,
-  .vp-doc .custom-block {
-    margin-inline: 0;
-    border-radius: var(--e-radius-md);
-  }
-}
-
-.vp-doc .e-table-wrap :is(th, td),
-.vp-doc .e-table-wrap tr {
-  border: 0;
-}
-
-.vp-doc .e-table-wrap tbody tr + tr {
-  border-top: var(--e-stroke-hair) solid var(--e-border);
-}
-
-.vp-doc .e-code {
-  margin: var(--e-space-4) 0;
-}
-
-/* Stacked code blocks sit flush: the component overlaps their rings into one seam. The rule above is unlayered, so it would otherwise open a gap. */
-.vp-doc .e-code + .e-code {
-  margin-top: 0;
-}
-
-.vp-doc .e-code:has(+ .e-code) {
-  margin-bottom: 0;
-}
-
-@media (max-width: 63.99rem), (pointer: coarse) {
-  .site-search-key {
-    display: none;
-  }
-}
-
-/* VitePress pads and rounds every inline code element. EHighlight's own tint (and its plain look inside a link) win over VitePress's layer, but it declares no padding, so commas sit right against it only once these are reset. */
-.vp-doc :not(pre) > code.e-highlight {
-  padding: 0;
-  border-radius: 0;
-}
-
-.site-footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  min-height: var(--site-tap);
-  gap: var(--e-space-2) var(--e-space-4);
-  font-size: var(--e-text-sm);
-}
-
-.site-footer-links a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--e-space-2);
-}
-
-.site-license {
-  display: block;
-}
-
-.site-license + .site-license {
-  margin-top: var(--e-space-2);
-}
-
-.site-footer-mark {
-  flex: none;
-  width: 1.1em;
-  height: 1.1em;
-}
-
-/* The heading anchor sits at the end of the heading row instead of hanging in the left margin. */
-.vp-doc .header-anchor {
-  inset-inline: auto 0;
-  margin-inline: 0;
-  padding-inline: var(--e-space-2);
-}
-
-/* The frame every demo shares: a bar with the preview options, then the stage. */
-.demo-frame {
-  position: relative;
-  border-radius: var(--e-radius-md);
-  overflow: clip;
-  background: var(--e-surface);
-}
-
-/* The edge is drawn over the content, not around it: the bar's tint and the stage run to the frame's outer curve, and the line sits on top. With a border of its own, the clip's soft edge let a sliver of the frame's background through between the tint and the border at the top corners. */
-.demo-frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: var(--e-stroke-edge) solid var(--e-border);
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.demo-bar {
-  --e-control-height: 2.25rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--e-space-2) var(--e-space-4);
-  padding: var(--e-space-2) var(--e-space-3);
-  border-bottom: var(--e-stroke-hair) solid var(--e-border);
-  background: var(--e-surface-tint);
-}
-
-/* One row at every width: two short toggles and the text size as a compact select, all at the small text size. */
-.demo-tools {
-  --e-text-md: var(--e-text-sm);
-  --e-pad-control: var(--e-space-2);
-  display: flex;
-  align-items: center;
-  gap: var(--e-space-2);
-  min-width: 0;
-}
-
-.demo-tools .e-seg-text {
-  min-width: 0;
-}
-
-.demo-size {
-  flex: none;
-  width: 5.5rem;
-}
-
-/* The Source panel closes the demo's section. The divider that follows already brings its own 48px of space above its rule, so the panel gives back most of it instead of leaving a blank band under a collapsed Source row. */
-.site-article .doc-section > .e-details:last-child {
-  margin-bottom: calc(-1 * var(--e-space-6));
-}
-
-/* An open disclosure clips its content at the top edge, and a code block's border is a 1px ring drawn outside its box, so the ring was cut off wherever the browser ignores the clip margin. A little padding keeps the ring inside the clip. */
-.site-article .e-details-body {
-  padding-block-start: var(--e-space-1);
-}
-
-/* Numbered steps: a list written straight into a page counts its items in the mono face, like the kickers. */
-.site-article.vp-doc > div > ol {
-  padding-inline-start: 0;
-  list-style: none;
-  counter-reset: step;
-}
-
-.site-article.vp-doc > div > ol > li {
-  position: relative;
-  counter-increment: step;
-  padding-inline-start: var(--e-space-8);
-}
-
-.site-article.vp-doc > div > ol > li::before {
-  content: counter(step, decimal-leading-zero);
-  position: absolute;
-  inset-inline-start: 0;
-  top: 0.15em;
-  font: 600 var(--e-text-sm) / 1.5 var(--e-font-mono);
-  letter-spacing: 0.08em;
-  color: var(--e-primary);
-}
-
-/* The footer: the licence, then the links. */
-.site-footer-about {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--e-space-1) var(--e-space-4);
-}
-
-.site-drawer-scheme {
-  margin-bottom: var(--e-space-3);
-}
-
 .not-found {
   display: grid;
   gap: var(--e-space-6);
@@ -712,62 +676,21 @@ body {
   gap: var(--e-gap-section);
 }
 
-/* The first screen of the home page. */
-.home-top {
-  position: relative;
-  display: grid;
-  align-content: center;
-  min-height: calc(100svh - var(--site-header) - var(--site-footer) - var(--e-space-8) * 2);
-}
-
-/* On a phone the hero buttons stack at full width, so none sits alone on a second row. */
-@media (max-width: 32rem) {
-  .home-actions > .e-btn {
-    flex: 1 1 100%;
-  }
-}
-
-/* A restrained entrance for the title and the hero: a short rise and fade, once. */
-@media (prefers-reduced-motion: no-preference) {
-  .home-top .home-heading,
-  .home-top .home-hero {
-    animation: home-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  }
-
-  .home-top .home-hero {
-    animation-delay: 0.12s;
-  }
-
-  @keyframes home-rise {
-    from {
-      opacity: 0;
-      transform: translateY(0.75rem);
-    }
-  }
-}
-
-/* On a narrow phone the install line is wider than the block. Wrap it rather than scroll sideways behind the copy button. */
-@media (max-width: 24rem) {
-  .home-install pre,
-  .home-install code {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-  }
-}
-
-/* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It sits over the page and lets every click through. */
+/* The wash behind the section an outline link or a #hash has just taken you to (Layout.vue). It lies under the section's content, a little outside it, like a highlighter's ink: each section is its own stacking context, so the wash sits above the page and below everything in the section. */
 .doc-section {
   position: relative;
+  isolation: isolate;
 }
 
 .flash-section {
   position: absolute;
-  z-index: 1;
+  inset: calc(-1 * var(--e-space-3));
+  z-index: -1;
   border-radius: var(--e-radius-md);
-  /* The library's hover wash: over the surface it is exactly `surface-tint`, the ground beside the page, and it is translucent, so the section's text stays readable (and over an already-tinted row it goes one step deeper). */
+  /* The library's hover wash: over the surface it is exactly `surface-tint`, and it is translucent, so where the content has no ground of its own the page shows through it. */
   background: var(--e-wash-hover);
   pointer-events: none;
-  animation: flash-section 2.4s ease-out forwards;
+  animation: flash-section var(--site-flash) var(--e-easing-out) forwards;
 }
 
 /* Full strength for the first third, so it is seen, then the fade. */
@@ -779,5 +702,34 @@ body {
 
   100% {
     opacity: 0;
+  }
+}
+
+/* Paper. The library prints its own components (colours, page breaks, links, tables); the site leaves off what only
+   works on a screen: the nav lists, the outline, the pager, the edit link, the footer's links, the demo's preview
+   options and its source (which would print open), and the header's search, scheme and menu. A component page prints
+   as its text, its demo and its tables. Each rule here is unlayered, so it wins over the site's own screen rules. */
+@media print {
+  .site-rail,
+  .site-topnav,
+  .site-scheme,
+  .site-menu-button,
+  .site-search-button,
+  .site-pager,
+  .site-edit,
+  .site-footer-links,
+  .demo-bar,
+  .demo + .e-disclosure,
+  .flash-section {
+    display: none;
+  }
+
+  .site-body {
+    padding-inline: 0;
+    border: 0;
+  }
+
+  .site-body > * {
+    padding-block: 0;
   }
 }

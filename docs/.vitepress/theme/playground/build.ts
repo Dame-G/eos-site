@@ -1,5 +1,5 @@
 import { constants, defaults, defineTheme, derivedFrom, groups, inputTokens, type Theme, type ThemeInput } from "@eos-ui/tokens";
-import { COLOUR_KEYS, DEFAULT_ACCENT, DEFAULT_BRAND, DEFAULT_DANGER, DEFAULT_GROUND, DEFAULT_WARNING, MONO, NEUTRAL, SAFE, SANS, isHex, type State, type Variants } from "./model";
+import { COLOUR_KEYS, DEFAULT_ACCENT, DEFAULT_BRAND, DEFAULT_DANGER, DEFAULT_GROUND, DEFAULT_SUCCESS, DEFAULT_WARNING, MONO, NEUTRAL, SAFE, SANS, isHex, type State, type Variants } from "./model";
 
 // Turns a state into a theme and into the code that reproduces it.
 
@@ -13,7 +13,7 @@ export interface Built {
   overrides: Record<string, string>;
 }
 
-const SHADOWS = ["frame", "well", "float"] as const;
+const SHADOWS = ["shadow-frame", "shadow-well", "shadow-float"] as const;
 const literal = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 function followShadows(base: Record<string, string>, next: Record<string, string>): Record<string, string> {
@@ -40,6 +40,7 @@ export function build(s: State, name = "my-theme"): Built {
     ["accent", s.accent, DEFAULT_ACCENT],
     ["danger", s.danger, DEFAULT_DANGER],
     ["warning", s.warning, DEFAULT_WARNING],
+    ["success", s.success, DEFAULT_SUCCESS],
     ["background", s.background, DEFAULT_GROUND.background],
     ["surface", s.surface, DEFAULT_GROUND.surface],
     ["foreground", s.foreground, DEFAULT_GROUND.foreground],
@@ -129,7 +130,7 @@ export function themeCode(b: Built): string {
   if (i.preset) lines.push(`preset: ${q(i.preset)},`);
   if (i.scheme) lines.push(`scheme: ${q(i.scheme)},`);
   if (i.density) lines.push(`density: ${q(i.density)},`);
-  for (const k of ["brand", "accent", "danger", "warning", "background", "surface", "foreground"] as const) if (i[k]) lines.push(`${k}: ${q(i[k])},`);
+  for (const k of ["brand", "accent", "danger", "warning", "success", "background", "surface", "foreground"] as const) if (i[k]) lines.push(`${k}: ${q(i[k])},`);
   if (i.radius) lines.push(`radius: ${q(i.radius as string)},`);
   if (i.elevation) lines.push(`elevation: ${q(i.elevation)},`);
   if (i.contrast) lines.push(`contrast: ${q(i.contrast)},`);
@@ -160,11 +161,13 @@ export function cssFull(b: Built): string {
 
 const SPACE_GAP = { tight: 3, default: 4, roomy: 6 } as const;
 const INLINE_GAP = { tight: 1, default: 2, roomy: 3 } as const;
+/** ESurface `padding` for each surface size: the medium one is the default `pad-card`, so it sets nothing. */
+const SURFACE_PADDING = { sm: "var(--e-gap-base) var(--e-pad-card)", md: undefined, lg: "section" } as const;
 
 /** The props each variant maps to, as the previews apply them. */
 export function variantProps(v: Variants) {
   return {
-    size: v.size,
+    padding: SURFACE_PADDING[v.size],
     gap: SPACE_GAP[v.gap],
     inlineGap: INLINE_GAP[v.gap],
   };
@@ -174,7 +177,7 @@ export function variantProps(v: Variants) {
 export function variantCode(v: Variants): string {
   const g = SPACE_GAP[v.gap];
   const lines = [
-    v.size === "md" ? "" : `<ESurface size="${v.size}" />`,
+    v.size === "md" ? "" : `<ESurface padding="${SURFACE_PADDING[v.size]}" />`,
     v.gap === "default" ? "" : `<EStack :gap="${g}" />\n<EGrid :gap="${g}" />`,
   ];
   return lines.filter(Boolean).join("\n");
