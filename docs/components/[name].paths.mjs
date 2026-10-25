@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join, sep } from "node:path";
-import { GROUPS, componentsDir, firstParagraph, listComponents, readReadme, siteRoot, splitReadme } from "../.vitepress/eos-source.mjs";
-import { GROUP_OF } from "../.vitepress/groups.mjs";
+import { componentsDir, firstParagraph, listComponents, readReadme, siteRoot, splitReadme } from "../.vitepress/eos-source.mjs";
+import { groupTitleOf } from "../.vitepress/groups.mjs";
 import { usedIn } from "../.vitepress/patterns.mjs";
 
 const EXPECTED_SECTIONS = ["Keyboard", "Related"];
@@ -40,7 +40,7 @@ export default {
       }
       const hasDemo = existsSync(join(siteRoot, "docs/components/demos", `${name}.vue`));
       const { head, rest } = splitReadme(readme || `# E${name}\n`);
-      const group = GROUPS.find((g) => g.id === GROUP_OF[name])?.title ?? "More";
+      const group = groupTitleOf(name);
       const demo = [
         "## Demo",
         "",

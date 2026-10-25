@@ -23,29 +23,21 @@ const components = listComponents();
 /** The home page's install line, coloured here so the browser does not fetch a highlighter for one line. */
 const installHtml = await codeToHtml(`npm install @eos-ui/vue@${libraryBuildInfo.version}`, { lang: "bash", theme: SHIKI_THEME });
 
+// The groups are in groups.mjs. In CI a component with no group fails the build (checkGrouped).
 function componentSidebar(): DefaultTheme.SidebarItem[] {
-  const groups = GROUPS.map((g) => ({
-    text: g.title,
-    items: components.filter((c) => GROUP_OF[c as keyof typeof GROUP_OF] === g.id).map((c) => ({ text: "E" + c, link: `/components/${c}` })),
-  }));
-  const unmapped = components.filter((c) => !(c in GROUP_OF));
-  // In CI a component with no group fails the build, so a library release cannot ship a page filed under "More" by accident.
-  if (unmapped.length && process.env.CI) throw new Error(`[eos-site] No sidebar group for: ${unmapped.map((c) => "E" + c).join(", ")}. Add them to docs/.vitepress/groups.mjs.`);
-  if (unmapped.length) console.warn(`[eos-site] No sidebar group for: ${unmapped.map((c) => "E" + c).join(", ")}. Add them to docs/.vitepress/groups.mjs.`);
-  if (unmapped.length) groups.push({ text: "More", items: unmapped.map((c) => ({ text: "E" + c, link: `/components/${c}` })) });
-  return [{ text: "Overview", link: "/components/" }, ...groups.filter((g) => g.items.length)];
+  checkGrouped(components);
+  const groups = groupComponents(components).map((g) => ({ text: g.title, items: g.names.map((c) => ({ text: "E" + c, link: `/components/${c}` })) }));
+  return [{ text: "Overview", link: "/components/" }, ...groups];
 }
 
-const guide: DefaultTheme.SidebarItem[] = guideSections().map((s) => ({
-  text: s.title,
-  items: [...s.pages.map((g) => ({ text: g.name, link: `/guide/${g.slug}` })), ...(s.title === "Reference" ? [{ text: "Changelog", link: "/changelog" }] : [])],
-}));
+// The guide sections, and the changelog at the end of Reference, come from pages.mjs.
+const guide: DefaultTheme.SidebarItem[] = guideSections().map((s) => ({ text: s.title, items: s.pages.map((g) => ({ text: g.name, link: g.link })) }));
 
-// Grouped as the overview groups them, then the pages that are not whole patterns.
+// Grouped as the overview groups them, then the small recipes.
 const patterns: DefaultTheme.SidebarItem[] = [
   { text: "Overview", link: "/patterns/" },
   ...patternSections().map((s) => ({ text: s.title, items: s.pages.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) })),
-  { text: "More", items: PATTERN_EXTRAS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) },
+  { text: "Small recipes", items: PATTERN_EXTRAS.map((p) => ({ text: p.name, link: `/patterns/${p.slug}` })) },
 ];
 
 export default defineConfig({
