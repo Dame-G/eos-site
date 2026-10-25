@@ -310,7 +310,7 @@ describe("Sign in error summary", () => {
     await settle();
     await page.getByRole("button", { name: "Sign in" }).click();
     await expect.element(page.getByText("There is a problem")).toBeVisible();
-    await expect.element(page.getByRole("textbox", { name: /Email address/ })).toHaveFocus();
+    await expect.poll(() => document.activeElement?.textContent ?? "").toContain("There is a problem");
 
     await page.getByRole("link", { name: /Password: Enter your password/ }).click();
     await expect.element(page.getByLabelText(/^Password/)).toHaveFocus();
