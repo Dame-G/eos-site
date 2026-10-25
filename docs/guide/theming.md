@@ -123,7 +123,7 @@ In the [playground](/playground) these three are the page, surface and text colo
 
 ## Light and dark
 
-Set `scheme: "auto"` and the theme follows the visitor's `prefers-color-scheme`. The base tokens are the light theme. The dark variant is derived the same way, so its contrast is checked too, and only the tokens that differ are written inside `@media (prefers-color-scheme: dark)`. `color-scheme` becomes `light dark`, so native controls follow. Nothing to wire up: `createEos()` applies it and repaints when the preference changes.
+Set `scheme: "auto"` and the theme follows the visitor's `prefers-color-scheme`. The base tokens are the light theme. The dark variant is derived the same way, so its contrast is checked too, and only the tokens that differ are written inside `@media (prefers-color-scheme: dark)`. `color-scheme` becomes `light dark`, so native controls follow. Nothing to wire up: `createEos({ theme })` adds the theme to the page as a stylesheet with those media queries, so it follows the preference as it changes.
 
 ```ts
 const clinic = defineTheme({
@@ -159,7 +159,7 @@ To use the default tokens without JavaScript, import `@eos-ui/tokens/tokens.css`
 
 ## Scoped themes
 
-For one part of a page, such as a preview in another theme or a dark panel on a light page, wrap it in [`EConfigProvider`](/components/ConfigProvider). It sets the theme's tokens on its element, in the server-rendered HTML too, renders the menus, dialogs and tooltips opened inside into itself, and inherits everything else (words, icons, locale) from the plugin.
+For one part of a page, such as a preview in another theme or a dark panel on a light page, wrap it in [`EConfigProvider`](/components/ConfigProvider). It sets the theme's tokens on its element, in the server-rendered HTML too, renders the menus, dialogs and tooltips opened inside into itself (when it sets a `theme` or `scheme`; `portal` overrides that), and inherits everything else (words, icons, locale) from the plugin.
 
 ```vue
 <EConfigProvider :theme="clinic" scheme="dark">
