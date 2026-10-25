@@ -7,9 +7,10 @@
  */
 export const INPUT_NOTES = {
   brand: { controls: "The brand colour: action colour, tinted ground, input focus edge.", neutral: { token: "brand" } },
-  accent: { controls: "A second brand colour for positive actions and the success tint.", neutral: { token: "brand-accent" } },
+  accent: { controls: "A second brand colour for the secondary action. It does not change the success tone.", neutral: { token: "brand-accent" } },
   danger: { controls: "The destructive action colour, its text and tint.", neutral: { token: "danger" } },
   warning: { controls: "The caution colour: warning text and tint.", neutral: { token: "warning-strong" } },
+  success: { controls: "The positive colour (paid, done, saved): success text and tint.", neutral: { token: "success" } },
   background: { controls: "The page ground: the colour behind everything.", neutral: { token: "background" } },
   surface: { controls: "Cards, fields, popovers and panels. A dark surface lifts the action colours.", neutral: { token: "surface" } },
   foreground: { controls: "Text and lines: secondary text, edges, the focus outline.", neutral: { token: "ink" } },

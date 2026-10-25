@@ -1,8 +1,18 @@
 import { describe, it, expect } from "vitest";
 import { GUIDE, GUIDE_GROUPS, PATTERNS, PATTERN_EXTRAS, PATTERN_GROUPS, PATTERN_MOVES, guideSections, patternSections } from "../docs/.vitepress/pages.mjs";
 import { builtFrom, frontMatter, section } from "../docs/data/patterns-source.js";
+import { GROUPS, groupComponents } from "../docs/.vitepress/groups.mjs";
 
 declare const __COMPONENTS__: string[];
+
+describe("component groups", () => {
+  it("files every library component in exactly one group, and lists no component the library lacks", () => {
+    const members = GROUPS.flatMap((g) => g.members);
+    expect(members.length, "a component in two groups").toBe(new Set(members).size);
+    expect(members.filter((m) => !__COMPONENTS__.includes(m)), "members the library does not have").toEqual([]);
+    expect(groupComponents(__COMPONENTS__).map((g) => g.id), "nothing falls under More").not.toContain("more");
+  });
+});
 
 const patternPages = import.meta.glob("../docs/patterns/*.md", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 const patternSources = import.meta.glob("../docs/patterns/*.vue", { query: "?raw", import: "default", eager: true }) as Record<string, string>;

@@ -20,10 +20,10 @@ export const GROUPS = [
 ];
 
 /** Where a component with no group lands, so a new library component still gets a page before it is filed. */
-export const MORE = { id: "more", title: "More" };
+const MORE = { id: "more", title: "More" };
 
 /** Component folder name -> group id. */
-export const GROUP_OF = Object.fromEntries(GROUPS.flatMap((g) => g.members.map((name) => [name, g.id])));
+const GROUP_OF = Object.fromEntries(GROUPS.flatMap((g) => g.members.map((name) => [name, g.id])));
 
 /** The title of a component's group, or "More". */
 export function groupTitleOf(name) {
@@ -31,7 +31,7 @@ export function groupTitleOf(name) {
 }
 
 /** The components of `names` that no group lists. */
-export function ungrouped(names) {
+function ungrouped(names) {
   return names.filter((n) => !(n in GROUP_OF));
 }
 

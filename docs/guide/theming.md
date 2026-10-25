@@ -29,7 +29,7 @@ app.use(createEos({ theme: clinic })); // or createEos({ theme: { brand: "#8a2be
 | Input | Type | Derives |
 | --- | --- | --- |
 | `brand`, `accent` | colour | `primary`, `secondary`, their tints and `surface-tint`. `brand` and `brand-accent` keep the colours as given, for decoration |
-| `danger`, `warning` | colour | `danger`, `on-danger`, `danger-soft`, `warning-strong`, `warning-soft` |
+| `danger`, `warning`, `success` | colour | `danger`, `on-danger`, `danger-soft`, `warning-strong`, `warning-soft`, `success`, `success-soft`. `accent` does not change the success tone: `success` does |
 | `background`, `surface`, `foreground` | colour | The grounds, `ink`, `muted`, `border` and `border-strong`. A dark surface lifts the action colours |
 | `fonts` | `{ sans?, mono?, script? }` | `font-sans`, `font-mono`, `font-script` (signatures). Full `font-family` stacks; nothing is bundled |
 | `radius` | `"sharp" | "default" | "round" | number | { sm?, md?, lg? }` | `radius-sm` to `radius-lg` and `radius-row`. A number is `radius-md` in px, with `sm` half of it and `lg` double |
