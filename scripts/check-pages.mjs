@@ -69,7 +69,8 @@ async function check(context, viewport, scheme, path) {
   });
   if (overflow.scroll > overflow.client) problems.push(`the page scrolls sideways: ${overflow.scroll}px of content in ${overflow.client}px`);
   if (viewport.axe) {
-    await page.addScriptTag({ content: axeSource });
+    // Evaluated by the browser tools, not added as a script tag, which the page policy would rightly block.
+    await page.evaluate(axeSource);
     const violations = await page.evaluate(async () => {
       // @ts-ignore axe is injected above
       const r = await axe.run(document, { resultTypes: ["violations"] });
