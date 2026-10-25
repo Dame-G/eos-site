@@ -29,8 +29,8 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
 </script>
 
 <template>
-  <EGrid min="22rem" :gap="6" class="pattern-lg">
-    <EStack :gap="3">
+  <EGrid min="22rem" gap="section" class="pattern-lg">
+    <EStack gap="base">
       <EHeading :level="2" kicker="Forms">To do before your visit</EHeading>
       <ENotice tone="warning" title="2 forms need your signature">Please finish them before Oct 22.</ENotice>
       <ul class="sign-list">
@@ -50,7 +50,7 @@ const signed = computed(() => signature.value.agreed && !!(signature.value.name 
     </EStack>
 
     <ESurface size="lg">
-      <EStack :gap="4">
+      <EStack gap="loose">
         <ELink href="#forms" icon="arrow-left">Back to forms</ELink>
         <EHeading :level="2">New client form</EHeading>
         <EText tone="neutral">By signing, you confirm the details you gave us are correct and you agree to our payment policy.</EText>

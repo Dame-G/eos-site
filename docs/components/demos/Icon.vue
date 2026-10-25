@@ -5,8 +5,8 @@ const names = ["card", "receipt", "calendar", "download", "lock", "mail", "phone
 
 <template>
   <EStack>
-    <EInline :gap="6">
-      <EInline v-for="n in names" :key="n" :gap="2">
+    <EInline gap="section">
+      <EInline v-for="n in names" :key="n" gap="snug">
         <EIcon :name="n" />
         <EText as="span" tone="neutral">{{ n }}</EText>
       </EInline>

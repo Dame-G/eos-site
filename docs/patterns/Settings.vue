@@ -27,7 +27,7 @@ function reset() {
   <div class="pattern-md">
     <EToastProvider>
       <form novalidate @submit.prevent="save">
-        <EStack :gap="6">
+        <EStack gap="section">
           <EPageHeader :heading-level="2" title="Settings" description="How we reach you and which language you read." />
 
           <EFieldset section legend="Profile" hint="Used on receipts.">
@@ -45,7 +45,7 @@ function reset() {
             </EStack>
           </EFieldset>
 
-          <EStack :gap="2">
+          <EStack gap="snug">
             <EButton type="submit">Save changes</EButton>
             <EButton variant="quiet" type="button" @click="reset">Discard changes</EButton>
           </EStack>

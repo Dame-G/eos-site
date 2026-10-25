@@ -3,7 +3,7 @@ import { EContainer, EHeading, EStack, ESurface, EText } from "@eos-ui/vue";
 </script>
 
 <template>
-  <EStack :gap="6">
+  <EStack gap="section">
     <EContainer size="sm" :gutter="false">
       <ESurface>
         <EHeading :level="3">Small</EHeading>

@@ -68,7 +68,7 @@ function back() {
 
 <template>
   <form novalidate class="pattern-narrow" @submit.prevent="next">
-    <EStack :gap="6">
+    <EStack gap="section">
       <EStepper label="Registration" :steps="stepper" />
 
       <ENotice v-if="done" tone="success" title="You are registered">We sent a confirmation to your phone.</ENotice>

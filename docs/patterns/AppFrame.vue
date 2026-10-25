@@ -29,7 +29,7 @@ const items = () => [
 
 <template>
   <div class="pattern-lg">
-    <EStack :gap="3">
+    <EStack gap="base">
       <EText size="sm" tone="neutral">The frame below stands in for a whole page. Switch the page to see the current item move.</EText>
       <EInline>
         <EButton variant="outline" :aria-pressed="page === 'home'" @click="page = 'home'">Home</EButton>
@@ -46,7 +46,7 @@ const items = () => [
           </template>
           <template #sidebar><ENavList label="Account" :items="items()" /></template>
 
-          <EStack :gap="6">
+          <EStack gap="section">
             <EPageHeader
               v-if="page === 'statements'"
               :heading-level="2"
@@ -62,13 +62,13 @@ const items = () => [
 
             <EGrid min="12rem" as="ul">
               <ESurface as="li">
-                <EStack :gap="2">
+                <EStack gap="snug">
                   <EStamp status="due" size="sm" />
                   <EText>October statement, $162.40</EText>
                 </EStack>
               </ESurface>
               <ESurface as="li">
-                <EStack :gap="2">
+                <EStack gap="snug">
                   <EStamp status="paid" size="sm" />
                   <EText>September statement, $84.00</EText>
                 </EStack>

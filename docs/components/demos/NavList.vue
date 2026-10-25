@@ -22,7 +22,7 @@ const outline = [
 </script>
 
 <template>
-  <EStack :gap="6">
+  <EStack gap="section">
     <ENavList label="Account" :items="items" />
     <ENavList label="Example site" orientation="horizontal" :items="header" />
     <ENavList label="Page sections" :items="outline" />

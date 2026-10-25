@@ -50,7 +50,7 @@ const facts = computed(() => [
 <template>
   <div class="pattern-md">
     <EToastProvider>
-      <EStack :gap="4">
+      <EStack gap="loose">
         <EPageHeader :heading-level="2" title="Command palette" description="Reach any page or action from the keyboard." />
         <EInline align="center">
           <EButton variant="outline" icon="search" aria-haspopup="dialog" @click="open = true">Search commands</EButton>

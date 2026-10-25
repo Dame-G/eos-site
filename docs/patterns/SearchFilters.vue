@@ -48,11 +48,11 @@ function clear() {
 
 <template>
   <div class="pattern-md">
-    <EStack :gap="4">
+    <EStack gap="loose">
       <EPageHeader :heading-level="2" title="Find a document" description="Statements, receipts and forms." />
       <ESearchBar clearable v-model="typed" placeholder="Search by title or number" @submit="search" />
       <EInline align="start">
-        <EStack :gap="2">
+        <EStack gap="snug">
           <EKicker as="span" aria-hidden="true">Type</EKicker>
           <ESegmented v-model="kind" label="Type" :options="['All', 'Statement', 'Receipt', 'Form']" />
         </EStack>

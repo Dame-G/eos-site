@@ -25,7 +25,7 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 </div>
 
 ```vue
-<EStack :gap="6">
+<EStack gap="section">
   <EInline justify="between">
     <EHeading :level="3">Visits</EHeading>
     <EInline>
@@ -36,7 +36,7 @@ Six layout components cover almost every screen. The default `gap` is `base` on 
 
   <EGrid min="14rem" as="ul">
     <ESurface v-for="v in visits" :key="v.id" as="li">
-      <EStack :gap="2">
+      <EStack gap="snug">
         <EStamp :status="v.status" size="sm" />
         <EText>{{ v.title }}</EText>
         <EText size="sm" tone="neutral">{{ v.when }}</EText>

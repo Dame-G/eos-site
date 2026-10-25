@@ -27,7 +27,7 @@ async function submit() {
   <form novalidate @submit.prevent="submit">
     <EStack>
       <ENotice v-if="problems.length" tone="danger" :title="problems.length === 1 ? 'Fix 1 thing to continue' : `Fix ${problems.length} things to continue`">
-        <EStack as="ul" :gap="1">
+        <EStack as="ul" gap="tight">
           <li v-for="p in problems" :key="p.id">
             <ELink :href="`#${p.id}`" @click.prevent="focusField(p.id)">{{ p.label }}: {{ p.message }}</ELink>
           </li>

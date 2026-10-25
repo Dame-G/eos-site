@@ -3,7 +3,7 @@ import { EExpandableRow, EStack, EStamp, EButton } from "@eos-ui/vue";
 </script>
 
 <template>
-  <EStack :gap="2">
+  <EStack gap="snug">
     <EExpandableRow title="Lab work" subtitle="Oct 3, 2026" open>
       <template #leading><EStamp status="paid" size="sm" /></template>
       <template #trailing>$42.40</template>

@@ -55,7 +55,7 @@ function search(q: string) {
 
 <template>
   <div class="pattern-md">
-    <EStack :gap="4">
+    <EStack gap="loose">
       <EPageHeader :heading-level="2" title="Statements and receipts" description="Everything you have been billed, newest first." />
       <ESearchBar clearable v-model="typed" placeholder="Search by visit or statement number" @submit="search" />
 
@@ -68,7 +68,7 @@ function search(q: string) {
         <EText size="sm" tone="neutral" role="status">{{ matches.length }} {{ matches.length === 1 ? "statement" : "statements" }}</EText>
       </EInline>
 
-      <EStack v-if="shown.length" :gap="2">
+      <EStack v-if="shown.length" gap="snug">
         <EExpandableRow v-for="s in shown" :key="s.id" :title="s.title" :subtitle="s.sub">
           <template #leading><EStamp :status="s.status" size="sm" /></template>
           <template #trailing>{{ money(s.amount) }}</template>

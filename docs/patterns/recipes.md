@@ -41,7 +41,7 @@ Buttons that belong together, side by side, announced as one labelled group. [`E
 A card that is one link is a component now: [`ELinkCard`](/components/LinkCard). The whole card is the click target, and its border recolours on hover without thickening.
 
 ```vue
-<EGrid as="ul" min="17rem" :gap="3">
+<EGrid as="ul" min="17rem" gap="base">
   <ELinkCard as="li" size="sm" title="EButton" href="/components/Button">A button for an action, or a link that looks like one.</ELinkCard>
 </EGrid>
 ```
@@ -62,7 +62,7 @@ A flat, outlined container for statements, detail rows and forms. Render an `ESu
 
 ```vue
 <ESurface as="section">
-  <EStack :gap="3">
+  <EStack gap="base">
     <EHeading :level="3" kicker="Billing">Questions</EHeading>
     <EDisclosure title="Can I set up a payment plan?">Yes. Call billing before the due date.</EDisclosure>
   </EStack>

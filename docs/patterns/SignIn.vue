@@ -47,13 +47,13 @@ async function submit() {
 </script>
 
 <template>
-  <EGrid min="20rem" :gap="6" class="pattern-lg">
+  <EGrid min="20rem" gap="section" class="pattern-lg">
     <ESurface size="lg">
       <form novalidate @submit.prevent="submit">
-        <EStack :gap="4">
+        <EStack gap="loose">
           <EHeading :level="2">Sign in</EHeading>
           <ENotice v-if="problems.length" tone="danger" :title="problems.length === 1 ? 'Fix 1 thing to sign in' : `Fix ${problems.length} things to sign in`">
-            <EStack as="ul" :gap="1">
+            <EStack as="ul" gap="tight">
               <li v-for="p in problems" :key="p.id">
                 <ELink :href="`#${p.id}`" @click.prevent="focusField(p.id)">{{ p.field }}: {{ p.message }}</ELink>
               </li>
@@ -88,7 +88,7 @@ async function submit() {
     </ESurface>
 
     <ESurface size="lg">
-      <EStack :gap="4">
+      <EStack gap="loose">
         <ELink href="#sign-in" icon="arrow-left">Back to sign in</ELink>
         <EHeading :level="2">Check your email</EHeading>
         <EText tone="neutral">We sent a 6-digit code to m***@example.com. It expires in 10 minutes.</EText>
@@ -101,7 +101,7 @@ async function submit() {
     </ESurface>
 
     <ESurface size="lg">
-      <EStack :gap="4">
+      <EStack gap="loose">
         <EHeading :level="2">Choose a new password</EHeading>
         <EPasswordField v-model="newPassword" label="New password" mode="new" :rules="rules" required />
       </EStack>

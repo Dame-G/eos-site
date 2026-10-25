@@ -45,7 +45,7 @@ function onKeydown(e: KeyboardEvent) {
       @exit-top="field?.focus()"
     />
     <EText size="sm" tone="neutral">While results load</EText>
-    <EStack :gap="2" aria-busy="true">
+    <EStack gap="snug" aria-busy="true">
       <ESkeleton :height="56" />
       <ESkeleton :height="56" />
     </EStack>

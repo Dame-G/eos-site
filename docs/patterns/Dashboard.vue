@@ -12,7 +12,7 @@ const recent = [
 
 <template>
   <div class="pattern-md">
-    <EStack :gap="6">
+    <EStack gap="section">
       <EPageHeader :heading-level="2" title="Overview" description="Where your account stands today.">
         <template #actions><EButton icon="card">Pay $162.40</EButton></template>
       </EPageHeader>
@@ -24,28 +24,28 @@ const recent = [
 
       <EGrid min="15rem" as="ul" class="pattern-cards">
         <ESurface as="li">
-          <EStack :gap="2">
+          <EStack gap="snug">
             <EText size="sm" tone="neutral">Balance due</EText>
             <EText size="lg">{{ money(162.4) }}</EText>
             <EStamp status="due" size="sm" detail="Nov 1" />
           </EStack>
         </ESurface>
         <ESurface as="li">
-          <EStack :gap="2">
+          <EStack gap="snug">
             <EText size="sm" tone="neutral">Paid this year</EText>
             <EText size="lg">{{ money(1286.75) }}</EText>
             <EText size="sm" tone="neutral">Across 9 statements</EText>
           </EStack>
         </ESurface>
         <ESurface as="li">
-          <EStack :gap="2">
+          <EStack gap="snug">
             <EText size="sm" tone="neutral">Visits used</EText>
             <EProgress label="Visits used" :value="9" :max="12" value-text="9 of 12" />
           </EStack>
         </ESurface>
       </EGrid>
 
-      <EStack :gap="3">
+      <EStack gap="base">
         <EInline justify="between">
           <EHeading :level="3">Recent statements</EHeading>
           <EButton variant="quiet">See all</EButton>

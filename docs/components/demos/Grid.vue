@@ -6,9 +6,9 @@ const masonry = ref(false);
 </script>
 
 <template>
-  <EStack :gap="4">
+  <EStack gap="loose">
     <ESwitch v-model="masonry" label="Masonry" />
-    <EGrid min="12rem" :gap="3" :masonry="masonry">
+    <EGrid min="12rem" gap="base" :masonry="masonry">
       <ESurface as="article">
         <EHeading :level="3">September</EHeading>
         <EText>$162.40, paid</EText>
