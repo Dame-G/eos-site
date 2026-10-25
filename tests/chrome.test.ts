@@ -54,9 +54,10 @@ describe("site chrome", () => {
     expect(document.activeElement).toBe(box.element());
     await userEvent.keyboard("dropdown");
     await settle(150);
-    // Every result names where it lives.
-    await expect.element(page.getByText("Components › Form controls")).toBeVisible();
-    await expect.element(page.getByText("ESelect")).toBeVisible();
+    // Every result names where it lives, and the component page itself comes before its sections.
+    const first = page.getByRole("option").first();
+    await expect.element(first).toBeVisible();
+    expect(first.element().textContent).toMatch(/^ESelect\s*Components$/);
     await userEvent.keyboard("{Enter}");
     expect(go).toHaveBeenCalledWith("/components/Select");
 

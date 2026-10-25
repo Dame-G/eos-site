@@ -15,7 +15,8 @@ vi.mock("vitepress", async () => {
 });
 
 describe("addresses in the wrong case", () => {
-  it("finds the page that differs only in case", () => {
+  it("finds the page that differs only in case or hyphens", () => {
+    expect(pageByCase(SIDEBAR, "/components/data-grid")).toBe("/components/DataGrid");
     expect(pageByCase(SIDEBAR, "/components/button")).toBe("/components/Button");
     expect(pageByCase(SIDEBAR, "/components/DATAGRID.html")).toBe("/components/DataGrid");
     expect(pageByCase(SIDEBAR, "/Guide/Theming/")).toBe("/guide/theming");

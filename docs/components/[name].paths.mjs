@@ -48,7 +48,7 @@ export default {
         "",
         ...(hasDemo ? ["<EDisclosure title=\"Source\">", "", `<<< @/components/demos/${name}.vue`, "", "</EDisclosure>", ""] : []),
       ].join("\n");
-      const noReadme = readme ? "" : `\n\n::: warning\nThe library has no README.md for E${name} yet, so this page only has the demo.\n:::\n`;
+      const noReadme = readme ? "" : `\n\n<ENotice tone="warning">The library has no README.md for E${name} yet, so this page only has the demo.</ENotice>\n`;
       // Derived from each pattern's "Built from:" line, so the list cannot drift from the patterns.
       const used = patterns.get(name) ?? [];
       const usedSection = used.length ? ["## Used in", "", ...used.map((p) => `- [${p.name}](/patterns/${p.slug})`)].join("\n") : "";

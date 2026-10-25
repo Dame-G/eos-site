@@ -6,9 +6,9 @@ import { EStack } from "@eos-ui/vue/components/EStack";
 import BubbleTitle from "./BubbleTitle.vue";
 import FlowField from "./FlowField.vue";
 
-declare const __EOS_BUILD__: { version: string };
+declare const __EOS_VERSION__: string;
 declare const __EOS_INSTALL_HTML__: string;
-const install = `npm install @eos-ui/vue@${__EOS_BUILD__.version}`;
+const install = `npm install @eos-ui/vue@${__EOS_VERSION__}`;
 const installHtml = __EOS_INSTALL_HTML__;
 </script>
 

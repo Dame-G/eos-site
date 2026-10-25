@@ -10,3 +10,4 @@ test-results
 /.vitepress
 *.timestamp-*.mjs
 docs/public/llms-full.txt
+docs/public/llms

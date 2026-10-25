@@ -1,7 +1,11 @@
 import { defineTheme, type ThemeInput } from "@eos-ui/tokens";
 
-/** The inputs of the dark scheme, shared with the demos' own dark toggle. */
-export const DARK_INPUT = { name: "dark", background: "#0d0d0f", surface: "#141416", foreground: "#ffffff" } satisfies ThemeInput;
+/**
+ * The inputs of the dark scheme, shared with the demos' own dark toggle. It is the library's own dark theme, the one
+ * `defineTheme({ scheme: "auto" })` ships: its dark surface, from which the library derives everything else.
+ */
+const libraryDark = defineTheme({ scheme: "auto" }).alternates.find((a) => a.scheme === "dark" && !a.media.includes("contrast"));
+export const DARK_INPUT = { name: "dark", surface: libraryDark?.tokens["surface"] ?? "#15121b" } satisfies ThemeInput;
 
 /** The site's two themes. Kept free of Vue so the config can render the dark one into the document head. */
 const lightTheme = defineTheme({ name: "light" });

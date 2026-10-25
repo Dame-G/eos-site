@@ -112,7 +112,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
           </div>
           <div class="meta">
             <p class="name">
-              <TokenName :name="c.name" /> <span class="hex"><ColorValue :value="shownHex(c)" /></span>
+              <TokenName :name="c.name" /> <ColorValue :value="shownHex(c)" />
             </p>
             <EText size="sm" tone="neutral" class="usage">{{ c.usage }}</EText>
             <EText size="sm" tone="neutral" class="usage">From {{ c.from.join(", ") }}{{ c.input ? " (its value)" : "" }}</EText>
@@ -257,7 +257,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
         ><TokenName :name="row.name as string" /></template
       >
       <template #cell-sample="{ row }"
-        ><span :style="{ fontSize: row.value as string, lineHeight: 1.2 }">Aa</span></template
+        ><span :style="{ fontSize: row.value as string, lineHeight: 'var(--e-leading-tight)' }">Aa</span></template
       >
     </PlainTable>
 
@@ -270,7 +270,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
       <template #cell-name="{ row }"
         ><TokenName :name="row.name as string" /></template
       >
-      <template #cell-look="{ row }"><span class="slab-demo" :style="{ borderBottomWidth: `var(--e-${row.name})` }" /></template>
+      <template #cell-look="{ row }"><span class="slab-demo" :style="{ '--slab-lift': `var(--e-${row.name})` }" /></template>
     </PlainTable>
   </div>
 </template>
@@ -296,7 +296,7 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
   height: var(--swatch-size);
   border: var(--e-stroke-hair) solid var(--e-border);
   border-radius: var(--e-radius-md);
-  font: 500 var(--e-text-xl) / 1 var(--e-font-sans);
+  font: var(--e-weight-medium) var(--e-text-xl) / var(--e-leading-none) var(--e-font-sans);
 }
 .meta {
   min-width: 0;
@@ -309,10 +309,6 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
 }
 .usage {
   margin-top: var(--e-space-1);
-}
-.hex {
-  font: 500 var(--e-text-xs) / 1.2 var(--e-font-mono);
-  color: var(--e-muted);
 }
 .pairs {
   display: grid;
@@ -380,13 +376,17 @@ const withFrom = (rows: Token[]) => rows.map((r) => ({ ...r, id: r.name, from: r
   display: block;
   max-width: 16rem;
 }
+/* A primary face on its slab, drawn as the library's recipe (base.css): an edge all round in the slab colour, the bottom one thicker by the lift this row names, and bottom corners as much taller as the slab is thick. */
 .slab-demo {
   display: block;
+  box-sizing: border-box;
   width: calc(var(--e-space-8) * 2);
-  height: var(--e-space-6);
+  height: calc(var(--e-space-6) + var(--slab-lift));
+  border: var(--e-stroke-edge) solid var(--e-primary-slab);
+  border-bottom-width: calc(var(--e-stroke-edge) + var(--slab-lift));
+  border-radius: var(--e-radius-md) / var(--e-radius-md) var(--e-radius-md) calc(var(--e-radius-md) + var(--slab-lift)) calc(var(--e-radius-md) + var(--slab-lift));
   background: var(--e-primary);
-  border-bottom: solid var(--e-primary-slab);
-  border-radius: var(--e-radius-sm);
+  background-clip: border-box;
 }
 .box {
   --box-size: calc(var(--e-space-8) + var(--e-space-6));
