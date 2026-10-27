@@ -6,16 +6,16 @@
 export const GROUPS = [
   { id: "layout", title: "Layout", members: ["Stack", "Inline", "Grid", "Container", "Surface", "Divider", "AppShell", "AppHeader", "AppFooter", "PageHeader"] },
   { id: "text-and-media", title: "Text and media", members: ["Heading", "Text", "Kicker", "Highlight", "Kbd", "CodeBlock", "Icon", "Avatar", "AvatarGroup", "VisuallyHidden"] },
-  { id: "data-display", title: "Data display", members: ["Table", "DataGrid", "DescriptionList", "Toggletip", "Metric", "Tag", "Stamp", "ExpandableRow"] },
+  { id: "data-display", title: "Data display", members: ["Table", "DataGrid", "DescriptionList", "List", "ListRow", "Tree", "VirtualList", "Toggletip", "Metric", "Tag", "Stamp", "ExpandableRow"] },
   { id: "actions", title: "Actions", members: ["Button", "IconButton", "CopyButton", "Link", "Actions"] },
   { id: "form-structure", title: "Form structure", members: ["Form", "Field", "Fieldset"] },
   { id: "text-inputs", title: "Text inputs", members: ["TextField", "Textarea", "PasswordField", "NumberField", "CurrencyField", "PhoneField", "OtpField", "ColorField"] },
   { id: "choices", title: "Choices", members: ["Checkbox", "CheckboxGroup", "RadioGroup", "Switch", "Segmented", "Select", "Combobox", "Slider"] },
   { id: "dates", title: "Dates", members: ["Calendar", "DatePicker", "RangePicker"] },
   { id: "files-and-signatures", title: "Files and signatures", members: ["Upload", "SignatureField", "SignaturePad"] },
-  { id: "search-and-navigation", title: "Search and navigation", members: ["SearchBar", "SearchResults", "CommandPalette", "Tabs", "Breadcrumb", "NavList", "LinkCard", "Pagination", "Stepper", "SkipLink"] },
+  { id: "search-and-navigation", title: "Search and navigation", members: ["SearchBar", "SearchResults", "CommandPalette", "Tabs", "Breadcrumb", "NavList", "StatLink", "LinkCard", "Pagination", "Stepper", "SkipLink"] },
   { id: "feedback", title: "Feedback", members: ["Notice", "ToastProvider", "Toast", "Progress", "Spinner", "Skeleton", "EmptyState"] },
-  { id: "overlays-and-disclosure", title: "Overlays and disclosure", members: ["Dialog", "Drawer", "Menu", "Tooltip", "Disclosure"] },
+  { id: "overlays-and-disclosure", title: "Overlays and disclosure", members: ["Dialog", "Drawer", "Menu", "Tooltip", "Popover", "Sheet", "Disclosure"] },
   { id: "app-config", title: "App config", members: ["ConfigProvider"] },
 ];
 
