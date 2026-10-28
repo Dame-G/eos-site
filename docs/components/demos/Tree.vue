@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { EStack, EText, ETree } from "@eos-ui/vue";
+import { EButton, EStack, EText, ETree } from "@eos-ui/vue";
 
 const items = [
   { id: "g1", label: "You vs Dameless", description: "5+3, live" },
@@ -32,6 +32,11 @@ const expanded = ref<string[]>(["visits"]);
 <template>
   <EStack>
     <ETree v-model="selected" v-model:expanded="expanded" label="Account records" :items="items" />
+    <ETree v-model="selected" label="Records, the chevron opens and the row selects" toggle-on="chevron" dense indent="sm" :items="items">
+      <template #trailing="{ item }">
+        <EButton size="xs" variant="outline" @click="selected = null">Clear {{ item.label }}</EButton>
+      </template>
+    </ETree>
     <EText size="sm" tone="muted">Selected: {{ selected ?? "nothing" }}. Open: {{ expanded.join(", ") || "none" }}.</EText>
   </EStack>
 </template>

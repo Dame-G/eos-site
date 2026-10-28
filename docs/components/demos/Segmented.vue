@@ -4,6 +4,8 @@ import { ESegmented, EStack, EText } from "@eos-ui/vue";
 
 const range = ref("Month");
 const view = ref("list");
+const speeds = ref<string[]>(["Blitz"]);
+const month = ref("March");
 </script>
 
 <template>
@@ -22,5 +24,15 @@ const view = ref("list");
     />
     <ESegmented label="Sort by" :options="['Date', 'Amount']" error="Choose how to sort before exporting." />
     <ESegmented label="Currency" :options="['USD', 'CAD']" disabled />
+    <ESegmented v-model="range" label="Full width" stretch :options="['Day', 'Week', 'Month']" />
+    <ESegmented v-model:values="speeds" label="Speeds" multiple :options="['Bullet', 'Blitz', 'Rapid']" />
+    <div style="max-width: 16rem">
+      <ESegmented
+        v-model="month"
+        label="Month, becomes a select when it does not fit"
+        collapse
+        :options="['January', 'February', 'March', 'April', 'May', 'June']"
+      />
+    </div>
   </EStack>
 </template>

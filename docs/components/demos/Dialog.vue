@@ -38,7 +38,7 @@ function cancel() {
 
     <ESegmented v-model="state" label="Preview state" hide-label :options="['Ready', 'Paying', 'Failed']" />
 
-    <EDialog v-if="state === 'Ready'" inline :open="true" title="Pay $162.40?">
+    <EDialog v-if="state === 'Ready'" inline :open="true" size="sm" footer="row" title="Pay $162.40?">
       The amount is taken from your card ending 4242.
       <template #actions>
         <EButton>Pay now</EButton>

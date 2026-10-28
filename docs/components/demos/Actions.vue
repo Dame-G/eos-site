@@ -14,6 +14,12 @@ import { EActions, EButton, EStack, ESurface, EText } from "@eos-ui/vue";
       <EButton variant="outline" aria-pressed="false">Needs payment</EButton>
       <EButton variant="outline" aria-pressed="false">Paid</EButton>
     </EActions>
+    <div style="max-width: 18rem">
+      <EActions bar stack="never">
+        <EButton>Save</EButton>
+        <EButton variant="outline">Cancel</EButton>
+      </EActions>
+    </div>
     <ESurface as="article" aria-label="October statement">
       <EText>October statement, due Oct 31, 2026.</EText>
       <template #actions>

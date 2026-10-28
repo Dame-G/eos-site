@@ -13,7 +13,7 @@ const open = ref(true);
         <EText>The statement stays usable beside the sheet.</EText>
         <EText>Total due Oct 22, 2026: $162.40</EText>
       </EStack>
-      <ESheet v-model:open="open" title="Your profile" description="How your name and contact details appear on statements.">
+      <ESheet v-model:open="open" back measure title="Your profile" description="How your name and contact details appear on statements." @back="open = false">
         <EText>Alex Morgan</EText>
         <EText>alex@example.com</EText>
         <template #actions>
