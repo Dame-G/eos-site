@@ -13,6 +13,7 @@ import { EButton, EInline, EStack } from "@eos-ui/vue";
     </EInline>
     <EInline>
       <EButton disabled>Disabled</EButton>
+      <EButton variant="quiet" disabled>Disabled, quiet</EButton>
       <EButton loading icon="lock">Paying</EButton>
     </EInline>
     <EInline>

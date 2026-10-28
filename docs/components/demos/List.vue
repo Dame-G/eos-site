@@ -23,6 +23,12 @@ const picked = ref<string | number | null>("g1");
     </EStack>
 
     <EStack>
+      <EList v-model="open" label="Games, flush" flush>
+        <EListRow v-for="g in games" :key="g.id" :value="g.id" :title="g.players" :subtitle="g.when" :disabled="g.disabled" />
+      </EList>
+    </EStack>
+
+    <EStack>
       <EList v-model="picked" label="Games to review" mode="select">
         <EListRow v-for="g in games" :key="g.id" :value="g.id" :title="g.players" :subtitle="g.when" :disabled="g.disabled" />
       </EList>

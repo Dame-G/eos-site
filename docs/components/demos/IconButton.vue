@@ -11,6 +11,7 @@ const last = ref("Nothing pressed yet.");
       <EIconButton icon="print" label="Print statement" @click="last = 'Statement sent to the printer.'" />
       <EIconButton icon="mail" label="Email statement" @click="last = 'Statement emailed.'" />
       <EIconButton icon="trash" label="Remove saved card" disabled />
+      <EIconButton icon="trash" label="Remove saved card, outline" variant="outline" disabled />
     </EInline>
     <EInline>
       <EIconButton icon="user" label="Profile" href="#profile" current />
