@@ -11,6 +11,8 @@ const open = ref(false);
 
     <EDisclosure title="Payment details" :open="true">Visa ending 4242, paid in full.</EDisclosure>
 
+    <EDisclosure title="Payment details in the row's own type" title-style="text">Visa ending 4242.</EDisclosure>
+
     <EDisclosure v-model:open="open" title="Itemised charges">Visit $120.00, lab work $42.40.</EDisclosure>
     <EText>The itemised charges are {{ open ? "open" : "closed" }}.</EText>
     <EStack gap="0">

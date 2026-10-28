@@ -3,6 +3,12 @@ import { ref } from "vue";
 import { EButton, ENotice, EStack } from "@eos-ui/vue";
 
 const showClosable = ref(true);
+const retrying = ref(false);
+
+function retry() {
+  retrying.value = true;
+  setTimeout(() => (retrying.value = false), 1200);
+}
 </script>
 
 <template>
@@ -14,6 +20,9 @@ const showClosable = ref(true);
       <template #actions><EButton variant="outline">Sign now</EButton></template>
     </ENotice>
     <ENotice tone="danger" title="Card declined">Check the card number or use another card.</ENotice>
+    <ENotice tone="danger" title="The games could not be loaded" retry :retrying="retrying" @retry="retry">
+      Check your connection.
+    </ENotice>
 
     <ENotice v-if="showClosable" closable title="Reminders are on" @close="showClosable = false">
       We message you two days before each visit.

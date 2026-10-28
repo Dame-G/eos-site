@@ -15,6 +15,11 @@ import { EButton, EInline, EStack } from "@eos-ui/vue";
       <EButton disabled>Disabled</EButton>
       <EButton loading icon="lock">Paying</EButton>
     </EInline>
+    <EInline>
+      <EButton size="xs" variant="outline">Dense</EButton>
+      <EButton size="sm" variant="outline">Small</EButton>
+      <EButton variant="outline">Medium</EButton>
+    </EInline>
     <EButton block>Full width</EButton>
   </EStack>
 </template>

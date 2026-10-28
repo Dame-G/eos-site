@@ -14,6 +14,9 @@ import { EGrid, EMetric, ESurface } from "@eos-ui/vue";
       <EMetric label="Out of pocket" value="$320.00" delta="+$40.00" trend="up" tone="danger" help="A cost that went up" />
     </ESurface>
     <ESurface>
+      <EMetric label="Search time" :value="412" unit="ms" help="Median over 20 games" />
+    </ESurface>
+    <ESurface>
       <EMetric label="Appointments" :value="3" delta="No change" trend="flat" />
     </ESurface>
   </EGrid>

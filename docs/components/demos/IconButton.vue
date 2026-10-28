@@ -12,6 +12,11 @@ const last = ref("Nothing pressed yet.");
       <EIconButton icon="mail" label="Email statement" @click="last = 'Statement emailed.'" />
       <EIconButton icon="trash" label="Remove saved card" disabled />
     </EInline>
+    <EInline>
+      <EIconButton icon="user" label="Profile" href="#profile" current />
+      <EIconButton icon="mail" label="Messages" href="#messages" />
+      <EIconButton icon="download" label="Download, dense" size="xs" />
+    </EInline>
     <EText tone="muted" role="status">{{ last }}</EText>
   </EStack>
 </template>
