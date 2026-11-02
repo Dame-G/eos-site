@@ -1,3 +1,5 @@
+> **Moved.** eos is now **sui (simple ui)**. The docs live at https://sui.dame.gg and the source at https://github.com/Dame-G/sui. This repo is archived.
+
 # eos-site
 
 Source of https://eos.dame.gg, the documentation and live-preview site for the public [eos](https://github.com/Dame-G/eos) library. It is released under the [MIT license](LICENSE).
